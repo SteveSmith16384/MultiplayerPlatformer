@@ -1,0 +1,50 @@
+package com.scs.worldcrafter.graphics;
+
+import ssmith.android.lib2d.Camera;
+import ssmith.android.lib2d.MyPointF;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+
+import com.scs.worldcrafter.Statics;
+import com.scs.worldcrafter.game.GameModule;
+import com.scs.worldcrafter.game.PhysicsEngine;
+
+public class DyingEnemy extends GameObject {
+
+	private Bitmap bmp;
+	private PhysicsEngine phys;
+
+	public DyingEnemy(GameModule _game, int r, GameObject o) {
+		super(_game, "DyingEnemy", false, o.getWorldX(), o.getWorldY(), o.getHeight(), o.getWidth()); // Notice height and width are reversed since the dying enemy is on it's side
+
+		phys = new PhysicsEngine(new MyPointF(0, -1), Statics.ROCK_SPEED*2, Statics.ROCK_GRAVITY*2);
+		bmp = Statics.img_cache.getImage(r, o.getHeight(), o.getWidth()); // Notice height and width are reversed since the dying enemy is on it's side
+		
+		this.game.root_node.attachChild(this);
+		this.updateGeometricState();
+		this.game.addToProcess_Instant(this);
+	}
+
+
+	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol) {
+		if (this.visible) {
+			g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+		}
+
+	}
+
+
+	@Override
+	public void process(long interpol) {
+		phys.process();
+		this.adjustLocation(phys.offset.x, phys.offset.y);
+		this.parent.updateGeometricState();
+
+		if (this.getScreenY(game.root_cam) > Statics.SCREEN_HEIGHT) {
+			this.remove();
+		}
+	}
+
+
+}
