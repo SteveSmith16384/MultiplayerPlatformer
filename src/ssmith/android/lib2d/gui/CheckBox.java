@@ -1,19 +1,19 @@
 package ssmith.android.lib2d.gui;
 
-import ssmith.android.lib2d.Camera;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import java.awt.image.BufferedImage;
 
-import com.scs.ninja.main.lite.R;
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.Paint;
+import ssmith.android.lib2d.Camera;
+
 import com.scs.worldcrafter.Statics;
 
 public class CheckBox extends Button {
 	
 	private boolean ticked;
-	private Bitmap bmp;
+	private BufferedImage bmp;
 
-	public CheckBox(String text, Paint paint, Paint ink, Bitmap bmp, boolean _ticked) {
+	public CheckBox(String text, Paint paint, Paint ink, BufferedImage bmp, boolean _ticked) {
 		super(text, paint, ink, bmp);
 		
 		this.setChecked(_ticked);
@@ -29,9 +29,9 @@ public class CheckBox extends Button {
 	public void setChecked(boolean b) {
 		ticked = b;
 		if (ticked) {
-			bmp = Statics.img_cache.getImage(R.drawable.tick, this.bmp_background.getHeight(), this.bmp_background.getHeight());
+			bmp = Statics.img_cache.getImage("tick", this.bmp_background.getHeight(), this.bmp_background.getHeight());
 		} else {
-			bmp = Statics.img_cache.getImage(R.drawable.cross, this.bmp_background.getHeight(), this.bmp_background.getHeight());
+			bmp = Statics.img_cache.getImage("cross", this.bmp_background.getHeight(), this.bmp_background.getHeight());
 		}
 
 	}

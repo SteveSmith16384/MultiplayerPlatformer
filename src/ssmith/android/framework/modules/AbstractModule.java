@@ -1,7 +1,12 @@
 package ssmith.android.framework.modules;
 
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.Intent;
+import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 import ssmith.android.lib2d.Camera;
@@ -9,11 +14,6 @@ import ssmith.android.lib2d.Node;
 import ssmith.android.lib2d.gui.AbstractComponent;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.Functions;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.view.KeyEvent;
 
 import com.scs.worldcrafter.MainThread;
 import com.scs.worldcrafter.Statics;
@@ -29,7 +29,7 @@ public abstract class AbstractModule extends Thread {
 	public Node stat_node_back = new Node("stat_node");
 	public Node stat_node_front = new Node("stat_node");
 	protected Camera stat_cam; // For stat node so some graphics are always drawn at the same pos
-	protected Bitmap background;
+	protected BufferedImage background;
 	protected AbstractModule mod_return_to;
 	private PleaseWaitDialog please_wait_dialog;
 
@@ -77,7 +77,7 @@ public abstract class AbstractModule extends Thread {
 	}
 	
 
-	public void setBackground(int key) {
+	public void setBackground(String key) {
 		background = Statics.img_cache.getImage(key, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT);
 	}
 
@@ -125,7 +125,7 @@ public abstract class AbstractModule extends Thread {
 
 		stat_node_front.doDraw(c, stat_cam, interpol);
 
-		if (Statics.RELEASE_MODE == false || Statics.DEBUGGING) {
+		if (Statics.RELEASE_MODE == false || Statics.DEBUG) {
 			c.drawText("Not in release mode", 5, 200, paint_button_text);
 		}
 		

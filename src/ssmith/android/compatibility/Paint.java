@@ -2,7 +2,7 @@ package ssmith.android.compatibility;
 
 import java.awt.Color;
 
-import com.scs.stellarforces.Statics;
+import com.scs.worldcrafter.Statics;
 
 public class Paint {
 
@@ -12,6 +12,7 @@ public class Paint {
 	public boolean antialiasing = true;
 
 	public Paint() {
+		typeface = Statics.stdfnt; // Default
 	}
 
 
@@ -30,10 +31,10 @@ public class Paint {
 
 
 	public float getTextSize() {
-		if (this.typeface != null) { 
+		//if (this.typeface != null) { 
 			return this.typeface.getSize();
-		}
-		return 10;
+		/*}
+		return 10;*/
 	}
 
 

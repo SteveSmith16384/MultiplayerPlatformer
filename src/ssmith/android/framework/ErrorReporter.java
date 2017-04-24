@@ -12,4 +12,8 @@ public class ErrorReporter {
 		return new ErrorReporter();
 	}
 
+	
+	public void handleSilentException(Throwable t) {
+		// todo
+	}
 }

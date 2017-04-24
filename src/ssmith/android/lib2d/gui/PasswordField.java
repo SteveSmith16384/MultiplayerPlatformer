@@ -1,9 +1,10 @@
 package ssmith.android.lib2d.gui;
 
+import java.awt.image.BufferedImage;
+
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.Paint;
 import ssmith.android.lib2d.Camera;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 
 public class PasswordField extends AbstractTextComponent {
 
@@ -12,17 +13,17 @@ public class PasswordField extends AbstractTextComponent {
 	/**
 	 * Use this when using a layout.
 	 */
-	public PasswordField(String name, String text, Paint paint, Paint ink, int max_len, Bitmap bmp) {
+	public PasswordField(String name, String text, Paint paint, Paint ink, int max_len, BufferedImage bmp) {
 		this(name, text, 0, 0, bmp.getWidth(), bmp.getHeight(), paint, ink, max_len, bmp);
 	}
 
 
-	public PasswordField(String name, String text, float x, float y, float w, float h, Paint paint, Paint ink, Bitmap bmp) {
+	public PasswordField(String name, String text, float x, float y, float w, float h, Paint paint, Paint ink, BufferedImage bmp) {
 		this(name, text, x, y, w, h, paint, ink, -1, bmp);
 	}
 
 
-	public PasswordField(String name, String text, float x, float y, float w, float h, Paint paint, Paint ink, int maxlen, Bitmap bmp) {
+	public PasswordField(String name, String text, float x, float y, float w, float h, Paint paint, Paint ink, int maxlen, BufferedImage bmp) {
 		super(name, "", text, x, y, w, h, paint, ink, maxlen, bmp, false);
 	}
 

@@ -1,11 +1,11 @@
 package ssmith.android.lib2d.shapes;
 
+import ssmith.android.compatibility.Paint;
+import ssmith.android.compatibility.RectF;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.Node;
 import ssmith.android.lib2d.Spatial;
 import ssmith.lang.GeometryFunctions2;
-import android.graphics.Paint;
-import android.graphics.RectF;
 
 public abstract class AbstractRectangle extends Geometry {
 

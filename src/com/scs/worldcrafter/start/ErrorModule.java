@@ -1,14 +1,12 @@
 package com.scs.worldcrafter.start;
 
+import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.modules.AbstractModule;
 import ssmith.android.framework.modules.AbstractSingleScreenModule;
 import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.gui.MultiLineLabel;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
 
-import com.scs.ninja.main.lite.R;
 import com.scs.worldcrafter.Statics;
 
 public final class ErrorModule extends AbstractSingleScreenModule {
@@ -37,10 +35,6 @@ public final class ErrorModule extends AbstractSingleScreenModule {
 	public ErrorModule(AbstractActivity act, AbstractModule _return_to, String title, String text) {
 		super(act, _return_to);
 		
-		if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-			background = Statics.img_cache.getImage(R.drawable.menu_background, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT);
-		}
-
 		showError(title, text);
 
 	}

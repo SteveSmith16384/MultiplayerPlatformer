@@ -1,12 +1,12 @@
 package com.scs.worldcrafter.graphics;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.Geometry;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;
@@ -15,12 +15,12 @@ import com.scs.worldcrafter.graphics.mobs.AbstractMob;
 
 public class Bullet extends GameObject {
 
-	private Bitmap bmp;
+	private BufferedImage bmp;
 	private AbstractMob thrower;
 	private MyPointF dir;
 	private int damage;
 	
-	public Bullet(GameModule _game, AbstractMob _thrower, MyPointF _dir, int bmp_id, int _damage) {
+	public Bullet(GameModule _game, AbstractMob _thrower, MyPointF _dir, String bmp_id, int _damage) {
 		super(_game, "Bullet", true, _thrower.getWorldCentreX(), _thrower.getWorldCentreY(), Statics.ROCK_SIZE, Statics.ROCK_SIZE);
 
 		bmp = Statics.img_cache.getImage(bmp_id, Statics.ROCK_SIZE, Statics.ROCK_SIZE);

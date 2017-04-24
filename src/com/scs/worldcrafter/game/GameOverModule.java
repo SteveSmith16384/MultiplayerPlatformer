@@ -1,5 +1,8 @@
 package com.scs.worldcrafter.game;
 
+import java.awt.image.BufferedImage;
+
+import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.modules.SimpleAbstractModule;
 import ssmith.android.lib2d.gui.AbstractComponent;
@@ -8,11 +11,7 @@ import ssmith.android.lib2d.gui.GUIFunctions;
 import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.gui.MultiLineLabel;
 import ssmith.android.lib2d.layouts.GridLayout;
-import android.graphics.Bitmap;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
 
-import com.scs.ninja.main.lite.R;
 import com.scs.worldcrafter.Statics;
 
 
@@ -48,16 +47,12 @@ public final class GameOverModule extends SimpleAbstractModule {
 		
 		game = _game;
 		
-		if (Statics.GAME_MODE == Statics.GM_NINJA) {
-			this.setBackground(R.drawable.ninja_background2);
-		} else if (Statics.GAME_MODE == Statics.GM_POLICECOP) {
-			this.setBackground(R.drawable.policecop_background);
-		}
+			this.setBackground("ninja_background2");
 		
-		RESTART = act.getString(R.string.replay_map);
-		RETURN = act.getString(R.string.main_menu);
+		RESTART = act.getString("replay_map");
+		RETURN = act.getString("main_menu");
 		
-		Label l = new Label("Game_Over_title", act.getString(R.string.game_over), null, paint_large_text);
+		Label l = new Label("Game_Over_title", act.getString("game_over"), null, paint_large_text);
 		l.updateGeometricState();
 		l.setCentre(Statics.SCREEN_WIDTH/2, paint_large_text.getTextSize());
 		this.stat_node_front.attachChild(l);
@@ -67,7 +62,7 @@ public final class GameOverModule extends SimpleAbstractModule {
 		this.stat_node_front.attachChild(ml);
 
 		GridLayout menu_node = new GridLayout("Menu", Statics.SCREEN_WIDTH/3, Statics.SCREEN_WIDTH/10, 10);
-		Bitmap bmp = Statics.img_cache.getImage(R.drawable.button_blue, Statics.SCREEN_WIDTH/3, Statics.SCREEN_WIDTH/10);
+		BufferedImage bmp = Statics.img_cache.getImage("button_blue", Statics.SCREEN_WIDTH/3, Statics.SCREEN_WIDTH/10);
 		menu_node.attachChild(new Button(RESTART, RESTART, null, paint_ink, bmp), 0, 0);
 		menu_node.attachChild(new Button(RETURN, RETURN, null, paint_ink, bmp), 1, 0);
 		menu_node.updateGeometricState();

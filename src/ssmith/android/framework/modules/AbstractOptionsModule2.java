@@ -1,7 +1,11 @@
 package ssmith.android.framework.modules;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.MotionEvent;
+import ssmith.android.compatibility.Paint;
+import ssmith.android.compatibility.PointF;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 import ssmith.android.io.IOFunctions;
@@ -13,11 +17,6 @@ import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.layouts.GridLayout;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.GeometryFuncs;
-import android.graphics.Bitmap;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.PointF;
-import android.view.MotionEvent;
 
 import com.scs.worldcrafter.Statics;
 
@@ -37,13 +36,13 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 	private PointF last_down_screen = new PointF();
 	private boolean is_dragging = false;
 	private int cols;
-	private Bitmap bmp;
+	private BufferedImage bmp;
 	private Paint paint_ink;
 	private boolean can_drag, auto_select, trunc_names;
 	protected int show; // -1, 0 or 1
 	protected Label lbl_title;
 
-	public AbstractOptionsModule2(AbstractActivity _act, AbstractModule _return_to, int _cols, Paint _paint_ink, Bitmap _bmp, int _show, boolean _auto_select, String title, boolean _trunc_names) {
+	public AbstractOptionsModule2(AbstractActivity _act, AbstractModule _return_to, int _cols, Paint _paint_ink, BufferedImage _bmp, int _show, boolean _auto_select, String title, boolean _trunc_names) {
 		super(_act, _return_to);
 
 		cols =_cols;
@@ -180,7 +179,7 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 			is_dragging = false;
 		} else if (ev.getAction() == MotionEvent.ACTION_MOVE) { // Dragging!
 			float offy = last_down_screen.y - ev.getY();
-			AbstractActivity.Log("Dragging (" + offy + ")");
+			//AbstractActivity.Log("Dragging (" + offy + ")");
 			double dist = GeometryFuncs.distance(0, 0, 0, offy);
 			if (dist > MIN_DRAG_DIST || is_dragging) {// && dist < MAX_DRAG_DIST) {
 				if (can_drag) {
@@ -206,7 +205,7 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 	private void selectOption(int idx) {
 		AbstractActivity act = Statics.act;
 		
-		IOFunctions.Vibrate(act.getBaseContext(), Statics.VIBRATE_LEN);
+		//IOFunctions.Vibrate(act.getBaseContext(), Statics.VIBRATE_LEN);
 		this.optionSelected(idx);
 
 	}

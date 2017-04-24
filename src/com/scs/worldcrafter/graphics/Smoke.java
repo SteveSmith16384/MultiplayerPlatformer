@@ -1,10 +1,10 @@
 package com.scs.worldcrafter.graphics;
 
+import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.Node;
 import ssmith.lang.Functions;
-import android.graphics.Canvas;
 
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;

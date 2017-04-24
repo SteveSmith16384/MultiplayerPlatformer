@@ -1,10 +1,10 @@
 package com.scs.worldcrafter.graphics;
 
-import ssmith.android.lib2d.Camera;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
+import java.awt.image.BufferedImage;
 
-import com.scs.ninja.main.lite.R;
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.lib2d.Camera;
+
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;
 import com.scs.worldcrafter.graphics.blocks.Block;
@@ -12,12 +12,12 @@ import com.scs.worldcrafter.graphics.mobs.AbstractMob;
 
 public class AirBubble extends GameObject {
 
-	private Bitmap bmp;
+	private BufferedImage bmp;
 	
 	public AirBubble(GameModule _game, AbstractMob _thrower) {
 		super(_game, "AirBubble", true, _thrower.getWorldCentreX(), _thrower.getWorldCentreY(), Statics.ROCK_SIZE, Statics.ROCK_SIZE);
 
-		bmp = Statics.img_cache.getImage(R.drawable.bubble, Statics.ROCK_SIZE, Statics.ROCK_SIZE);
+		bmp = Statics.img_cache.getImage("bubble", Statics.ROCK_SIZE, Statics.ROCK_SIZE);
 		
 		this.game.root_node.attachChild(this);
 		this.updateGeometricState();

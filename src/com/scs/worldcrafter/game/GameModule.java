@@ -1,13 +1,19 @@
 package com.scs.worldcrafter.game;
 
+import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.MotionEvent;
+import ssmith.android.compatibility.Paint;
+import ssmith.android.compatibility.RectF;
+import ssmith.android.compatibility.Style;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
-import ssmith.android.framework.modules.SensorModule;
+import ssmith.android.framework.modules.AbstractModule;
 import ssmith.android.lib2d.MyPointF;
-import ssmith.android.lib2d.gui.AbstractComponent;
 import ssmith.android.lib2d.gui.Button;
 import ssmith.android.lib2d.gui.GUIFunctions;
 import ssmith.android.lib2d.gui.ToggleButton;
@@ -22,29 +28,14 @@ import ssmith.lang.NumberFunctions;
 import ssmith.util.IDisplayText;
 import ssmith.util.Interval;
 import ssmith.util.TSArrayList;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.Point;
-import android.graphics.RectF;
-import android.view.MotionEvent;
 
-import com.scs.ninja.main.lite.R;
 import com.scs.worldcrafter.Statics;
-import com.scs.worldcrafter.game.tutorial.NinjaTutorial;
-import com.scs.worldcrafter.game.tutorial.WorldcrafterTutorial;
-import com.scs.worldcrafter.graphics.BankingSpaceship;
-import com.scs.worldcrafter.graphics.BlockHighlighter;
-import com.scs.worldcrafter.graphics.Cloud;
 import com.scs.worldcrafter.graphics.Explosion;
-import com.scs.worldcrafter.graphics.SunOrMoon;
 import com.scs.worldcrafter.graphics.ThrownItem;
 import com.scs.worldcrafter.graphics.blocks.Block;
 import com.scs.worldcrafter.graphics.blocks.SimpleBlock;
 import com.scs.worldcrafter.graphics.mobs.AbstractMob;
 import com.scs.worldcrafter.graphics.mobs.PlayersAvatar;
-import com.scs.worldcrafter.graphics.mobs.Skeleton;
 import com.scs.worldcrafter.mapgen.AbstractLevelData;
 import com.scs.worldcrafter.mapgen.SimpleMobData;
 
@@ -55,8 +46,10 @@ import com.scs.worldcrafter.mapgen.SimpleMobData;
  * V. SLow: BLock
  *
  */
-public final class GameModule extends SensorModule implements IDisplayText {
+public final class GameModule extends AbstractModule implements IDisplayText {
 
+	public static final byte HAND = 1;
+	
 	// Icons
 	private static String CURRENT_ITEM;
 	private static String MAP;// = R.string.icon_map;
@@ -89,14 +82,11 @@ public final class GameModule extends SensorModule implements IDisplayText {
 	public AbstractLevelData original_level_data;
 	private boolean got_map = false;
 	public MyEfficientGridLayout new_grid;
-	private DarknessAdjusterController dark_adj_cont;
 	public int map_loaded_up_to_col = -1;
 	public BlockInventory inv;
 	private Button curr_item_icon, current_item_image, cmd_menu;
 	public boolean is_day = true;
 	public TimedString msg;
-	private ToggleButton btn_id;
-	private SaveMapThread save_map_thread;
 	private RectF health_bar = new RectF();
 	private RectF health_bar_outline = new RectF();
 	private Rectangle dummy_rect = new Rectangle(); // for checking the area is clear
@@ -106,11 +96,10 @@ public final class GameModule extends SensorModule implements IDisplayText {
 	private Timer time_remaining;
 	public String filename;
 	public int level;
-	private String str_amulet_dist, str_time_remaining;
+	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
 
-	private HighlightingRect rect_ctrl_move_left, rect_ctrl_move_right, rect_ctrl_jump_left, rect_ctrl_jump_right, rect_ctrl_up, rect_ctrl_down;
-	private BitmapRectangle arrow_left, arrow_right, arrow_up, arrow_down;
+	//private BitmapRectangle arrow_left, arrow_right, arrow_up, arrow_down;
 
 	private long draw_time = 0; // Avg. 20
 	private long instant_time = 0; // Avg. 4-5
@@ -162,32 +151,12 @@ public final class GameModule extends SensorModule implements IDisplayText {
 		level = _level;
 		filename = save_filename;
 
-		if (Statics.cfg.using_buttons) {
-
-		} else {
-			rect_ctrl_move_left = new HighlightingRect(0, Statics.SCREEN_HEIGHT/3, Statics.SCREEN_WIDTH/4, Statics.SCREEN_HEIGHT);
-			rect_ctrl_move_right = new HighlightingRect(Statics.SCREEN_WIDTH * .66f, Statics.SCREEN_HEIGHT/3, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT);
-			rect_ctrl_jump_left = new HighlightingRect(0, 0, Statics.SCREEN_WIDTH/4, Statics.SCREEN_HEIGHT/3);
-			rect_ctrl_jump_right = new HighlightingRect(Statics.SCREEN_WIDTH * .66f, 0, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT/3);
-			rect_ctrl_up = new HighlightingRect(Statics.SCREEN_WIDTH/3, 0, Statics.SCREEN_WIDTH * .66f, Statics.SCREEN_HEIGHT/3);
-			rect_ctrl_down = new HighlightingRect(Statics.SCREEN_WIDTH/3, Statics.SCREEN_HEIGHT * 0.66f, Statics.SCREEN_WIDTH * .66f, Statics.SCREEN_HEIGHT);
-		}
-
-		try {
-			if (level > Statics.cfg.getMaxLevel()) {
-				Statics.cfg.setMaxLevel(level);
-			}
-		} catch (IOException e) {
-			this.showToast("Unable to save level!");
-		}
-
 		CURRENT_ITEM = "";// No, we show the qty instead, on the overlaying icon act.getString(R.string.icon_inv);
-		MAP = act.getString(R.string.icon_map);
-		MENU = act.getString(R.string.icon_menu);
+		MENU = act.getString("icon_menu");
 		TEST = "TEST";
-		ID = act.getString(R.string.icon_id);
+		ID = act.getString("icon_id");
 
-		this.got_offsets = true;
+		//this.got_offsets = true;
 
 		others_instant = new TSArrayList<IProcessable>();
 		others_slow = new TSArrayList<IProcessable>();
@@ -195,37 +164,28 @@ public final class GameModule extends SensorModule implements IDisplayText {
 
 		msg = new TimedString(this, 2000);
 
-		if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-			dark_adj_cont = new DarknessAdjusterController(this);
-		}
-
 		this.root_node.detachAllChildren();
 		this.stat_node_back.detachAllChildren();
 		this.stat_node_front.detachAllChildren();
 
 		original_level_data.start();
 
-		if (Statics.GAME_MODE != Statics.GM_POLICECOP) {
+		/*if (Statics.GAME_MODE != Statics.GM_POLICECOP) {
 			for (int i=0 ; i<3 ; i++) {
 				new Cloud(this);
 			}
 		} else {
 			new BankingSpaceship(this, 1);
 			new BankingSpaceship(this, -1);
-		}
+		}*/
 
 		this.stat_node_back.updateGeometricState();
 		this.stat_cam.lookAtTopLeft(true);
 
-		str_amulet_dist = act.getString(R.string.amulet_distance);
-		str_time_remaining = act.getString(R.string.time_remaining);
+		str_time_remaining = act.getString("time_remaining");
 
-		if (Statics.GAME_MODE == Statics.GM_NINJA) {
-			this.setBackground(R.drawable.ninja_background2);
+			this.setBackground("ninja_background2");
 			this.showToast("Level " + this.level + "!");
-		} else if (Statics.GAME_MODE == Statics.GM_POLICECOP) {
-			this.setBackground(R.drawable.policecop_background);
-		}
 	}
 
 
@@ -238,7 +198,7 @@ public final class GameModule extends SensorModule implements IDisplayText {
 		
 		try {
 			if (player != null) {
-				if ((ev.getAction() == MotionEvent.ACTION_DOWN || ev.getAction() == MotionEvent.ACTION_POINTER_DOWN)) {// && is_down == false) {
+				/*if ((ev.getAction() == MotionEvent.ACTION_DOWN || ev.getAction() == MotionEvent.ACTION_POINTER_DOWN)) {// && is_down == false) {
 					if (Statics.cfg.using_buttons == false) {
 						checkForHighlights(ev, true);
 					} else {
@@ -261,7 +221,6 @@ public final class GameModule extends SensorModule implements IDisplayText {
 
 				} else if ((ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_POINTER_UP)) {// && is_down) {
 					if (Statics.cfg.using_buttons == false) {
-						checkForHighlights(ev, false);
 					} else {
 						if (this.arrow_left != null) { // here
 							if (this.arrow_left.contains(ev.getX(), ev.getY())) {
@@ -280,7 +239,6 @@ public final class GameModule extends SensorModule implements IDisplayText {
 					}
 					//is_down = false;
 
-					if (player != null) {
 						if (player.is_on_ice == false) {
 							player.move_x_offset = 0;
 						}
@@ -292,25 +250,17 @@ public final class GameModule extends SensorModule implements IDisplayText {
 						if (drag_dist < THROW_DRAG_DIST || drag_start > Statics.SQ_SIZE*2) {
 							// Might be an icon
 							// Need this on OnUp so it doesn't register a keypress with the inventory as well
-							AbstractComponent c = this.GetComponentAt(stat_node_front, ev.getX(), ev.getY());
+							/*AbstractComponent c = this.GetComponentAt(stat_node_front, ev.getX(), ev.getY());
 							if (c != null) {
 								if (c instanceof Button) {
 									Button b = (Button)c;
-									if (b.getActionCommand() == CURRENT_ITEM && Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-										this.getThread().setNextModule(new InventoryModule(act, this));
-									} else if (b.getActionCommand() == ID) {
+									if (b.getActionCommand() == ID) {
 										ToggleButton t = (ToggleButton)c;
 										t.toggeSelected();
 										if (t.isSelected()) {
 											this.showToast(act.getString(R.string.click_on_a_block));
 										}
-									} else if (b.getActionCommand() == MAP) {
-										this.getThread().setNextModule(new MapScreenModule(act, this));
-									} else if (b.getActionCommand() == MENU) {
-										this.getThread().setNextModule(new InGameMenuModule(act, this));
 									} else if (b.getActionCommand() == TEST) {
-										Skeleton.Factory(this, null);
-										this.inv.addBlock(Block.ROCK, 10);
 									}
 									return true;
 								}
@@ -335,40 +285,16 @@ public final class GameModule extends SensorModule implements IDisplayText {
 							throwItem(ev);
 							updateInvIconAmt();
 						}
-					}
 					act_start_drag.x = ev.getX();
 					act_start_drag.y = ev.getY();
 				} else if (ev.getAction() == MotionEvent.ACTION_MOVE) {// && is_down) {  //MotionEvent.
 					checkForHighlights(ev, true);
-				}
+				}*/
 			}
 		} catch (RuntimeException ex) {
 			AbstractActivity.HandleError(null, ex);
 		}
 		return false;
-	}
-
-
-	private void checkForHighlights(MyEvent ev, boolean select) {
-		if (Statics.cfg.using_buttons == false) {
-			if (Statics.cfg.show_control_squares) {
-				if (select) {
-					this.rect_ctrl_move_left.setHighlighted(ev.getX(), ev.getY());
-					this.rect_ctrl_move_right.setHighlighted(ev.getX(), ev.getY());
-					this.rect_ctrl_jump_left.setHighlighted(ev.getX(), ev.getY());
-					this.rect_ctrl_jump_right.setHighlighted(ev.getX(), ev.getY());
-					this.rect_ctrl_up.setHighlighted(ev.getX(), ev.getY());
-					this.rect_ctrl_down.setHighlighted(ev.getX(), ev.getY());
-				} else {
-					this.rect_ctrl_move_left.setNotHighlighted(ev.getX(), ev.getY());
-					this.rect_ctrl_move_right.setNotHighlighted(ev.getX(), ev.getY());
-					this.rect_ctrl_jump_left.setNotHighlighted(ev.getX(), ev.getY());
-					this.rect_ctrl_jump_right.setNotHighlighted(ev.getX(), ev.getY());
-					this.rect_ctrl_up.setNotHighlighted(ev.getX(), ev.getY());
-					this.rect_ctrl_down.setNotHighlighted(ev.getX(), ev.getY());
-				}
-			}
-		}
 	}
 
 
@@ -388,28 +314,18 @@ public final class GameModule extends SensorModule implements IDisplayText {
 					msg.setText(act.getString(R.string.generating_map));
 				} else {*/
 				if (original_level_data.max_rows != 0) {
-					msg.setText(act.getString(R.string.loading_map) + " (" + original_level_data.row + "/" + original_level_data.max_rows + ")");
+					msg.setText(act.getString("loading_map") + " (" + original_level_data.row + "/" + original_level_data.max_rows + ")");
 				} else {
-					msg.setText(act.getString(R.string.loading_map));
+					msg.setText(act.getString("loading_map"));
 				}
 				//}
 			} else {
 				this.mapGeneratedOrLoaded();
 			}
-		} else {
-			if (save_map_thread != null) {
-				if (save_map_thread.isAlive()) {
-					this.msg.setText(act.getString(R.string.saving_game));
-				} else {
-					//this.msg.setText(act.getString(R.string.finished_saving_game));
-					this.showToast(act.getString(R.string.finished_saving_game));
-					save_map_thread = null;
-				}
-			}
 		}
 
 		if (player != null) {
-			if (Statics.cfg.using_buttons) {
+			/*if (Statics.cfg.using_buttons) {
 				if (this.arrow_left.pressed) {
 					player.move_x_offset = -1;
 				} else if (this.arrow_right.pressed) {
@@ -458,7 +374,7 @@ public final class GameModule extends SensorModule implements IDisplayText {
 						this.player.moving_down = true;
 					}
 				}*/
-			}
+			//}*/
 		}
 
 		// Process the rest
@@ -523,7 +439,7 @@ public final class GameModule extends SensorModule implements IDisplayText {
 
 		if (this.time_remaining != null) {
 			if (time_remaining.hasHit(interpol)) {
-				this.gameOver(act.getString(R.string.out_of_time));
+				this.gameOver(act.getString("out_of_time"));
 			}
 		}
 
@@ -552,13 +468,6 @@ public final class GameModule extends SensorModule implements IDisplayText {
 
 	public void doDraw(Canvas g, long interpol) {
 		long start = System.currentTimeMillis();
-		if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-			if (is_day) {
-				g.drawRect(0, 0, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT, paint_day);
-			} else {
-				g.drawRect(0, 0, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT, paint_night);
-			}
-		}
 		super.doDraw(g, interpol);
 
 		if (this.player != null) {
@@ -573,9 +482,6 @@ public final class GameModule extends SensorModule implements IDisplayText {
 
 			//g.drawText("Health: " + this.player.getHealth(), 10, paint_text_ink.getTextSize(), paint_text_ink);
 			//g.drawText("Rocks: " + this.player.rocks, 10, (paint_text_ink.getTextSize()*2), paint_text_ink);
-			if (this.prox_scanner != null) {
-				g.drawText(this.str_amulet_dist + ": " + this.prox_scanner.getDistance(false)/10, 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()), paint_text_ink);
-			}
 			if (this.time_remaining != null) {
 				g.drawText(this.str_time_remaining + ": " + (this.time_remaining.getTimeRemaining()/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
 			}
@@ -584,7 +490,7 @@ public final class GameModule extends SensorModule implements IDisplayText {
 			g.drawText("Inst Objects: " + this.others_instant.size(), 10, paint_text_ink.getTextSize()*4, paint_text_ink);
 			g.drawText("Slow Objects: " + this.others_slow.size(), 10, paint_text_ink.getTextSize()*5, paint_text_ink);
 			g.drawText("V. Slow Objects: " + this.others_very_slow.size(), 10, paint_text_ink.getTextSize()*6, paint_text_ink);
-			g.drawText("Darkness: " + this.dark_adj_cont.size(), 10, paint_text_ink.getTextSize()*7, paint_text_ink);
+			//g.drawText("Darkness: " + this.dark_adj_cont.size(), 10, paint_text_ink.getTextSize()*7, paint_text_ink);
 			//g.drawText("Map Squares: " + EfficientGridLayout.objects_being_drawn, 10, paint_text_ink.getTextSize()*4, paint_text_ink);
 			//long mem = ((long)r.freeMemory()*100) / (long)r.totalMemory();//) * 100;
 			//g.drawText("Free mem: " + mem + "%", 10, paint_text_ink.getTextSize()*5, paint_text_ink);
@@ -601,27 +507,6 @@ public final class GameModule extends SensorModule implements IDisplayText {
 		}
 
 
-		if (Statics.cfg.using_buttons == false) {
-			if (this.rect_ctrl_move_left.isHighighted()) {
-				g.drawRect(rect_ctrl_move_left, paint_movement_highlight);
-			}
-			if (this.rect_ctrl_move_right.isHighighted()) {
-				g.drawRect(rect_ctrl_move_right, paint_movement_highlight);
-			}
-			if (this.rect_ctrl_jump_left.isHighighted()) {
-				g.drawRect(rect_ctrl_jump_left, paint_movement_highlight);
-			}
-			if (this.rect_ctrl_jump_right.isHighighted()) {
-				g.drawRect(rect_ctrl_jump_right, paint_movement_highlight);
-			}
-			if (this.rect_ctrl_up.isHighighted()) {
-				g.drawRect(rect_ctrl_up, paint_movement_highlight);
-			}
-			if (this.rect_ctrl_down.isHighighted()) {
-				g.drawRect(rect_ctrl_down, paint_movement_highlight);
-			}
-		}
-
 		draw_time = System.currentTimeMillis() - start;
 
 	}
@@ -629,73 +514,19 @@ public final class GameModule extends SensorModule implements IDisplayText {
 
 	private void mapGeneratedOrLoaded() {
 		// Add icons
-		btn_id = new ToggleButton(ID, null, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage(R.drawable.button_red, Statics.ICON_SIZE, Statics.ICON_SIZE), Statics.img_cache.getImage(R.drawable.button_green, Statics.ICON_SIZE, Statics.ICON_SIZE));
-		if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-			btn_id.setByLTWH(Statics.ICON_SIZE*2, 0, Statics.ICON_SIZE, Statics.ICON_SIZE);
-			this.stat_node_front.attachChild(btn_id);
-		}
-		curr_item_icon = new Button(CURRENT_ITEM, CURRENT_ITEM, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage(R.drawable.button_red, Statics.ICON_SIZE, Statics.ICON_SIZE));
+		curr_item_icon = new Button(CURRENT_ITEM, CURRENT_ITEM, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage("button_red", Statics.ICON_SIZE, Statics.ICON_SIZE));
 		//curr_item_icon.setByLTWH(Statics.SCREEN_WIDTH-(Statics.ICON_SIZE*3), 0, Statics.ICON_SIZE, Statics.ICON_SIZE);
-		if (Statics.cfg.using_buttons == false) {
-			curr_item_icon.setLocation((Statics.ICON_SIZE*3), Statics.SCREEN_HEIGHT - Statics.ICON_SIZE);
-		} else {
-			curr_item_icon.setLocation(0, 0);
-		}
+		curr_item_icon.setLocation(0, 0);
 		this.stat_node_front.attachChild(curr_item_icon);
 
-		this.cmd_menu = new Button(MENU, MENU, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage(R.drawable.button_red, Statics.ICON_SIZE, Statics.ICON_SIZE));
+		this.cmd_menu = new Button(MENU, MENU, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage("button_red", Statics.ICON_SIZE, Statics.ICON_SIZE));
 		//this.cmd_menu.setByLTWH(Statics.SCREEN_WIDTH-(Statics.ICON_SIZE*2), 0, Statics.ICON_SIZE, Statics.ICON_SIZE);
-		if (Statics.cfg.using_buttons == false) {
-			this.cmd_menu.setLocation((Statics.ICON_SIZE*2), Statics.SCREEN_HEIGHT - Statics.ICON_SIZE);
-		} else {
-			this.cmd_menu.setLocation(Statics.ICON_SIZE, 0);
-		}
+		this.cmd_menu.setLocation(Statics.ICON_SIZE, 0);
 		this.stat_node_front.attachChild(this.cmd_menu);
-
-		if (Statics.cfg.using_buttons == false) {
-			if (Statics.show_tutorial) {
-				float ARROW_SIZE = Statics.SQ_SIZE*3;
-				BitmapRectangle tut_arrow_left = new BitmapRectangle("ArrowLeft", Statics.img_cache.getImage(R.drawable.tut_arrow_left,ARROW_SIZE, ARROW_SIZE), Statics.SQ_SIZE, Statics.SCREEN_HEIGHT - (Statics.SQ_SIZE*4));
-				this.stat_node_front.attachChild(tut_arrow_left);
-
-				BitmapRectangle tut_arrow_right = new BitmapRectangle("ArrowRight", Statics.img_cache.getImage(R.drawable.tut_arrow_right, ARROW_SIZE, ARROW_SIZE), Statics.SCREEN_WIDTH - (Statics.SQ_SIZE*4), Statics.SCREEN_HEIGHT - (Statics.SQ_SIZE*4));
-				this.stat_node_front.attachChild(tut_arrow_right);
-
-				BitmapRectangle tut_arrow_up1 = new BitmapRectangle("ArrowUp1", Statics.img_cache.getImage(R.drawable.tut_arrow_up, ARROW_SIZE, ARROW_SIZE), Statics.SQ_SIZE, Statics.SQ_SIZE);
-				this.stat_node_front.attachChild(tut_arrow_up1);
-
-				BitmapRectangle tut_arrow_up2 = new BitmapRectangle("ArrowUp2", Statics.img_cache.getImage(R.drawable.tut_arrow_up, ARROW_SIZE, ARROW_SIZE), Statics.SCREEN_WIDTH - (Statics.SQ_SIZE*4), Statics.SQ_SIZE);
-				this.stat_node_front.attachChild(tut_arrow_up2);
-
-				BitmapRectangle tut_arrow_down = new BitmapRectangle("ArrowDown", Statics.img_cache.getImage(R.drawable.tut_arrow_down, ARROW_SIZE, ARROW_SIZE), Statics.SCREEN_WIDTH - (Statics.SQ_SIZE*4), Statics.SQ_SIZE);
-				tut_arrow_down.setCentre(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT - (Statics.SQ_SIZE*3));
-				this.stat_node_front.attachChild(tut_arrow_down);
-			}
-		} else {
-			float ARROW_SIZE = Statics.SQ_SIZE * 1.5f;
-
-			arrow_left = new BitmapRectangle("ArrowLeft", Statics.img_cache.getImage(R.drawable.arrow_left, ARROW_SIZE, ARROW_SIZE), ARROW_SIZE, Statics.SCREEN_HEIGHT - ARROW_SIZE);
-			this.stat_node_front.attachChild(arrow_left);
-
-			arrow_right = new BitmapRectangle("ArrowRight", Statics.img_cache.getImage(R.drawable.arrow_right, ARROW_SIZE, ARROW_SIZE), ARROW_SIZE *3, Statics.SCREEN_HEIGHT - ARROW_SIZE);
-			this.stat_node_front.attachChild(arrow_right);
-
-			arrow_up = new BitmapRectangle("ArrowUp1", Statics.img_cache.getImage(R.drawable.arrow_up, ARROW_SIZE, ARROW_SIZE), Statics.SCREEN_WIDTH - (ARROW_SIZE*3), Statics.SCREEN_HEIGHT - ARROW_SIZE);
-			this.stat_node_front.attachChild(arrow_up);
-
-			arrow_down = new BitmapRectangle("ArrowDown", Statics.img_cache.getImage(R.drawable.arrow_down, ARROW_SIZE, ARROW_SIZE), Statics.SCREEN_WIDTH - (ARROW_SIZE*1), Statics.SCREEN_HEIGHT - ARROW_SIZE);
-			this.stat_node_front.attachChild(arrow_down);
-
-		}
 
 		msg.setText("");
 
 		new_grid = new MyEfficientGridLayout(this, original_level_data.getGridWidth(), original_level_data.getGridHeight(), Statics.SQ_SIZE);
-
-		// These must be behind the player!
-		if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-			new SunOrMoon(this, true);
-		}
 
 		this.root_node.attachChild(new_grid);	
 
@@ -719,9 +550,7 @@ public final class GameModule extends SensorModule implements IDisplayText {
 
 		checkIfMapNeedsLoading();
 
-		if (Statics.monsters) {
-			new EnemyEventTimer(this);
-		}
+		new EnemyEventTimer(this);
 
 		if (Statics.amulet) {
 			prox_scanner = new ProximityScanner(this);
@@ -734,20 +563,8 @@ public final class GameModule extends SensorModule implements IDisplayText {
 			}
 		}
 
-		if (Statics.show_tutorial) {
-			if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-				new WorldcrafterTutorial(this);
-			} else if (Statics.GAME_MODE == Statics.GM_NINJA) {
-				new NinjaTutorial(this);
-			} else if (Statics.GAME_MODE == Statics.GM_POLICECOP) {
-			} else {
-				throw new RuntimeException("Unknown game mode: " + Statics.GAME_MODE);
-			}
-		}
-
 		health_bar_outline = new RectF(0, Statics.SCREEN_HEIGHT-Statics.HEALTH_BAR_HEIGHT, Statics.HEALTH_BAR_WIDTH, Statics.SCREEN_HEIGHT);
 
-		//this.showToast("Touch the sides of the screen to move and jump!");
 	}
 
 
@@ -876,10 +693,7 @@ public final class GameModule extends SensorModule implements IDisplayText {
 
 			if (not_loaded_from_file) { // If it's not loaded from file, we always check darkness
 				if (type == Block.FIRE) {
-					act.sound_manager.playSound(R.raw.start_fire);
-				}
-				if (dark_adj_cont != null) {
-					dark_adj_cont.add(map_x);
+					act.sound_manager.playSound("start_fire");
 				}
 			}
 		}
@@ -893,11 +707,7 @@ public final class GameModule extends SensorModule implements IDisplayText {
 		byte type = this.player.getCurrentItemType();
 		byte fallback_type = -1;
 		//if (type <= 0) { // No item selected
-			if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-				fallback_type = Block.ROCK; // Default
-			} else if (Statics.GAME_MODE == Statics.GM_NINJA) {
 				fallback_type = Block.SHURIKEN; // Default
-			}
 			//fallback_type = type;
 		//}
 
@@ -909,16 +719,12 @@ public final class GameModule extends SensorModule implements IDisplayText {
 		if (this.inv.hasBlock(type)) {
 			thrown = true;
 		} else {
-			if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-				this.showToast("You have nothing to throw!  Try a rock.");
-			} else if (Statics.GAME_MODE == Statics.GM_NINJA) {
-				this.showToast("You have nothing to throw!  Try a shuriken");
-			}
+			this.showToast("You have nothing to throw!  Try a shuriken");
 			return;
 		}
 
 		if (thrown) {
-			act.sound_manager.playSound(R.raw.throwitem);
+			act.sound_manager.playSound("throwitem");
 			if (type == Block.SHURIKEN) {
 				ThrownItem.ThrowShuriken(this, player, new MyPointF(ev.getX(), ev.getY()).subtractLocal(act_start_drag).normalizeLocal());
 			} else {
@@ -935,51 +741,6 @@ public final class GameModule extends SensorModule implements IDisplayText {
 			this.inv.addBlock(type, -1);
 		}
 
-	}
-
-
-	private void digOrBuild(float rel_x, float rel_y) {
-		AbstractActivity act = Statics.act;
-		
-		// Check the block is not too far away
-		if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-			if (GeometryFuncs.distance(this.player.getWorldCentreX(), this.player.getWorldCentreY(), rel_x, rel_y) <= Statics.SQ_SIZE*1.9f) { 
-				// See if there is a block in that square
-				Block block_found = (Block)this.new_grid.getBlockAtPixel_MaybeNull(rel_x, rel_y);
-				if (block_found != null) {
-					new BlockHighlighter(this, block_found);
-					if (Block.CanBeBuiltOver(block_found.getType()) == false) {
-						block_found.damage(1, true); // this.player.getCurrentItemType()*-1
-						return;
-					}
-				}
-
-				// Place block?
-				if (this.player.hasBlockSelected()) {
-					// Check the player has enough blocks
-					if (inv.containsKey(this.player.getCurrentItemType())) {
-						// Check the area is clear
-						Rectangle dummy_rect = new Rectangle("Temp", (int)(rel_x / Statics.SQ_SIZE) * Statics.SQ_SIZE, (int)(rel_y / Statics.SQ_SIZE) * Statics.SQ_SIZE, Statics.SQ_SIZE, Statics.SQ_SIZE, null, null);
-						this.root_node.attachChild(dummy_rect);
-						dummy_rect.parent.updateGeometricState();
-						new BlockHighlighter(this, dummy_rect);
-						if (dummy_rect.getColliders(this.root_node).size() <= 0) {
-							this.addBlock(this.player.getCurrentItemType(), (int)(rel_x / Statics.SQ_SIZE), (int)(rel_y / Statics.SQ_SIZE), true);
-							// Remove from inv
-							inv.addBlock(this.player.getCurrentItemType(), -1);
-						} else {
-							this.showToast(act.getString(R.string.area_not_empty));
-						}
-						dummy_rect.removeFromParent();
-					} else {
-						this.showToast(act.getString(R.string.none_left));
-						this.player.removeItem();
-					}
-				} else {
-					this.showToast(act.getString(R.string.no_item_selected));
-				}
-			}
-		}
 	}
 
 
@@ -1008,7 +769,7 @@ public final class GameModule extends SensorModule implements IDisplayText {
 	public boolean onBackPressed() {
 		AbstractActivity act = Statics.act;
 		
-		this.getThread().setNextModule(new InGameMenuModule(act, this));
+		//this.getThread().setNextModule(new InGameMenuModule(act, this));
 		return true;
 	}
 
@@ -1029,7 +790,7 @@ public final class GameModule extends SensorModule implements IDisplayText {
 
 
 	public void explosionWithDamage(int block_rad, int dam, int pieces, float pxl_x, float pxl_y) {
-		Explosion.CreateExplosion(this, pieces, pxl_x, pxl_y, R.drawable.thrown_rock);
+		Explosion.CreateExplosion(this, pieces, pxl_x, pxl_y, "thrown_rock");
 		int map_x = (int)(pxl_x / Statics.SQ_SIZE);
 		int map_y = (int)(pxl_y / Statics.SQ_SIZE);
 
@@ -1071,12 +832,12 @@ public final class GameModule extends SensorModule implements IDisplayText {
 		if (current_item_image != null) {
 			current_item_image.removeFromParent();
 		}
-		Bitmap bmp = null;
+		BufferedImage bmp = null;
 		float size = Statics.ICON_SIZE -(ICON_INSETS*2);
 		if (player.hasBlockSelected()) {
 			bmp = Block.GetBitmap(Statics.img_cache, player.getCurrentItemType(), size, size);
-		} else if (player.getCurrentItemType() == InventoryModule.HAND) {
-			bmp = Statics.img_cache.getImage(R.drawable.hand, size, size);
+		} else if (player.getCurrentItemType() == HAND) {
+			bmp = Statics.img_cache.getImage("hand", size, size);
 		}
 		if (bmp != null) {
 			current_item_image = new Button("Current Item", ""+inv.get(player.getCurrentItemType()), this.curr_item_icon.getWorldX()+ICON_INSETS, this.curr_item_icon.getWorldY()+ICON_INSETS, null, paint_inv_ink, bmp);
@@ -1084,12 +845,6 @@ public final class GameModule extends SensorModule implements IDisplayText {
 			current_item_image.updateGeometricState();
 		}
 		this.updateInvIconAmt();
-	}
-
-
-	public void saveMap() {
-		save_map_thread = new SaveMapThread(this);
-		save_map_thread.start();
 	}
 
 

@@ -1,14 +1,13 @@
 package ssmith.android.framework.modules;
 
+import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.IDisplayMessages;
 import ssmith.android.framework.IProgressDisplay;
 import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.gui.MultiLineLabel;
-import android.graphics.Paint;
 
 import com.scs.worldcrafter.Statics;
-import com.scs.ninja.main.lite.R;
 
 public abstract class AbstractPleaseWaitModule extends SimpleAbstractModule implements IDisplayMessages, IProgressDisplay {
 
@@ -33,7 +32,7 @@ public abstract class AbstractPleaseWaitModule extends SimpleAbstractModule impl
 	public AbstractPleaseWaitModule(AbstractActivity act, AbstractModule _return_to) {
 		super(act, _return_to);
 
-		Label l = new Label("Title", act.getString(R.string.please_wait), 0, 0, null, paint_large_text, true);
+		Label l = new Label("Title", act.getString("please_wait"), 0, 0, null, paint_large_text, true);
 		l.setCentre(Statics.SCREEN_WIDTH/2, paint_large_text.getTextSize());
 		this.stat_node_front.attachChild(l);
 		

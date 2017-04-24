@@ -1,32 +1,38 @@
 package ssmith.android.framework;
 
-public final class MyEvent {
+import java.awt.event.MouseEvent;
+
+import com.scs.worldcrafter.Statics;
+
+public class MyEvent {
 	
-	public int action;
-	public float x, y;
+	private MouseEvent mouseEvent;
 	
-	public MyEvent(int _action, float _x, float _y) {
-		action = _action;
-		x = _x;
-		y = _y;
+	public MyEvent(MouseEvent me) {
+		this.mouseEvent = me;
 	}
 	
 	
 	public String toString() {
-		return "A:" + action + " X:" + x + " Y:" + y;
+		return "A:" + getAction() + " X:" + getX() + " Y:" + getY();
 	}
+	
+	
 	public int getAction() {
-		return action;
+		return this.mouseEvent.getID();
 	}
 	
 	
 	public float getX() {
-		return x;
+		return mouseEvent.getX();
 	}
 
 
 	public float getY() {
-		return y;
+		if (!Statics.FULL_SCREEN) {
+			return mouseEvent.getY()-Statics.WINDOW_TOP_OFFSET;
+		}
+		return mouseEvent.getY();
 	}
 
 

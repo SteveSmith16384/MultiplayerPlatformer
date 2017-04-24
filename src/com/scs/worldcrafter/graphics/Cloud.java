@@ -1,17 +1,17 @@
 package com.scs.worldcrafter.graphics;
 
+import java.awt.image.BufferedImage;
+
+import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.lang.Functions;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
-import com.scs.ninja.main.lite.R;
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;
 
 public class Cloud extends GameObject {
 	
-	private Bitmap bmp_day, bmp_night;
+	private BufferedImage bmp_day, bmp_night;
 	private float speed;
 	private float x_off = -Statics.CLOUD_WIDTH;
 	private float y_off = Functions.rndFloat(0, Statics.SCREEN_HEIGHT/2);
@@ -21,8 +21,8 @@ public class Cloud extends GameObject {
 		
 		this.setLocation(x_off, y_off);
 		
-		bmp_day = Statics.img_cache.getImage(R.drawable.white_cloud, Statics.CLOUD_WIDTH, Statics.CLOUD_HEIGHT);
-		bmp_night = Statics.img_cache.getImage(R.drawable.red_cloud, Statics.CLOUD_WIDTH, Statics.CLOUD_HEIGHT);
+		bmp_day = Statics.img_cache.getImage("white_cloud", Statics.CLOUD_WIDTH, Statics.CLOUD_HEIGHT);
+		bmp_night = Statics.img_cache.getImage("red_cloud", Statics.CLOUD_WIDTH, Statics.CLOUD_HEIGHT);
 		speed = Functions.rndFloat(Statics.CLOUD_SPEED * .05f, Statics.CLOUD_SPEED);
 
 		game.addToProcess_Slow(this, true);

@@ -2,13 +2,13 @@ package ssmith.android.lib2d;
 
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.PointF;
+import ssmith.android.compatibility.RectF;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.android.lib2d.shapes.Line;
 import ssmith.android.lib2d.shapes.Rectangle;
 import ssmith.lang.GeometryFunctions2;
-import android.graphics.Canvas;
-import android.graphics.PointF;
-import android.graphics.RectF;
 
 public class Node extends Spatial {
 

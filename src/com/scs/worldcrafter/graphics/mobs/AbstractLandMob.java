@@ -1,12 +1,12 @@
 package com.scs.worldcrafter.graphics.mobs;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;
@@ -15,11 +15,11 @@ import com.scs.worldcrafter.graphics.blocks.Block;
 
 public abstract class AbstractLandMob extends AbstractMob {
 
-	private Bitmap bmp_left, bmp_right;
+	private BufferedImage bmp_left, bmp_right;
 	protected boolean is_on_ground_or_ladder, can_swim;
 	protected boolean facing_left = false; // Default to facing right
-	protected Bitmap a_bmp_left[];
-	protected Bitmap a_bmp_right[];
+	protected BufferedImage a_bmp_left[];
+	protected BufferedImage a_bmp_right[];
 	private int max_frames, curr_frame;
 	private long frame_time=0, frame_interval;
 	protected boolean jumping = false;
@@ -40,8 +40,8 @@ public abstract class AbstractLandMob extends AbstractMob {
 
 
 	protected void setNumFrames(int f) {
-		a_bmp_left = new Bitmap[f];
-		a_bmp_right = new Bitmap[f];
+		a_bmp_left = new BufferedImage[f];
+		a_bmp_right = new BufferedImage[f];
 
 	}
 

@@ -1,27 +1,23 @@
 
 package com.scs.worldcrafter.graphics.blocks;
 
-import ssmith.android.framework.ErrorReporter;
+import java.awt.image.BufferedImage;
 
+import ssmith.android.compatibility.Canvas;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.util.ImageCache;
 import ssmith.lang.Functions;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
-import com.scs.ninja.main.lite.R;
 import com.scs.worldcrafter.Statics;
-import com.scs.worldcrafter.crafting.CraftingData;
 import com.scs.worldcrafter.game.EnemyEventTimer;
-import com.scs.worldcrafter.game.GameCompletedModule;
 import com.scs.worldcrafter.game.GameModule;
 import com.scs.worldcrafter.graphics.Explosion;
 import com.scs.worldcrafter.graphics.GameObject;
 import com.scs.worldcrafter.graphics.ThrownItem;
 import com.scs.worldcrafter.mapgen.AbstractLevelData;
-import com.scs.worldcrafter.mapgen.LoadSavedMap;
+import com.scs.worldcrafter.start.ninja.LoadSavedMap;
 
 public class Block extends GameObject {
 
@@ -77,7 +73,7 @@ public class Block extends GameObject {
 	public static final byte GLASS = 48;  // Add to wiki
 	public static final byte CLAY = 49; 
 	public static final byte BRICKS = 50;
-	public static final byte BED = 51;
+	//public static final byte BED = 51;
 	public static final byte RAW_BEEF = 52;  // Add to wiki
 	public static final byte RAW_DEAD_CHICKEN = 53;  // Add to wiki
 	public static final byte RAW_PORK = 54;  // Add to wiki
@@ -85,7 +81,7 @@ public class Block extends GameObject {
 	public static final byte SHURIKEN = 56;  // Add to wiki
 	public static final byte CRATE = 57;  // Add to wiki
 	public static final byte MEDIKIT = 58;
-	public static final byte SAVEPOINT = 59;
+	//public static final byte SAVEPOINT = 59;
 	public static final byte END_OF_LEVEL = 60;
 	public static final byte BARREL = 61;
 	public static final byte ROPE = 62;
@@ -97,15 +93,13 @@ public class Block extends GameObject {
 
 	// Misc
 	private static final int MOB_GEN_DURATION = 5000;
-	private static final int GERMINATION_DURATION = 15000;
 	private static final int FIRE_DURATION = 200;
 	private static final int SLIME_DURATION = 300;
-	private static final int FURNACE_DURATION = 10 * 1000;
 
-	private static Bitmap fire_bmp1, fire_bmp2;
+	private static BufferedImage fire_bmp1, fire_bmp2;
 
 	private byte type;
-	public Bitmap bmp, bmp2;
+	public BufferedImage bmp, bmp2;
 	private byte health = 1;
 	private int map_x, map_y;
 	private long event_time = System.currentTimeMillis() + 10000; // So they don't start straight away
@@ -118,7 +112,7 @@ public class Block extends GameObject {
 			fire_bmp1 = GetBitmap(Statics.img_cache, Block.FIRE, Statics.SQ_SIZE, Statics.SQ_SIZE);
 		}
 		if (fire_bmp2 == null) {
-			fire_bmp2 = Statics.img_cache.getImage(R.drawable.fire2, Statics.SQ_SIZE, Statics.SQ_SIZE);//GetBitmap(_game.img_cache, Block.FIRE, Statics.SQ_SIZE, Statics.SQ_SIZE);
+			fire_bmp2 = Statics.img_cache.getImage("fire2", Statics.SQ_SIZE, Statics.SQ_SIZE);//GetBitmap(_game.img_cache, Block.FIRE, Statics.SQ_SIZE, Statics.SQ_SIZE);
 		}
 
 		type =_type;
@@ -133,20 +127,20 @@ public class Block extends GameObject {
 			break;
 		case WATER:
 			health = (byte)100;
-			bmp2 = Statics.img_cache.getImage(R.drawable.water2, Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
+			bmp2 = Statics.img_cache.getImage("water2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
 			break;
 		case FIRE:
 			health = (byte)100;
-			bmp2 = Statics.img_cache.getImage(R.drawable.fire2, Statics.SQ_SIZE, Statics.SQ_SIZE);
+			bmp2 = Statics.img_cache.getImage("fire2", Statics.SQ_SIZE, Statics.SQ_SIZE);
 			on_fire = true;
 			break;
 		case LAVA:
 			health = (byte)100;
-			bmp2 = Statics.img_cache.getImage(R.drawable.lava2, Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
+			bmp2 = Statics.img_cache.getImage("lava2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
 			break;
 		case SLIME:
 			health = (byte)100;
-			bmp2 = Statics.img_cache.getImage(R.drawable.slime2, Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
+			bmp2 = Statics.img_cache.getImage("slime2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
 			break;
 		case MONSTER_GENERATOR:
 			health = (byte)(health * 2);
@@ -205,60 +199,6 @@ public class Block extends GameObject {
 	}
 
 
-	public static boolean AddInConstructionMode(byte type) {
-		switch (type) {
-		case DARKNESS:
-		case DARKNESS2:
-		case WHEAT_NONE:
-		case WHEAT_LOW:
-		case WHEAT_MED:
-		case WHEAT_HIGH:
-			//case TANGLEWEED:
-		case APPLE:
-		case LAVA:
-		case MONSTER_GENERATOR:
-		case ADAMANTIUM:
-		case CHEST:
-		case FIRE:
-			//case WATER:
-		case SLIME:
-		case AMULET:
-		case TREE_BRANCH_LEFT:
-		case TREE_BRANCH_RIGHT:
-			//case GRASS:
-		case TREE_ROOT:
-		case WHEAT_ROOT:
-			//case WEEDS:
-		case COBWEB:
-		case LAMB_CHOP:
-		case BREAD:
-		case LIT_FURNACE:
-			//case UNLIT_FURNACE:
-			//case CRAFTING_TABLE:
-		case ACORN:
-			//case WHEAT_SEED:
-			//case STICKS:
-		case BONES:
-			//case WOOL:
-			//case SNOW:
-		case BED:
-		case RAW_BEEF:
-		case RAW_DEAD_CHICKEN:
-		case RAW_PORK:
-		case EGG:
-		case SHURIKEN:
-		case MEDIKIT:
-		case SAVEPOINT:
-		case END_OF_LEVEL:
-		case SLIME_SPURT:
-		case BLOOD_SPURT:
-			return false;
-		default:
-			return true;
-		}
-	}
-
-
 	public static boolean AddToInv(byte type) {
 		switch (type) {
 		case DARKNESS:
@@ -305,7 +245,6 @@ public class Block extends GameObject {
 		case COBWEB:
 		case LAMB_CHOP:
 		case BREAD:
-		case BED:
 		case RAW_BEEF:
 		case RAW_DEAD_CHICKEN:
 		case RAW_PORK:
@@ -359,7 +298,6 @@ public class Block extends GameObject {
 		case LIT_FURNACE:
 		case BREAD:
 		case GLASS:
-		case BED:
 		case RAW_BEEF:
 		case RAW_DEAD_CHICKEN:
 		case RAW_PORK:
@@ -430,7 +368,6 @@ public class Block extends GameObject {
 		case COBWEB:
 		case LAMB_CHOP:
 		case BREAD:
-		case BED:
 		case RAW_BEEF:
 		case RAW_DEAD_CHICKEN:
 		case RAW_PORK:
@@ -463,7 +400,6 @@ public class Block extends GameObject {
 	public void touched() {
 		AbstractActivity act = Statics.act;
 
-		if (Statics.GAME_MODE == Statics.GM_NINJA) {
 			switch (type) {
 			case Block.SHURIKEN:
 				game.inv.addBlock(this.getType(), Statics.SHURIKENS_FROM_BLOCK);
@@ -473,28 +409,17 @@ public class Block extends GameObject {
 				game.player.incHealthToMax();
 				destroy(0, false);
 				break;
-			case Block.SAVEPOINT:
-				game.showToast("Position Saved!");
-				game.original_level_data.setStartPos(this.map_x, this.map_y);
-				destroy(0, false);
-				break;
 			case Block.END_OF_LEVEL:
 				game.level++;
-				int map_r = Statics.GetNinjaFilename(game.level);
-				if (map_r >= 0) {
+				String map_r = Statics.GetNinjaFilename(game.level);
 					AbstractLevelData original_level_data = new LoadSavedMap(map_r);
 					GameModule mod = new GameModule(act, original_level_data, game.level, null);
 					game.getThread().setNextModule(mod);
-				} else {
-					GameCompletedModule mod = new GameCompletedModule(act, game);
-					game.getThread().setNextModule(mod);
-				}
 				destroy(0, false);
 				break;
 			case Block.SAND:
 				destroy(2, false);
 			}
-		}
 	}
 
 
@@ -599,16 +524,12 @@ public class Block extends GameObject {
 	}
 
 
-	public static Bitmap GetBitmap(ImageCache img_cache, byte type, float w, float h) {
-		switch (type) {
-		case DARKNESS:
-			return img_cache.getImage(R.drawable.darkness, w, h);
-		case DARKNESS2:
-			return img_cache.getImage(R.drawable.darkness2, w, h);
-		case GRASS:
+	public static BufferedImage GetBitmap(ImageCache img_cache, byte type, float w, float h) {
+		/*switch (type) { todo - this
+		case SOIL:*/
+			return img_cache.getImage("mud", w, h);
+		/*case GRASS:
 			return img_cache.getImage(R.drawable.grass, w, h);
-		case SOIL:
-			return img_cache.getImage(R.drawable.mud, w, h);
 		case ROCK:
 			return img_cache.getImage(R.drawable.rock, w, h);
 		case WATER:
@@ -741,145 +662,7 @@ public class Block extends GameObject {
 
 			}
 			return img_cache.getImage(R.drawable.wood, w, h);
-		}
-	}
-
-
-	public static String GetDesc(byte type) {
-		switch (type) {
-		case DARKNESS:
-		case DARKNESS2:
-		case NOTHING_DAYLIGHT:
-			return Statics.act.getString(R.string.nothing);// "Nothing";
-		case GRASS:
-			return Statics.act.getString(R.string.grass);// "Grass";
-		case SOIL:
-			return Statics.act.getString(R.string.soil);// "Soil";
-		case ROCK:
-			return Statics.act.getString(R.string.rock);// "Rock";
-		case WATER:
-			return Statics.act.getString(R.string.water);// "Water";
-		case FIRE:
-			return Statics.act.getString(R.string.fire);// "Fire";
-		case LADDER:
-			return Statics.act.getString(R.string.ladder);// "Ladder";
-		case WOOD:
-			return Statics.act.getString(R.string.wood);// "Wood";
-		case DYNAMITE:
-			return Statics.act.getString(R.string.dynamite);// "Dynamite";
-		case TANGLEWEED:
-			return Statics.act.getString(R.string.tangleweed);// "Tangleweed";
-		case APPLE:
-			return Statics.act.getString(R.string.apple);// "Apple";
-		case CHEST:
-			return Statics.act.getString(R.string.chest);// "Chest";
-		case COAL:
-			return Statics.act.getString(R.string.coal);// "Coal";
-		case GOLD:
-			return Statics.act.getString(R.string.gold);// "Gold";
-		case LAVA:
-			return Statics.act.getString(R.string.lava);// "Lava";
-		case MONSTER_GENERATOR:
-			return Statics.act.getString(R.string.monster_gen);// "Monster Gen"; // Keep it short
-		case SNOW:
-			return Statics.act.getString(R.string.snow);// "Snow";
-		case TREE_BARK:
-			return Statics.act.getString(R.string.tree);// "Tree";
-		case ACORN:
-			return Statics.act.getString(R.string.acorn);// "Acorn Seed";
-		case TREE_BRANCH_LEFT:
-		case TREE_BRANCH_RIGHT:
-			return Statics.act.getString(R.string.tree_branch);// "Tree Branch";
-		case FLINT:
-			return Statics.act.getString(R.string.flint);// "Flint";
-		case ADAMANTIUM:
-			return Statics.act.getString(R.string.adamantium);// "Adamantium";
-		case IRON_ORE:
-			return Statics.act.getString(R.string.iron_ore);// "Iron Ore";
-		case SAND:
-			return Statics.act.getString(R.string.sand);// "Sand";
-		case WHEAT_NONE:
-		case WHEAT_LOW:
-		case WHEAT_MED:
-		case WHEAT_HIGH:
-			return Statics.act.getString(R.string.wheat);// "Wheat";
-		case AMULET:
-			return Statics.act.getString(R.string.amulet);// "Amulet";
-		case SLIME:
-			return Statics.act.getString(R.string.slime);// "Slime";
-		case STONE:
-			return Statics.act.getString(R.string.stone);// "Stone";
-		case WHEAT_SEED:
-			return Statics.act.getString(R.string.wheat_seed);// "Wheat Seed";
-		case GIRDER:
-			return Statics.act.getString(R.string.metal_girder);// "Metal Girder";
-		case TREE_ROOT:
-			return Statics.act.getString(R.string.tree_roots);// "Tree Roots";
-		case WHEAT_ROOT:
-			return Statics.act.getString(R.string.wheat_roots);// "Wheat Roots";
-		case WOOL:
-			return Statics.act.getString(R.string.wool);// Wool";
-		case WEEDS:
-			return Statics.act.getString(R.string.weeds);//"Weeds";
-		case STICKS:
-			return Statics.act.getString(R.string.sticks);//"Sticks";
-		case CRAFTING_TABLE:
-			return Statics.act.getString(R.string.crafting_table);//"Table";
-		case BONES:
-			return Statics.act.getString(R.string.bones);//"Bones";
-		case COBWEB:
-			return Statics.act.getString(R.string.cobweb);// "Cobweb";
-		case LAMB_CHOP:
-			return Statics.act.getString(R.string.lamb_chop);// "Lamb Chop";
-		case UNLIT_FURNACE:
-			return Statics.act.getString(R.string.unlit_furnace);// "Unlit Furnace";
-		case LIT_FURNACE:
-			return Statics.act.getString(R.string.lit_furnace);// "Lit Furnace";
-		case BREAD:
-			return Statics.act.getString(R.string.bread);// "Bread";
-		case GLASS:
-			return Statics.act.getString(R.string.glass);// "Glass";
-		case CLAY:
-			return Statics.act.getString(R.string.clay);// "Clay";
-		case BRICKS:
-			return Statics.act.getString(R.string.bricks);// "Bricks";
-		case BED:
-			return Statics.act.getString(R.string.bed);// "Bed";
-		case RAW_BEEF:
-			return Statics.act.getString(R.string.raw_beef);// "Beef";
-		case RAW_DEAD_CHICKEN:
-			return Statics.act.getString(R.string.chicken);// "Dead chicken";
-		case RAW_PORK:
-			return Statics.act.getString(R.string.pork);// "Pork";
-		case EGG:
-			return Statics.act.getString(R.string.egg);// "Egg";
-		case SHURIKEN:
-			return "Shuriken";
-		case CRATE:
-			return "Crate";
-		case SAVEPOINT:
-			return "Savepoint";
-		case END_OF_LEVEL:
-			return "End of Level";
-		case BARREL:
-			return "Barrel";
-		case ROPE:
-			return "Rope";
-		case SLIME_SPURT:
-			return "Slime";
-		case BLOOD_SPURT:
-			return "Blood";
-		case MEDIKIT:
-			return "Medikit";
-		default:
-			try {
-				throw new RuntimeException("Unknown block type:" + type);
-			} catch (Exception ex) {
-				ErrorReporter.getInstance().handleSilentException(ex);
-			}
-			return "Unknown";
-		}
-
+		}*/
 	}
 
 
@@ -954,17 +737,12 @@ public class Block extends GameObject {
 	}
 
 
-	public String getDesc() {
-		return GetDesc(this.getType());
-	}
-
-
 	public void damage(int amt, boolean give_to_player) {
 		AbstractActivity act = Statics.act;
 
 		this.health -= amt;
-		act.sound_manager.playSound(R.raw.crumbling);
-		Explosion.CreateExplosion(game, 1, this.getWorldCentreX(), this.getWorldCentreY(), R.drawable.thrown_rock);
+		act.sound_manager.playSound("crumbling");
+		Explosion.CreateExplosion(game, 1, this.getWorldCentreX(), this.getWorldCentreY(), "thrown_rock");
 
 		if (this.health <= 0) {
 			this.destroy(1, give_to_player);
@@ -990,7 +768,7 @@ public class Block extends GameObject {
 
 	public void destroy(int explode_pieces, boolean give_to_player) {
 		if (explode_pieces > 0) {
-			Explosion.CreateExplosion(game, explode_pieces, this.getWorldCentreX(), this.getWorldCentreY(), R.drawable.thrown_rock);
+			Explosion.CreateExplosion(game, explode_pieces, this.getWorldCentreX(), this.getWorldCentreY(), "thrown_rock");
 		}
 		if (give_to_player) {
 			if (Block.AddToInv(this.getType())) {
@@ -1094,18 +872,14 @@ public class Block extends GameObject {
 		boolean remove_from_process = true; // Default
 		switch (type) {
 		case WATER:
-			if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
 				processWater();
-			}
 			break;
 		case LAVA:
-			if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
 				if (this.getDistanceTo(game.player) <= Statics.ACTIVATE_DIST) {
 					checkLavaSquares();
 				} else {
 					remove_from_process = false; // Try again later
 				}
-			}
 			break;
 		case TANGLEWEED:
 			remove_from_process = false;
@@ -1140,42 +914,8 @@ public class Block extends GameObject {
 			}
 			break;
 		case TREE_ROOT:
-			if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-				remove_from_process = false;
-				if (this.event_time < System.currentTimeMillis()) {
-					this.event_time = System.currentTimeMillis() + GERMINATION_DURATION;
-					// Check conditions are right
-					Block b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x-1, this.map_y);
-					if (b != null && Block.CanGrowPlants(b.getType())) {
-						b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x+1, this.map_y);
-						if (b != null && Block.CanGrowPlants(b.getType())) {
-							b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x, this.map_y+1);
-							if (b != null && Block.CanGrowPlants(b.getType())) {
-								growTree();
-							}
-						}
-					}
-				}
-			}
 			break;
 		case WHEAT_ROOT:
-			if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
-				remove_from_process = false;
-				if (this.event_time < System.currentTimeMillis()) {
-					this.event_time = System.currentTimeMillis() + (GERMINATION_DURATION*3);
-					// Check conditions are right
-					Block b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x-1, this.map_y);
-					if (b != null && Block.CanGrowPlants(b.getType())) {
-						b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x+1, this.map_y);
-						if (b != null && Block.CanGrowPlants(b.getType())) {
-							b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x, this.map_y+1);
-							if (b != null && Block.CanGrowPlants(b.getType())) {
-								remove_from_process = growWheat();
-							}
-						}
-					}
-				}
-			}
 			break;
 		case SLIME:
 			remove_from_process = false;
@@ -1183,23 +923,18 @@ public class Block extends GameObject {
 				this.event_time = System.currentTimeMillis() + SLIME_DURATION;
 				if (Functions.rnd(1, 2) == 1) {
 					if (this.getDistanceTo(game.player) <= Statics.ACTIVATE_DIST) {
-						act.sound_manager.playSound(R.raw.slime);
+						act.sound_manager.playSound("slime");
 						new ThrownItem(game, Block.SLIME_SPURT, new MyPointF(this.getWorldCentreX(), this.getWorldY()), new MyPointF(Functions.rndFloat(-.5f, .5f), -1), null, 10, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.SLIME_SIZE);
 					}
 				}
 			}
 			break;
-		case Block.LIT_FURNACE:
-			remove_from_process = processFurnace();
-			break;
 		}
 
 		if (this.getType() == Block.FIRE || this.on_fire) {
-			if (Statics.GAME_MODE == Statics.GM_WORLDCRAFTER) {
 				if (checkFire()) {
 					remove_from_process = false;
 				}
-			}
 		}
 
 		if (Falls(this.getType())) {
@@ -1232,30 +967,6 @@ public class Block extends GameObject {
 	 * Returns whether it's gone out (and should be removed from process).
 	 * @return
 	 */
-	private boolean processFurnace() {
-		if (this.event_time < System.currentTimeMillis()) {
-			event_time = System.currentTimeMillis() + FURNACE_DURATION;
-			// Does it go out?
-			if (Functions.rnd(1, 10) == 1) {
-				game.addBlock(Block.UNLIT_FURNACE, this.map_x, this.map_y, true);
-				return true;
-			} else {
-				// Crafting?
-				Block above = (Block)game.new_grid.getBlockAtMap_MaybeNull(this.map_x, this.map_y-1);
-				/*if (above.getType() == Block.SAND) {
-					game.addBlock(Block.GLASS, this.map_x, this.map_y-1, true, true);
-				} else if (above.getType() == Block.WHEAT_HIGH) {
-					game.addBlock(Block.BREAD, this.map_x, this.map_y-1, true, true);
-				} else if (above.getType() == Block.CLAY) {
-					game.addBlock(Block.BRICKS, this.map_x, this.map_y-1, true, true);
-				}*/
-				CraftingData.DoFurnace(game, above);
-			}
-		}
-		return false;
-	}
-
-
 	private void processWater() {
 		byte[] types = {NOTHING_DAYLIGHT, DARKNESS, DARKNESS2, FIRE, LADDER, ROPE};
 		checkAndChangeAdjacentSquares(0, 1, types, WATER, false);

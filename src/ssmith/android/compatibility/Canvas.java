@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
-import com.scs.stellarforces.Statics;
+import com.scs.worldcrafter.Statics;
 
 public class Canvas {
 
@@ -92,6 +92,11 @@ public class Canvas {
 
 	public void drawRect(RectF r, Paint p) {
 		drawRect(r.left, r.top, r.right, r.bottom, p);
+	}
+
+
+	public void drawBitmap(BufferedImage b, float x, float y, Paint p) {
+		g.drawImage(b, (int)x, (int)y, null);
 	}
 
 

@@ -5,7 +5,6 @@ import ssmith.lang.Functions;
 import ssmith.lang.NumberFunctions;
 import ssmith.util.Interval;
 
-import com.scs.ninja.main.lite.R;
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;
 import com.scs.worldcrafter.graphics.DyingEnemy;
@@ -28,36 +27,32 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 
 	public static void Factory(GameModule game, Block gen) { // gen == null for normal appearance
 		if (game.getNumProcessInstant() < Statics.MAX_INSTANTS) {
-			if (Statics.monsters) {
-				if (gen == null) {
-					float start = game.root_cam.bottom + (Statics.PLAYER_HEIGHT);
-					float left = game.root_cam.left - Statics.PLAYER_WIDTH;
-					if (Functions.rnd(1, 2) == 1) {
-						left = game.root_cam.right + Statics.PLAYER_WIDTH;
-					}
-					while (start >= game.root_cam.top - (Statics.PLAYER_HEIGHT)) {
-						boolean res = EnemyNinjaEasy.Subfactory(game, left, start);
-						if (res) {
-							break;
-						} else {
-							start -= (Statics.SQ_SIZE);
-						}
-					}
-				} else {
-					// Use generator
-					EnemyNinjaEasy.Subfactory(game, gen.getWorldX(), gen.getWorldY() - (Statics.PLAYER_HEIGHT));
+			if (gen == null) {
+				float start = game.root_cam.bottom + (Statics.PLAYER_HEIGHT);
+				float left = game.root_cam.left - Statics.PLAYER_WIDTH;
+				if (Functions.rnd(1, 2) == 1) {
+					left = game.root_cam.right + Statics.PLAYER_WIDTH;
 				}
+				while (start >= game.root_cam.top - (Statics.PLAYER_HEIGHT)) {
+					boolean res = EnemyNinjaEasy.Subfactory(game, left, start);
+					if (res) {
+						break;
+					} else {
+						start -= (Statics.SQ_SIZE);
+					}
+				}
+			} else {
+				// Use generator
+				EnemyNinjaEasy.Subfactory(game, gen.getWorldX(), gen.getWorldY() - (Statics.PLAYER_HEIGHT));
 			}
 		}
 	}
 
 
 	public static boolean Subfactory(GameModule game, float x, float y) {
-		if (Statics.monsters) {
-			if (game.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {
-				new EnemyNinjaEasy(game, x, y);
-				return true;
-			}
+		if (game.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {
+			new EnemyNinjaEasy(game, x, y);
+			return true;
 		}
 		return false;
 	}
@@ -66,23 +61,23 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 	private EnemyNinjaEasy(GameModule _game, float x, float y) {
 		super(_game, "Enemy Ninja", x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, HEALTH, MAX_FRAMES, 200, true, false, Statics.SD_ENEMY_SIDE, true);
 
-		a_bmp_left[0] = Statics.img_cache.getImage(R.drawable.easy_ninja_l0, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[1] = Statics.img_cache.getImage(R.drawable.easy_ninja_l1, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[2] = Statics.img_cache.getImage(R.drawable.easy_ninja_l2, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[3] = Statics.img_cache.getImage(R.drawable.easy_ninja_l3, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[4] = Statics.img_cache.getImage(R.drawable.easy_ninja_l4, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[5] = Statics.img_cache.getImage(R.drawable.easy_ninja_l5, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[6] = Statics.img_cache.getImage(R.drawable.easy_ninja_l6, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[7] = Statics.img_cache.getImage(R.drawable.easy_ninja_l7, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_left[0] = Statics.img_cache.getImage("easy_ninja_l0", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_left[1] = Statics.img_cache.getImage("easy_ninja_l1", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_left[2] = Statics.img_cache.getImage("easy_ninja_l2", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_left[3] = Statics.img_cache.getImage("easy_ninja_l3", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_left[4] = Statics.img_cache.getImage("easy_ninja_l4", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_left[5] = Statics.img_cache.getImage("easy_ninja_l5", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_left[6] = Statics.img_cache.getImage("easy_ninja_l6", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_left[7] = Statics.img_cache.getImage("easy_ninja_l7", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
 
-		a_bmp_right[0] = Statics.img_cache.getImage(R.drawable.easy_ninja_r0, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[1] = Statics.img_cache.getImage(R.drawable.easy_ninja_r1, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[2] = Statics.img_cache.getImage(R.drawable.easy_ninja_r2, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[3] = Statics.img_cache.getImage(R.drawable.easy_ninja_r3, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[4] = Statics.img_cache.getImage(R.drawable.easy_ninja_r4, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[5] = Statics.img_cache.getImage(R.drawable.easy_ninja_r5, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[6] = Statics.img_cache.getImage(R.drawable.easy_ninja_r6, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[7] = Statics.img_cache.getImage(R.drawable.easy_ninja_r7, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_right[0] = Statics.img_cache.getImage("easy_ninja_r0", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_right[1] = Statics.img_cache.getImage("easy_ninja_r1", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_right[2] = Statics.img_cache.getImage("easy_ninja_r2", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_right[3] = Statics.img_cache.getImage("easy_ninja_r3", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_right[4] = Statics.img_cache.getImage("easy_ninja_r4", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_right[5] = Statics.img_cache.getImage("easy_ninja_r5", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_right[6] = Statics.img_cache.getImage("easy_ninja_r6", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
+		a_bmp_right[7] = Statics.img_cache.getImage("easy_ninja_r7", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
 	}
 
 
@@ -115,7 +110,7 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 
 			performJumpingOrGravity();
 			checkForHarmingBlocks();
-			
+
 			if (throw_interval.hitInterval()) {
 				if (this.canSee(game.player)) {
 					this.throwShuriken();
@@ -138,12 +133,12 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 	private void throwShuriken() {
 		ThrownItem.ThrowShuriken(this.game, this, game.player.getWorldCentre_CreatesNew().subtract(this.getWorldCentre_CreatesNew()).normalizeLocal());
 	}
-	
-	
+
+
 	@Override
 	protected void died() {
-		new DyingEnemy(game, R.drawable.easy_ninja_dying, this);
-		Explosion.CreateExplosion(game, 2, this.getWorldCentreX(), this.getWorldCentreY(), R.drawable.blood_spurt);
+		new DyingEnemy(game, "easy_ninja_dying", this);
+		Explosion.CreateExplosion(game, 2, this.getWorldCentreX(), this.getWorldCentreY(), "blood_spurt");
 		this.remove(); // Must be before we drop an item
 	}
 

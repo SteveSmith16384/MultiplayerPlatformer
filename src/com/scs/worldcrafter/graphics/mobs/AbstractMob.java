@@ -2,17 +2,15 @@ package com.scs.worldcrafter.graphics.mobs;
 
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.RectF;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.Functions;
 import ssmith.util.Interval;
-import android.graphics.RectF;
 
-import com.scs.ninja.main.lite.R;
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;
-import com.scs.worldcrafter.game.InventoryModule;
 import com.scs.worldcrafter.graphics.AirBubble;
 import com.scs.worldcrafter.graphics.GameObject;
 import com.scs.worldcrafter.graphics.blocks.Block;
@@ -37,7 +35,7 @@ public abstract class AbstractMob extends GameObject {
 	public static final byte PLATFORM1 = 11;
 
 	protected int health, max_health;
-	protected byte current_item = InventoryModule.HAND;
+	protected byte current_item = GameModule.HAND;
 	private boolean remove_if_far_away;
 	private boolean destroy_blocks;
 	protected RectF tmp_rect = new RectF();
@@ -67,39 +65,12 @@ public abstract class AbstractMob extends GameObject {
 			return;
 		}*/
 		switch (sm.getType()) {
-		case AbstractMob.ZOMBIE:
-			Zombie.Subfactory(game, sm.pixel_x, sm.pixel_y);
-			break;
-		case AbstractMob.WASP:
-			Wasp.Subfactory(game, sm.pixel_x, sm.pixel_y);
-			break;
-		case AbstractMob.SKELETON:
-			Skeleton.Subfactory(game, sm.pixel_x, sm.pixel_y);
-			break;
-		case AbstractMob.SHEEP:
-			Sheep.Subfactory(game, sm.pixel_x, sm.pixel_y);
-			break;
-		case AbstractMob.PIG:
-			Pig.Subfactory(game, sm.pixel_x, sm.pixel_y);
-			break;
-		case AbstractMob.CHICKEN:
-			Chicken.Subfactory(game, sm.pixel_x, sm.pixel_y);
-			break;
-		case AbstractMob.COW:
-			Cow.Subfactory(game, sm.pixel_x, sm.pixel_y);
-			break;
 		case AbstractMob.ENEMY_NINJA_EASY:
 			EnemyNinjaEasy.Subfactory(game, sm.pixel_x, sm.pixel_y);
 			break;
-		case AbstractMob.HELICOPTER:
-			Helicopter.Factory(game, sm.pixel_x, sm.pixel_y);
-			break;
-		case AbstractMob.ALIEN:
-			Alien.Subfactory(game, sm.pixel_x, sm.pixel_y);
-			break;
 		case AbstractMob.PLATFORM1:
 			//new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE, Statics.SQ_SIZE, R.drawable.grass, 1, 0, Statics.SQ_SIZE * 4); // todo - change params
-			new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE*2, Statics.SQ_SIZE, R.drawable.grass, 0, -1, Statics.SQ_SIZE * 4); // todo - change params
+			new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE*2, Statics.SQ_SIZE, "grass", 0, -1, Statics.SQ_SIZE * 4); // todo - change params
 			break;
 		default:
 			if (Statics.RELEASE_MODE == false) {
@@ -114,20 +85,6 @@ public abstract class AbstractMob extends GameObject {
 	public byte getType() {
 		if (this instanceof PlayersAvatar) {
 			return PLAYER;
-		} else if (this instanceof Zombie) {
-			return ZOMBIE;
-		} else if (this instanceof Wasp) {
-			return WASP;
-		} else if (this instanceof Skeleton) {
-			return SKELETON;
-		} else if (this instanceof Sheep) {
-			return SHEEP;
-		} else if (this instanceof Pig) {
-			return PIG;
-		} else if (this instanceof Chicken) {
-			return CHICKEN;
-		} else if (this instanceof Cow) {
-			return COW;
 		} else {
 			if (Statics.RELEASE_MODE == false) {
 				throw new RuntimeException("Unknown type: " + this.toString());

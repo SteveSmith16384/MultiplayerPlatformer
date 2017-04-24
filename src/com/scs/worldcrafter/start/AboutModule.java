@@ -1,14 +1,13 @@
 package com.scs.worldcrafter.start;
 
+import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.modules.AbstractModule;
 import ssmith.android.framework.modules.AbstractSingleScreenModule;
 import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.gui.MultiLineLabel;
-import android.graphics.Paint;
 
 import com.scs.worldcrafter.Statics;
-import com.scs.ninja.main.lite.R;
 
 public final class AboutModule extends AbstractSingleScreenModule {
 	
@@ -31,14 +30,14 @@ public final class AboutModule extends AbstractSingleScreenModule {
 	public AboutModule(AbstractActivity act, AbstractModule _return_to) {
 		super(act, _return_to);
 		
-		background = Statics.img_cache.getImage(R.drawable.menu_background, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT);
+		background = Statics.img_cache.getImage("menu_background", Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT);
 
-		Label l = new Label("Credits_title", act.getString(R.string.about) + " " + act.getString(R.string.app_name), null, paint_large_text);
+		/*todo - this Label l = new Label("Credits_title", act.getString(R.string.about) + " " + act.getString(R.string.app_name), null, paint_large_text);
 		l.setCentre(Statics.SCREEN_WIDTH/2, paint_large_text.getTextSize());
 		this.stat_node_front.attachChild(l);
-
+*/
 		StringBuffer str = new StringBuffer();
-		str.append(act.getString(R.string.app_name) + " " + act.getString(R.string.about_text) + " " + Statics.EMAIL);
+	//	str.append(act.getString(R.string.app_name) + " " + act.getString(R.string.about_text) + " " + Statics.EMAIL);
 
 		MultiLineLabel label2 = new MultiLineLabel("credits", str.toString(), null, paint_normal_text, true, Statics.SCREEN_WIDTH * 0.9f);
 		label2.setCentre(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT/2);

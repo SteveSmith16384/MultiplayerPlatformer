@@ -1,8 +1,8 @@
 package ssmith.android.framework.modules;
 
+import ssmith.android.compatibility.MotionEvent;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
-import android.view.MotionEvent;
 
 import com.scs.worldcrafter.Statics;
 

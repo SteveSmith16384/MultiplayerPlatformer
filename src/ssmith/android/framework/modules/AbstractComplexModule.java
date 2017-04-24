@@ -2,14 +2,14 @@ package ssmith.android.framework.modules;
 
 import java.util.ArrayList;
 
-import com.scs.worldcrafter.Statics;
-
+import ssmith.android.compatibility.MotionEvent;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.GeometryFuncs;
-import android.view.MotionEvent;
+
+import com.scs.worldcrafter.Statics;
 
 /**
  * This module automatically handles dragging and clicking of icons.

@@ -1,14 +1,13 @@
 package ssmith.android.lib2d.layouts;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.Paint;
+import ssmith.android.compatibility.RectF;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.Point;
-import android.graphics.RectF;
 
 public class EfficientGridLayout extends AbstractRectangle {
 

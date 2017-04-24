@@ -1,7 +1,7 @@
 package ssmith.android.lib2d;
 
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
+import ssmith.android.compatibility.Paint;
+import ssmith.android.compatibility.Style;
 
 public class Lib2DStatics {
 	

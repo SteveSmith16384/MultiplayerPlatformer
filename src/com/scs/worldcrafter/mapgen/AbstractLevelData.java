@@ -1,10 +1,10 @@
 package com.scs.worldcrafter.mapgen;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import ssmith.lang.Functions;
-import android.graphics.Point;
 
 import com.scs.worldcrafter.graphics.blocks.Block;
 import com.scs.worldcrafter.graphics.blocks.SimpleBlock;

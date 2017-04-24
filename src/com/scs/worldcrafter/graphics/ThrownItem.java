@@ -1,15 +1,14 @@
 package com.scs.worldcrafter.graphics;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.Geometry;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 import com.scs.worldcrafter.Statics;
-import com.scs.worldcrafter.crafting.CraftingData;
 import com.scs.worldcrafter.game.GameModule;
 import com.scs.worldcrafter.game.PhysicsEngine;
 import com.scs.worldcrafter.graphics.blocks.Block;
@@ -18,7 +17,7 @@ import com.scs.worldcrafter.graphics.mobs.AbstractMob;
 public class ThrownItem extends GameObject {
 
 	private PhysicsEngine phys;
-	private Bitmap bmp;
+	private BufferedImage bmp;
 	private AbstractMob thrower;
 	private byte type;
 	private int damage;
@@ -95,24 +94,17 @@ public class ThrownItem extends GameObject {
 				if (Block.DamagedByThrownObject(block.getType())) {
 					block.damage(1, false);
 				} else {
-					boolean used = checkCrafting(block, this.type, block.getType());
+					/*boolean used = checkCrafting(block, this.type, block.getType());
 					if (used == false && thrower == game.player && Block.AddToInv(this.type)) {
 						// Return it to the players inventory
 						this.game.inv.addBlock(type, 1);
-					}
+					}*/
 				}
 			}
 		}
 	}
 
 
-	private boolean checkCrafting(Block block, byte t1, byte t2) {
-		boolean used = false;
-		used = CraftingData.DoCrafting(game, block, this);
-		return used;
-	}
-
-	
 	public byte getType() {
 		return this.type;
 	}

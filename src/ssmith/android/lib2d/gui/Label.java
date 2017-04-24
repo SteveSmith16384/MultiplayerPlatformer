@@ -1,6 +1,6 @@
 package ssmith.android.lib2d.gui;
 
-import android.graphics.Paint;
+import ssmith.android.compatibility.Paint;
 
 import com.scs.worldcrafter.Statics;
 

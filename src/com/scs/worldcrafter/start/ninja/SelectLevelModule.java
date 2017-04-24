@@ -1,16 +1,14 @@
 package com.scs.worldcrafter.start.ninja;
 
+import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.modules.AbstractModule;
 import ssmith.android.framework.modules.AbstractOptionsModule2;
 import ssmith.android.lib2d.gui.GUIFunctions;
-import android.graphics.Paint;
 
-import com.scs.ninja.main.lite.R;
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;
 import com.scs.worldcrafter.mapgen.AbstractLevelData;
-import com.scs.worldcrafter.mapgen.LoadSavedMap;
 
 public class SelectLevelModule extends AbstractOptionsModule2 {
 
@@ -27,19 +25,15 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 
 
 	public SelectLevelModule(AbstractActivity act, AbstractModule _return_to) {
-		super(act, _return_to, 2, paint_text, Statics.img_cache.getImage(R.drawable.button_blue, ICON_WIDTH, Statics.SCREEN_WIDTH/10), 0, false, "", true);
+		super(act, _return_to, 2, paint_text, Statics.img_cache.getImage("button_blue", ICON_WIDTH, Statics.SCREEN_WIDTH/10), 0, false, "", true);
 
-		if (Statics.GAME_MODE == Statics.GM_NINJA) {
-			this.setBackground(R.drawable.ninja_background2);
-		} else if (Statics.GAME_MODE == Statics.GM_POLICECOP) {
-			this.setBackground(R.drawable.policecop_background);
-		} 
+		this.setBackground("ninja_background2");
 	}
 
 
 	@Override
 	public void getOptions() {
-		int max = Statics.cfg.getMaxLevel();
+		int max = 3; //todo Statics.cfg.getMaxLevel();
 		for (int i=1 ; i<=max ; i++) {
 			this.addOption("Level " + i);
 		}

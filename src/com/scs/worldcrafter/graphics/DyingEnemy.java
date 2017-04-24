@@ -1,9 +1,10 @@
 package com.scs.worldcrafter.graphics;
 
+import java.awt.image.BufferedImage;
+
+import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;
@@ -11,10 +12,10 @@ import com.scs.worldcrafter.game.PhysicsEngine;
 
 public class DyingEnemy extends GameObject {
 
-	private Bitmap bmp;
+	private BufferedImage bmp;
 	private PhysicsEngine phys;
 
-	public DyingEnemy(GameModule _game, int r, GameObject o) {
+	public DyingEnemy(GameModule _game, String r, GameObject o) {
 		super(_game, "DyingEnemy", false, o.getWorldX(), o.getWorldY(), o.getHeight(), o.getWidth()); // Notice height and width are reversed since the dying enemy is on it's side
 
 		phys = new PhysicsEngine(new MyPointF(0, -1), Statics.ROCK_SPEED*2, Statics.ROCK_GRAVITY*2);

@@ -1,10 +1,11 @@
 package com.scs.worldcrafter.graphics.mobs;
 
+import java.awt.image.BufferedImage;
+
+import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.NumberFunctions;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;
@@ -12,11 +13,11 @@ import com.scs.worldcrafter.game.GameModule;
 public class PlatformMob extends AbstractMob {
 
 	public float move_x, move_y, max_dist, dist_moved;
-	private Bitmap bmp;
+	private BufferedImage bmp;
 	private long start;
 
 
-	public PlatformMob(GameModule _game, float x, float y, float w, float h, int _r, float off_x, float off_y, float _dist) {
+	public PlatformMob(GameModule _game, float x, float y, float w, float h, String _r, float off_x, float off_y, float _dist) {
 		super(_game, "Platform", x, y, w, h, (byte)1, false, false, (byte)-1);
 
 		move_x = off_x * Statics.PLATFORM_SPEED;

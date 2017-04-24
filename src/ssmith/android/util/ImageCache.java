@@ -1,134 +1,93 @@
 package ssmith.android.util;
 
-import java.util.Enumeration;
+import java.awt.Component;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Hashtable;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import javax.imageio.ImageIO;
 
-public class ImageCache {
+public class ImageCache extends Hashtable<String, BufferedImage> {
+
+	private static final long serialVersionUID = 1L;
 	
-	//private static final long serialVersionUID = 1L;
-	
-	private Hashtable<String, Bitmap> ht = new Hashtable<String, Bitmap>();
-	private Resources res;
-	
-	public ImageCache(Resources _res) {
+	private static final String IMAGES_DIR = "";//assets/gfx/";
+
+	private Component c;
+
+	public ImageCache(Component _c) {
 		super();
-		
-		res = _res;
+
+		c = _c;
+	}
+
+
+	public BufferedImage getImageByKey_HeightOnly(String filename, float h) {
+		return getImage(filename, (int)-1, (int)h);
 	}
 	
 	
-	private static String CreateKey(int key, float w, float h) {
-		return key + "_" + (int)w + "_" + (int)h;
+	public BufferedImage getImage(String filename, float w, float h) {
+		return getImage(filename, (int)w, (int)h);
 	}
 	
 	
-	public Bitmap getImage(int key, float w, float h) {
-		String key2 = CreateKey(key, w, h);
-		if (ht.containsKey(key2) == false) {
-			Bitmap bmp = BitmapFactory.decodeResource(res, key);
-			Bitmap bmp2 = Bitmap.createScaledBitmap(bmp, (int)w, (int)h, false);
-			if (bmp != bmp2) {
-				bmp.recycle();
+	public BufferedImage getImage(String filename, int w, int h) {
+		String origFilename = filename;
+		if (filename != null && filename.length() > 0) {// && !filename.endsWith("/") && !filename.endsWith("\\")) {
+			if (!filename.contains(".")) {
+				filename = filename + ".png";
 			}
-			ht.put(key2, bmp2);
-		}
-		if (ht.get(key2) == null) {
-			throw new RuntimeException("Error getting bitmap " + key);
-		}
-		return ht.get(key2);
-	}
+			filename = IMAGES_DIR + filename;
+			String key = filename + "_" + w + "_" + h;
+			BufferedImage img = get(key);
+			if (img == null) {
+				try {
+					String res_filename = filename;
+					if (res_filename.startsWith(".")) {
+						res_filename = res_filename.substring(2);
+					}
+					
+					BufferedImage bi = null;
+					ClassLoader cl = this.getClass().getClassLoader();
+					InputStream is = cl.getResourceAsStream(res_filename);
+					if (is != null) {
+						bi = ImageIO.read(is);
+					} else {
+						if (filename.endsWith(".png")) {
+							// Try jpg
+							return getImage(origFilename + ".jpg", w, h);
+						} else {
+							throw new FileNotFoundException(filename);
+						}
+						/*File f = new File(filename);
+						if (f.canRead() == false) {
+							throw new FileNotFoundException(filename);
+						}
+						bi = ImageIO.read(f);*/
+					}
+					img = bi;//new Bitmap(bi);
 
-
-	public Bitmap getImageByKey_WidthOnly(int keyX, float w) {
-		Bitmap bmp = BitmapFactory.decodeResource(res, keyX);
-/*		return getImageByKey_WidthOnly(bmp, keyX, w);
-	}
-	
-
-	public Bitmap getImageByKey_WidthOnly(Bitmap bmp, int keyX, float w) {*/
-		float scale = w / bmp.getWidth();
-		float h = bmp.getHeight() * scale;
-		String key = CreateKey(keyX, w, h);
-		if (ht.containsKey(key) == false) {
-			Bitmap bmp2 = Bitmap.createScaledBitmap(bmp, (int)w, (int)h, true);
-			ht.put(key, bmp2);
-		}
-		if (bmp != ht.get(key)) {
-			bmp.recycle();
-		}
-		return ht.get(key);
-	}
-
-
-	/**
-	 * This one automatically keeps the proportions.
-	 * @param key
-	 * @param w
-	 * @return
-	 */
-	public Bitmap getImageByKey_HeightOnly(int keyX, float h) {
-		Bitmap bmp = BitmapFactory.decodeResource(res, keyX);
-		float scale = h / bmp.getHeight();
-		float w = bmp.getWidth() * scale;
-		String key = CreateKey(keyX, w, h);
-		if (ht.containsKey(key) == false) {
-			Bitmap bmp2 = Bitmap.createScaledBitmap(bmp, (int)w, (int)h, true);
-			ht.put(key, bmp2);
-		}
-		if (bmp != ht.get(key)) {
-			bmp.recycle();
-		}
-		return ht.get(key);
-	}
-
-
-	public Bitmap[] getImages(int key[], float w, float h) {
-		Bitmap bmp[] = new Bitmap[key.length];
-		for (int i=0 ; i<key.length ; i++) {
-			bmp[i] = this.getImage(key[i], w, h);
-		}
-		return bmp;
-	}
-	
-
-	public Bitmap[] getImages(int key0, int key1, float w, float h) {
-		int key[] = new int[2];
-		key[0] = key0;
-		key[1] = key1;
-		return getImages(key, w, h);
-	}
-
-	
-	public Bitmap[] getImages(int key0, float w, float h) {
-		int key[] = new int[1];
-		key[0] = key0;
-		return getImages(key, w, h);
-	}
-	
-	
-	public void clear() {
-		Enumeration<Bitmap> enumr = this.ht.elements();
-		while (enumr.hasMoreElements()) {
-			Bitmap bmp = enumr.nextElement();
-			bmp.recycle();
-		}
-		ht.clear();
-		System.gc();
-	}
-	
-	
-	public void remove(int key) {
-		Bitmap bmp = this.ht.remove(key);
-		if (bmp != null) {
-			bmp.recycle();
+					// Resize it
+					if (w < 0) {
+						// Scale proportionally
+						w = (int)(((float)img.getWidth() / (float)img.getHeight()) * h);
+					}
+					BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+					scaled.getGraphics().drawImage(img, 0, 0, w, h, c);
+					img = scaled;
+					put(key, img);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+			return img;           
+		} else {
+			return null;
 		}
 	}
-	
 
 }
-
-

@@ -2,8 +2,8 @@ package ssmith.android.lib2d.gui;
 
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.Paint;
 import ssmith.android.lib2d.Node;
-import android.graphics.Paint;
 
 import com.scs.worldcrafter.Statics;
 
@@ -35,7 +35,7 @@ public class MultiLineLabel extends Node {
 			ArrayList<String> al_lines = new ArrayList<String>();
 			while (true) {
 				//ink.setSubpixelText(true);
-				int chars = ink.breakText(text, true, width, null);  //ink.measureText("first");   For some reason it misses off the last char?
+				int chars = ink.breakText(text, width);  //ink.measureText("first");   For some reason it misses off the last char?
 				int cr_pos = text.indexOf("\n"); // Is there a CR in the text we've got?
 				if (cr_pos >= 0 && cr_pos < chars) {
 					chars = cr_pos;

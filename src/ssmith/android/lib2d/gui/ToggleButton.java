@@ -1,23 +1,23 @@
 package ssmith.android.lib2d.gui;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.Paint;
+import ssmith.android.compatibility.RectF;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.Node;
 import ssmith.android.lib2d.Spatial;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
 
 public class ToggleButton extends Button {
 
 	private RectF temp_rect2 = new RectF();
 	private boolean selected = false;
 	private Paint deselected_background_paint_and_ink;
-	private Bitmap deselected_bmp;
+	private BufferedImage deselected_bmp;
 
-	public ToggleButton(String _text, Paint paint, Paint _deselected_background_paint, Paint ink, Bitmap bmp, Bitmap _deselected_bmp) {
+	public ToggleButton(String _text, Paint paint, Paint _deselected_background_paint, Paint ink, BufferedImage bmp, BufferedImage _deselected_bmp) {
 		super(_text, paint, ink, bmp);
 
 		deselected_background_paint_and_ink = _deselected_background_paint;
@@ -25,7 +25,7 @@ public class ToggleButton extends Button {
 	}
 
 
-	public ToggleButton(String cmd, String _text, float x, float y, Paint paint, Paint _deselected_background_paint, Paint ink, Bitmap bmp, Bitmap _deselected_bmp) {
+	public ToggleButton(String cmd, String _text, float x, float y, Paint paint, Paint _deselected_background_paint, Paint ink, BufferedImage bmp, BufferedImage _deselected_bmp) {
 		super(cmd + "_Btn", cmd, _text, x, y, paint, ink, bmp);
 
 		deselected_background_paint_and_ink = _deselected_background_paint;
@@ -56,9 +56,6 @@ public class ToggleButton extends Button {
 					temp_rect2.set(this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, this.world_bounds.right - cam.left, this.world_bounds.bottom - cam.top);
 					g.drawRect(temp_rect2, deselected_background_paint_and_ink);
 				} else {
-					if (deselected_bmp.isRecycled()) {
-						throw new RuntimeException("Bitmap 'deselected_bmp' has been recycled!");
-					}
 					g.drawBitmap(this.deselected_bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, deselected_background_paint_and_ink);
 				}
 				super.drawText(g, cam);

@@ -1,7 +1,7 @@
 package com.scs.worldcrafter.graphics;
 
+import ssmith.android.compatibility.Paint;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
-import android.graphics.Paint;
 
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;

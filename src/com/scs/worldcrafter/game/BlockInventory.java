@@ -19,20 +19,6 @@ public final class BlockInventory extends HashMap<Byte, Integer> {
 
 		game = _game;
 
-		if (Statics.has_infinite_blocks) {
-			try {
-				for (byte i=2 ; i<=Block.MAX_BLOCK_ID ; i++) {
-					Block b = new Block(_game, i, -1, -1); // Check it exists
-					if (Block.AddInConstructionMode(b.getType())) {
-						this.addBlock(i, 99);
-					}
-					i++;
-				}
-			} catch (RuntimeException ex) {
-				//BugSenseHandler.log(Statics.NAME, ex);
-				AbstractActivity.HandleError(null, ex);
-			}
-		}	
 	}
 
 
@@ -59,16 +45,13 @@ public final class BlockInventory extends HashMap<Byte, Integer> {
 
 		// Give it to the player?
 		if (amt > 0) { // Adding an item
-			if (Statics.GAME_MODE != Statics.GM_WORLDCRAFTER) {
 				if (this.game.player != null && this.game.player.hasBlockSelected() == false) {
 					if (super.containsKey(id)) {
 						this.game.player.setItemType(id);
 						game.setCurrentItemIcon();
 					}
 				}
-			}
 		} else { // Removing item
-			if (Statics.has_infinite_blocks == false) { // Don't remove in Construction mode
 				if (hasBlock(game.player.getCurrentItemType()) == false) { // Is it the last item of this type
 					game.player.setItemType(Block.NOTHING_DAYLIGHT); // Default
 					Iterator<Byte> it = this.keySet().iterator();
@@ -78,7 +61,6 @@ public final class BlockInventory extends HashMap<Byte, Integer> {
 					}
 					game.setCurrentItemIcon();
 				}
-			}
 		}
 		game.updateInvIconAmt();
 

@@ -1,8 +1,9 @@
 package com.scs.worldcrafter.game;
 
+import java.awt.Point;
+
 import ssmith.android.util.Timer;
 import ssmith.lang.GeometryFuncs;
-import android.graphics.Point;
 
 import com.scs.worldcrafter.Statics;
 

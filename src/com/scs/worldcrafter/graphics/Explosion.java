@@ -1,13 +1,13 @@
 package com.scs.worldcrafter.graphics;
 
+import java.awt.image.BufferedImage;
+
+import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.Node;
 import ssmith.lang.Functions;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 
-import com.scs.ninja.main.lite.R;
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.game.GameModule;
 import com.scs.worldcrafter.game.PhysicsEngine;
@@ -15,11 +15,11 @@ import com.scs.worldcrafter.game.PhysicsEngine;
 public class Explosion extends GameObject {
 	
 	private PhysicsEngine phys;
-	private Bitmap bmp;
+	private BufferedImage bmp;
 	private MyPointF pxl_origin;
-	private int r;
+	private String r;
 	
-	public static void CreateExplosion(GameModule game, int pieces, float pxl_x, float pxl_y, int _r) {
+	public static void CreateExplosion(GameModule game, int pieces, float pxl_x, float pxl_y, String _r) {
 		//game.act.sound_manager.playSound(R.raw.explosion1);
 		
 		Node parent_node = new Node("ExplosionParent");
@@ -33,7 +33,7 @@ public class Explosion extends GameObject {
 	}
 	
 	
-	private Explosion(GameModule _game, MyPointF _pxl_origin, MyPointF _dir, Node parent, int _r) {
+	private Explosion(GameModule _game, MyPointF _pxl_origin, MyPointF _dir, Node parent, String _r) {
 		super(_game, "Explosion", false, _pxl_origin.x, _pxl_origin.y, Statics.ROCK_SIZE, Statics.ROCK_SIZE);
 		
 		r = _r;

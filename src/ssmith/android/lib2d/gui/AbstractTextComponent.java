@@ -1,9 +1,10 @@
 package ssmith.android.lib2d.gui;
 
+import java.awt.image.BufferedImage;
+
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.Paint;
 import ssmith.android.lib2d.Camera;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 
 import com.scs.worldcrafter.Statics;
 
@@ -16,12 +17,12 @@ public abstract class AbstractTextComponent extends AbstractComponent {
 	private boolean centre;
 	protected String lines[];
 
-	public AbstractTextComponent(String name, String cmd, String _text, float x, float y, float w, float h, Paint paint, Paint _ink, Bitmap bmp, boolean _centre) {
+	public AbstractTextComponent(String name, String cmd, String _text, float x, float y, float w, float h, Paint paint, Paint _ink, BufferedImage bmp, boolean _centre) {
 		this(name, cmd, _text, x, y, w, h, paint, _ink, -1, bmp, _centre);
 	}
 
 
-	public AbstractTextComponent(String name, String cmd, String _text, float x, float y, float w, float h, Paint paint, Paint _ink, int maxlen, Bitmap bmp, boolean _centre) {
+	public AbstractTextComponent(String name, String cmd, String _text, float x, float y, float w, float h, Paint paint, Paint _ink, int maxlen, BufferedImage bmp, boolean _centre) {
 		super(name, cmd, x, y, w, h, paint, bmp);
 
 		ink = _ink;

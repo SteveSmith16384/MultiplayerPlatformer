@@ -2,11 +2,11 @@ package ssmith.android.lib2d;
 
 import java.util.ArrayList;
 
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.PointF;
+import ssmith.android.compatibility.RectF;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.GeometryFuncs;
-import android.graphics.Canvas;
-import android.graphics.PointF;
-import android.graphics.RectF;
 
 public abstract class Spatial {
 

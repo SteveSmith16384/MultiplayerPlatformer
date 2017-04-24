@@ -1,10 +1,10 @@
 package ssmith.android.lib2d;
 
-import com.scs.worldcrafter.Statics;
-
+import ssmith.android.compatibility.PointF;
+import ssmith.android.compatibility.RectF;
 import ssmith.lang.GeometryFuncs;
-import android.graphics.PointF;
-import android.graphics.RectF;
+
+import com.scs.worldcrafter.Statics;
 
 public class Camera extends RectF {
 

@@ -1,6 +1,6 @@
 package ssmith.android.lib2d;
 
-import android.graphics.PointF;
+import ssmith.android.compatibility.PointF;
 
 public class MyPointF extends PointF {
 	

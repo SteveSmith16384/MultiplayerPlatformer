@@ -1,10 +1,10 @@
 package ssmith.android.framework.modules;
 
+import ssmith.android.compatibility.Paint;
+import ssmith.android.compatibility.Style;
 import ssmith.android.lib2d.Node;
 import ssmith.android.lib2d.gui.GUIFunctions;
 import ssmith.android.lib2d.gui.MultiLineLabel;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
 
 import com.scs.worldcrafter.Statics;
 

@@ -1,5 +1,8 @@
 package ssmith.android.lib2d.shapes;
 
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.Paint;
+import ssmith.android.compatibility.PointF;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.Node;
@@ -7,9 +10,6 @@ import ssmith.android.lib2d.Spatial;
 import ssmith.lang.GeometryFuncs;
 import ssmith.lang.GeometryFunctions2;
 import ssmith.lang.Maths;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PointF;
 
 
 public class Line extends Geometry {

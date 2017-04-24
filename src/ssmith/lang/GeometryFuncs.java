@@ -1,7 +1,8 @@
 package ssmith.lang;
 
-import android.graphics.Point;
-import android.graphics.PointF;
+import java.awt.Point;
+
+import ssmith.android.compatibility.PointF;
 
 public class GeometryFuncs {
 
