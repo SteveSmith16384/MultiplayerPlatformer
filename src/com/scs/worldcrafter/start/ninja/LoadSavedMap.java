@@ -1,21 +1,20 @@
 package com.scs.worldcrafter.start.ninja;
 
 import java.awt.Point;
-import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import ssmith.android.framework.AbstractActivity;
-import ssmith.android.io.IOFunctions;
-import ssmith.lang.Functions;
-import ssmith.lang.NumberFunctions;
+import java.util.List;
 
 import com.scs.worldcrafter.Statics;
 import com.scs.worldcrafter.graphics.blocks.Block;
 import com.scs.worldcrafter.graphics.blocks.SimpleBlock;
-import com.scs.worldcrafter.graphics.mobs.AbstractMob;
 import com.scs.worldcrafter.mapgen.AbstractLevelData;
 import com.scs.worldcrafter.mapgen.SimpleMobData;
+
+import ssmith.android.framework.AbstractActivity;
+import ssmith.lang.NumberFunctions;
 
 public class LoadSavedMap extends AbstractLevelData {
 
@@ -44,9 +43,9 @@ public class LoadSavedMap extends AbstractLevelData {
 	@Override
 	public void run() {
 		try {
-			String text = null;
-			text = "todo";//IOFunctions.ReadRawText(Statics.act, r_level);
-			String lines[] = text.split("\n");
+			List<String> text = Files.readAllLines(FileSystems.getDefault().getPath(".", filename));//IOFunctions.ReadRawText(Statics.act, r_level);
+			String lines[] = new String[text.size()];
+			lines = text.toArray(lines);
 			int map_row = 0;
 			ArrayList<SimpleBlock[]> rows = new ArrayList<SimpleBlock[]>();
 			max_rows = lines.length;

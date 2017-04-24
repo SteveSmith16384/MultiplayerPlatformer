@@ -30,7 +30,7 @@ public class XMLHelper {
 		} else {
 			String s;
 			try {
-				s = loadXML("strings.xml", id);
+				s = loadXML("assets/strings/strings.xml", id);
 			} catch (ParserConfigurationException | SAXException | IOException e) {
 				e.printStackTrace();
 				s = id;//"[Not Found]"
@@ -53,7 +53,7 @@ public class XMLHelper {
 		if (fXmlFile.canRead()) {
 			doc = dBuilder.parse(fXmlFile);
 		} else {
-			InputStream fntStr = this.getClass().getClassLoader().getResourceAsStream("strings.xml");
+			InputStream fntStr = this.getClass().getClassLoader().getResourceAsStream(filename);
 			doc = dBuilder.parse(fntStr);
 
 		}

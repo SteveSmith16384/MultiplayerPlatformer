@@ -14,7 +14,7 @@ public class ImageCache extends Hashtable<String, BufferedImage> {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final String IMAGES_DIR = "";//assets/gfx/";
+	private static final String IMAGES_DIR = "assets/gfx/";
 
 	private Component c;
 
