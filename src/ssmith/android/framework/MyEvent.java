@@ -2,7 +2,7 @@ package ssmith.android.framework;
 
 import java.awt.event.MouseEvent;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public class MyEvent {
 	

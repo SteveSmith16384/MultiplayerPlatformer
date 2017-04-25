@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public class BitmapRectangle extends AbstractRectangle {
 

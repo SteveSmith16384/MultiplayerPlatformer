@@ -9,7 +9,7 @@ import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.GeometryFuncs;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 /**
  * This module automatically handles dragging and clicking of icons.

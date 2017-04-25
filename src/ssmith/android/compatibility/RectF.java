@@ -1,6 +1,5 @@
 package ssmith.android.compatibility;
 
-
 public class RectF {
 
 	public float left, top, right, bottom;

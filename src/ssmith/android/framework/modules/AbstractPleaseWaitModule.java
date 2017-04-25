@@ -2,14 +2,14 @@ package ssmith.android.framework.modules;
 
 import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
-import ssmith.android.framework.IDisplayMessages;
 import ssmith.android.framework.IProgressDisplay;
 import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.gui.MultiLineLabel;
+import ssmith.util.IDisplayText;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
-public abstract class AbstractPleaseWaitModule extends SimpleAbstractModule implements IDisplayMessages, IProgressDisplay {
+public abstract class AbstractPleaseWaitModule extends SimpleAbstractModule implements IDisplayText, IProgressDisplay {
 
 	private Label label3;
 	private MultiLineLabel log_label;
@@ -52,7 +52,7 @@ public abstract class AbstractPleaseWaitModule extends SimpleAbstractModule impl
 
 
 	@Override
-	public void displayMessage(String s) {
+	public void displayText(String s) {
 		log_label.appendText(s + "\n");
 	}
 

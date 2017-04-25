@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import ssmith.android.compatibility.Paint;
 import ssmith.android.lib2d.Node;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public class MultiLineLabel extends Node {
 

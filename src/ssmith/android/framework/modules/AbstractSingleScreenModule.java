@@ -4,7 +4,7 @@ import ssmith.android.compatibility.MotionEvent;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public abstract class AbstractSingleScreenModule extends AbstractModule {
 

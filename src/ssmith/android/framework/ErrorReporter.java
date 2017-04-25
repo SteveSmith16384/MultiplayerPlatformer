@@ -14,6 +14,6 @@ public class ErrorReporter {
 
 	
 	public void handleSilentException(Throwable t) {
-		// todo
+		t.printStackTrace();
 	}
 }

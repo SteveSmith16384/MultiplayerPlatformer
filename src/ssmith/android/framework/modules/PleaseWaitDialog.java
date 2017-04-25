@@ -6,7 +6,7 @@ import ssmith.android.lib2d.Node;
 import ssmith.android.lib2d.gui.GUIFunctions;
 import ssmith.android.lib2d.gui.MultiLineLabel;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public class PleaseWaitDialog extends Node {
 

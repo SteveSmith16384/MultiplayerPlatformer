@@ -4,7 +4,7 @@ import ssmith.android.compatibility.PointF;
 import ssmith.android.compatibility.RectF;
 import ssmith.lang.GeometryFuncs;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public class Camera extends RectF {
 

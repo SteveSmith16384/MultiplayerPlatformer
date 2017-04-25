@@ -2,7 +2,7 @@ package ssmith.android.compatibility;
 
 import java.awt.Color;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public class Paint {
 

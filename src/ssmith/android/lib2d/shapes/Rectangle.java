@@ -7,7 +7,7 @@ import ssmith.android.compatibility.Paint;
 import ssmith.android.compatibility.RectF;
 import ssmith.android.lib2d.Camera;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public class Rectangle extends AbstractRectangle {
 

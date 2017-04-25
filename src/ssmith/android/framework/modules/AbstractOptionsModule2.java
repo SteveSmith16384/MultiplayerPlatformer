@@ -18,7 +18,7 @@ import ssmith.android.lib2d.layouts.GridLayout;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.GeometryFuncs;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public abstract class AbstractOptionsModule2 extends AbstractModule {
 
@@ -203,9 +203,6 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 
 
 	private void selectOption(int idx) {
-		AbstractActivity act = Statics.act;
-		
-		//IOFunctions.Vibrate(act.getBaseContext(), Statics.VIBRATE_LEN);
 		this.optionSelected(idx);
 
 	}

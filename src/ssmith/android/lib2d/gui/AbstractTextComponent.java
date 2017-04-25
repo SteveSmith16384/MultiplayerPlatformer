@@ -6,7 +6,7 @@ import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
 import ssmith.android.lib2d.Camera;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public abstract class AbstractTextComponent extends AbstractComponent {
 

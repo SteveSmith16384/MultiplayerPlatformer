@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import ssmith.android.compatibility.Canvas;
-import ssmith.android.compatibility.Intent;
 import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
@@ -15,8 +14,8 @@ import ssmith.android.lib2d.gui.AbstractComponent;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.Functions;
 
-import com.scs.worldcrafter.MainThread;
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.MainThread;
+import com.scs.multiplayerplatformer.Statics;
 
 public abstract class AbstractModule extends Thread {
 	
@@ -190,7 +189,7 @@ public abstract class AbstractModule extends Thread {
 	}
 	
 
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(int requestCode, int resultCode) {
 		// Override if required
 	}
 	

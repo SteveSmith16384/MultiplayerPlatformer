@@ -2,7 +2,7 @@ package ssmith.android.lib2d.gui;
 
 import ssmith.android.compatibility.Paint;
 
-import com.scs.worldcrafter.Statics;
+import com.scs.multiplayerplatformer.Statics;
 
 public class Label extends AbstractTextComponent {
 

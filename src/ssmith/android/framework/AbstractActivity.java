@@ -1,19 +1,16 @@
 package ssmith.android.framework;
 
-import ssmith.android.compatibility.Activity;
-import ssmith.android.compatibility.Bundle;
 import ssmith.android.framework.modules.AbstractModule;
 import ssmith.audio.MP3Player;
 import ssmith.audio.SoundCacheThread;
-import sun.rmi.runtime.Log;
 
-import com.scs.ninja.XMLHelper;
-import com.scs.worldcrafter.MainThread;
-import com.scs.worldcrafter.Statics;
-import com.scs.worldcrafter.start.ErrorModule;
+import com.scs.multiplayerplatformer.MainThread;
+import com.scs.multiplayerplatformer.Statics;
+import com.scs.multiplayerplatformer.XMLHelper;
+import com.scs.multiplayerplatformer.start.ErrorModule;
 
 
-public abstract class AbstractActivity extends Activity implements Thread.UncaughtExceptionHandler {
+public abstract class AbstractActivity implements Thread.UncaughtExceptionHandler {
 
 	public static MainThread thread; // thread must be here as this is the only constant class
 	public static SoundCacheThread sound_manager;
@@ -26,7 +23,7 @@ public abstract class AbstractActivity extends Activity implements Thread.Uncaug
 	}
 
 
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate() {
 		Statics.init(this);
 		Statics.act = this;
 
