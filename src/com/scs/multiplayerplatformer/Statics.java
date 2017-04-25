@@ -45,13 +45,11 @@ public final class Statics {
 	public static ImageCache img_cache;
 
 	// Game settings
-	//public static boolean los_to_see_monsters = false;
-	//public static boolean amulet = false;
 	public static boolean player_loses_health = false;
 	public static boolean has_timer = false;
 
 	// Bitmap scales
-	private static float SQ_SIZE_PCENT = 6f;
+	private static float SQ_SIZE_PCENT = 4f;
 	public static float SQ_SIZE;
 	public static int SQ_SIZE_INT;
 	private static final float ICON_SIZE_PCENT = 11f;
@@ -109,7 +107,7 @@ public final class Statics {
 			ROCK_SIZE = SCREEN_WIDTH * (ROCK_SIZE_PCENT/100);
 			SLIME_SIZE = SCREEN_WIDTH * (SLIME_SIZE_PCENT/100);
 			ROCK_SPEED = SCREEN_WIDTH * (ROCK_SPEED_PCENT/100);
-			ROCK_GRAVITY = 0.0598f;//Must be constant!  Was: screen_width * (ROCK_GRAVITY_PCENT/100);
+			ROCK_GRAVITY = 0.0598f; // Must be constant!
 			BULLET_SPEED = SCREEN_WIDTH * (BULLET_SPEED_PCENT/100);
 			BUBBLE_SPEED = SCREEN_WIDTH * (BUBBLE_SPEED_PCENT/100);
 			PLATFORM_SPEED = SCREEN_WIDTH * (PLATFORM_SPEED_PCENT/100);
@@ -164,7 +162,8 @@ public final class Statics {
 		return "ninja_level" + level + ".csv";
 	}
 
-
+	// ----------------------------------------------------------------------
+	
 	public static void p(String s) {
 		System.out.println(s);
 	}

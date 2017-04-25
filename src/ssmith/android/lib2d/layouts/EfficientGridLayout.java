@@ -18,7 +18,6 @@ public class EfficientGridLayout extends AbstractRectangle {
 	static {
 		default_paint.setARGB(255, 255, 255, 255);
 		default_paint.setAntiAlias(true);
-		//default_paint.setStyle(Style.STROKE);
 	}
 
 	protected AbstractRectangle blocks[][];

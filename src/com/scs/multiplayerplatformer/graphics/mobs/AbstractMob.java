@@ -216,7 +216,7 @@ public abstract class AbstractMob extends GameObject {
 			float y = this.getWorldCentreY() + (dir.y * i);
 			int map_x = (int)(x / Statics.SQ_SIZE);
 			int map_y = (int)(y / Statics.SQ_SIZE);
-			Block b = (Block)game.new_grid.getBlockAtMap_MaybeNull(map_x, map_y);
+			Block b = (Block) game.new_grid.getBlockAtMap_MaybeNull(map_x, map_y);
 			if (b != null) {
 				if (Block.BlocksLight(b.getType())) {
 					return false;

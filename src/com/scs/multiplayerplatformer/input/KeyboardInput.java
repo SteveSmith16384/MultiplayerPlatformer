@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 
 public class KeyboardInput implements IInputDevice, KeyListener {
 
-	private boolean left, right, jump, down;
+	private volatile boolean left, right, jump, down;
 
 	public KeyboardInput(JFrame frame) {
 		frame.addKeyListener(this);

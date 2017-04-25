@@ -1,6 +1,5 @@
 package com.scs.multiplayerplatformer.game;
 
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -11,7 +10,6 @@ import ssmith.android.compatibility.Style;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 import ssmith.android.framework.modules.AbstractModule;
-import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.gui.Button;
 import ssmith.android.lib2d.gui.GUIFunctions;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
@@ -28,7 +26,6 @@ import ssmith.util.TSArrayList;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.graphics.Cloud;
 import com.scs.multiplayerplatformer.graphics.Explosion;
-import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.graphics.blocks.SimpleBlock;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
@@ -290,13 +287,15 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				player.move_x_offset = -1;
 			} else if (input.isRightPressed()) {
 				player.move_x_offset = 1;
+			} else {
+				player.move_x_offset = 0;
 			}
+			
 			if (input.isJumpPressed()) {
 				player.startJumping();
 			} else if (input.isDownPressed()) {
 				player.moving_down = true;
 			}
-
 		}
 
 		// Process the rest
@@ -585,7 +584,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	private void throwItem(PlayersAvatar player, MyEvent ev) {
+	private void throwItem(PlayersAvatar player, MyEvent ev) { // todo - use this
 		AbstractActivity act = Statics.act;
 
 		byte type = player.getCurrentItemType();

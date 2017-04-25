@@ -93,34 +93,6 @@ public final class MainThread extends Thread {
 	}
 
 
-	/*public boolean onKeyDown(int keyCode, KeyEvent msg) {
-		if (keyCode == KeyEvent.VK_F1) {
-			// Take screenshot
-			try {
-				BufferedImage image = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
-				ImageIO.write(image, "png", new File("sf_" + System.currentTimeMillis() + ".png"));
-				Statics.p("Screenshot saved");
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-				ex.printStackTrace();
-			}
-			return false;
-		}
-		if (this.module != null) {
-			return this.module.onKeyDown(keyCode, msg);
-		}
-		return false;
-	}
-
-
-	public boolean onKeyUp(int keyCode, KeyEvent msg) {
-		if (this.module != null) {
-			return this.module.onKeyUp(keyCode, msg);
-		}
-		return false;
-	}*/
-
-
 	public boolean onBackPressed() {
 		synchronized (events) {
 			events.clear();
