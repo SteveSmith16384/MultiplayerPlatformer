@@ -10,6 +10,10 @@ public interface IInputDevice {
 
 	boolean isDownPressed();
 	
+	boolean isThrowPressed();
+	
 	int getAngle();
+
+	int getThrowDuration();
 
 }

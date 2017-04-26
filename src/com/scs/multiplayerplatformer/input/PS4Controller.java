@@ -40,4 +40,18 @@ public class PS4Controller implements IInputDevice {
 		return 0;
 	}
 
+
+	@Override
+	public boolean isThrowPressed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public int getThrowDuration() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

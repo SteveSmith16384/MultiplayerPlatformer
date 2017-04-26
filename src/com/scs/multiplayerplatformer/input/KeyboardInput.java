@@ -92,4 +92,16 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 		return 0;
 	}
 
+	@Override
+	public boolean isThrowPressed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int getThrowDuration() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

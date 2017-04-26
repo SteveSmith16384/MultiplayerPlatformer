@@ -73,7 +73,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public MyEfficientGridLayout new_grid;
 	public int map_loaded_up_to_col = -1;
 	private Button curr_item_icon, current_item_image, cmd_menu;
-	public boolean is_day = true;
+	//public boolean is_day = true;
 	public TimedString msg;
 	private RectF health_bar = new RectF();
 	private RectF health_bar_outline = new RectF();
@@ -291,10 +291,15 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				player.move_x_offset = 0;
 			}
 			
+			player.moving_down = false;
 			if (input.isJumpPressed()) {
 				player.startJumping();
 			} else if (input.isDownPressed()) {
 				player.moving_down = true;
+			}
+			
+			if (input.isThrowPressed()) {
+				this.throwItem(player, input.getAngle(), input.getThrowDuration());
 			}
 		}
 
@@ -584,7 +589,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	private void throwItem(PlayersAvatar player, MyEvent ev) { // todo - use this
+	private void throwItem(PlayersAvatar player, float angle, float power) {
 		AbstractActivity act = Statics.act;
 
 		byte type = player.getCurrentItemType();

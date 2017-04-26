@@ -34,7 +34,6 @@ public final class Statics {
 	public static final int DYNAMITE_DAMAGE = 10;
 	public static final String EMAIL = "help@penultimateapps.com"; 
 	public static final float LABEL_SPACING = 1.2f;
-	public static final float JUMP_Y = -1.2f;
 	public static float ACTIVATE_DIST, DEACTIVATE_DIST;
 	public static final String MUSIC_R = "chippytoon";
 	public static int WINDOW_TOP_OFFSET;
@@ -55,7 +54,7 @@ public final class Statics {
 	private static final float ICON_SIZE_PCENT = 11f;
 	public static float ICON_SIZE;
 	public static float PLAYER_WIDTH, PLAYER_HEIGHT;
-	public static float PLAYER_SPEED_DIVISOR = 10f;
+	public static float PLAYER_SPEED_DIVISOR = 7f;
 	public static float PLAYER_SPEED, ENEMY_NINJA_SPEED;
 	public static float PLAYER_FALL_SPEED, MAX_FALL_SPEED;
 	private static final float ROCK_SIZE_PCENT = 3f;
@@ -77,15 +76,13 @@ public final class Statics {
 	public static final float CLOUD_SPEED_PCENT = .4f;
 	public static float CLOUD_SPEED;
 	public static float HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT;
+	public static float JUMP_Y;// = -1.2f;
 
 	public static boolean initd = false;
 
 
 	public static void init(AbstractActivity _act) {
 		if (initd == false) {
-
-			Statics.SQ_SIZE_PCENT = 8f;
-
 			if (FULL_SCREEN) {
 				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 				SCREEN_WIDTH = (int)screenSize.getWidth();
@@ -101,6 +98,7 @@ public final class Statics {
 			PLAYER_WIDTH = SQ_SIZE * 0.8f;
 			PLAYER_HEIGHT = (SQ_SIZE*2) * 0.9f;
 			PLAYER_SPEED = SQ_SIZE / PLAYER_SPEED_DIVISOR;//10f;
+			JUMP_Y = -SQ_SIZE/30;
 			PLAYER_FALL_SPEED = PLAYER_SPEED/3f;
 			MAX_FALL_SPEED = Statics.SQ_SIZE/2; 
 			ENEMY_NINJA_SPEED = PLAYER_SPEED * 0.25f;

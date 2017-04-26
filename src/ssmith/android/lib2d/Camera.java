@@ -8,7 +8,7 @@ import com.scs.multiplayerplatformer.Statics;
 
 public class Camera extends RectF {
 
-	private static final float LOCKON_DIST = 10;
+	private static final float LOCKON_DIST = 20; // Was 10
 
 	public int zoom = 1;
 	private PointF target_point = new PointF(); // Where we're aiming at

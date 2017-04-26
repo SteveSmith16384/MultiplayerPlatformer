@@ -34,13 +34,13 @@ public class Log implements ILog {
 	public static LogLevel level = null;
 	
 	/** Debug logging flag. */
-	public static boolean debugEnabled = false;
+	public static boolean debugEnabled = true;
 	
 	/** Info logging flag. */
 	public static boolean infoEnabled = false;
 	
 	/** Error logging flag. */
-	public static boolean errorEnabled = false;
+	public static boolean errorEnabled = true;
 	
 	/* (non-Javadoc)
 	 * @see org.gamepad4j.util.ILog#debug(java.lang.String)

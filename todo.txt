@@ -1,4 +1,5 @@
 TODO
+Throwing shuriken
 Look for game modes
 Put in PS4 code
 Player joins when controller pressed

@@ -65,10 +65,10 @@ public class Block extends GameObject {
 	public static final byte STICKS = 40;
 	public static final byte BONES = 42;  // Add to wiki
 	public static final byte COBWEB = 43;
-	public static final byte LAMB_CHOP = 44;  // Add to wiki
+	//public static final byte LAMB_CHOP = 44;  // Add to wiki
 	public static final byte UNLIT_FURNACE = 45;
 	public static final byte LIT_FURNACE = 46;
-	public static final byte BREAD = 47;
+	//public static final byte BREAD = 47;
 	public static final byte GLASS = 48;  // Add to wiki
 	public static final byte CLAY = 49; 
 	public static final byte BRICKS = 50;
@@ -237,8 +237,6 @@ public class Block extends GameObject {
 		case WHEAT_SEED:
 		case WOOL:
 		case COBWEB:
-		case LAMB_CHOP:
-		case BREAD:
 		case RAW_BEEF:
 		case RAW_DEAD_CHICKEN:
 		case RAW_PORK:
@@ -286,10 +284,8 @@ public class Block extends GameObject {
 		case WEEDS:
 		case STICKS:
 		case BONES:
-		case LAMB_CHOP:
 		case UNLIT_FURNACE:
 		case LIT_FURNACE:
-		case BREAD:
 		case GLASS:
 		case RAW_BEEF:
 		case RAW_DEAD_CHICKEN:
@@ -357,8 +353,6 @@ public class Block extends GameObject {
 		case WOOL:
 		case WEEDS:
 		case COBWEB:
-		case LAMB_CHOP:
-		case BREAD:
 		case RAW_BEEF:
 		case RAW_DEAD_CHICKEN:
 		case RAW_PORK:
@@ -483,7 +477,6 @@ public class Block extends GameObject {
 		case WOOL:
 		case WEEDS:
 		case COBWEB:
-		case BREAD:
 		case GLASS:
 		case RAW_BEEF:
 		case RAW_DEAD_CHICKEN:
@@ -591,14 +584,10 @@ public class Block extends GameObject {
 			return img_cache.getImage("bones", w, h);
 		case COBWEB:
 			return img_cache.getImage("cobweb", w, h);
-		case LAMB_CHOP:
-			return img_cache.getImage("raw_lamb_chop", w, h);
 		case UNLIT_FURNACE:
 			return img_cache.getImage("furnace_unlit", w, h);
 		case LIT_FURNACE:
 			return img_cache.getImage("furnace_lit", w, h);
-		case BREAD:
-			return img_cache.getImage("bread", w, h);
 		case GLASS:
 			return img_cache.getImage("glass", w, h);
 		case CLAY:
@@ -618,7 +607,7 @@ public class Block extends GameObject {
 		case CRATE:
 			return img_cache.getImage("crate.gif", w, h);
 		case MEDIKIT:
-			return img_cache.getImage("bread", w, h);
+			return img_cache.getImage("medikit", w, h);
 		case END_OF_LEVEL:
 			return img_cache.getImage("gold_star", w, h);
 		case BARREL:
@@ -630,13 +619,13 @@ public class Block extends GameObject {
 		case BLOOD_SPURT:
 			return img_cache.getImage("blood_spurt", w, h);
 		default:
-			try {
+			/*try {
 				throw new RuntimeException("Unknown block type:" + type);
 			} catch (Exception ex) {
 				ErrorReporter.getInstance().handleSilentException(ex);
 
-			}
-			return img_cache.getImage("wood", w, h);
+			}*/
+			return img_cache.getImage("wood", w, h); // todo - show dummy image
 		}
 	}
 
@@ -646,10 +635,6 @@ public class Block extends GameObject {
 		switch (type) {
 		case APPLE:
 			return 10;
-		case BREAD:
-			return 30;
-		case LAMB_CHOP:
-			return 40;
 		case RAW_BEEF:
 			return 40;
 		case RAW_DEAD_CHICKEN:

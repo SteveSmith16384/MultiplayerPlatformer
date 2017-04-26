@@ -145,17 +145,20 @@ public abstract class AbstractLandMob extends AbstractMob {
 
 		// Align us with the ladder
 		if (is_on_ladder && this instanceof PlayersAvatar) {
-			float adj_dist = (Statics.SQ_SIZE - this.getWidth())/2;
-			float target_pos = ladder_x + adj_dist;
-			float MOVE_DIST = Statics.PLAYER_SPEED/2;
-			float diff = Math.abs(this.getWorldX() - target_pos);
-			if (diff > MOVE_DIST) {
-				if (this.getWorldX() > target_pos) {
-					this.adjustLocation(-MOVE_DIST, 0);
-					this.updateGeometricState();
-				} else if (this.getWorldX() < target_pos) {
-					this.adjustLocation(MOVE_DIST, 0);
-					this.updateGeometricState();
+			PlayersAvatar player = (PlayersAvatar)this;
+			if (player.move_x_offset == 0) { // add to Android?
+				float adj_dist = (Statics.SQ_SIZE - this.getWidth())/2;
+				float target_pos = ladder_x + adj_dist;
+				float MOVE_DIST = Statics.PLAYER_SPEED/2;
+				float diff = Math.abs(this.getWorldX() - target_pos);
+				if (diff > MOVE_DIST) {
+					if (this.getWorldX() > target_pos) {
+						this.adjustLocation(-MOVE_DIST, 0);
+						this.updateGeometricState();
+					} else if (this.getWorldX() < target_pos) {
+						this.adjustLocation(MOVE_DIST, 0);
+						this.updateGeometricState();
+					}
 				}
 			}
 		}
@@ -192,8 +195,8 @@ public abstract class AbstractLandMob extends AbstractMob {
 		}
 
 	}
-	
-	
+
+
 	/*protected boolean checkIfCanFall() {
 		RectF r = new RectF(this.getWorldBounds().left, this.getWorldBounds().top, this.getWorldBounds().right, this.getWorldBounds().bottom);
 		r.offset(0,  1);
