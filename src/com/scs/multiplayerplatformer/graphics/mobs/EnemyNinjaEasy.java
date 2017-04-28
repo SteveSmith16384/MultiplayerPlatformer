@@ -84,18 +84,18 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 	@Override
 	public void process(long interpol) {
 		//if (Statics.DEBUGGING == false) {
-		float dist = super.getDistanceTo(game.player); 
+		float dist = this.getDistanceToClosestPlayer(); //  super.getDistanceTo(game.player); 
 		if (dist < Statics.ACTIVATE_DIST) { // Only process if close
 			//turn_timer -= interpol;
 			//if (turn_timer <= 0) {
 			if (turn_interval.hitInterval()) {
 				//turn_timer = TURN_DURATION;
-				float diff = game.player.getWorldCentreX() - this.getWorldCentreX();
+				float diff = -1; // todo game.player.getWorldCentreX() - this.getWorldCentreX();
 				x_offset = NumberFunctions.sign(diff);
 			}
 
 			// Try moving
-			if (this.move(x_offset * Statics.ENEMY_NINJA_SPEED, 0) == false) {
+			if (this.move(x_offset * Statics.ENEMY_NINJA_SPEED, 0, false) == false) {
 				// Can't move
 				if (tried_jumping == false) {
 					this.startJumping();
@@ -112,8 +112,9 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 			checkForHarmingBlocks();
 
 			if (throw_interval.hitInterval()) {
-				if (this.canSee(game.player)) {
-					this.throwShuriken();
+				PlayersAvatar player = this.getVisiblePlayer(); 
+				if (player != null) {
+					this.throwShuriken(player);
 				}
 			}
 
@@ -130,8 +131,8 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 	}
 
 
-	private void throwShuriken() {
-		ThrownItem.ThrowShuriken(this.game, this, game.player.getWorldCentre_CreatesNew().subtract(this.getWorldCentre_CreatesNew()).normalizeLocal());
+	private void throwShuriken(PlayersAvatar player) {
+		ThrownItem.ThrowShuriken(this.game, this, player.getWorldCentre_CreatesNew().subtract(this.getWorldCentre_CreatesNew()).normalizeLocal());
 	}
 
 

@@ -69,8 +69,8 @@ public abstract class AbstractMob extends GameObject {
 			EnemyNinjaEasy.Subfactory(game, sm.pixel_x, sm.pixel_y);
 			break;
 		case AbstractMob.PLATFORM1:
-			//new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE, Statics.SQ_SIZE, R.drawable.grass, 1, 0, Statics.SQ_SIZE * 4); // todo - change params
-			new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE*2, Statics.SQ_SIZE, "grass", 0, -1, Statics.SQ_SIZE * 4); // todo - change params
+			//new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE, Statics.SQ_SIZE, R.drawable.grass, 1, 0, Statics.SQ_SIZE * 4);
+			new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE*2, Statics.SQ_SIZE, "grass", 0, -1, Statics.SQ_SIZE * 4);
 			break;
 		default:
 			if (Statics.RELEASE_MODE == false) {
@@ -98,7 +98,7 @@ public abstract class AbstractMob extends GameObject {
 	 * Returns if the move was successful.
 	 * 
 	 */
-	protected boolean move(float off_x, float off_y) {
+	protected boolean move(float off_x, float off_y, boolean ladderBlocks) {
 		if (remove_if_far_away) {
 			if (checkIfTooFarAway()) { 
 				return false; 
@@ -125,7 +125,15 @@ public abstract class AbstractMob extends GameObject {
 				if (this instanceof PlayersAvatar) {
 					b.touched((PlayersAvatar)this);
 				}
+				boolean blocked = false;
+
 				if (Block.BlocksAllMovement(b.getType())) {
+					blocked = true;
+				}
+				if (ladderBlocks && Block.BlocksDownMovement(b.getType())) {
+					blocked = true;
+				}
+				if (blocked) {
 					this.is_on_ice = (b.getType() == Block.SNOW);
 
 					// Move us up to the object we hit
@@ -186,7 +194,7 @@ public abstract class AbstractMob extends GameObject {
 	protected void collidedWithBlock() {
 		// Override if required.
 	}
-	
+
 
 	private boolean collidedWith(Geometry g, float prev_x, float prev_y) {
 		if (hasCollidedWith(g)) {
@@ -206,25 +214,28 @@ public abstract class AbstractMob extends GameObject {
 	protected abstract boolean hasCollidedWith(Geometry g);
 
 
-	protected boolean canSee(AbstractMob mob) {
-		MyPointF dir = this.game.player.getWorldCentre_CreatesNew().subtract(this.getWorldCentre_CreatesNew());//new MyPointF(mob.getWorldCentreX(), mob.getWorldCentreY());
-		float len = dir.length();
-		int num = (int)(len / Statics.SQ_SIZE) * 3;
-		dir.divideLocal(num);
-		for (int i=0 ; i<num ; i++) {
-			float x = this.getWorldCentreX() + (dir.x * i);
-			float y = this.getWorldCentreY() + (dir.y * i);
-			int map_x = (int)(x / Statics.SQ_SIZE);
-			int map_y = (int)(y / Statics.SQ_SIZE);
-			Block b = (Block) game.new_grid.getBlockAtMap_MaybeNull(map_x, map_y);
-			if (b != null) {
-				if (Block.BlocksLight(b.getType())) {
-					return false;
+	protected PlayersAvatar getVisiblePlayer() {
+		for (PlayersAvatar player : game.players) { // todo - use Line() from Roguelike
+			MyPointF dir = player.getWorldCentre_CreatesNew().subtract(this.getWorldCentre_CreatesNew());//new MyPointF(mob.getWorldCentreX(), mob.getWorldCentreY());
+			float len = dir.length();
+			int num = (int)(len / Statics.SQ_SIZE) * 3;
+			dir.divideLocal(num);
+			for (int i=0 ; i<num ; i++) {
+				float x = this.getWorldCentreX() + (dir.x * i);
+				float y = this.getWorldCentreY() + (dir.y * i);
+				int map_x = (int)(x / Statics.SQ_SIZE);
+				int map_y = (int)(y / Statics.SQ_SIZE);
+				Block b = (Block) game.new_grid.getBlockAtMap_MaybeNull(map_x, map_y);
+				if (b != null) {
+					if (b.getType() != Block.NOTHING_DAYLIGHT) {
+						//return false;
+						continue;
+					}
 				}
 			}
+			return player;
 		}
-
-		return true;
+		return null;
 	}
 
 

@@ -119,7 +119,7 @@ public final class StartupModule extends AbstractModule {
 								startNewGame();
 								return true;
 							} else if (cmd.equalsIgnoreCase(act.getString("quit"))) {
-								// todo
+								onBackPressed();
 								return true;
 							} else {
 								throw new RuntimeException("Unknown command: '" + cmd + "'");
@@ -136,9 +136,7 @@ public final class StartupModule extends AbstractModule {
 	private void startNewGame() {
 		AbstractActivity act = Statics.act;
 
-		//Statics.los_to_see_monsters = false;
 		Statics.player_loses_health = false;
-		Statics.has_timer = false;
 		SelectLevelModule game = new SelectLevelModule(act, this);
 		this.getThread().setNextModule(game);
 

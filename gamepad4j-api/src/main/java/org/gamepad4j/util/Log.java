@@ -37,7 +37,7 @@ public class Log implements ILog {
 	public static boolean debugEnabled = true;
 	
 	/** Info logging flag. */
-	public static boolean infoEnabled = false;
+	public static boolean infoEnabled = true;
 	
 	/** Error logging flag. */
 	public static boolean errorEnabled = true;

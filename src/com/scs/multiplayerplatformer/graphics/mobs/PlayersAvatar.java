@@ -7,19 +7,24 @@ import ssmith.lang.DateFunctions;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.BlockInventory;
 import com.scs.multiplayerplatformer.game.GameModule;
+import com.scs.multiplayerplatformer.input.IInputDevice;
 
 public class PlayersAvatar extends AbstractLandMob {
 
 	private static final byte MAX_HEALTH = 100;
 
 	public int move_x_offset = 0;
-	//public boolean moving_with_keys = false;
 	private Timer dec_health_timer = new Timer(DateFunctions.MINUTE/4);
 	public BlockInventory inv;
-
-	public PlayersAvatar(GameModule _game, float x, float y) {
+	private int controllerID;
+	private IInputDevice input;
+	
+	public PlayersAvatar(GameModule _game, float x, float y, IInputDevice _input, int _controllerID) {
 		super(_game, Statics.act.getString("player"), x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, MAX_HEALTH, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
 
+		input = _input;
+		controllerID = _controllerID;
+		
 		this.setNumFrames(8);
 		a_bmp_left[0] = Statics.img_cache.getImage("ninja_l0", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
 		a_bmp_left[1] = Statics.img_cache.getImage("ninja_l1", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
@@ -43,26 +48,35 @@ public class PlayersAvatar extends AbstractLandMob {
 
 	@Override
 	public void process(long interpol) {
+		//IInputDevice input = game.getInputDevice(controllerID);
+		if (is_on_ice == false) {
+			move_x_offset = 0;
+		}
+		if (input.isLeftPressed()) {
+			move_x_offset = -1;
+		} else if (input.isRightPressed()) {
+			move_x_offset = 1;
+		}
+		
+		moving_down = false;
+		if (input.isJumpPressed()) {
+			startJumping();
+		} else if (input.isDownPressed()) {
+			moving_down = true;
+		}
+		
+		if (input.isThrowPressed()) {
+			game.throwItem(this, input.getAngle(), input.getThrowDuration());
+		}
+		
 		if (Statics.player_loses_health) {
 			if (dec_health_timer.hasHit(interpol)) {
 				this.damage(1);
 			}	
 		}
 
-		/*if (Statics.cfg.using_tilt) {
-			if (this.game.getPitch() > Statics.TILT_THRESH) { // Left
-				move_x_offset = -1;
-			} else if (this.game.getPitch() < -Statics.TILT_THRESH) {
-				move_x_offset = 1;
-			} else {
-				if (moving_with_keys == false) {
-					this.move_x_offset = 0;
-				}
-			}
-		}*/
-
 		if (move_x_offset != 0) {
-			this.move(move_x_offset * Statics.PLAYER_SPEED, 0);
+			this.move(move_x_offset * Statics.PLAYER_SPEED, 0, false);
 			game.checkIfMapNeedsLoading();
 		}
 
@@ -82,17 +96,17 @@ public class PlayersAvatar extends AbstractLandMob {
 
 	@Override
 	protected void died() {
-		game.gameOver("You have been killed!");
+		//todo game.gameOver("You have been killed!");
 	}
 
 
 	@Override
 	protected boolean hasCollidedWith(Geometry g) {
-		/*if (g instanceof PlatformMob) { todo - try and get this to work
+		if (g instanceof PlatformMob) { // try and get this to work
 			PlatformMob pm = (PlatformMob)g;
 			// Move us in the same direction as the platform.
-			this.move(pm.move_x, pm.move_y);
-		}*/
+			this.move(pm.move_x, pm.move_y, false);
+		}
 		//return true;
 		return true;
 	}

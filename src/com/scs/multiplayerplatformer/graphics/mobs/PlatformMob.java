@@ -32,7 +32,7 @@ public class PlatformMob extends AbstractMob {
 
 	@Override
 	public void process(long interpol) {
-		if (this.move(move_x, move_y) == false) {
+		if (this.move(move_x, move_y, false) == false) {
 			//this.move_x = this.move_x * -1;  Don't reverse, just pause!
 			//this.move_y = this.move_y * -1;
 		} else {
@@ -79,7 +79,7 @@ public class PlatformMob extends AbstractMob {
 			// Move the mob up with us
 			if (g instanceof AbstractMob) {
 				AbstractMob m = (AbstractMob)g;
-				m.move(0, this.move_y);
+				m.move(0, this.move_y, false);
 				return false; // So it doesn't stop us moving up
 			}
 		}

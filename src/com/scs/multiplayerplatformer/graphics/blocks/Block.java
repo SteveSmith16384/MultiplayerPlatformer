@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.framework.AbstractActivity;
-import ssmith.android.framework.ErrorReporter;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.awt.ImageCache;
@@ -49,26 +48,14 @@ public class Block extends GameObject {
 	public static final byte ADAMANTIUM = 23;
 	public static final byte IRON_ORE = 24;
 	public static final byte SAND = 25;
-	public static final byte WHEAT_LOW = 26;
-	public static final byte WHEAT_MED = 27;
-	public static final byte WHEAT_HIGH = 28;
 	public static final byte AMULET = 29;
 	public static final byte SLIME = 30;
 	public static final byte STONE = 31;
-	public static final byte WHEAT_SEED = 32;
 	public static final byte GIRDER = 33; // Add to wiki
-	public static final byte WHEAT_NONE = 34; 
-	public static final byte TREE_ROOT = 35;
-	public static final byte WHEAT_ROOT = 36;
-	public static final byte WOOL = 37;
 	public static final byte WEEDS = 38;
 	public static final byte STICKS = 40;
 	public static final byte BONES = 42;  // Add to wiki
 	public static final byte COBWEB = 43;
-	//public static final byte LAMB_CHOP = 44;  // Add to wiki
-	public static final byte UNLIT_FURNACE = 45;
-	public static final byte LIT_FURNACE = 46;
-	//public static final byte BREAD = 47;
 	public static final byte GLASS = 48;  // Add to wiki
 	public static final byte CLAY = 49; 
 	public static final byte BRICKS = 50;
@@ -148,11 +135,6 @@ public class Block extends GameObject {
 		case IRON_ORE:
 			health = (byte)(health * 2);
 			break;
-		case WHEAT_MED:
-			break;
-		case WHEAT_HIGH:
-			health = (byte)(health * 2);
-			break;
 		case AMULET:
 			health = (byte)(health * 2);
 			break;
@@ -168,10 +150,6 @@ public class Block extends GameObject {
 		case BRICKS:
 			health = (byte)(health * 3);
 			break;
-		case UNLIT_FURNACE:
-		case LIT_FURNACE:
-			health = (byte)(health * 3);
-			break;
 		default:
 			//throw new RuntimeException("Unknown block type:" + type);
 
@@ -184,8 +162,6 @@ public class Block extends GameObject {
 		switch (type) {
 		case GRASS:
 		case SNOW:
-		case TREE_ROOT:
-		case WHEAT_ROOT:
 			return SOIL;
 		case TREE_BRANCH_RIGHT:
 		case TREE_BRANCH_LEFT:
@@ -225,17 +201,12 @@ public class Block extends GameObject {
 		case DYNAMITE:
 		case TANGLEWEED:
 		case LADDER:
-		case WHEAT_LOW:
-		case WHEAT_MED:
-		case WHEAT_HIGH:
 		case ACORN:
 		case FLINT:
 		case COAL:
 		case CHEST:
 		case TREE_BRANCH_LEFT:
 		case TREE_BRANCH_RIGHT:
-		case WHEAT_SEED:
-		case WOOL:
 		case COBWEB:
 		case RAW_BEEF:
 		case RAW_DEAD_CHICKEN:
@@ -273,19 +244,12 @@ public class Block extends GameObject {
 		case ACORN:
 		case SAND:
 		case APPLE:
-		case WHEAT_LOW:
-		case WHEAT_MED:
-		case WHEAT_HIGH:
-		case WHEAT_SEED:
 		case GOLD:
 		case AMULET:
 		case SLIME:
-		case WOOL:
 		case WEEDS:
 		case STICKS:
 		case BONES:
-		case UNLIT_FURNACE:
-		case LIT_FURNACE:
 		case GLASS:
 		case RAW_BEEF:
 		case RAW_DEAD_CHICKEN:
@@ -317,9 +281,7 @@ public class Block extends GameObject {
 		case DYNAMITE:
 		case ROCK:
 		case STONE:
-		case WHEAT_SEED:
 		case ACORN:
-		case WOOL:
 		case STICKS:
 		case TREE_BARK:
 		case WOOD:
@@ -340,17 +302,11 @@ public class Block extends GameObject {
 		case FIRE:
 		case LADDER:
 		case ACORN:
-		case WHEAT_SEED:
 		case AMULET:
 		case SLIME: // Need this so splurts don't disappear straight away.
 		case TREE_BARK:
 		case TREE_BRANCH_RIGHT:
 		case TREE_BRANCH_LEFT:
-		case WHEAT_NONE:
-		case WHEAT_LOW:
-		case WHEAT_MED:
-		case WHEAT_HIGH:
-		case WOOL:
 		case WEEDS:
 		case COBWEB:
 		case RAW_BEEF:
@@ -420,7 +376,7 @@ public class Block extends GameObject {
 	}
 
 
-	public static boolean CanMoveDownThrough(byte type) {
+	public static boolean IsLadder(byte type) {
 		switch (type) {
 		case LADDER:
 		case ROPE:
@@ -438,9 +394,6 @@ public class Block extends GameObject {
 		case LAVA:
 		case WATER:
 		case SLIME:
-		case TREE_ROOT:
-		case WHEAT_ROOT:
-		case LIT_FURNACE:
 			return true;
 		default:
 			return false;
@@ -456,36 +409,6 @@ public class Block extends GameObject {
 			return 1;
 		default:
 			return 0;
-		}
-	}
-
-
-	public static boolean BlocksLight(byte type) {
-		switch (type) {
-		case APPLE:
-		case LADDER:
-		case WHEAT_LOW:
-		case WHEAT_MED:
-		case WHEAT_HIGH:
-		case WHEAT_SEED:
-		case TREE_BRANCH_LEFT:
-		case TREE_BRANCH_RIGHT:
-		case FIRE:
-		case ACORN:
-		case AMULET:
-		case FLINT:
-		case WOOL:
-		case WEEDS:
-		case COBWEB:
-		case GLASS:
-		case RAW_BEEF:
-		case RAW_DEAD_CHICKEN:
-		case RAW_PORK:
-		case EGG:
-		case ROPE:
-			return false;
-		default:
-			return true;
 		}
 	}
 
@@ -552,30 +475,14 @@ public class Block extends GameObject {
 			return img_cache.getImage("iron_ore", w, h);
 		case SAND:
 			return img_cache.getImage("sand", w, h);
-		case WHEAT_NONE:
-			return img_cache.getImage("blank", w, h);
-		case WHEAT_LOW:
-			return img_cache.getImage("wheat_low", w, h);
-		case WHEAT_MED:
-			return img_cache.getImage("wheat_med", w, h);
-		case WHEAT_HIGH:
-			return img_cache.getImage("wheat_high", w, h);
 		case AMULET:
 			return img_cache.getImage("amulet", w, h);
 		case SLIME:
 			return img_cache.getImage("slime1", w, h);
 		case STONE:
 			return img_cache.getImage("stone", w, h);
-		case WHEAT_SEED:
-			return img_cache.getImage("wheat_seed", w, h);
 		case GIRDER:
 			return img_cache.getImage("girder", w, h);
-		case TREE_ROOT:
-			return img_cache.getImage("tree_roots", w, h);
-		case WHEAT_ROOT:
-			return img_cache.getImage("wheat_roots", w, h);
-		case WOOL:
-			return img_cache.getImage("wool", w, h);
 		case WEEDS:
 			return img_cache.getImage("weeds", w, h);
 		case STICKS:
@@ -584,10 +491,6 @@ public class Block extends GameObject {
 			return img_cache.getImage("bones", w, h);
 		case COBWEB:
 			return img_cache.getImage("cobweb", w, h);
-		case UNLIT_FURNACE:
-			return img_cache.getImage("furnace_unlit", w, h);
-		case LIT_FURNACE:
-			return img_cache.getImage("furnace_lit", w, h);
 		case GLASS:
 			return img_cache.getImage("glass", w, h);
 		case CLAY:
@@ -625,7 +528,7 @@ public class Block extends GameObject {
 				ErrorReporter.getInstance().handleSilentException(ex);
 
 			}*/
-			return img_cache.getImage("wood", w, h); // todo - show dummy image
+			return img_cache.getImage("wood", w, h); // todo - show obvious dummy image
 		}
 	}
 
@@ -654,13 +557,14 @@ public class Block extends GameObject {
 	 * @return
 	 */
 	public boolean alwaysProcess() {
-		switch (this.getType()) {
+		/*switch (this.getType()) {
 		case WHEAT_ROOT:
 		case TREE_ROOT:
 			return true;
 		default:
 			return false;
-		}
+		}*/
+		return false;
 	}
 
 
@@ -673,18 +577,6 @@ public class Block extends GameObject {
 		case STONE:
 		case CRATE:
 		case BARREL:
-			return true;
-		default:
-			return false;
-		}
-	}
-
-
-	public static boolean CanGrowPlants(byte type) {
-		switch (type) {
-		case SOIL:
-		case TREE_ROOT:
-		case WHEAT_ROOT:
 			return true;
 		default:
 			return false;
@@ -765,21 +657,7 @@ public class Block extends GameObject {
 			case 3:
 				this.game.addBlock(Block.GOLD, this.map_x, this.map_y, true);
 				break;
-			case 4:
-				this.game.addBlock(Block.WHEAT_SEED, this.map_x, this.map_y, true);
-				break;
 			}
-		} else {
-			/*Block above = (Block)game.new_grid.getBlockAtMap_MaybeNull(this.map_x, this.map_y-1);
-			if (above != null && (above.getType() == Block.DARKNESS || above.getType() == Block.DARKNESS2 || Block.BlocksLight(above.getType()))) {
-				if (Functions.rnd(1, 2) == 1) {
-					this.game.addBlock(Block.DARKNESS, this.map_x, this.map_y, true);
-				} else {
-					this.game.addBlock(Block.DARKNESS2, this.map_x, this.map_y, true);
-				}
-			} else {*/
-				this.game.addBlock(Block.NOTHING_DAYLIGHT, this.map_x, this.map_y, true);
-			//}
 		}
 		this.game.removeFromProcess(this);
 		if (this.getType() != Block.NOTHING_DAYLIGHT) {
@@ -835,7 +713,7 @@ public class Block extends GameObject {
 				processWater();
 			break;
 		case LAVA:
-				if (this.getDistanceTo(game.player) <= Statics.ACTIVATE_DIST) {
+				if (this.getDistanceToClosestPlayer() <= Statics.ACTIVATE_DIST) {
 					checkLavaSquares();
 				} else {
 					remove_from_process = false; // Try again later
@@ -868,21 +746,17 @@ public class Block extends GameObject {
 			remove_from_process = false;
 			if (this.event_time < System.currentTimeMillis()) {
 				this.event_time = System.currentTimeMillis() + MOB_GEN_DURATION;
-				if (this.getDistanceTo(game.player) <= Statics.ACTIVATE_DIST) {
+				if (this.getDistanceToClosestPlayer() <= Statics.ACTIVATE_DIST) {
 					EnemyEventTimer.GenerateRandomMonster(game, this);
 				}
 			}
-			break;
-		case TREE_ROOT:
-			break;
-		case WHEAT_ROOT:
 			break;
 		case SLIME:
 			remove_from_process = false;
 			if (this.event_time < System.currentTimeMillis()) {
 				this.event_time = System.currentTimeMillis() + SLIME_DURATION;
 				if (Functions.rnd(1, 2) == 1) {
-					if (this.getDistanceTo(game.player) <= Statics.ACTIVATE_DIST) {
+					if (this.getDistanceToClosestPlayer() <= Statics.ACTIVATE_DIST) {
 						act.sound_manager.playSound("slime");
 						new ThrownItem(game, Block.SLIME_SPURT, new MyPointF(this.getWorldCentreX(), this.getWorldY()), new MyPointF(Functions.rndFloat(-.5f, .5f), -1), null, 10, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.SLIME_SIZE);
 					}
@@ -956,8 +830,6 @@ public class Block extends GameObject {
 					if (Flammable(b.getType()) && b.on_fire == false) {
 						b.on_fire = true;
 						game.addToProcess_Slow(b, true);
-					} else if (b.getType() == Block.UNLIT_FURNACE) {
-						game.addBlock(Block.LIT_FURNACE, this.map_x+1, this.map_y, false);
 					}
 				}
 				b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x-1, this.map_y);
@@ -965,8 +837,6 @@ public class Block extends GameObject {
 					if (Flammable(b.getType()) && b.on_fire == false) {
 						b.on_fire = true;
 						game.addToProcess_Slow(b, true);
-					} else if (b.getType() == Block.UNLIT_FURNACE) {
-						game.addBlock(Block.LIT_FURNACE, this.map_x-1, this.map_y, false);
 					}
 				}
 				b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x, this.map_y+1);
@@ -974,8 +844,6 @@ public class Block extends GameObject {
 					if (Flammable(b.getType()) && b.on_fire == false) {
 						b.on_fire = true;
 						game.addToProcess_Slow(b, true);
-					} else if (b.getType() == Block.UNLIT_FURNACE) {
-						game.addBlock(Block.LIT_FURNACE, this.map_x, this.map_y+1, false);
 					}
 				}
 				b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x, this.map_y-1);
@@ -983,8 +851,6 @@ public class Block extends GameObject {
 					if (Flammable(b.getType()) && b.on_fire == false) {
 						b.on_fire = true;
 						game.addToProcess_Slow(b, true);
-					} else if (b.getType() == Block.UNLIT_FURNACE) {
-						game.addBlock(Block.LIT_FURNACE, this.map_x, this.map_y-1, false);
 					}
 				}
 			}

@@ -45,7 +45,6 @@ public final class Statics {
 
 	// Game settings
 	public static boolean player_loses_health = false;
-	public static boolean has_timer = false;
 
 	// Bitmap scales
 	private static float SQ_SIZE_PCENT = 4f;

@@ -61,7 +61,6 @@ public class ControllerPanel extends JPanel {
 	    
 	    int x = 0, y = 0;
 	    for(IAxis axis : axes) {
-	    	if (axis != null) {
 	    	grid.gridx = x;
 	    	grid.gridy = y;
 		    subPanel.add(new AxisPanel(axis), grid);
@@ -70,7 +69,6 @@ public class ControllerPanel extends JPanel {
 		    	x = 0;
 		    	y++;
 		    }
-	    	}
 	    }
 	}
 

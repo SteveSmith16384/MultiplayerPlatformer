@@ -1,36 +1,44 @@
 package com.scs.multiplayerplatformer.input;
 
+import org.gamepad4j.ButtonID;
+import org.gamepad4j.DpadDirection;
+import org.gamepad4j.IController;
+import org.gamepad4j.StickID;
+import org.gamepad4j.StickPosition;
+
 public class PS4Controller implements IInputDevice {
 
-	public PS4Controller() {
+	private IController gamepad;
+	
+	public PS4Controller(IController _gamepad) {
+		gamepad = _gamepad;
 	}
 	
 
 	@Override
 	public boolean isLeftPressed() {
-		// TODO Auto-generated method stub
-		return false;
+		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
+		return pos.getDirection() == DpadDirection.LEFT;
 	}
 
 	
 	@Override
 	public boolean isRightPressed() {
-		// TODO Auto-generated method stub
-		return false;
+		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
+		return pos.getDirection() == DpadDirection.RIGHT;
 	}
 
 	
 	@Override
 	public boolean isJumpPressed() {
-		// TODO Auto-generated method stub
-		return false;
+		return gamepad.isButtonPressed(ButtonID.FACE_DOWN);
 	}
 
 	
 	@Override
 	public boolean isDownPressed() {
-		// TODO Auto-generated method stub
-		return false;
+		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
+		return pos.getDirection() == DpadDirection.DOWN;
 	}
 
 	
@@ -43,15 +51,13 @@ public class PS4Controller implements IInputDevice {
 
 	@Override
 	public boolean isThrowPressed() {
-		// TODO Auto-generated method stub
-		return false;
+		return gamepad.isButtonPressed(ButtonID.FACE_RIGHT);
 	}
 
 
 	@Override
 	public int getThrowDuration() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 }

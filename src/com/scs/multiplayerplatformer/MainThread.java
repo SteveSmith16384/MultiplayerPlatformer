@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import org.gamepad4j.Controllers;
+import org.gamepad4j.IController;
+
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
@@ -46,6 +49,8 @@ public final class MainThread extends Thread {
 		window = new MainWindow(this);
 		Statics.img_cache = new ImageCache(window);
 
+		Controllers.initialize();
+
 	}
 
 
@@ -55,21 +60,36 @@ public final class MainThread extends Thread {
 			while (mRun) {
 				long start = System.currentTimeMillis();
 
+				//checkGamepads();
 				updateGame();
 				doDrawing();
 
 				long diff = System.currentTimeMillis() - start;
 				if (diff != 0) {
-				fps = 1000/diff;
+					fps = 1000/diff;
 				}
 				Functions.delay(Statics.LOOP_DELAY - diff);
 			}
 		} catch (Exception ex) {
 			AbstractActivity.HandleError(ex);
 			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage() + ".  Please restart", "Error", JOptionPane.ERROR_MESSAGE);
+		} finally {
+			Controllers.shutdown();
 		}
 		//AbstractActivity.Log("MainThread ended.");
 	}
+
+
+	/*private void checkGamepads() {
+		// Poll the state of the controllers
+		Controllers.checkControllers();
+		IController[] gamepads = Controllers.getControllers();
+		if (gamepads.length > 0) {
+			for (int i=0 ; i<gamepads.length ; i++) {
+				gamepads[i].getDeviceID()
+			}
+		}
+	}*/
 
 
 	public void doDrawing() {
@@ -84,11 +104,11 @@ public final class MainThread extends Thread {
 		if (module != null) {
 			module.doDraw(c, Statics.LOOP_DELAY);
 		}
-		
+
 		if (Statics.DEBUG) {
 			c.getGraphics().drawString("FPS: "+fps, 20, 30);
 		}
-		
+
 		window.bs.show();
 	}
 

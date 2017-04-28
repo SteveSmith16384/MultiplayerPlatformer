@@ -9,14 +9,14 @@ import org.gamepad4j.IStick;
 import org.gamepad4j.StickID;
 import org.gamepad4j.StickPosition;
 
-public class Main {
+public class PS4ControllerTest {
 
 	public static void main(String[] args) {
-		new Main();
+		new PS4ControllerTest();
 
 	}
 
-	public Main() {	
+	public PS4ControllerTest() {	
 		// Initialize the API
 		Controllers.initialize();
 

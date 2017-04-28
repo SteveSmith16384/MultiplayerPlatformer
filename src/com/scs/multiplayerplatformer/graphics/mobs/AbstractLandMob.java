@@ -46,7 +46,8 @@ public abstract class AbstractLandMob extends AbstractMob {
 	}
 
 
-	public boolean move(float off_x, float off_y) {
+	// This just adjusts the animation before calling the super().
+	public boolean move(float off_x, float off_y, boolean ladderBlocks) {
 		if (off_x != 0) {
 			if (frame_time > frame_interval && frame_interval > 0) {
 				frame_time = 0;
@@ -69,16 +70,7 @@ public abstract class AbstractLandMob extends AbstractMob {
 		} else if (off_x > 0) {
 			this.facing_left = false;
 		}
-		boolean b = super.move(off_x, off_y);
-
-		// Check if can be seen
-		/*if (Statics.los_to_see_monsters && this instanceof PlayersAvatar == false) {
-			this.visible = false;
-			if (this.getDistanceTo(this.game.player) <= Statics.ACTIVATE_DIST) {
-				this.visible = this.canSee(this.game.player);
-			}
-		}*/
-
+		boolean b = super.move(off_x, off_y, ladderBlocks);
 		return b;
 	}
 
@@ -136,7 +128,7 @@ public abstract class AbstractLandMob extends AbstractMob {
 				if (Block.BlocksDownMovement(b.getType())) {
 					is_on_ground_or_ladder = true;
 				}
-				if (Block.CanMoveDownThrough(b.getType())) {
+				if (Block.IsLadder(b.getType())) {
 					is_on_ladder = true;
 					ladder_x = b.getWorldX();
 				}
@@ -168,7 +160,7 @@ public abstract class AbstractLandMob extends AbstractMob {
 			if (is_on_ground_or_ladder && this.getJumpingYOff() >= 0) {
 				this.jumping = false;
 			} else {
-				if (this.move(0, this.getJumpingYOff()) == false) { // Hit a ceiling?
+				if (this.move(0, this.getJumpingYOff(), false) == false) { // Hit a ceiling?
 					this.jumping = false;
 				}
 			}
@@ -178,7 +170,7 @@ public abstract class AbstractLandMob extends AbstractMob {
 				if (in_water && can_swim) {
 					//is_on_ground_or_ladder = false; // So we can't jump
 				} else {
-					is_on_ground_or_ladder = (this.move(0, curr_fall_speed) == false);
+					is_on_ground_or_ladder = (this.move(0, curr_fall_speed, true) == false);
 					if (is_on_ground_or_ladder) {
 						curr_fall_speed = Statics.PLAYER_FALL_SPEED; // Reset current fall speed
 					} else {
@@ -190,7 +182,7 @@ public abstract class AbstractLandMob extends AbstractMob {
 					}
 				}
 			} else if (is_on_ladder && moving_down) {
-				this.move(0, Statics.PLAYER_SPEED);
+				this.move(0, Statics.PLAYER_SPEED, false);
 			}
 		}
 

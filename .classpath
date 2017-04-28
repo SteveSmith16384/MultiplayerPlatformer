@@ -4,10 +4,14 @@
 	<classpathentry kind="src" path="gamepad4j-api/src/main/java"/>
 	<classpathentry kind="src" path="gamepad4j-desktop/src/main/java">
 		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="multiplayerplatformer/gamepad4j-desktop/src/main/resources/native/windows"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="gamepad4j-desktop/src/main/resources">
+		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="multiplayerplatformer/gamepad4j-desktop/src/main/resources/native/windows/32bit"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="gamepad4j-desktop/src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

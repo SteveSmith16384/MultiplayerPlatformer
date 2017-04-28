@@ -7,31 +7,56 @@ import javax.swing.JFrame;
 
 public class KeyboardInput implements IInputDevice, KeyListener {
 
-	private volatile boolean left, right, jump, down;
+	private volatile boolean left, right, jump, down, fire;
 
 	public KeyboardInput(JFrame frame) {
 		frame.addKeyListener(this);
 	}
 
+	
 	@Override
 	public boolean isLeftPressed() {
 		return left;
 	}
+	
 
 	@Override
 	public boolean isRightPressed() {
 		return right;
 	}
 
+	
 	@Override
 	public boolean isJumpPressed() {
 		return jump;
 	}
+	
 
 	@Override
 	public boolean isDownPressed() {
 		return down;
 	}
+
+
+	@Override
+	public int getAngle() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	
+	@Override
+	public boolean isThrowPressed() {
+		return fire;
+	}
+	
+
+	@Override
+	public int getThrowDuration() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 	@Override
 	public void keyPressed(KeyEvent ke) {
@@ -50,6 +75,10 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 		case KeyEvent.VK_DOWN:
 			down = true;
+			break;
+
+		case KeyEvent.VK_SPACE:
+			fire = true;
 			break;
 
 		}
@@ -76,6 +105,10 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 			down = false;
 			break;
 
+		case KeyEvent.VK_SPACE:
+			fire = false;
+			break;
+
 		}
 
 	}
@@ -84,24 +117,6 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 	@Override
 	public void keyTyped(KeyEvent ke) {
 
-	}
-
-	@Override
-	public int getAngle() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean isThrowPressed() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public int getThrowDuration() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

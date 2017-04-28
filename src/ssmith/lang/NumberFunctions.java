@@ -82,14 +82,14 @@ public class NumberFunctions {
 	}
 
 	
-	public static int mod(int x) {
+	/*public static int mod(int x) {
 		if (x >= 0) {
 			return x;
 		}
 		else {
 			return x * -1;
 		}
-	}
+	}*/
 
 	
 	public static float mod(float x) {

@@ -2,6 +2,13 @@ package com.scs.multiplayerplatformer.game;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.gamepad4j.ButtonID;
+import org.gamepad4j.Controllers;
+import org.gamepad4j.IController;
 
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
@@ -18,7 +25,6 @@ import ssmith.android.lib2d.shapes.Rectangle;
 import ssmith.android.util.Timer;
 import ssmith.lang.Functions;
 import ssmith.lang.GeometryFuncs;
-import ssmith.lang.NumberFunctions;
 import ssmith.util.IDisplayText;
 import ssmith.util.Interval;
 import ssmith.util.TSArrayList;
@@ -32,6 +38,7 @@ import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 import com.scs.multiplayerplatformer.input.IInputDevice;
 import com.scs.multiplayerplatformer.input.KeyboardInput;
+import com.scs.multiplayerplatformer.input.PS4Controller;
 import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 
@@ -60,9 +67,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private static Paint paint_inv_ink = new Paint(); // For inv qty
 	private static Paint paint_text_ink = new Paint(); // For timer, dist
 
-	public PlayersAvatar player;
-	private IInputDevice input;
-
 	private TSArrayList<IProcessable> others_instant;
 	private TSArrayList<IProcessable> others_slow;
 	private TSArrayList<Block> others_very_slow;
@@ -88,6 +92,11 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private long draw_time = 0; // Avg. 20
 	private long instant_time = 0; // Avg. 4-5
 	private long total_time = 0; // Avg. 4-5
+
+	public List<PlayersAvatar> players = new ArrayList<>();
+	private IController[] gamepads;
+	private Map<Integer, IInputDevice> createdDevices = new HashMap<>();
+	private IInputDevice keyboard;
 
 
 	static {
@@ -148,8 +157,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		this.setBackground("ninja_background2");
 		this.showToast("Level " + this.level + "!");
-		
-		input = new KeyboardInput(act.thread.window);
+
+		keyboard = new KeyboardInput(act.thread.window);
 	}
 
 
@@ -159,8 +168,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	@Override
 	public boolean processEvent(MyEvent ev) throws Exception {
 		try {
-			if (player != null) {
-				/*if ((ev.getAction() == MotionEvent.ACTION_DOWN || ev.getAction() == MotionEvent.ACTION_POINTER_DOWN)) {// && is_down == false) {
+			/*if ((ev.getAction() == MotionEvent.ACTION_DOWN || ev.getAction() == MotionEvent.ACTION_POINTER_DOWN)) {// && is_down == false) {
 					if (Statics.cfg.using_buttons == false) {
 						checkForHighlights(ev, true);
 					} else {
@@ -252,7 +260,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				} else if (ev.getAction() == MotionEvent.ACTION_MOVE) {// && is_down) {  //MotionEvent.
 					checkForHighlights(ev, true);
 				}*/
-			}
 		} catch (RuntimeException ex) {
 			AbstractActivity.HandleError(null, ex);
 		}
@@ -264,6 +271,23 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		AbstractActivity act = Statics.act;
 
 		long total_start = System.currentTimeMillis();
+
+		Controllers.checkControllers();
+		gamepads = Controllers.getControllers();
+
+		// See if any humans have pressed Fire, and thus need an avatar creating
+		if (keyboard.isThrowPressed()) {
+			if (getPlayerFromInput(-1) == null) {
+				this.loadPlayer(keyboard, -1); // todo - make -1 a const
+			}
+		}
+		for (IController gamepad : gamepads) {
+			if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
+				if (getPlayerFromInput(gamepad.getDeviceID()) == null) {
+					this.loadPlayer(new PS4Controller(gamepad), gamepad.getDeviceID());
+				}
+			}
+		}
 
 		// Remove any objects marked for removal
 		this.others_instant.refresh();
@@ -282,27 +306,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			}
 		}
 
-		if (player != null) {
-			if (input.isLeftPressed()) {
-				player.move_x_offset = -1;
-			} else if (input.isRightPressed()) {
-				player.move_x_offset = 1;
-			} else {
-				player.move_x_offset = 0;
-			}
-			
-			player.moving_down = false;
-			if (input.isJumpPressed()) {
-				player.startJumping();
-			} else if (input.isDownPressed()) {
-				player.moving_down = true;
-			}
-			
-			if (input.isThrowPressed()) {
-				this.throwItem(player, input.getAngle(), input.getThrowDuration());
-			}
-		}
-
 		// Process the rest
 		long start_instant = System.currentTimeMillis();
 		if (others_instant != null) {
@@ -313,11 +316,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		instant_time = System.currentTimeMillis() - start_instant;
 
 		// Check for any very_slow blocks that are close
-		if (others_very_slow != null && this.player != null) {
+		if (others_very_slow != null && this.players.size() > 0) {
 			for (int i=0 ; i<20 ; i++) {
 				if (last_very_slow_object_processed < others_very_slow.size()) {
-					Block ip = others_very_slow.get(last_very_slow_object_processed); 
-					if (GeometryFuncs.distance(this.player.getWorldCentreX(), this.player.getWorldCentreY(), ip.getWorldCentreX(), ip.getWorldCentreY()) < Statics.SCREEN_WIDTH) {
+					Block ip = others_very_slow.get(last_very_slow_object_processed);
+					//if (GeometryFuncs.distance(this.player.getWorldCentreX(), this.player.getWorldCentreY(), ip.getWorldCentreX(), ip.getWorldCentreY()) < Statics.SCREEN_WIDTH) {
+						if (ip.getDistanceToClosestPlayer() < Statics.SCREEN_WIDTH) {
 						this.others_very_slow.remove(last_very_slow_object_processed);
 						this.others_slow.add(ip);
 					}
@@ -341,7 +345,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					if (o instanceof Block) {
 						Block b = (Block)o;
 						if (b.alwaysProcess() == false) {
-							if (GeometryFuncs.distance(this.player.getWorldCentreX(), this.player.getWorldCentreY(), b.getWorldCentreX(), b.getWorldCentreY()) > Statics.SCREEN_WIDTH) {
+							//if (GeometryFuncs.distance(this.player.getWorldCentreX(), this.player.getWorldCentreY(), b.getWorldCentreX(), b.getWorldCentreY()) > Statics.SCREEN_WIDTH) {
+							if (b.getDistanceToClosestPlayer() > Statics.SCREEN_WIDTH) {
 								this.others_slow.remove(last_slow_object_processed);
 								this.others_very_slow.add(o);
 							}
@@ -359,8 +364,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}
 
 
-		if (this.player != null) {
-			this.root_cam.lookAt(this.player, true);
+		if (players.size() > 0) {
+			PlayersAvatar player = this.players.get(0);
+			this.root_cam.lookAt(player, true); // todo - look at all players
 		}
 
 		if (this.time_remaining != null) {
@@ -378,10 +384,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 	private void checkIfMobsNeedCreating() {
 		// Load mobs
-		if (original_level_data.mobs != null && this.player != null) {
+		if (original_level_data.mobs != null && this.players.size() > 0) {
 			for (int i=0 ; i<original_level_data.mobs.size() ; i++) {
 				SimpleMobData sm = original_level_data.mobs.get(i);
-				float dist = NumberFunctions.mod(this.player.getWorldX() - sm.pixel_x); 
+				float dist = getDistanceToClosestPlayer(sm.pixel_x); // NumberFunctions.mod(this.player.getWorldX() - sm.pixel_x); 
 				if (dist < Statics.ACTIVATE_DIST) { // Needs to be screen width in case we've walked too fast into their "creation zone"
 					AbstractMob.CreateMob(this, sm);
 					original_level_data.mobs.remove(i);
@@ -392,11 +398,24 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 	}
 
+
+	public float getDistanceToClosestPlayer(float xpos) {
+		float closest = 9999;
+		for(PlayersAvatar player : players) {
+			float dist = Math.abs(player.getWorldX() - xpos); 
+			if (dist < closest) {
+				closest = dist;
+			}
+		}
+		return closest;
+	}
+
+	
 	public void doDraw(Canvas g, long interpol) {
 		long start = System.currentTimeMillis();
 		super.doDraw(g, interpol);
 
-		if (this.player != null) {
+		/*todo if (this.player != null) {
 			// Health bar
 			float height = (Statics.HEALTH_BAR_HEIGHT / 100) * this.player.getHealth();
 			health_bar.set(0, Statics.SCREEN_HEIGHT-height, Statics.HEALTH_BAR_WIDTH, Statics.SCREEN_HEIGHT);
@@ -408,9 +427,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 			//g.drawText("Health: " + this.player.getHealth(), 10, paint_text_ink.getTextSize(), paint_text_ink);
 			//g.drawText("Rocks: " + this.player.rocks, 10, (paint_text_ink.getTextSize()*2), paint_text_ink);
-			if (this.time_remaining != null) {
-				g.drawText(this.str_time_remaining + ": " + (this.time_remaining.getTimeRemaining()/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
-			}
+		}*/
+		if (this.time_remaining != null) {
+			g.drawText(this.str_time_remaining + ": " + (this.time_remaining.getTimeRemaining()/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
 		}
 		if (Statics.SHOW_STATS) {
 			g.drawText("Inst Objects: " + this.others_instant.size(), 10, paint_text_ink.getTextSize()*4, paint_text_ink);
@@ -463,9 +482,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		this.root_cam.lookAt(root_node, false);
 
-		// Player - must be added last so they are at the front
-		loadPlayer();
-
 		got_map = true;
 
 		checkIfMapNeedsLoading();
@@ -482,14 +498,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		int ay = Functions.rnd(original_level_data.getGridHeight()/2, original_level_data.getGridHeight()-1);
 		this.addBlock(Block.AMULET, ax, ay, true);
 		original_level_data.data[ax][ay].type = Block.AMULET;
-		createTimer(); // Re-start timer
-	}
-
-
-	private void createTimer() {
-		if (Statics.has_timer) {
-			this.time_remaining = new Timer(1000); // todo
-		}
 	}
 
 
@@ -589,15 +597,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	private void throwItem(PlayersAvatar player, float angle, float power) {
+	public void throwItem(PlayersAvatar player, float angle, float power) {
 		AbstractActivity act = Statics.act;
 
 		byte type = player.getCurrentItemType();
 		byte fallback_type = -1;
-		//if (type <= 0) { // No item selected
 		fallback_type = Block.SHURIKEN; // Default
-		//fallback_type = type;
-		//}
 
 		if (Block.CanBeThrown(type) == false || player.inv.hasBlock(type) == false) {
 			type = fallback_type;
@@ -744,14 +749,16 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	private void loadPlayer() {
-		this.game_over = false;
-		if (player != null) {
-			player.removeFromParent();
-			this.removeFromProcess(player);
+	private void loadPlayer(IInputDevice input, int controllerID) {
+		/*this.game_over = false;
+		/* todo if (players[id] != null) {
+			players[id].removeFromParent();
+			this.removeFromProcess(players[id]);
 			this.others_instant.refresh();
-		}
-		player = new PlayersAvatar(this, original_level_data.getStartPos().x * Statics.SQ_SIZE, (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE); // -2 so we start above the bed
+		}*/
+		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
+		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE;
+		PlayersAvatar player = new PlayersAvatar(this, x, y, input, controllerID); // -2 so we start above the bed
 		player.inv = new BlockInventory(this, player);
 		player.parent.updateGeometricState();
 		setCurrentItemIcon(player);
@@ -761,14 +768,18 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		if (original_level_data.block_inv != null) {
 			player.inv.putAll(original_level_data.block_inv);
 		}
+		this.players.add(player);
+		this.createdDevices.put(controllerID, input);
 
 	}
 
 
 	public void checkIfMapNeedsLoading() {
-		int pl_sq = (int)((this.player.getWorldX() + Statics.SCREEN_WIDTH) / Statics.SQ_SIZE);
-		if (pl_sq > this.map_loaded_up_to_col) {
-			loadMoreMap(pl_sq);
+		for (PlayersAvatar player : this.players) {
+			int pl_sq = (int)((player.getWorldX() + Statics.SCREEN_WIDTH) / Statics.SQ_SIZE);
+			if (pl_sq > this.map_loaded_up_to_col) {
+				loadMoreMap(pl_sq);
+			}
 		}
 	}
 
@@ -783,6 +794,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		this.msg.setText(s);
 	}
 
+
+	private IInputDevice getPlayerFromInput(int id) {
+		return createdDevices.get(id);
+	}
 
 }
 

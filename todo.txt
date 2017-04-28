@@ -1,7 +1,11 @@
 TODO
+Move PS4controllers to MainWindow
+Players press fire to join game
+Centre camera on all players
+Diff coloured player sprites
 Throwing shuriken
 Look for game modes
-Put in PS4 code
+	Put in PS4 code
 Player joins when controller pressed
 Get a font
 Create icon
