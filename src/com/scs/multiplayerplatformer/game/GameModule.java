@@ -760,6 +760,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE;
 		PlayersAvatar player = new PlayersAvatar(this, x, y, input, controllerID); // -2 so we start above the bed
 		player.inv = new BlockInventory(this, player);
+		this.players.add(player);
 		player.parent.updateGeometricState();
 		setCurrentItemIcon(player);
 		checkIfMapNeedsLoading();
