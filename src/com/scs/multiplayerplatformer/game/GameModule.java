@@ -40,6 +40,7 @@ import com.scs.multiplayerplatformer.input.IInputDevice;
 import com.scs.multiplayerplatformer.input.KeyboardInput;
 import com.scs.multiplayerplatformer.input.PS4Controller;
 import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
+import com.scs.multiplayerplatformer.mapgen.LoadMap;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 
 /**
@@ -68,8 +69,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private static Paint paint_text_ink = new Paint(); // For timer, dist
 
 	private TSArrayList<IProcessable> others_instant;
-	private TSArrayList<IProcessable> others_slow;
-	private TSArrayList<Block> others_very_slow;
+	//private TSArrayList<IProcessable> others_slow;
+	//private TSArrayList<Block> others_very_slow;
 	private int last_slow_object_processed = 0;
 	private int last_very_slow_object_processed = 0;
 	public AbstractLevelData original_level_data;
@@ -77,7 +78,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public MyEfficientGridLayout new_grid;
 	public int map_loaded_up_to_col = -1;
 	private Button curr_item_icon, current_item_image, cmd_menu;
-	//public boolean is_day = true;
 	public TimedString msg;
 	private RectF health_bar = new RectF();
 	private RectF health_bar_outline = new RectF();
@@ -125,18 +125,19 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	public GameModule(AbstractActivity act, AbstractLevelData _original_level_data, int _level) {
+	public GameModule(AbstractActivity act, int _level) { // AbstractLevelData _original_level_data, 
 		super(act, null);
 
-		original_level_data = _original_level_data;
 		level = _level;
+
+		original_level_data = new LoadMap(Statics.GetMapFilename(_level));
 
 		CURRENT_ITEM = "";// No, we show the qty instead, on the overlaying icon act.getString(R.string.icon_inv);
 		MENU = act.getString("icon_menu");
 
 		others_instant = new TSArrayList<IProcessable>();
-		others_slow = new TSArrayList<IProcessable>();
-		others_very_slow = new TSArrayList<Block>();
+		//others_slow = new TSArrayList<IProcessable>();
+		//others_very_slow = new TSArrayList<Block>();
 
 		msg = new TimedString(this, 2000);
 
@@ -272,8 +273,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		long total_start = System.currentTimeMillis();
 
-		Controllers.checkControllers();
-		gamepads = Controllers.getControllers();
+		if (Statics.USE_CONTROLLERS) {
+			Controllers.checkControllers();
+			gamepads = Controllers.getControllers();
+		}
 
 		// See if any humans have pressed Fire, and thus need an avatar creating
 		if (keyboard.isThrowPressed()) {
@@ -281,18 +284,21 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				this.loadPlayer(keyboard, -1); // todo - make -1 a const
 			}
 		}
-		for (IController gamepad : gamepads) {
-			if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
-				if (getPlayerFromInput(gamepad.getDeviceID()) == null) {
-					this.loadPlayer(new PS4Controller(gamepad), gamepad.getDeviceID());
+
+		if (gamepads != null) {
+			for (IController gamepad : gamepads) {
+				if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
+					if (getPlayerFromInput(gamepad.getDeviceID()) == null) {
+						this.loadPlayer(new PS4Controller(gamepad), gamepad.getDeviceID());
+					}
 				}
 			}
 		}
 
 		// Remove any objects marked for removal
 		this.others_instant.refresh();
-		this.others_slow.refresh();
-		this.others_very_slow.refresh();
+		//this.others_slow.refresh();
+		//this.others_very_slow.refresh();
 
 		if (got_map == false) {
 			if (this.original_level_data.isAlive()) {
@@ -316,12 +322,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		instant_time = System.currentTimeMillis() - start_instant;
 
 		// Check for any very_slow blocks that are close
-		if (others_very_slow != null && this.players.size() > 0) {
+		/*if (others_very_slow != null && this.players.size() > 0) {
 			for (int i=0 ; i<20 ; i++) {
 				if (last_very_slow_object_processed < others_very_slow.size()) {
 					Block ip = others_very_slow.get(last_very_slow_object_processed);
 					//if (GeometryFuncs.distance(this.player.getWorldCentreX(), this.player.getWorldCentreY(), ip.getWorldCentreX(), ip.getWorldCentreY()) < Statics.SCREEN_WIDTH) {
-						if (ip.getDistanceToClosestPlayer() < Statics.SCREEN_WIDTH) {
+					if (ip.getDistanceToClosestPlayer(null) < Statics.SCREEN_WIDTH) {
 						this.others_very_slow.remove(last_very_slow_object_processed);
 						this.others_slow.add(ip);
 					}
@@ -330,11 +336,11 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					last_very_slow_object_processed = 0;
 				}
 			}
-		}
+		}*/
 
 
 		// Move any slow objects?
-		if (others_slow != null) {
+		/*if (others_slow != null) {
 			for (int i=0 ; i<2 ; i++) {
 				if (last_slow_object_processed < others_slow.size()) {
 					IProcessable o = others_slow.get(last_slow_object_processed);
@@ -345,8 +351,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					if (o instanceof Block) {
 						Block b = (Block)o;
 						if (b.alwaysProcess() == false) {
-							//if (GeometryFuncs.distance(this.player.getWorldCentreX(), this.player.getWorldCentreY(), b.getWorldCentreX(), b.getWorldCentreY()) > Statics.SCREEN_WIDTH) {
-							if (b.getDistanceToClosestPlayer() > Statics.SCREEN_WIDTH) {
+							if (b.getDistanceToClosestPlayer(null) > Statics.SCREEN_WIDTH) {
 								this.others_slow.remove(last_slow_object_processed);
 								this.others_very_slow.add(o);
 							}
@@ -357,16 +362,26 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					last_slow_object_processed = 0;
 				}
 			}
-		}
+		}*/
 
 		if (check_for_new_mobs.hitInterval()) {
 			this.checkIfMobsNeedCreating();
 		}
 
 
+		// todo - don't do every frame
 		if (players.size() > 0) {
-			PlayersAvatar player = this.players.get(0);
-			this.root_cam.lookAt(player, true); // todo - look at all players
+			float x = 0, y = 0;
+			for (PlayersAvatar player : players) {
+				x += player.getWorldX();
+				y += player.getWorldY();
+			}
+			//PlayersAvatar player = this.players.get(0);
+			x = x / this.players.size();
+			y = y / this.players.size();
+			this.root_cam.lookAt(x, y, false);
+		} else {
+			this.root_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT, false);
 		}
 
 		if (this.time_remaining != null) {
@@ -410,7 +425,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		return closest;
 	}
 
-	
+
 	public void doDraw(Canvas g, long interpol) {
 		long start = System.currentTimeMillis();
 		super.doDraw(g, interpol);
@@ -433,8 +448,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}
 		if (Statics.SHOW_STATS) {
 			g.drawText("Inst Objects: " + this.others_instant.size(), 10, paint_text_ink.getTextSize()*4, paint_text_ink);
-			g.drawText("Slow Objects: " + this.others_slow.size(), 10, paint_text_ink.getTextSize()*5, paint_text_ink);
-			g.drawText("V. Slow Objects: " + this.others_very_slow.size(), 10, paint_text_ink.getTextSize()*6, paint_text_ink);
+			//g.drawText("Slow Objects: " + this.others_slow.size(), 10, paint_text_ink.getTextSize()*5, paint_text_ink);
+			//g.drawText("V. Slow Objects: " + this.others_very_slow.size(), 10, paint_text_ink.getTextSize()*6, paint_text_ink);
 			//g.drawText("Darkness: " + this.dark_adj_cont.size(), 10, paint_text_ink.getTextSize()*7, paint_text_ink);
 			//g.drawText("Map Squares: " + EfficientGridLayout.objects_being_drawn, 10, paint_text_ink.getTextSize()*4, paint_text_ink);
 			//long mem = ((long)r.freeMemory()*100) / (long)r.totalMemory();//) * 100;
@@ -582,8 +597,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 			if (block != null) {
 				if (Block.RequireProcessing(block.getType())) {
-					boolean slow = block.getType() == Block.WATER || block.getType() == Block.LAVA || block.getType() == Block.FIRE; // Always process water slow!
-					this.addToProcess_Slow(block, slow);
+					//boolean slow = block.getType() == Block.WATER || block.getType() == Block.LAVA || block.getType() == Block.FIRE; // Always process water slow!
+					this.addToProcess_Instant(block);//, slow);
 				}
 			}
 
@@ -634,19 +649,19 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	public void addToProcess_Slow(IProcessable o, boolean slow) {
+	/*public void addToProcess_Slow(IProcessable o, boolean slow) {
 		if (slow) {
 			this.others_slow.add(o);
 		} else {
 			this.others_very_slow.add(o);
 		}
-	}
+	}*/
 
 
 	public void removeFromProcess(IProcessable o) {
 		this.others_instant.remove(o);
-		this.others_slow.remove(o);
-		this.others_very_slow.remove(o);
+		//this.others_slow.remove(o);
+		//this.others_very_slow.remove(o);
 	}
 
 
@@ -751,14 +766,14 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 	private void loadPlayer(IInputDevice input, int controllerID) {
 		/*this.game_over = false;
-		/* todo if (players[id] != null) {
+		/*if (players[id] != null) {
 			players[id].removeFromParent();
 			this.removeFromProcess(players[id]);
 			this.others_instant.refresh();
 		}*/
 		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
-		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE;
-		PlayersAvatar player = new PlayersAvatar(this, x, y, input, controllerID); // -2 so we start above the bed
+		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
+		PlayersAvatar player = new PlayersAvatar(this, x, y, input);//, controllerID);
 		player.inv = new BlockInventory(this, player);
 		this.players.add(player);
 		player.parent.updateGeometricState();
@@ -776,11 +791,15 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 	public void checkIfMapNeedsLoading() {
-		for (PlayersAvatar player : this.players) {
-			int pl_sq = (int)((player.getWorldX() + Statics.SCREEN_WIDTH) / Statics.SQ_SIZE);
-			if (pl_sq > this.map_loaded_up_to_col) {
-				loadMoreMap(pl_sq);
+		if (players.size() > 0) {
+			for (PlayersAvatar player : this.players) {
+				int pl_sq = (int)((player.getWorldX() + Statics.SCREEN_WIDTH) / Statics.SQ_SIZE);
+				if (pl_sq > this.map_loaded_up_to_col) {
+					loadMoreMap(pl_sq);
+				}
 			}
+		} else {
+			loadMoreMap((int)(Statics.SCREEN_WIDTH/Statics.SQ_SIZE_INT));
 		}
 	}
 

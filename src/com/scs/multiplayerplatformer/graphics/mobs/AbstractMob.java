@@ -22,16 +22,7 @@ public abstract class AbstractMob extends GameObject {
 
 	// Types
 	public static final byte PLAYER = 0;
-	public static final byte ZOMBIE = 1;
-	public static final byte WASP = 2;
-	public static final byte SKELETON = 3;
-	public static final byte SHEEP = 4;
-	public static final byte PIG = 5;
-	public static final byte CHICKEN = 6;
-	public static final byte COW = 7;
 	public static final byte ENEMY_NINJA_EASY = 8;
-	public static final byte HELICOPTER = 9;
-	public static final byte ALIEN = 10;
 	public static final byte PLATFORM1 = 11;
 
 	protected int health, max_health;

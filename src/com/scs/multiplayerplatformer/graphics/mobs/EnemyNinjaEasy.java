@@ -4,6 +4,7 @@ import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.Functions;
 import ssmith.lang.NumberFunctions;
 import ssmith.util.Interval;
+import ssmith.util.ReturnObject;
 
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
@@ -84,14 +85,15 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 	@Override
 	public void process(long interpol) {
 		//if (Statics.DEBUGGING == false) {
-		float dist = this.getDistanceToClosestPlayer(); //  super.getDistanceTo(game.player); 
+		ReturnObject<PlayersAvatar> playerTemp = new ReturnObject<>();
+		float dist = this.getDistanceToClosestPlayer(playerTemp); 
 		if (dist < Statics.ACTIVATE_DIST) { // Only process if close
-			//turn_timer -= interpol;
-			//if (turn_timer <= 0) {
+			PlayersAvatar player = playerTemp.toReturn;
 			if (turn_interval.hitInterval()) {
-				//turn_timer = TURN_DURATION;
-				float diff = -1; // todo game.player.getWorldCentreX() - this.getWorldCentreX();
-				x_offset = NumberFunctions.sign(diff);
+				if (player != null) {
+					float diff = player.getWorldCentreX() - this.getWorldCentreX();
+					x_offset = NumberFunctions.sign(diff);
+				}
 			}
 
 			// Try moving
@@ -111,11 +113,11 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 			performJumpingOrGravity();
 			checkForHarmingBlocks();
 
-			if (throw_interval.hitInterval()) {
-				PlayersAvatar player = this.getVisiblePlayer(); 
-				if (player != null) {
-					this.throwShuriken(player);
-				}
+			if (player != null && throw_interval.hitInterval()) {
+				//player = this.getVisiblePlayer(); 
+				//if (player != null) {
+				this.throwShuriken(player);
+				//}
 			}
 
 			if (is_on_ground_or_ladder) { // Must be after we've jumped!

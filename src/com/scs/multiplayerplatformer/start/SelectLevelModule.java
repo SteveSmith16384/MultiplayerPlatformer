@@ -45,8 +45,8 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 	@Override
 	public void optionSelected(int idx) {
 		int level = idx+1;
-		AbstractLevelData original_level_data = new LoadMap(Statics.GetMapFilename(level));
-		GameModule game = new GameModule(Statics.act, original_level_data, level);
+		//AbstractLevelData original_level_data = new LoadMap(Statics.GetMapFilename(level));
+		GameModule game = new GameModule(Statics.act, level);
 		this.getThread().setNextModule(game);
 	}
 

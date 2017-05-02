@@ -1,13 +1,11 @@
 package ssmith.android.framework;
 
-import ssmith.android.framework.modules.AbstractModule;
 import ssmith.audio.MP3Player;
 import ssmith.audio.SoundCacheThread;
 
 import com.scs.multiplayerplatformer.MainThread;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.XMLHelper;
-import com.scs.multiplayerplatformer.start.ErrorModule;
 
 
 public abstract class AbstractActivity implements Thread.UncaughtExceptionHandler {
@@ -67,8 +65,8 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 		try {
 			ex.printStackTrace();
 			ErrorReporter.getInstance().handleSilentException(ex);
-			AbstractModule m = Statics.GetStartupModule(Statics.act);
-			AbstractActivity.thread.setNextModule(new ErrorModule(Statics.act, m, ex));
+			//AbstractModule m = Statics.GetStartupModule(Statics.act);
+			//AbstractActivity.thread.setNextModule(new ErrorModule(Statics.act, m, ex));
 		} catch (Exception ex2) {
 			ex2.printStackTrace();
 		}

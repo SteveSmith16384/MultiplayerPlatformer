@@ -17,7 +17,7 @@ public class AirBubble extends GameObject {
 	public AirBubble(GameModule _game, AbstractMob _thrower) {
 		super(_game, "AirBubble", true, _thrower.getWorldCentreX(), _thrower.getWorldCentreY(), Statics.ROCK_SIZE, Statics.ROCK_SIZE);
 
-		bmp = Statics.img_cache.getImage("bubble", Statics.ROCK_SIZE, Statics.ROCK_SIZE);
+		bmp = Statics.img_cache.getImage("bubble", Statics.ROCK_SIZE/3, Statics.ROCK_SIZE/3);
 		
 		this.game.root_node.attachChild(this);
 		this.updateGeometricState();

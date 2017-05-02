@@ -84,7 +84,7 @@ public final class GameOverModule extends SimpleAbstractModule {
 			this.getThread().setNextModule(Statics.GetStartupModule(act));
 		} else {
 			//game.loadPlayer();
-			this.getThread().setNextModule(game); // todo - create new game module!
+			this.getThread().setNextModule(new GameModule(act, game.level));
 		}
 	}
 

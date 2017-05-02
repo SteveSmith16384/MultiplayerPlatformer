@@ -16,14 +16,13 @@ public class PlayersAvatar extends AbstractLandMob {
 	public int move_x_offset = 0;
 	private Timer dec_health_timer = new Timer(DateFunctions.MINUTE/4);
 	public BlockInventory inv;
-	private int controllerID;
 	private IInputDevice input;
 	
-	public PlayersAvatar(GameModule _game, float x, float y, IInputDevice _input, int _controllerID) {
+	public PlayersAvatar(GameModule _game, float x, float y, IInputDevice _input) {//, int _controllerID) {
 		super(_game, Statics.act.getString("player"), x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, MAX_HEALTH, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
 
 		input = _input;
-		controllerID = _controllerID;
+		//controllerID = _controllerID;
 		
 		this.setNumFrames(8);
 		a_bmp_left[0] = Statics.img_cache.getImage("ninja_l0", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);

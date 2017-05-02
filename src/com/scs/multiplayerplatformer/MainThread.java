@@ -26,7 +26,7 @@ public final class MainThread extends Thread {
 
 	private ArrayList<MyEvent> events = new ArrayList<MyEvent>();
 
-	protected boolean mRun = true;
+	protected volatile boolean mRun = true;
 
 	public AbstractModule module;
 	public AbstractModule next_module;
@@ -49,7 +49,12 @@ public final class MainThread extends Thread {
 		window = new MainWindow(this);
 		Statics.img_cache = new ImageCache(window);
 
-		Controllers.initialize();
+		try {
+			Controllers.initialize();
+		} catch (Throwable ex) {
+			ex.printStackTrace();
+			Statics.USE_CONTROLLERS = false;
+		}
 
 	}
 
@@ -74,7 +79,13 @@ public final class MainThread extends Thread {
 			AbstractActivity.HandleError(ex);
 			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage() + ".  Please restart", "Error", JOptionPane.ERROR_MESSAGE);
 		} finally {
-			Controllers.shutdown();
+			try {
+				if (Statics.USE_CONTROLLERS) {
+					Controllers.shutdown();
+				}
+			} catch (Throwable t) {
+				// Do nothing
+			}
 		}
 		//AbstractActivity.Log("MainThread ended.");
 	}

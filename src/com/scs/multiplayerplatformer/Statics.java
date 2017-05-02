@@ -15,6 +15,7 @@ import com.scs.multiplayerplatformer.start.StartupModule;
 public final class Statics {
 
 	public static final boolean FULL_SCREEN = false;
+	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = false;
 	public static final boolean RELEASE_MODE = true; // Stricter if false
 
@@ -36,9 +37,10 @@ public final class Statics {
 	public static final float LABEL_SPACING = 1.2f;
 	public static float ACTIVATE_DIST, DEACTIVATE_DIST;
 	public static final String MUSIC_R = "chippytoon";
-	public static int WINDOW_TOP_OFFSET;
+	public static final int WINDOW_TOP_OFFSET = 25;
 	public static String BACKGROUND_R;
-
+	public static boolean USE_CONTROLLERS = true;
+	
 	public static Typeface stdfnt, iconfnt, bigfnt;
 
 	public static ImageCache img_cache;

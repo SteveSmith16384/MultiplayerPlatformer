@@ -181,13 +181,17 @@ public abstract class AbstractLandMob extends AbstractMob {
 						}
 					}
 				}
-			} else if (is_on_ladder && moving_down) {
-				this.move(0, Statics.PLAYER_SPEED, false);
+			}
+			if (is_on_ground_or_ladder) {
+				if (moving_down) {
+					//if (is_on_ladder) {
+						this.move(0, Statics.PLAYER_SPEED, false);
+					//}
+				}
 			}
 		}
 
 	}
-
 
 	/*protected boolean checkIfCanFall() {
 		RectF r = new RectF(this.getWorldBounds().left, this.getWorldBounds().top, this.getWorldBounds().right, this.getWorldBounds().bottom);

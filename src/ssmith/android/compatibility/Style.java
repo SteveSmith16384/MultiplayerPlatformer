@@ -6,7 +6,6 @@ public class Style {
 	public static final int STROKE = 2;
 
 	public Style() {
-		// TODO Auto-generated constructor stub
 	}
 
 }

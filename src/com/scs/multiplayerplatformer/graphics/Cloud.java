@@ -25,7 +25,7 @@ public class Cloud extends GameObject {
 		//bmp_night = Statics.img_cache.getImage("red_cloud", Statics.CLOUD_WIDTH, Statics.CLOUD_HEIGHT);
 		speed = Functions.rndFloat(Statics.CLOUD_SPEED * .05f, Statics.CLOUD_SPEED);
 
-		game.addToProcess_Slow(this, true);
+		game.addToProcess_Instant(this);//, true);
 		game.stat_node_back.attachChild(0, this); // Must be in front of sun/moon
 	}
 

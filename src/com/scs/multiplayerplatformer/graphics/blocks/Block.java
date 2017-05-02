@@ -1,4 +1,3 @@
-
 package com.scs.multiplayerplatformer.graphics.blocks;
 
 import java.awt.image.BufferedImage;
@@ -17,8 +16,6 @@ import com.scs.multiplayerplatformer.graphics.Explosion;
 import com.scs.multiplayerplatformer.graphics.GameObject;
 import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
-import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
-import com.scs.multiplayerplatformer.mapgen.LoadMap;
 
 public class Block extends GameObject {
 
@@ -83,7 +80,7 @@ public class Block extends GameObject {
 	private static BufferedImage fire_bmp1, fire_bmp2;
 
 	private byte type;
-	public BufferedImage bmp, bmp2;
+	private BufferedImage bmp, bmp2;
 	private byte health = 1;
 	private int map_x, map_y;
 	private long event_time = System.currentTimeMillis() + 10000; // So they don't start straight away
@@ -234,7 +231,7 @@ public class Block extends GameObject {
 	}
 
 
-	public static boolean Falls(byte type) {
+	/*public static boolean Falls(byte type) {
 		switch (type) {
 		case MONSTER_GENERATOR:
 		case FLINT:
@@ -261,7 +258,7 @@ public class Block extends GameObject {
 		default:
 			return false;
 		}
-	}
+	}*/
 
 
 	/*public static boolean InfiniteSupplyToThrow(byte type) {
@@ -339,26 +336,26 @@ public class Block extends GameObject {
 	public void touched(PlayersAvatar player) {
 		AbstractActivity act = Statics.act;
 
-			switch (type) {
-			case Block.SHURIKEN:
-				player.inv.addBlock(this.getType(), Statics.SHURIKENS_FROM_BLOCK);
-				destroy(0, false, null);
-				break;
-			case Block.MEDIKIT:
-				player.incHealthToMax();
-				destroy(0, false, null);
-				break;
-			case Block.END_OF_LEVEL:
-				game.level++;
-				String map_r = Statics.GetMapFilename(game.level);
-					AbstractLevelData original_level_data = new LoadMap(map_r);
-					GameModule mod = new GameModule(act, original_level_data, game.level);
-					game.getThread().setNextModule(mod);
-				destroy(0, false, null);
-				break;
-			case Block.SAND:
-				destroy(2, false, null);
-			}
+		switch (type) {
+		case Block.SHURIKEN:
+			player.inv.addBlock(this.getType(), Statics.SHURIKENS_FROM_BLOCK);
+			destroy(0, false, null);
+			break;
+		case Block.MEDIKIT:
+			player.incHealthToMax();
+			destroy(0, false, null);
+			break;
+		case Block.END_OF_LEVEL:
+			game.level++;
+			//String map_r = Statics.GetMapFilename(game.level);
+			//AbstractLevelData original_level_data = new LoadMap(map_r);
+			GameModule mod = new GameModule(act, game.level);
+			game.getThread().setNextModule(mod);
+			destroy(0, false, null);
+			break;
+		case Block.SAND:
+			destroy(2, false, null);
+		}
 	}
 
 
@@ -598,22 +595,6 @@ public class Block extends GameObject {
 
 		if (this.health <= 0) {
 			this.destroy(1, give_to_player, player);
-			/*Explosion.CreateExplosion(game, 1, this.getWorldCentreX(), this.getWorldCentreY());
-			if (give_to_player) {
-				if (Block.AddToInv(this.getType())) {
-					this.game.inv.addBlock(Block.GetInvType(this.getType()), 1);
-					if (getType() == Block.AMULET) {
-						game.newAmulet();
-					}
-				}
-			} else {
-				if (getType() == Block.DYNAMITE) {
-					// Remove us so we don't get caught in a loop of explosions
-					this.remove();
-					game.explosion(3, Statics.DYNAMITE_DAMAGE, 6, this.getWorldCentreX(), this.getWorldCentreY());
-				}
-			}
-			this.remove();*/
 		}
 	}
 
@@ -658,6 +639,8 @@ public class Block extends GameObject {
 				this.game.addBlock(Block.GOLD, this.map_x, this.map_y, true);
 				break;
 			}
+		} else {
+			this.game.addBlock(Block.NOTHING_DAYLIGHT, this.map_x, this.map_y, true);
 		}
 		this.game.removeFromProcess(this);
 		if (this.getType() != Block.NOTHING_DAYLIGHT) {
@@ -676,15 +659,16 @@ public class Block extends GameObject {
 
 	private void addBlockToProcess(int map_x, int map_y) {
 		Block b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(map_x, map_y);
-		if (b != null) {
-			game.addToProcess_Slow(b, false);
-		}
+		/*if (b != null) {
+			game.addToProcess(b, false);
+		}*/
 	}
 
 
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
 		if (this.visible) {
+			// If they have an alt image, choose one randomly
 			if (bmp2 != null) {
 				if (Functions.rnd(1, 2) == 2) {
 					g.drawBitmap(bmp2, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
@@ -706,18 +690,18 @@ public class Block extends GameObject {
 	@Override
 	public void process(long interpol) {
 		AbstractActivity act = Statics.act;
-		
+
 		boolean remove_from_process = true; // Default
 		switch (type) {
 		case WATER:
-				processWater();
+			processWater();
 			break;
 		case LAVA:
-				if (this.getDistanceToClosestPlayer() <= Statics.ACTIVATE_DIST) {
-					checkLavaSquares();
-				} else {
-					remove_from_process = false; // Try again later
-				}
+			/*if (this.getDistanceToClosestPlayer(null) <= Statics.ACTIVATE_DIST) {
+				checkLavaSquares();
+			} else {
+				remove_from_process = false; // Try again later
+			}*/
 			break;
 		case TANGLEWEED:
 			remove_from_process = false;
@@ -746,7 +730,7 @@ public class Block extends GameObject {
 			remove_from_process = false;
 			if (this.event_time < System.currentTimeMillis()) {
 				this.event_time = System.currentTimeMillis() + MOB_GEN_DURATION;
-				if (this.getDistanceToClosestPlayer() <= Statics.ACTIVATE_DIST) {
+				if (this.getDistanceToClosestPlayer(null) <= Statics.ACTIVATE_DIST) {
 					EnemyEventTimer.GenerateRandomMonster(game, this);
 				}
 			}
@@ -756,7 +740,7 @@ public class Block extends GameObject {
 			if (this.event_time < System.currentTimeMillis()) {
 				this.event_time = System.currentTimeMillis() + SLIME_DURATION;
 				if (Functions.rnd(1, 2) == 1) {
-					if (this.getDistanceToClosestPlayer() <= Statics.ACTIVATE_DIST) {
+					if (this.getDistanceToClosestPlayer(null) <= Statics.ACTIVATE_DIST) {
 						act.sound_manager.playSound("slime");
 						new ThrownItem(game, Block.SLIME_SPURT, new MyPointF(this.getWorldCentreX(), this.getWorldY()), new MyPointF(Functions.rndFloat(-.5f, .5f), -1), null, 10, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.SLIME_SIZE);
 					}
@@ -766,30 +750,30 @@ public class Block extends GameObject {
 		}
 
 		if (this.getType() == Block.FIRE || this.on_fire) {
-				if (checkFire()) {
-					remove_from_process = false;
-				}
+			/*if (checkFire()) {
+				remove_from_process = false;
+			}*/
 		}
 
-		if (Falls(this.getType())) {
+		/*if (Falls(this.getType())) {
 			if (game.new_grid.isSquareEmpty(this.map_x, this.map_y+1)) {
 				game.addBlock(this.getType(), this.map_x, this.map_y+1, true);
 				this.remove();
 			}
 		} else { // Always falls if not attached to anything UNLESS DARKNESS!
 			//if (this.getType() != Block.DARKNESS && this.getType() != Block.DARKNESS2) {
-				if (game.new_grid.isSquareEmpty(this.map_x, this.map_y+1)) {
-					if (game.new_grid.isSquareEmpty(this.map_x, this.map_y-1)) {
-						if (game.new_grid.isSquareEmpty(this.map_x+1, this.map_y)) {
-							if (game.new_grid.isSquareEmpty(this.map_x-1, this.map_y)) {
-								game.addBlock(this.getType(), this.map_x, this.map_y+1, true);
-								this.remove();
-							}
+			if (game.new_grid.isSquareEmpty(this.map_x, this.map_y+1)) {
+				if (game.new_grid.isSquareEmpty(this.map_x, this.map_y-1)) {
+					if (game.new_grid.isSquareEmpty(this.map_x+1, this.map_y)) {
+						if (game.new_grid.isSquareEmpty(this.map_x-1, this.map_y)) {
+							game.addBlock(this.getType(), this.map_x, this.map_y+1, true);
+							this.remove();
 						}
 					}
 				}
+			}
 			//}
-		}
+		}*/
 
 		if (remove_from_process) {
 			this.game.removeFromProcess(this);
@@ -797,10 +781,6 @@ public class Block extends GameObject {
 	}
 
 
-	/**
-	 * Returns whether it's gone out (and should be removed from process).
-	 * @return
-	 */
 	private void processWater() {
 		byte[] types = {NOTHING_DAYLIGHT, FIRE, LADDER, ROPE};
 		checkAndChangeAdjacentSquares(0, 1, types, WATER, false);
@@ -817,7 +797,7 @@ public class Block extends GameObject {
 	 * Returns false if fire is out.
 	 * @return
 	 */
-	private boolean checkFire() {
+	/*private boolean checkFire() {
 		if (this.event_time < System.currentTimeMillis()) {
 			event_time = System.currentTimeMillis() + FIRE_DURATION;
 			int i = Functions.rnd(1, 8);
@@ -829,7 +809,7 @@ public class Block extends GameObject {
 				if (b != null) {
 					if (Flammable(b.getType()) && b.on_fire == false) {
 						b.on_fire = true;
-						game.addToProcess_Slow(b, true);
+						game.addToProcess_Instant(b, true);
 					}
 				}
 				b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x-1, this.map_y);
@@ -856,18 +836,18 @@ public class Block extends GameObject {
 			}
 		}
 		return true;
-	}
+	}*/
 
 
-	private void checkLavaSquares() {
+	/*private void checkLavaSquares() {
 		this.checkSpecificLavaSquare(-1, 0);
 		this.checkSpecificLavaSquare(1, 0);
 		this.checkSpecificLavaSquare(0, -1);
 		this.checkSpecificLavaSquare(0, 1);
-	}
+	}*/
 
 
-	private void checkSpecificLavaSquare(int off_x, int off_y) {
+	/*private void checkSpecificLavaSquare(int off_x, int off_y) {
 		if (off_y >= 0) { // Lava only flows across and down
 			byte[] types_lava = {NOTHING_DAYLIGHT, FIRE, APPLE, CHEST, GOLD, MONSTER_GENERATOR, DYNAMITE, ACORN, LADDER, COAL, TREE_BRANCH_LEFT, TREE_BRANCH_RIGHT, ROPE};
 			checkAndChangeAdjacentSquares(off_x, off_y, types_lava, LAVA, false);
@@ -882,7 +862,7 @@ public class Block extends GameObject {
 				//this.game.addBlock(Block.FIRE, this.map_x+off_x, this.map_y+off_y, true, false);
 			}
 		}
-	}
+	}*/
 
 
 	private boolean checkAndChangeAdjacentSquares(int off_x, int off_y, byte[] from, byte to, boolean check_for_sprites) {
