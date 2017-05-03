@@ -1,17 +1,26 @@
 TODO
-Basic shooting - shoot in direction moving?
-Throwing shuriken
-Look for game modes - Mario War, Jump'n'Bump
+Restart player if they die
+Check throwing angles
+Drop stars
+	Check how long fire held down for
+	Throwing too many shurikens
+	Getting stuck on own shurikens
+	Start GameModule immed
+Look for game modes - Mario War, Jump'n'Bump, (see reddit)
 Search for todos
 	Centre camera on all players
 Copy map files in
 
 
+GAMEMODES
+Collect as many stars as possible
+
+
 LOW PRI
+Physics
 Diff coloured player sprites
 Get a font
 Create icon
-"press fire to join game"
-Water too fast
+	"press fire to join game"
 Enemies not sinking in water
 

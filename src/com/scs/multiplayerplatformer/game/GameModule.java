@@ -33,7 +33,6 @@ import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.graphics.Cloud;
 import com.scs.multiplayerplatformer.graphics.Explosion;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
-import com.scs.multiplayerplatformer.graphics.blocks.SimpleBlock;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 import com.scs.multiplayerplatformer.input.IInputDevice;
@@ -52,13 +51,14 @@ import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
  */
 public final class GameModule extends AbstractModule implements IDisplayText {
 
+	private static final long CAM_UPDATE = 1000;
 	public static final byte HAND = 1;
 
 	// Icons
 	private static String CURRENT_ITEM;
 	private static String MENU;
 
-	private static final int LOAD_MAP_BATCH_SIZE = 5;
+	//private static final int LOAD_MAP_BATCH_SIZE = 5;
 	private static final int ICON_INSETS = 10;
 
 	private static Paint paint_health_bar = new Paint();
@@ -71,12 +71,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private TSArrayList<IProcessable> others_instant;
 	//private TSArrayList<IProcessable> others_slow;
 	//private TSArrayList<Block> others_very_slow;
-	private int last_slow_object_processed = 0;
-	private int last_very_slow_object_processed = 0;
+	//private int last_slow_object_processed = 0;
+	//private int last_very_slow_object_processed = 0;
 	public AbstractLevelData original_level_data;
-	private boolean got_map = false;
+	//private boolean got_map = false;
 	public MyEfficientGridLayout new_grid;
-	public int map_loaded_up_to_col = -1;
+	//public int map_loaded_up_to_col = -1;
 	private Button curr_item_icon, current_item_image, cmd_menu;
 	public TimedString msg;
 	private RectF health_bar = new RectF();
@@ -88,6 +88,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public int level;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
+	private Timer camTimer = new Timer(CAM_UPDATE);
 
 	private long draw_time = 0; // Avg. 20
 	private long instant_time = 0; // Avg. 4-5
@@ -131,6 +132,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		level = _level;
 
 		original_level_data = new LoadMap(Statics.GetMapFilename(_level));
+		original_level_data.getMap();
 
 		CURRENT_ITEM = "";// No, we show the qty instead, on the overlaying icon act.getString(R.string.icon_inv);
 		MENU = act.getString("icon_menu");
@@ -145,7 +147,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		this.stat_node_back.detachAllChildren();
 		this.stat_node_front.detachAllChildren();
 
-		original_level_data.start();
+		this.mapGeneratedOrLoaded();
+		loadMap();
 
 		for (int i=0 ; i<3 ; i++) {
 			new Cloud(this);
@@ -160,6 +163,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		this.showToast("Level " + this.level + "!");
 
 		keyboard = new KeyboardInput(act.thread.window);
+
+		showToast("PRESS FIRE TO START!");
 	}
 
 
@@ -300,7 +305,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		//this.others_slow.refresh();
 		//this.others_very_slow.refresh();
 
-		if (got_map == false) {
+		/*if (got_map == false) {
 			if (this.original_level_data.isAlive()) {
 				if (original_level_data.max_rows != 0) {
 					msg.setText(act.getString("loading_map") + " (" + original_level_data.row + "/" + original_level_data.max_rows + ")");
@@ -311,7 +316,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				this.mapGeneratedOrLoaded();
 			}
 		}
-
+		 */
 		// Process the rest
 		long start_instant = System.currentTimeMillis();
 		if (others_instant != null) {
@@ -369,20 +374,22 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}
 
 
-		// todo - don't do every frame
 		if (players.size() > 0) {
-			float x = 0, y = 0;
-			for (PlayersAvatar player : players) {
-				x += player.getWorldX();
-				y += player.getWorldY();
+			if (camTimer.hasHit(interpol)) {
+				float x = 0, y = 0;
+				for (PlayersAvatar player : players) {
+					x += player.getWorldX();
+					y += player.getWorldY();
+				}
+				//PlayersAvatar player = this.players.get(0);
+				x = x / this.players.size();
+				y = y / this.players.size();
+				this.root_cam.lookAt(x, y, false);
 			}
-			//PlayersAvatar player = this.players.get(0);
-			x = x / this.players.size();
-			y = y / this.players.size();
-			this.root_cam.lookAt(x, y, false);
 		} else {
 			this.root_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT, false);
 		}
+		this.root_cam.update(interpol);
 
 		if (this.time_remaining != null) {
 			if (time_remaining.hasHit(interpol)) {
@@ -497,10 +504,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		this.root_cam.lookAt(root_node, false);
 
-		got_map = true;
-
-		checkIfMapNeedsLoading();
-
 		new EnemyEventTimer(this);
 
 		health_bar_outline = new RectF(0, Statics.SCREEN_HEIGHT-Statics.HEALTH_BAR_HEIGHT, Statics.HEALTH_BAR_WIDTH, Statics.SCREEN_HEIGHT);
@@ -512,41 +515,41 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		int ax = Functions.rnd(10, original_level_data.getGridWidth()-1);
 		int ay = Functions.rnd(original_level_data.getGridHeight()/2, original_level_data.getGridHeight()-1);
 		this.addBlock(Block.AMULET, ax, ay, true);
-		original_level_data.data[ax][ay].type = Block.AMULET;
+		original_level_data.data[ax][ay] = Block.AMULET;
 	}
 
 
-	private void loadMap(int end_col) {
-		if (end_col - this.map_loaded_up_to_col < LOAD_MAP_BATCH_SIZE) {
+	private void loadMap() {//int end_col) {
+		/*if (end_col - this.map_loaded_up_to_col < LOAD_MAP_BATCH_SIZE) {
 			end_col = this.map_loaded_up_to_col + LOAD_MAP_BATCH_SIZE;
 		}
 
-		end_col = Math.min(end_col, this.original_level_data.getGridWidth()-1);
+		end_col = Math.min(end_col, this.original_level_data.getGridWidth()-1);*/
 		for (int map_y=0 ; map_y<original_level_data.getGridHeight() ; map_y++) {
-			for (int map_x=map_loaded_up_to_col+1 ; map_x<=end_col ; map_x++) {
-				SimpleBlock sb = original_level_data.getGridDataAt(map_x, map_y);
-				if (sb != null) {
-					byte data = sb.type;
-					if (data > 0) {
-						Block block = this.addBlock(data, map_x, map_y, false);
-						if (original_level_data.getGridDataAt(map_x, map_y).on_fire) {
+			for (int map_x=0 ; map_x<this.original_level_data.getGridWidth()-1 ; map_x++) {
+				byte sb = original_level_data.getGridDataAt(map_x, map_y);
+				//if (sb != null) {
+				byte data = sb;//.type;
+				if (data > 0) {
+					Block block = this.addBlock(data, map_x, map_y, false);
+					/*if (original_level_data.getGridDataAt(map_x, map_y).on_fire) {
 							block.on_fire = true;
-						}
-					}
+						}*/
 				}
+				//}
 			}
 		}
 		this.new_grid.parent.updateGeometricState();
 
-		map_loaded_up_to_col = end_col;
+		//map_loaded_up_to_col = end_col;
 
 	}
 
 
-	private void loadMoreMap(int col) {
+	/*private void loadMoreMap(int col) {
 		this.loadMap(col);
 	}
-
+	 */
 
 	public boolean isAreaClear(float x, float y, float w, float h, boolean check_blocks) {
 		dummy_rect.setByLTWH(x, y, w, h);
@@ -612,56 +615,17 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	public void throwItem(PlayersAvatar player, float angle, float power) {
-		AbstractActivity act = Statics.act;
-
-		byte type = player.getCurrentItemType();
-		byte fallback_type = -1;
-		fallback_type = Block.SHURIKEN; // Default
-
-		if (Block.CanBeThrown(type) == false || player.inv.hasBlock(type) == false) {
-			type = fallback_type;
-		}
-
-		boolean thrown = false;
-		if (player.inv.hasBlock(type)) {
-			thrown = true;
-		} else {
-			this.showToast("You have nothing to throw!  Try a shuriken");
-			return;
-		}
-
-		if (thrown) {
-			act.sound_manager.playSound("throwitem");
-			/*todo if (type == Block.SHURIKEN) {
-				ThrownItem.ThrowShuriken(this, player, new MyPointF(ev.getX(), ev.getY()).subtractLocal(act_start_drag).normalizeLocal());
-			} else {
-				ThrownItem.ThrowRock(this, type, player, new MyPointF(ev.getX(), ev.getY()).subtractLocal(act_start_drag).normalizeLocal());
-			}*/
-			player.inv.addBlock(type, -1);
-		}
-
-	}
-
-
-	public void addToProcess_Instant(IProcessable o) {//, boolean instant, boolean slow) {
+	/*
+	 * angle = ?todo
+	 * power = 0-1
+	 */
+	public void addToProcess_Instant(IProcessable o) {
 		this.others_instant.add(o);
 	}
 
 
-	/*public void addToProcess_Slow(IProcessable o, boolean slow) {
-		if (slow) {
-			this.others_slow.add(o);
-		} else {
-			this.others_very_slow.add(o);
-		}
-	}*/
-
-
 	public void removeFromProcess(IProcessable o) {
 		this.others_instant.remove(o);
-		//this.others_slow.remove(o);
-		//this.others_very_slow.remove(o);
 	}
 
 
@@ -778,7 +742,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		this.players.add(player);
 		player.parent.updateGeometricState();
 		setCurrentItemIcon(player);
-		checkIfMapNeedsLoading();
+		//checkIfMapNeedsLoading();
 
 		// Load inventory
 		if (original_level_data.block_inv != null) {
@@ -790,7 +754,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	public void checkIfMapNeedsLoading() {
+	/*public void checkIfMapNeedsLoading() {
 		if (players.size() > 0) {
 			for (PlayersAvatar player : this.players) {
 				int pl_sq = (int)((player.getWorldX() + Statics.SCREEN_WIDTH) / Statics.SQ_SIZE);
@@ -801,7 +765,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		} else {
 			loadMoreMap((int)(Statics.SCREEN_WIDTH/Statics.SQ_SIZE_INT));
 		}
-	}
+	}*/
 
 
 	public TSArrayList<IProcessable> getOthersInstant() {

@@ -8,8 +8,6 @@ import ssmith.android.lib2d.gui.GUIFunctions;
 
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
-import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
-import com.scs.multiplayerplatformer.mapgen.LoadMap;
 
 public class SelectLevelModule extends AbstractOptionsModule2 {
 
@@ -34,7 +32,7 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 
 	@Override
 	public void getOptions() {
-		int max = 3; //todo Statics.cfg.getMaxLevel();
+		int max = 6;
 		for (int i=1 ; i<=max ; i++) {
 			this.addOption("Level " + i);
 		}

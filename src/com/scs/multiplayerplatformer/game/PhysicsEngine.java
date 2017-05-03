@@ -22,7 +22,7 @@ public class PhysicsEngine {
 		offset.x = dir.x * speed;
 		offset.y = dir.y * speed;
 
-		dir.y += grav; //Statics.ROCK_GRAVITY;
+		dir.y += grav;
 	}
 
 }

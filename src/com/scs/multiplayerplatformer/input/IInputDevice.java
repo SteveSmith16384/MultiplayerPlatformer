@@ -14,6 +14,6 @@ public interface IInputDevice {
 	
 	int getAngle();
 
-	int getThrowDuration();
+	//float getThrowDuration();
 
 }

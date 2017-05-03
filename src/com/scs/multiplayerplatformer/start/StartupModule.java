@@ -20,6 +20,7 @@ import ssmith.android.lib2d.shapes.BitmapRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
 
 import com.scs.multiplayerplatformer.Statics;
+import com.scs.multiplayerplatformer.game.GameModule;
 
 public final class StartupModule extends AbstractModule {
 
@@ -84,9 +85,9 @@ public final class StartupModule extends AbstractModule {
 		this.stat_node_front.attachChild(menu_node);
 
 		if (!Statics.HIDE_GFX) {
-		BitmapRectangle logo2 = new BitmapRectangle("Logo2", Statics.img_cache.getImage("penultimate_logo", Statics.SCREEN_WIDTH * 0.2f, Statics.SCREEN_HEIGHT/10), 0, 0);
-		logo2.setCentre(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT * .95f);
-		this.stat_node_front.attachChild(logo2);
+			BitmapRectangle logo2 = new BitmapRectangle("Logo2", Statics.img_cache.getImage("penultimate_logo", Statics.SCREEN_WIDTH * 0.2f, Statics.SCREEN_HEIGHT/10), 0, 0);
+			logo2.setCentre(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT * .95f);
+			this.stat_node_front.attachChild(logo2);
 		}
 		Label label2 = new Label("Version", act.getString("version") + " " + Statics.VERSION_NAME, null, paint_normal_text);
 		label2.setLocation(5, Statics.SCREEN_HEIGHT - (paint_normal_text.getTextSize()*2));
@@ -141,7 +142,12 @@ public final class StartupModule extends AbstractModule {
 		AbstractActivity act = Statics.act;
 
 		Statics.player_loses_health = false;
-		SelectLevelModule game = new SelectLevelModule(act, this);
+		AbstractModule game = null;
+		if (Statics.DEBUG) {
+			game = new GameModule(act, 1);
+		} else {
+			game = new SelectLevelModule(act, this);
+		}
 		this.getThread().setNextModule(game);
 
 	}

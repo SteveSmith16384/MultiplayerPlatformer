@@ -1,32 +1,32 @@
 package com.scs.multiplayerplatformer.mapgen;
 
 import java.awt.Point;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import ssmith.lang.Functions;
 
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
-import com.scs.multiplayerplatformer.graphics.blocks.SimpleBlock;
 
-public abstract class AbstractLevelData extends Thread {
+public abstract class AbstractLevelData {//extends Thread {
 
-	public SimpleBlock[][] data;
+	public byte[][] data;
 	protected Point start_pos, amulet_pos;
 	public HashMap<Byte, Integer> block_inv;
 	public ArrayList<SimpleMobData> mobs = new ArrayList<SimpleMobData>();
 	public volatile int row, max_rows; // To track progress
 
 	public AbstractLevelData() {
-		super("MapGen");
+		//super("MapGen");
 
 	}
 
 
-	public abstract void run();
+	public abstract void getMap();
 
 
-	public SimpleBlock getGridDataAt(int x, int y) {
+	public byte getGridDataAt(int x, int y) {
 		return data[x][y];
 	}
 
@@ -37,8 +37,8 @@ public abstract class AbstractLevelData extends Thread {
 			out: for (int i = 0 ; i<20 ; i++) { // 20 attempts
 				int x = Functions.rnd(data.length/20, data.length/5);
 				for (int y=1 ; y<data[0].length ; y++) {
-					if (data[x][y].type != Block.NOTHING_DAYLIGHT) {
-						if (Block.IsSolidGround(data[x][y].type) == false) {// != Block.SOIL && data[x][y].type != Block.GRASS && data[x][y].type != Block.SNOW) {
+					if (data[x][y] != Block.NOTHING_DAYLIGHT) {
+						if (Block.IsSolidGround(data[x][y]) == false) {// != Block.SOIL && data[x][y].type != Block.GRASS && data[x][y].type != Block.SNOW) {
 							//if (data[x][y].type != Block.GRASS) {
 							//i--;
 							break;
@@ -92,9 +92,9 @@ public abstract class AbstractLevelData extends Thread {
 	protected void checkAndChangeSquare(int x, int y, byte[] from, byte to) {
 		try {
 			for(int i=0 ;i<from.length ; i++) {
-				byte type = data[x][y].type;
+				byte type = data[x][y];
 				if (type == from[i]) {
-					data[x][y].type = to;
+					data[x][y] = to;
 				}
 			}
 		} catch (java.lang.ArrayIndexOutOfBoundsException ex) {

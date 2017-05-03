@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 public class KeyboardInput implements IInputDevice, KeyListener {
 
 	private volatile boolean left, right, jump, down, fire;
+	private boolean lastMoveWasLeft = false;
 
 	public KeyboardInput(JFrame frame) {
 		frame.addKeyListener(this);
@@ -16,12 +17,18 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 	
 	@Override
 	public boolean isLeftPressed() {
+		if (left) {
+			lastMoveWasLeft = true;
+		}
 		return left;
 	}
 	
 
 	@Override
 	public boolean isRightPressed() {
+		if (right) {
+			lastMoveWasLeft = false;
+		}
 		return right;
 	}
 
@@ -38,24 +45,30 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 	}
 
 
+	/*
+	 * 180 - up-left
+	 * 225 - up-right
+	 */
 	@Override
 	public int getAngle() {
-		// TODO Auto-generated method stub
-		return 0;
+		//return lastMoveWasLeft ? 180: 225;
+		return lastMoveWasLeft ? 170: 235;
 	}
 
 	
 	@Override
 	public boolean isThrowPressed() {
+		/*boolean b = fire;
+		fire = false;
+		return b;*/
 		return fire;
 	}
 	
 
-	@Override
-	public int getThrowDuration() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	/*@Override
+	public float getThrowDuration() {
+		return this.duration;
+	}*/
 
 
 	@Override
@@ -79,6 +92,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 		case KeyEvent.VK_SPACE:
 			fire = true;
+			//firePressedTime = System.currentTimeMillis();
 			break;
 
 		}
@@ -107,6 +121,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 		case KeyEvent.VK_SPACE:
 			fire = false;
+			//this.duration = System.currentTimeMillis() - this.firePressedTime;
 			break;
 
 		}
@@ -116,7 +131,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent ke) {
-
+		// Do nothing
 	}
 
 }

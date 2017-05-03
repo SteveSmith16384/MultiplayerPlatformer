@@ -18,5 +18,10 @@ public class PointF {
 	public float length() {
 		return (float)Math.sqrt((x*x) + (y*y));
 	}
+	
+	
+	public String toString() {
+		return "x=" + x + ", y=" + y;
+	}
 
 }

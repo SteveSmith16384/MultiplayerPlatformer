@@ -867,7 +867,7 @@ public class Block extends GameObject {
 
 	private boolean checkAndChangeAdjacentSquares(int off_x, int off_y, byte[] from, byte to, boolean check_for_sprites) {
 		for(int i=0 ;i<from.length ; i++) {
-			if (this.map_x+off_x <= game.map_loaded_up_to_col) {
+			//if (this.map_x+off_x <= game.map_loaded_up_to_col) {
 				Block b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x+off_x, this.map_y+off_y);
 				if (b != null) {
 					if (b.getType() == from[i]) {
@@ -886,7 +886,7 @@ public class Block extends GameObject {
 					}
 					break;
 				}
-			}
+			//}
 		}
 		return false;
 	}

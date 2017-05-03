@@ -6,13 +6,23 @@ import java.io.InputStream;
 
 import javax.swing.JFrame;
 
+import ssmith.android.compatibility.PointF;
 import ssmith.awt.ImageCache;
+import ssmith.lang.GeometryFuncs;
 
 import com.scs.multiplayerplatformer.XMLHelper;
 
 public class Tests {
 
 	public Tests() {
+		PointF p = GeometryFuncs.GetPointFromAngle(45, 100);
+		System.out.println(p);
+		p = GeometryFuncs.GetPointFromAngle(180, 100);
+		System.out.println(p);
+		p = GeometryFuncs.GetPointFromAngle(315, 100);
+		System.out.println(p);
+
+		
 		JFrame frame = new JFrame();
 		frame.setVisible(true);
 		ImageCache imageCache = new ImageCache(frame);

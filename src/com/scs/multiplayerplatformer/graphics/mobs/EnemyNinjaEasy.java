@@ -150,16 +150,8 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 	protected boolean hasCollidedWith(Geometry g) {
 		if (g instanceof PlayersAvatar) {
 			AbstractMob am = (AbstractMob)g;
-			/*if (am.side >= -1 && this.side >= 0 && am.side != this.side) { // Only the players side gets damaged, and only mobs with side >= 0 do damage
-				if (this.side == Statics.SD_PLAYERS_SIDE) {
-					this.damage(2);
-				} else {*/
 			am.damage(2);
-			/*}
-			}*/
-			//return true;
 		}
-		//return false;
 		return true;
 
 	}

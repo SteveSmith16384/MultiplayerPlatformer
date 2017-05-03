@@ -9,7 +9,7 @@ import org.gamepad4j.StickPosition;
 public class PS4Controller implements IInputDevice {
 
 	private IController gamepad;
-	
+
 	public PS4Controller(IController _gamepad) {
 		gamepad = _gamepad;
 	}
@@ -55,9 +55,9 @@ public class PS4Controller implements IInputDevice {
 	}
 
 
-	@Override
-	public int getThrowDuration() {
-		return 1;
-	}
+	/*@Override
+	public float getThrowDuration() {
+		return .5f;
+	}*/
 
 }
