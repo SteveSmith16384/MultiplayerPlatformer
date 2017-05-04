@@ -15,14 +15,12 @@ import com.scs.multiplayerplatformer.XMLHelper;
 public class Tests {
 
 	public Tests() {
-		PointF p = GeometryFuncs.GetPointFromAngle(45, 100);
-		System.out.println(p);
-		p = GeometryFuncs.GetPointFromAngle(180, 100);
-		System.out.println(p);
-		p = GeometryFuncs.GetPointFromAngle(315, 100);
-		System.out.println(p);
+		for (int i=0 ; i<360 ; i += 10) {
+			System.out.println("angle=" + i);
+			PointF p = GeometryFuncs.GetPointFromAngle(i, 60);
+			System.out.println(p);
+		}
 
-		
 		JFrame frame = new JFrame();
 		frame.setVisible(true);
 		ImageCache imageCache = new ImageCache(frame);
@@ -30,13 +28,13 @@ public class Tests {
 		if (bi == null) {
 			throw new RuntimeException("Image is null");
 		}
-		
+
 		XMLHelper xml = new XMLHelper();
 		String s = xml.getString("app_name");
 		if (s.equalsIgnoreCase("app_name")) {
 			throw new RuntimeException("Cannot get XML");
 		}
-	
+
 		InputStream in = this.getClass().getResourceAsStream("/assets/maps/ninja_level1.csv");
 		if (in == null) {
 			throw new RuntimeException("Map file is null");
@@ -48,12 +46,12 @@ public class Tests {
 			}
 		}
 
-		
+
 		frame.setVisible(false);
 		System.out.println("Tests finished successfully.");
 	}
 
-	
+
 	/**
 	 * @param args
 	 */

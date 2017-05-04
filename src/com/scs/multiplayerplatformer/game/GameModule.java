@@ -17,6 +17,7 @@ import ssmith.android.compatibility.Style;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 import ssmith.android.framework.modules.AbstractModule;
+import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.gui.Button;
 import ssmith.android.lib2d.gui.GUIFunctions;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
@@ -51,7 +52,6 @@ import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
  */
 public final class GameModule extends AbstractModule implements IDisplayText {
 
-	private static final long CAM_UPDATE = 1000;
 	public static final byte HAND = 1;
 
 	// Icons
@@ -88,7 +88,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public int level;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
-	private Timer camTimer = new Timer(CAM_UPDATE);
+	private Timer camTimer = new Timer(Camera.CAM_UPDATE);
 
 	private long draw_time = 0; // Avg. 20
 	private long instant_time = 0; // Avg. 4-5
@@ -615,10 +615,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	/*
-	 * angle = ?todo
-	 * power = 0-1
-	 */
 	public void addToProcess_Instant(IProcessable o) {
 		this.others_instant.add(o);
 	}
@@ -737,7 +733,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}*/
 		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
 		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
-		PlayersAvatar player = new PlayersAvatar(this, x, y, input);//, controllerID);
+		PlayersAvatar player = new PlayersAvatar(this, players.size(), x, y, input);//, controllerID);
 		player.inv = new BlockInventory(this, player);
 		this.players.add(player);
 		player.parent.updateGeometricState();

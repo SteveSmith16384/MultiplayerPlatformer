@@ -5,10 +5,13 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
+import com.scs.multiplayerplatformer.Statics;
+
 public class KeyboardInput implements IInputDevice, KeyListener {
 
 	private volatile boolean left, right, jump, down, fire;
 	private boolean lastMoveWasLeft = false;
+	private int angle = 0;
 
 	public KeyboardInput(JFrame frame) {
 		frame.addKeyListener(this);
@@ -45,31 +48,17 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 	}
 
 
-	/*
-	 * 180 - up-left
-	 * 225 - up-right
-	 */
 	@Override
 	public int getAngle() {
-		//return lastMoveWasLeft ? 180: 225;
-		return lastMoveWasLeft ? 170: 235;
+		return lastMoveWasLeft ? 210: 330;
 	}
 
 	
 	@Override
 	public boolean isThrowPressed() {
-		/*boolean b = fire;
-		fire = false;
-		return b;*/
 		return fire;
 	}
 	
-
-	/*@Override
-	public float getThrowDuration() {
-		return this.duration;
-	}*/
-
 
 	@Override
 	public void keyPressed(KeyEvent ke) {

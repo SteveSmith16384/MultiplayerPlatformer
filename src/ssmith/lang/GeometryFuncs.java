@@ -91,8 +91,8 @@ public class GeometryFuncs {
 
 
 	public static PointF GetPointFromAngle(int degrees, float len) {
-		float x = (float)(Math.toRadians(Math.cos(degrees)) * len);
-		float y = (float)(Math.toRadians(Math.sin(degrees)) * len);
+		float x = (float)(Math.cos(Math.toRadians(degrees)) * len);
+		float y = (float)(Math.sin(Math.toRadians(degrees)) * len);
 		return new PointF(x, y);
 	}
 

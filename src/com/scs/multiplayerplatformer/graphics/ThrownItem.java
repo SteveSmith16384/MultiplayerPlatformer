@@ -75,12 +75,14 @@ public class ThrownItem extends GameObject {
 				if (c == thrower) {
 					// Do nothing
 				} else {
-					if (c instanceof ThrownItem) { // c == this
-						// Do nothing
+					if (c instanceof ThrownItem) {
+						this.remove(); // Knock other shurikens out of sky
+						return;
 					} else if (c instanceof AbstractMob) {
 						AbstractMob m = (AbstractMob)c;
 						m.damage(damage);
 						this.remove();
+						return;
 					}
 				}
 			}
@@ -100,7 +102,13 @@ public class ThrownItem extends GameObject {
 						this.game.inv.addBlock(type, 1);
 					}*/
 				}
+				return;
 			}
+		}
+		
+		// See if we're off the map
+		if (this.getWorldY() < 0) {
+			this.remove();
 		}
 	}
 

@@ -7,10 +7,12 @@ import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
+import ssmith.android.lib2d.shapes.Geometry;
 
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.PhysicsEngine;
+import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
 public abstract class AbstractLandMob extends AbstractMob {
@@ -26,7 +28,8 @@ public abstract class AbstractLandMob extends AbstractMob {
 	private PhysicsEngine phys;
 	private float curr_fall_speed = Statics.PLAYER_FALL_SPEED;
 	public boolean moving_down = false;
-
+	protected long frozenUntil = 0;
+	
 	public AbstractLandMob(GameModule _game, String name, float x, float y, float w, float h, byte health, int _max_frames, long _frame_interval, boolean remove_if_far_away, boolean destroy_blocks, byte side, boolean _can_swim) {
 		super(_game, name, x, y, w, h, health, remove_if_far_away, destroy_blocks, side);
 
@@ -218,5 +221,21 @@ public abstract class AbstractLandMob extends AbstractMob {
 		}
 	}
 
+
+	@Override
+	protected boolean hasCollidedWith(Geometry g) {
+		if (g instanceof PlatformMob) { // try and get this to work
+			PlatformMob pm = (PlatformMob)g;
+			// Move us in the same direction as the platform.
+			this.move(pm.move_x, pm.move_y, false);
+			return false;
+		} else if (g instanceof PlayersAvatar) {
+			// Todo - check who's highest
+			return true;
+		} else if (g instanceof ThrownItem) {
+			return false; // The ThrownItem class handles collisions
+		}
+		return true; // Move us back
+	}
 
 }

@@ -15,6 +15,7 @@ import ssmith.android.framework.modules.AbstractModule;
 import ssmith.awt.ImageCache;
 import ssmith.lang.Functions;
 
+import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.start.ErrorModule;
 import com.scs.multiplayerplatformer.start.StartupModule;
 
@@ -198,8 +199,11 @@ public final class MainThread extends Thread {
 			module.updateGame(Statics.LOOP_DELAY);
 		} else {
 			// Load default module
-			//this.setNextModule(new IntroModule()); // re-add when have logo
-			this.setNextModule(new StartupModule(Statics.act));
+			if (Statics.DEBUG) {
+				this.setNextModule(new GameModule(Statics.act, 1));
+			} else {
+				this.setNextModule(new StartupModule(Statics.act));
+			}
 		}
 	}
 

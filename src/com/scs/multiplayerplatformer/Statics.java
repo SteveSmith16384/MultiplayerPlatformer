@@ -40,6 +40,7 @@ public final class Statics {
 	public static final int WINDOW_TOP_OFFSET = 25;
 	public static String BACKGROUND_R;
 	public static boolean USE_CONTROLLERS = true;
+	public static final long FREEZE_DUR = 1000;
 	
 	public static Typeface stdfnt, iconfnt, bigfnt;
 
@@ -118,7 +119,7 @@ public final class Statics {
 			HEALTH_BAR_WIDTH =  Statics.SCREEN_WIDTH * 0.05f;
 
 			ACTIVATE_DIST = Statics.SCREEN_WIDTH * .65f; // Dist when something should be processed 
-			DEACTIVATE_DIST = Statics.SCREEN_WIDTH * .75f; // Dist when something should be removed/
+			DEACTIVATE_DIST = Statics.SCREEN_WIDTH * .75f; // Dist when something should be removed
 
 			// Load font
 			/*try {

@@ -1,6 +1,5 @@
 package com.scs.multiplayerplatformer.graphics.mobs;
 
-import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.Functions;
 import ssmith.lang.NumberFunctions;
 import ssmith.util.Interval;
@@ -84,7 +83,6 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 
 	@Override
 	public void process(long interpol) {
-		//if (Statics.DEBUGGING == false) {
 		ReturnObject<PlayersAvatar> playerTemp = new ReturnObject<>();
 		float dist = this.getDistanceToClosestPlayer(playerTemp); 
 		if (dist < Statics.ACTIVATE_DIST) { // Only process if close
@@ -97,15 +95,17 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 			}
 
 			// Try moving
-			if (this.move(x_offset * Statics.ENEMY_NINJA_SPEED, 0, false) == false) {
-				// Can't move
-				if (tried_jumping == false) {
-					this.startJumping();
-					this.tried_jumping = true;
-				} else {
-					if (is_on_ground_or_ladder) {
-						tried_jumping = false;
-						x_offset = x_offset * -1; //Turn around
+			if (frozenUntil < System.currentTimeMillis()) {
+				if (this.move(x_offset * Statics.ENEMY_NINJA_SPEED, 0, false) == false) {
+					// Can't move
+					if (tried_jumping == false) {
+						this.startJumping();
+						this.tried_jumping = true;
+					} else {
+						if (is_on_ground_or_ladder) {
+							tried_jumping = false;
+							x_offset = x_offset * -1; //Turn around
+						}
 					}
 				}
 			}
@@ -113,11 +113,15 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 			performJumpingOrGravity();
 			checkForHarmingBlocks();
 
-			if (player != null && throw_interval.hitInterval()) {
-				//player = this.getVisiblePlayer(); 
-				//if (player != null) {
-				this.throwShuriken(player);
-				//}
+			if (frozenUntil < System.currentTimeMillis()) {
+				if (throw_interval.hitInterval()) {
+					player = this.getVisiblePlayer(); 
+					if (player != null) {
+						if (Statics.DEBUG == false) {
+							this.throwShuriken(player);
+						}
+					}
+				}
 			}
 
 			if (is_on_ground_or_ladder) { // Must be after we've jumped!
@@ -145,7 +149,7 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 		this.remove(); // Must be before we drop an item
 	}
 
-
+	/*
 	@Override
 	protected boolean hasCollidedWith(Geometry g) {
 		if (g instanceof PlayersAvatar) {
@@ -155,6 +159,6 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 		return true;
 
 	}
-
+	 */
 
 }

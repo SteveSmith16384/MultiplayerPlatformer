@@ -77,7 +77,7 @@ public final class StartupModule extends AbstractModule {
 
 		menu_node.attachChild(new Button(act.getString("start_game"), null, paint_button_text, bmp_mf_blue), 0, 0);
 		//menu_node.attachChild(new Button(act.getString("settings"), null, paint_button_text, bmp_mf_blue), 0, 1);
-		menu_node.attachChild(new Button(act.getString("quit"), null, paint_button_text, bmp_mf_blue), 1, 1);
+		menu_node.attachChild(new Button(act.getString("quit"), null, paint_button_text, bmp_mf_blue), 0, 1);
 
 		menu_node.updateGeometricState();
 
@@ -143,11 +143,7 @@ public final class StartupModule extends AbstractModule {
 
 		Statics.player_loses_health = false;
 		AbstractModule game = null;
-		if (Statics.DEBUG) {
-			game = new GameModule(act, 1);
-		} else {
-			game = new SelectLevelModule(act, this);
-		}
+		game = new SelectLevelModule(act, this);
 		this.getThread().setNextModule(game);
 
 	}
