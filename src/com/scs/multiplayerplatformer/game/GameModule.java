@@ -1,6 +1,5 @@
 package com.scs.multiplayerplatformer.game;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +16,6 @@ import ssmith.android.compatibility.Style;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 import ssmith.android.framework.modules.AbstractModule;
-import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.gui.Button;
 import ssmith.android.lib2d.gui.GUIFunctions;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
@@ -43,13 +41,7 @@ import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
 import com.scs.multiplayerplatformer.mapgen.LoadMap;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 
-/**
- * Lists:-
- * Instant: Mobs - Mobs are always instant, as they are removed if too far away (unless they are not, like sheep).
- * Slow: Blocks and clouds and other misc items
- * V. SLow: BLock
- *
- */
+
 public final class GameModule extends AbstractModule implements IDisplayText {
 
 	public static final byte HAND = 1;
@@ -57,8 +49,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	// Icons
 	private static String CURRENT_ITEM;
 	private static String MENU;
-
-	//private static final int ICON_INSETS = 10;
 
 	private static Paint paint_health_bar = new Paint();
 	private static Paint paint_health_bar_outline = new Paint();
@@ -68,15 +58,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private static Paint paint_text_ink = new Paint(); // For timer, dist
 
 	private TSArrayList<IProcessable> others_instant;
-	//private TSArrayList<IProcessable> others_slow;
-	//private TSArrayList<Block> others_very_slow;
-	//private int last_slow_object_processed = 0;
-	//private int last_very_slow_object_processed = 0;
 	public AbstractLevelData original_level_data;
-	//private boolean got_map = false;
 	public MyEfficientGridLayout new_grid;
-	//public int map_loaded_up_to_col = -1;
-	private Button curr_item_icon, current_item_image, cmd_menu;
+	//private Button curr_item_icon, cmd_menu;
 	public TimedString msg;
 	private RectF health_bar = new RectF();
 	private RectF health_bar_outline = new RectF();
@@ -87,7 +71,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public int level;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
-	private Timer camTimer = new Timer(Camera.CAM_UPDATE);
+	//private Timer camTimer = new Timer(Camera.CAM_UPDATE);
 
 	private long draw_time = 0; // Avg. 20
 	private long instant_time = 0; // Avg. 4-5
@@ -374,17 +358,17 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 		if (players.size() > 0) {
-			if (camTimer.hasHit(interpol)) {
-				float x = 0, y = 0;
-				for (PlayersAvatar player : players) {
-					x += player.getWorldX();
-					y += player.getWorldY();
-				}
-				//PlayersAvatar player = this.players.get(0);
-				x = x / this.players.size();
-				y = y / this.players.size();
-				this.root_cam.lookAt(x, y, false);
+			//if (camTimer.hasHit(interpol)) {
+			float x = 0, y = 0;
+			for (PlayersAvatar player : players) {
+				x += player.getWorldX();
+				y += player.getWorldY();
 			}
+			//PlayersAvatar player = this.players.get(0);
+			x = x / this.players.size();
+			y = y / this.players.size();
+			this.root_cam.lookAt(x, y, false);
+			//}
 		} else {
 			this.root_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT, false);
 		}
@@ -436,12 +420,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		long start = System.currentTimeMillis();
 		super.doDraw(g, interpol);
 
-		
+
 		for (PlayersAvatar player : players) {
 			g.drawText("Player " + (player.playerNum+1) + " Score: " + player.score, 10, 50+(player.playerNum * paint_text_ink.getTextSize()), paint_text_ink);
 
 		}
-		
+
 		/*todo if (this.player != null) {
 			// Health bar
 			float height = (Statics.HEALTH_BAR_HEIGHT / 100) * this.player.getHealth();
@@ -486,7 +470,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 	private void mapGeneratedOrLoaded() {
 		// Add icons
-		curr_item_icon = new Button(CURRENT_ITEM, CURRENT_ITEM, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage("button_red", Statics.ICON_SIZE, Statics.ICON_SIZE));
+		/*curr_item_icon = new Button(CURRENT_ITEM, CURRENT_ITEM, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage("button_red", Statics.ICON_SIZE, Statics.ICON_SIZE));
 		//curr_item_icon.setByLTWH(Statics.SCREEN_WIDTH-(Statics.ICON_SIZE*3), 0, Statics.ICON_SIZE, Statics.ICON_SIZE);
 		curr_item_icon.setLocation(0, 0);
 		this.stat_node_front.attachChild(curr_item_icon);
@@ -494,7 +478,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		this.cmd_menu = new Button(MENU, MENU, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage("button_red", Statics.ICON_SIZE, Statics.ICON_SIZE));
 		//this.cmd_menu.setByLTWH(Statics.SCREEN_WIDTH-(Statics.ICON_SIZE*2), 0, Statics.ICON_SIZE, Statics.ICON_SIZE);
 		this.cmd_menu.setLocation(Statics.ICON_SIZE, 0);
-		this.stat_node_front.attachChild(this.cmd_menu);
+		this.stat_node_front.attachChild(this.cmd_menu);*/
 
 		msg.setText("");
 
@@ -524,12 +508,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	private void loadMap() {//int end_col) {
-		/*if (end_col - this.map_loaded_up_to_col < LOAD_MAP_BATCH_SIZE) {
-			end_col = this.map_loaded_up_to_col + LOAD_MAP_BATCH_SIZE;
-		}
-
-		end_col = Math.min(end_col, this.original_level_data.getGridWidth()-1);*/
+	private void loadMap() {
 		for (int map_y=0 ; map_y<original_level_data.getGridHeight() ; map_y++) {
 			for (int map_x=0 ; map_x<this.original_level_data.getGridWidth()-1 ; map_x++) {
 				byte sb = original_level_data.getGridDataAt(map_x, map_y);
@@ -546,15 +525,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}
 		this.new_grid.parent.updateGeometricState();
 
-		//map_loaded_up_to_col = end_col;
-
 	}
 
-
-	/*private void loadMoreMap(int col) {
-		this.loadMap(col);
-	}
-	 */
 
 	public boolean isAreaClear(float x, float y, float w, float h, boolean check_blocks) {
 		dummy_rect.setByLTWH(x, y, w, h);
@@ -780,9 +752,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-/*	private IInputDevice getPlayerFromInput(int id) {
+	/*	private IInputDevice getPlayerFromInput(int id) {
 		return createdDevices.get(id);
 	}
-*/
+	 */
 }
 

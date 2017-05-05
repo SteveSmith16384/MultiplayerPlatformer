@@ -27,9 +27,10 @@ public abstract class AbstractLandMob extends AbstractMob {
 	protected boolean jumping = false;
 	private PhysicsEngine phys;
 	private float curr_fall_speed = Statics.PLAYER_FALL_SPEED;
+	public boolean moving_up = false;
 	public boolean moving_down = false;
 	protected long frozenUntil = 0;
-	
+
 	public AbstractLandMob(GameModule _game, String name, float x, float y, float w, float h, byte health, int _max_frames, long _frame_interval, boolean remove_if_far_away, boolean destroy_blocks, byte side, boolean _can_swim) {
 		super(_game, name, x, y, w, h, health, remove_if_far_away, destroy_blocks, side);
 
@@ -97,7 +98,7 @@ public abstract class AbstractLandMob extends AbstractMob {
 	}
 
 
-	public void startJumping() {
+	protected void startJumping() {
 		if (is_on_ground_or_ladder && jumping == false) {
 			jumping = true;
 			//this.jumping_y_off = jump_speed;
@@ -106,7 +107,7 @@ public abstract class AbstractLandMob extends AbstractMob {
 	}
 
 
-	public boolean isJumping() {
+	protected boolean isJumping() {
 		return this.jumping;
 	}
 
@@ -141,7 +142,7 @@ public abstract class AbstractLandMob extends AbstractMob {
 		// Align us with the ladder
 		if (is_on_ladder && this instanceof PlayersAvatar) {
 			PlayersAvatar player = (PlayersAvatar)this;
-			if (player.move_x_offset == 0) { // add to Android?
+			if (player.move_x_offset == 0) {
 				float adj_dist = (Statics.SQ_SIZE - this.getWidth())/2;
 				float target_pos = ladder_x + adj_dist;
 				float MOVE_DIST = Statics.PLAYER_SPEED/2;
@@ -186,9 +187,11 @@ public abstract class AbstractLandMob extends AbstractMob {
 				}
 			}
 			if (is_on_ground_or_ladder) {
-				if (moving_down) {
+				if (this.moving_up) {
+					this.move(0, -Statics.PLAYER_SPEED, false);
+				} else if (moving_down) {
 					//if (is_on_ladder) {
-						this.move(0, Statics.PLAYER_SPEED, false);
+					this.move(0, Statics.PLAYER_SPEED, false);
 					//}
 				}
 			}

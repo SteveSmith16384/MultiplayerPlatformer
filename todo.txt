@@ -1,30 +1,33 @@
 Throw shurikens at each other and get high score!
+Who has the most points at the end
+
+HOME
+Create new map - ice
+Change colour of p2+p3 sprites
+
 
 TODO
-	Don't draw icons
-Get PS4 angles right
-Check when players collide
-Look for game modes - Mario War, Jump'n'Bump, (see reddit)
-"Up" to move up a ladder
+More points for landing on head
+	Use stick dist to adjust speed
+Control menus with controller
 Turn off ps4 debugging
-Create new map
-PS4 - handle up-left etc...
-Change colour of p2 sprites
-Create p3 sprites
-	Get PS4 angles right
+Check area clear when new player joins
+	"Up" to move up a ladder
 	Make cam smoother
-Remove BlockInventory
-Diff coloured player sprites
+	Don't draw icons
+	PS4 - handle up-left etc...
+	Show players scores
+Search for todos
+More types of enemy
+Use interpol
+
+
+LATER
+FPS not working
 Randomly drop stars
 SelectGameMode module
-	Show players scores
-Show players scores
 Get star image
 Restart player if they die
-Search for todos
-Copy map files in
-Create new map
-FPS not working
 
 
 GAMEMODES

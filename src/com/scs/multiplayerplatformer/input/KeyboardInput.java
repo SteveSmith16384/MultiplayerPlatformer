@@ -9,7 +9,7 @@ import com.scs.multiplayerplatformer.Statics;
 
 public class KeyboardInput implements IInputDevice, KeyListener {
 
-	private volatile boolean left, right, jump, down, fire;
+	private volatile boolean left, right, jump, up, down, fire;
 	private boolean lastMoveWasLeft = false;
 	private int angle = 0;
 
@@ -43,6 +43,12 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 	
 
 	@Override
+	public boolean isUpPressed() {
+		return up;
+	}
+
+
+	@Override
 	public boolean isDownPressed() {
 		return down;
 	}
@@ -72,6 +78,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 			break;
 
 		case KeyEvent.VK_UP:
+			up = true;
 			jump = true;
 			break;
 
@@ -101,6 +108,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 			break;
 
 		case KeyEvent.VK_UP:
+			up = false;
 			jump = false;
 			break;
 
@@ -121,6 +129,13 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 	@Override
 	public void keyTyped(KeyEvent ke) {
 		// Do nothing
+	}
+
+
+	@Override
+	public float getStickDistance() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

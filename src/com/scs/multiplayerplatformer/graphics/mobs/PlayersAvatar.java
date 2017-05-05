@@ -18,7 +18,7 @@ public class PlayersAvatar extends AbstractLandMob {
 
 	private static final byte MAX_HEALTH = 100;
 
-	public int move_x_offset = 0;
+	public float move_x_offset = 0;
 	public int playerNum;
 	private Timer dec_health_timer = new Timer(DateFunctions.MINUTE/4);
 	public BlockInventory inv;
@@ -62,14 +62,17 @@ public class PlayersAvatar extends AbstractLandMob {
 				move_x_offset = 0;
 			}
 			if (input.isLeftPressed()) {
-				move_x_offset = -1;
+				move_x_offset = -1 * input.getStickDistance();
 			} else if (input.isRightPressed()) {
-				move_x_offset = 1;
+				move_x_offset = 1 * input.getStickDistance();
 			}
 
+			moving_up = false;
 			moving_down = false;
 			if (input.isJumpPressed()) {
 				startJumping();
+			} else if (input.isUpPressed()) {
+				moving_up = true;
 			} else if (input.isDownPressed()) {
 				moving_down = true;
 			}

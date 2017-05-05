@@ -14,32 +14,49 @@ public class PS4Controller implements IInputDevice {
 	public PS4Controller(IController _gamepad) {
 		gamepad = _gamepad;
 	}
-	
+
 
 	@Override
 	public boolean isLeftPressed() {
 		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
-		return pos.getDirection() == DpadDirection.LEFT;
+		//return pos.getDirection() == DpadDirection.LEFT;
+		return pos.getDegree() > 252 && pos.getDegree() < 360;
+
 	}
 
-	
+
 	@Override
 	public boolean isRightPressed() {
 		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
-		return pos.getDirection() == DpadDirection.RIGHT;
+		//return pos.getDirection() == DpadDirection.RIGHT;
+		return pos.getDegree() > 17 && pos.getDegree() < 152;
 	}
 
-	
+
 	@Override
 	public boolean isJumpPressed() {
 		return gamepad.isButtonPressed(ButtonID.FACE_DOWN);
 	}
 
-	
+
+	@Override
+	public boolean isUpPressed() {
+		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
+		return pos.getDirection() == DpadDirection.UP;
+	}
+
+
 	@Override
 	public boolean isDownPressed() {
 		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
 		return pos.getDirection() == DpadDirection.DOWN;
+	}
+
+
+	@Override
+	public float getStickDistance() {
+		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
+		return pos.getDistanceToCenter();
 	}
 
 	

@@ -53,7 +53,7 @@ public class Controllers implements IControllerListener {
 			controllerProvider.initialize();
 			Log.logger.debug("Controller provider ready: " + controllerProvider.getClass().getName());
 		} catch(Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			throw new IllegalStateException("Failed to initialize controller provider instance: " + e);
 		}
 	}
