@@ -76,6 +76,7 @@ public class ThrownItem extends GameObject {
 					// Do nothing
 				} else {
 					if (c instanceof ThrownItem) {
+						((ThrownItem) c).remove();
 						this.remove(); // Knock other shurikens out of sky
 						return;
 					} else if (c instanceof AbstractMob) {

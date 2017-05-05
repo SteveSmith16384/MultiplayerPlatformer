@@ -8,7 +8,7 @@ import com.scs.multiplayerplatformer.Statics;
 
 public class Camera extends RectF {
 
-	public static final long CAM_UPDATE = 100;
+	public static final long CAM_UPDATE = 0;
 	private static final float MOVE_SPEED = .1f;
 	private static final float LOCKON_DIST = 20; // Was 10
 
@@ -73,8 +73,8 @@ public class Camera extends RectF {
 				if (dist <= LOCKON_DIST) {
 					lookAt(target_point.x, target_point.y, true);
 				} else {
-					float off_x = Math.signum(target_point.x - actual_point.x) * MOVE_SPEED * interpol * dist;
-					float off_y = Math.signum(target_point.y - actual_point.y) * MOVE_SPEED * interpol * dist;
+					float off_x = Math.signum(target_point.x - actual_point.x) * MOVE_SPEED * interpol;// todo  * dist;
+					float off_y = Math.signum(target_point.y - actual_point.y) * MOVE_SPEED * interpol;// todo  * dist;
 					actual_point.x += off_x;//(target_point.x + actual_point.x)/2;
 					actual_point.y += off_y;//= (target_point.y + actual_point.y)/2;
 					this.updateWindow();

@@ -3,6 +3,7 @@ package com.scs.multiplayerplatformer.input;
 import org.gamepad4j.ButtonID;
 import org.gamepad4j.DpadDirection;
 import org.gamepad4j.IController;
+import org.gamepad4j.IStick;
 import org.gamepad4j.StickID;
 import org.gamepad4j.StickPosition;
 
@@ -44,8 +45,9 @@ public class PS4Controller implements IInputDevice {
 	
 	@Override
 	public int getAngle() {
-		// TODO Auto-generated method stub
-		return 0;
+		IStick leftStick = gamepad.getStick(StickID.LEFT);
+		StickPosition pos = leftStick.getPosition();
+		return (int)pos.getDegree() -90; // 0=up, 90=right
 	}
 
 

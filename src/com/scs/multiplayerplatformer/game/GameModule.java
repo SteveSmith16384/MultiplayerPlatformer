@@ -285,7 +285,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		// See if any humans have pressed Fire, and thus need an avatar creating
 		if (keyboard.isThrowPressed()) {
-			if (getPlayerFromInput(-1) == null) {
+			if (createdDevices.get(-1) == null) {
 				this.loadPlayer(keyboard, -1); // todo - make -1 a const
 			}
 		}
@@ -293,7 +293,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		if (gamepads != null) {
 			for (IController gamepad : gamepads) {
 				if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
-					if (getPlayerFromInput(gamepad.getDeviceID()) == null) {
+					if (createdDevices.get(gamepad.getDeviceID()) == null) {
 						this.loadPlayer(new PS4Controller(gamepad), gamepad.getDeviceID());
 					}
 				}
@@ -724,7 +724,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	private void loadPlayer(IInputDevice input, int controllerID) {
+	private synchronized void loadPlayer(IInputDevice input, int controllerID) {
 		/*this.game_over = false;
 		/*if (players[id] != null) {
 			players[id].removeFromParent();
@@ -744,7 +744,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		if (original_level_data.block_inv != null) {
 			player.inv.putAll(original_level_data.block_inv);
 		}
-		this.players.add(player);
+		//this.players.add(player);
 		this.createdDevices.put(controllerID, input);
 
 	}
@@ -775,9 +775,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	private IInputDevice getPlayerFromInput(int id) {
+/*	private IInputDevice getPlayerFromInput(int id) {
 		return createdDevices.get(id);
 	}
-
+*/
 }
 
