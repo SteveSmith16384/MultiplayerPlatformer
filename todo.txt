@@ -5,16 +5,23 @@ TODO
 Get PS4 angles right
 Check when players collide
 Look for game modes - Mario War, Jump'n'Bump, (see reddit)
+"Up" to move up a ladder
+Turn off ps4 debugging
+Create new map
+PS4 - handle up-left etc...
+Change colour of p2 sprites
+Create p3 sprites
+	Get PS4 angles right
 	Make cam smoother
 Remove BlockInventory
 Diff coloured player sprites
 Randomly drop stars
 SelectGameMode module
 	Show players scores
+Show players scores
 Get star image
 Restart player if they die
 Search for todos
-	Centre camera on all players
 Copy map files in
 Create new map
 FPS not working

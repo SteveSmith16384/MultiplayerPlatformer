@@ -112,6 +112,7 @@ public class PlayersAvatar extends AbstractLandMob {
 		} 
 		if (Statics.DEBUG) {
 			Statics.p("Duration: " + power);
+			Statics.p("Ang: " + angle);
 		}
 		AbstractActivity act = Statics.act;
 
@@ -134,7 +135,7 @@ public class PlayersAvatar extends AbstractLandMob {
 			act.sound_manager.playSound("throwitem");
 			PointF p = GeometryFuncs.GetPointFromAngle(angle, power*2);
 			MyPointF dir = new MyPointF(p.x, p.y);
-			Statics.p("Dir:" + dir);
+			//Statics.p("Dir:" + dir);
 			if (type == Block.SHURIKEN) {
 				ThrownItem.ThrowShuriken(game, this, dir);
 			} else {
