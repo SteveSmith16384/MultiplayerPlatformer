@@ -58,8 +58,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private static String CURRENT_ITEM;
 	private static String MENU;
 
-	//private static final int LOAD_MAP_BATCH_SIZE = 5;
-	private static final int ICON_INSETS = 10;
+	//private static final int ICON_INSETS = 10;
 
 	private static Paint paint_health_bar = new Paint();
 	private static Paint paint_health_bar_outline = new Paint();
@@ -437,6 +436,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		long start = System.currentTimeMillis();
 		super.doDraw(g, interpol);
 
+		
+		for (PlayersAvatar player : players) {
+			g.drawText("Player " + (player.playerNum+1) + " Score: " + player.score, 10, 50+(player.playerNum * paint_text_ink.getTextSize()), paint_text_ink);
+
+		}
+		
 		/*todo if (this.player != null) {
 			// Health bar
 			float height = (Statics.HEALTH_BAR_HEIGHT / 100) * this.player.getHealth();
@@ -685,7 +690,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	public void setCurrentItemIcon(PlayersAvatar player) {
+	/*public void setCurrentItemIcon(PlayersAvatar player) {
 		if (current_item_image != null) {
 			current_item_image.removeFromParent();
 		}
@@ -721,7 +726,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		} catch (RuntimeException ex) {
 			AbstractActivity.HandleError(null, ex);
 		}
-	}
+	}*/
 
 
 	private void loadPlayer(IInputDevice input, int controllerID) {
@@ -737,13 +742,13 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		player.inv = new BlockInventory(this, player);
 		this.players.add(player);
 		player.parent.updateGeometricState();
-		setCurrentItemIcon(player);
+		//setCurrentItemIcon(player);
 		//checkIfMapNeedsLoading();
 
 		// Load inventory
-		if (original_level_data.block_inv != null) {
+		/*if (original_level_data.block_inv != null) {
 			player.inv.putAll(original_level_data.block_inv);
-		}
+		}*/
 		this.players.add(player);
 		this.createdDevices.put(controllerID, input);
 

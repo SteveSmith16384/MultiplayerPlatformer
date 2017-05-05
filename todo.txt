@@ -1,17 +1,18 @@
 Throw shurikens at each other and get high score!
 
 TODO
+	Don't draw icons
 Get PS4 angles right
 Check when players collide
+Look for game modes - Mario War, Jump'n'Bump, (see reddit)
 	Make cam smoother
+Remove BlockInventory
 Diff coloured player sprites
 Randomly drop stars
 SelectGameMode module
-Getting hit by enemies freezes players
-Show players scores
+	Show players scores
 Get star image
 Restart player if they die
-Look for game modes - Mario War, Jump'n'Bump, (see reddit)
 Search for todos
 	Centre camera on all players
 Copy map files in

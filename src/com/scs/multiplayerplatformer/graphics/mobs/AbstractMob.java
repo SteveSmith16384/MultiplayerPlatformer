@@ -34,6 +34,7 @@ public abstract class AbstractMob extends GameObject {
 	private int hold_breath_time = MAX_HOLD_BREATH_TIME;
 	public boolean is_on_ice = false;
 	private Interval bubble_int = new Interval(1000, false);
+	public int score;
 
 	public AbstractMob(GameModule _game, String name, float x, float y, float w, float h, byte _health, boolean _remove_if_far_away, boolean _destroy_blocks, byte _side) {
 		super(_game, name, true, x, y, w, h);

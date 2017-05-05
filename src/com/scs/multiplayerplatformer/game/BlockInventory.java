@@ -44,24 +44,24 @@ public final class BlockInventory extends HashMap<Byte, Integer> {
 
 		// Give it to the player?
 		if (amt > 0) { // Adding an item
-				if (player != null && player.hasBlockSelected() == false) {
-					if (super.containsKey(id)) {
-						player.setItemType(id);
-						game.setCurrentItemIcon(player);
-					}
+			if (player != null && player.hasBlockSelected() == false) {
+				if (super.containsKey(id)) {
+					player.setItemType(id);
+					//game.setCurrentItemIcon(player);
 				}
+			}
 		} else { // Removing item
-				if (hasBlock(player.getCurrentItemType()) == false) { // Is it the last item of this type
-					player.setItemType(Block.NOTHING_DAYLIGHT); // Default
-					Iterator<Byte> it = this.keySet().iterator();
-					if (it.hasNext()) {
-						byte other_item = it.next();
-						player.setItemType(other_item);
-					}
-					game.setCurrentItemIcon(player);
+			if (hasBlock(player.getCurrentItemType()) == false) { // Is it the last item of this type
+				player.setItemType(Block.NOTHING_DAYLIGHT); // Default
+				Iterator<Byte> it = this.keySet().iterator();
+				if (it.hasNext()) {
+					byte other_item = it.next();
+					player.setItemType(other_item);
 				}
+				//game.setCurrentItemIcon(player);
+			}
 		}
-		game.updateInvIconAmt(player);
+		//game.updateInvIconAmt(player);
 
 	}
 

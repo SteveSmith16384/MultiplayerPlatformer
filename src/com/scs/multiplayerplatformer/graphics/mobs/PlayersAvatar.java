@@ -19,10 +19,10 @@ public class PlayersAvatar extends AbstractLandMob {
 	private static final byte MAX_HEALTH = 100;
 
 	public int move_x_offset = 0;
+	public int playerNum;
 	private Timer dec_health_timer = new Timer(DateFunctions.MINUTE/4);
 	public BlockInventory inv;
 	private IInputDevice input;
-	public int score;
 
 	private long firePressedTime;
 	private boolean prevThrowPressed = false;
@@ -31,6 +31,7 @@ public class PlayersAvatar extends AbstractLandMob {
 	public PlayersAvatar(GameModule _game, int playernum, float x, float y, IInputDevice _input) {
 		super(_game, Statics.act.getString("player"), x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, MAX_HEALTH, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
 
+		playerNum = playernum;
 		input = _input;
 
 		this.setNumFrames(8);

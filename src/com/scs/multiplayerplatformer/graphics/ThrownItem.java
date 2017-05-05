@@ -13,6 +13,8 @@ import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.PhysicsEngine;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
+import com.scs.multiplayerplatformer.graphics.mobs.EnemyNinjaEasy;
+import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 
 public class ThrownItem extends GameObject {
 
@@ -78,9 +80,13 @@ public class ThrownItem extends GameObject {
 					if (c instanceof ThrownItem) {
 						this.remove(); // Knock other shurikens out of sky
 						return;
-					} else if (c instanceof AbstractMob) {
+					} else if (c instanceof EnemyNinjaEasy) {
 						AbstractMob m = (AbstractMob)c;
 						m.damage(damage);
+						this.remove();
+						return;
+					} else if (c instanceof PlayersAvatar) {
+						this.thrower.score += 100;
 						this.remove();
 						return;
 					}
