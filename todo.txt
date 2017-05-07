@@ -1,5 +1,6 @@
 Throw shurikens at each other and get high score!
 Who has the most points at the end
+Race to complete each small level
 
 HOME
 Create new map - ice
@@ -7,6 +8,8 @@ Change colour of p2+p3 sprites
 
 
 TODO
+Restart at start of level when killed
+Hold down jump to jump higher
 More points for landing on head
 	Use stick dist to adjust speed
 Control menus with controller

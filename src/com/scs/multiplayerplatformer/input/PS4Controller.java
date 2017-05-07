@@ -7,6 +7,8 @@ import org.gamepad4j.IStick;
 import org.gamepad4j.StickID;
 import org.gamepad4j.StickPosition;
 
+import com.scs.multiplayerplatformer.Statics;
+
 public class PS4Controller implements IInputDevice {
 
 	private IController gamepad;
@@ -56,6 +58,9 @@ public class PS4Controller implements IInputDevice {
 	@Override
 	public float getStickDistance() {
 		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
+		if (Statics.DEBUG) {
+			Statics.p("Dist=" + pos.getDistanceToCenter());
+		}
 		return pos.getDistanceToCenter();
 	}
 
