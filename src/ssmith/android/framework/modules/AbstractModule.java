@@ -21,8 +21,6 @@ public abstract class AbstractModule extends Thread {
 	
 	private static Paint paint_button_text = new Paint();
 
-	//public AbstractActivity act;
-	
 	public Camera root_cam;
 	public Node root_node = new Node("root_node");
 	public Node stat_node_back = new Node("stat_node");
@@ -65,7 +63,6 @@ public abstract class AbstractModule extends Thread {
 	 */
 	public abstract boolean processEvent(MyEvent evt) throws Exception;
 	
-
 	public void started() {
 		// Override if reqd.
 	}

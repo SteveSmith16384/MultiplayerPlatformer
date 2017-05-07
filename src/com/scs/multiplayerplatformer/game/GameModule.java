@@ -60,7 +60,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private TSArrayList<IProcessable> others_instant;
 	public AbstractLevelData original_level_data;
 	public MyEfficientGridLayout new_grid;
-	//private Button curr_item_icon, cmd_menu;
 	public TimedString msg;
 	private RectF health_bar = new RectF();
 	private RectF health_bar_outline = new RectF();
@@ -71,16 +70,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public int level;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
-	//private Timer camTimer = new Timer(Camera.CAM_UPDATE);
-
-	private long draw_time = 0; // Avg. 20
-	private long instant_time = 0; // Avg. 4-5
-	private long total_time = 0; // Avg. 4-5
 
 	public List<PlayersAvatar> players = new ArrayList<>();
-	private IController[] gamepads;
-	private Map<Integer, IInputDevice> createdDevices = new HashMap<>();
-	private IInputDevice keyboard;
+	//private IController[] gamepads;
+	//private IInputDevice keyboard;
 
 
 	static {
@@ -145,7 +138,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		this.setBackground("ninja_background2");
 		this.showToast("Level " + this.level + "!");
 
-		keyboard = new KeyboardInput(act.thread.window);
+		//keyboard = new KeyboardInput(act.thread.window);
 
 		showToast("PRESS FIRE TO START!");
 	}
@@ -261,19 +254,15 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		long total_start = System.currentTimeMillis();
 
-		if (Statics.USE_CONTROLLERS) {
-			Controllers.checkControllers();
-			gamepads = Controllers.getControllers();
-		}
-
 		// See if any humans have pressed Fire, and thus need an avatar creating
-		if (keyboard.isThrowPressed()) {
+		/*if (keyboard.isThrowPressed()) {
 			if (createdDevices.get(-1) == null) {
 				this.loadPlayer(keyboard, -1); // todo - make -1 a const
 			}
-		}
+		}*/
 
-		if (gamepads != null) {
+		// todo - check all controllers have a player
+		/*if (gamepads != null) {
 			for (IController gamepad : gamepads) {
 				if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
 					if (createdDevices.get(gamepad.getDeviceID()) == null) {
@@ -281,7 +270,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					}
 				}
 			}
-		}
+		}*/
 
 		// Remove any objects marked for removal
 		this.others_instant.refresh();
@@ -307,8 +296,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				o.process(interpol);
 			}
 		}
-		instant_time = System.currentTimeMillis() - start_instant;
-
 		// Check for any very_slow blocks that are close
 		/*if (others_very_slow != null && this.players.size() > 0) {
 			for (int i=0 ; i<20 ; i++) {
@@ -461,9 +448,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				g.drawText(msg.toString(), 10, Statics.SCREEN_HEIGHT - (paint_icon_ink.getTextSize()*.5f), paint_icon_ink);
 			}
 		}
-
-
-		draw_time = System.currentTimeMillis() - start;
 
 	}
 
@@ -722,7 +706,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			player.inv.putAll(original_level_data.block_inv);
 		}*/
 		//this.players.add(player);
-		this.createdDevices.put(controllerID, input);
+		//this.createdDevices.put(controllerID, input);
 
 	}
 
