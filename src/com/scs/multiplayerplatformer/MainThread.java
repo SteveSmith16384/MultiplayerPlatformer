@@ -1,21 +1,8 @@
 package com.scs.multiplayerplatformer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JOptionPane;
-
-import org.gamepad4j.ButtonID;
-import org.gamepad4j.Controllers;
-import org.gamepad4j.IController;
-
-import com.scs.multiplayerplatformer.game.GameModule;
-import com.scs.multiplayerplatformer.input.IInputDevice;
-import com.scs.multiplayerplatformer.input.KeyboardInput;
-import com.scs.multiplayerplatformer.input.PS4Controller;
-import com.scs.multiplayerplatformer.start.ErrorModule;
-import com.scs.multiplayerplatformer.start.StartupModule;
 
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
@@ -24,6 +11,11 @@ import ssmith.android.framework.MyEvent;
 import ssmith.android.framework.modules.AbstractModule;
 import ssmith.awt.ImageCache;
 import ssmith.lang.Functions;
+
+import com.scs.multiplayerplatformer.game.GameModule;
+import com.scs.multiplayerplatformer.input.DeviceThread;
+import com.scs.multiplayerplatformer.start.ErrorModule;
+import com.scs.multiplayerplatformer.start.StartupModule;
 
 public final class MainThread extends Thread {
 
@@ -41,9 +33,8 @@ public final class MainThread extends Thread {
 	public Canvas c;
 	private long fps;
 	public MainWindow window;
-	private Map<Integer, IInputDevice> createdDevices = new HashMap<>();
-	private IInputDevice keyboard;
-
+	public DeviceThread deviceThread;
+	
 	static {
 		paint_black_fill.setARGB(255, 0, 0, 0);
 		paint_black_fill.setAntiAlias(true);
@@ -57,16 +48,7 @@ public final class MainThread extends Thread {
 
 		window = new MainWindow(this);
 		Statics.img_cache = new ImageCache(window);
-
-		keyboard = new KeyboardInput(window);
-
-		try {
-			Controllers.initialize();
-		} catch (Throwable ex) {
-			ex.printStackTrace();
-			Statics.USE_CONTROLLERS = false;
-		}
-
+		deviceThread = new DeviceThread(window);
 	}
 
 
@@ -76,9 +58,6 @@ public final class MainThread extends Thread {
 			while (mRun) {
 				long start = System.currentTimeMillis();
 
-				if (Statics.USE_CONTROLLERS) {
-					checkGamepads();
-				}
 				updateGame();
 				doDrawing();
 
@@ -91,43 +70,8 @@ public final class MainThread extends Thread {
 		} catch (Exception ex) {
 			AbstractActivity.HandleError(ex);
 			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage() + ".  Please restart", "Error", JOptionPane.ERROR_MESSAGE);
-		} finally {
-			try {
-				if (Statics.USE_CONTROLLERS) {
-					Controllers.shutdown();
-				}
-			} catch (Throwable t) {
-				// Do nothing
-			}
 		}
 		//AbstractActivity.Log("MainThread ended.");
-	}
-
-
-	private void checkGamepads() {
-		IController[] gamepads = null;
-		if (Statics.USE_CONTROLLERS) {
-			Controllers.checkControllers();
-			gamepads = Controllers.getControllers();
-			
-			for (IController gamepad : gamepads) {
-				if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
-					if (createdDevices.get(gamepad.getDeviceID()) == null) {
-						//this.loadPlayer(new PS4Controller(gamepad), gamepad.getDeviceID());
-						//this.module.newPlayer(gamepad.getDeviceID());
-						createdDevices.put(gamepad.getDeviceID(), new PS4Controller(gamepad));
-					}
-				}
-			}
-
-		}
-		if (keyboard.isThrowPressed()) {
-			if (createdDevices.get(-1) == null) {
-				// todo this.loadPlayer(keyboard, -1); // todo - make -1 a const
-				createdDevices.put(-1, keyboard);				
-			}
-		}
-
 	}
 
 

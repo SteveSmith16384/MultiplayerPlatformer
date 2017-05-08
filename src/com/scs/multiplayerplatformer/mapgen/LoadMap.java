@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import ssmith.android.framework.AbstractActivity;
 import ssmith.lang.NumberFunctions;
 
 import com.scs.multiplayerplatformer.Statics;

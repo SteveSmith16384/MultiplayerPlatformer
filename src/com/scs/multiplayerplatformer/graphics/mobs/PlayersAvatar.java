@@ -3,8 +3,6 @@ package com.scs.multiplayerplatformer.graphics.mobs;
 import ssmith.android.compatibility.PointF;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.lib2d.MyPointF;
-import ssmith.android.util.Timer;
-import ssmith.lang.DateFunctions;
 import ssmith.lang.GeometryFuncs;
 
 import com.scs.multiplayerplatformer.Statics;
@@ -16,20 +14,17 @@ import com.scs.multiplayerplatformer.input.IInputDevice;
 
 public class PlayersAvatar extends AbstractLandMob {
 
-	private static final byte MAX_HEALTH = 100;
-
 	public float move_x_offset = 0;
 	public int playerNum;
-	private Timer dec_health_timer = new Timer(DateFunctions.MINUTE/4);
 	public BlockInventory inv;
-	private IInputDevice input;
+	public boolean completedLevel = false;
 
+	private IInputDevice input;
 	private long firePressedTime;
 	private boolean prevThrowPressed = false;
 
-
 	public PlayersAvatar(GameModule _game, int playernum, float x, float y, IInputDevice _input) {
-		super(_game, Statics.act.getString("player"), x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, MAX_HEALTH, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
+		super(_game, Statics.act.getString("player"), x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
 
 		playerNum = playernum;
 		input = _input;
@@ -95,15 +90,9 @@ public class PlayersAvatar extends AbstractLandMob {
 
 		}
 
-		if (Statics.player_loses_health) {
-			if (dec_health_timer.hasHit(interpol)) {
-				this.damage(1);
-			}	
-		}
-
 		performJumpingOrGravity();
 		checkForSuffocation();
-		checkForHarmingBlocks();
+		//checkForHarmingBlocks();  already does this
 
 	}
 
@@ -113,10 +102,10 @@ public class PlayersAvatar extends AbstractLandMob {
 		if (power > 1) {
 			power = 1;
 		} 
-		if (Statics.DEBUG) {
+		/*if (Statics.DEBUG) {
 			Statics.p("Duration: " + power);
 			Statics.p("Ang: " + angle);
-		}
+		}*/
 		AbstractActivity act = Statics.act;
 
 		byte type = getCurrentItemType();
@@ -150,17 +139,18 @@ public class PlayersAvatar extends AbstractLandMob {
 	}
 
 
-	@Override
+	/*@Override
 	public void damage(int amt) {
 		super.damage(amt);
 		this.startJumping();
-	}
+	}*/
 
 
 	@Override
-	protected void died() {
-		//todo game.gameOver("You have been killed!");
+	public void died() {
+		game.restartPlayer(this);
 	}
+	
 
 	/*
 	@Override

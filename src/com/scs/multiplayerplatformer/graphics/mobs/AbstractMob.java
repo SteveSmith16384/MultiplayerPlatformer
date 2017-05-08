@@ -25,7 +25,6 @@ public abstract class AbstractMob extends GameObject {
 	public static final byte ENEMY_NINJA_EASY = 8;
 	public static final byte PLATFORM1 = 11;
 
-	protected int health, max_health;
 	protected byte current_item = GameModule.HAND;
 	private boolean remove_if_far_away;
 	private boolean destroy_blocks;
@@ -36,11 +35,9 @@ public abstract class AbstractMob extends GameObject {
 	private Interval bubble_int = new Interval(1000, false);
 	public int score;
 
-	public AbstractMob(GameModule _game, String name, float x, float y, float w, float h, byte _health, boolean _remove_if_far_away, boolean _destroy_blocks, byte _side) {
+	public AbstractMob(GameModule _game, String name, float x, float y, float w, float h, boolean _remove_if_far_away, boolean _destroy_blocks, byte _side) {
 		super(_game, name, true, x, y, w, h);
 
-		health = _health;
-		max_health = _health;
 		remove_if_far_away = _remove_if_far_away;
 		destroy_blocks = _destroy_blocks;
 		side = _side;
@@ -231,39 +228,39 @@ public abstract class AbstractMob extends GameObject {
 	}
 
 
-	public int getHealth() {
+	/*public int getHealth() {
 		return this.health;
-	}
+	}*/
 
 
-	public void damage(int amt) {
+	/*public void damage(int amt) {
 		this.health -= amt;
 		if (this.health <= 0) {
 			died();
 		}
-	}
+	}*/
 
 
-	public void incHealth(int amt) {
+	/*public void incHealth(int amt) {
 		this.health += amt;
 		if (this.health > this.max_health) {
 			this.health = max_health;
 		}
-	}
+	}*/
 
 
-	public void incHealthToMax() {
+	/*public void incHealthToMax() {
 		this.health = max_health;
 	}
+*/
 
-
-	protected void remove() {
+	public void remove() {
 		this.removeFromParent();
 		this.game.removeFromProcess(this);
 	}
 
 
-	protected abstract void died();
+	public abstract void died();
 
 
 	protected void checkForSuffocation() { 
@@ -276,7 +273,7 @@ public abstract class AbstractMob extends GameObject {
 				// Suffocation
 				this.hold_breath_time--;
 				if (this.hold_breath_time < 0) {
-					this.damage(1);
+					this.died();//.damage(1);
 					this.hold_breath_time = 0;
 				}
 				return;
@@ -297,11 +294,11 @@ public abstract class AbstractMob extends GameObject {
 			for (AbstractRectangle r : colls) {
 				Block b = (Block)r;
 				if (b != null) {
-					if (b.on_fire) {
-						this.damage(1);
-					}
+					/*if (b.on_fire) {
+						this.died();//.damage(1);
+					}*/
 					if (Block.GetHarm(b.getType()) > 0) {
-						this.damage(Block.GetHarm(b.getType()));
+						this.died();//.damage(Block.GetHarm(b.getType()));
 					}
 				}
 			}

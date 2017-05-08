@@ -3,29 +3,25 @@ Who has the most points at the end
 Race to complete each small level
 
 HOME
-Create new map - ice
+Create new maps - ice
 Change colour of p2+p3 sprites
 
 
 TODO
-Restart at start of level when killed
-Hold down jump to jump higher
-More points for landing on head
-	Use stick dist to adjust speed
-Control menus with controller
+Get points for being quickest
+	Restart at start of level when killed
+	restartPlayer() method
+	Check if all players have completed a level
+	Players don't collide
 Turn off ps4 debugging
-Check area clear when new player joins
-	"Up" to move up a ladder
-	Make cam smoother
-	Don't draw icons
-	PS4 - handle up-left etc...
-	Show players scores
 Search for todos
-More types of enemy
-Use interpol
 
 
 LATER
+Hold down jump to jump higher
+Control menus with controller
+More types of enemy
+Use interpol
 FPS not working
 Randomly drop stars
 SelectGameMode module

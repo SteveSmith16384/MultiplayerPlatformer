@@ -32,7 +32,6 @@ public class Block extends GameObject {
 	public static final byte TANGLEWEED = 10;
 	public static final byte APPLE = 11;
 	public static final byte CHEST = 12;
-	public static final byte TREE_BRANCH_RIGHT = 13;
 	public static final byte COAL = 14;
 	public static final byte GOLD = 15;
 	public static final byte LAVA = 16;
@@ -40,7 +39,6 @@ public class Block extends GameObject {
 	public static final byte SNOW = 18;
 	public static final byte TREE_BARK = 19;
 	public static final byte ACORN = 20;
-	public static final byte TREE_BRANCH_LEFT = 21;
 	public static final byte FLINT = 22;
 	public static final byte ADAMANTIUM = 23;
 	public static final byte IRON_ORE = 24;
@@ -84,7 +82,7 @@ public class Block extends GameObject {
 	private byte health = 1;
 	private int map_x, map_y;
 	private long event_time = System.currentTimeMillis() + 10000; // So they don't start straight away
-	public boolean on_fire = false;
+	//public boolean on_fire = false;
 
 	public Block(GameModule _game, byte _type, int _map_x, int _map_y) {
 		super(_game, "Block", true, 0, 0, Statics.SQ_SIZE, Statics.SQ_SIZE);
@@ -113,7 +111,7 @@ public class Block extends GameObject {
 		case FIRE:
 			health = (byte)100;
 			bmp2 = Statics.img_cache.getImage("fire2", Statics.SQ_SIZE, Statics.SQ_SIZE);
-			on_fire = true;
+			//on_fire = true;
 			break;
 		case LAVA:
 			health = (byte)100;
@@ -160,9 +158,6 @@ public class Block extends GameObject {
 		case GRASS:
 		case SNOW:
 			return SOIL;
-		case TREE_BRANCH_RIGHT:
-		case TREE_BRANCH_LEFT:
-			return TREE_BARK;
 		default:
 			return type;
 		}
@@ -202,8 +197,6 @@ public class Block extends GameObject {
 		case FLINT:
 		case COAL:
 		case CHEST:
-		case TREE_BRANCH_LEFT:
-		case TREE_BRANCH_RIGHT:
 		case COBWEB:
 		case RAW_BEEF:
 		case RAW_DEAD_CHICKEN:
@@ -302,8 +295,6 @@ public class Block extends GameObject {
 		case AMULET:
 		case SLIME: // Need this so splurts don't disappear straight away.
 		case TREE_BARK:
-		case TREE_BRANCH_RIGHT:
-		case TREE_BRANCH_LEFT:
 		case WEEDS:
 		case COBWEB:
 		case RAW_BEEF:
@@ -341,18 +332,21 @@ public class Block extends GameObject {
 			player.inv.addBlock(this.getType(), Statics.SHURIKENS_FROM_BLOCK);
 			destroy(0, false, null);
 			break;
+			
 		case Block.MEDIKIT:
-			player.incHealthToMax();
+			//player.incHealthToMax();
 			destroy(0, false, null);
 			break;
+			
 		case Block.END_OF_LEVEL:
-			game.level++;
-			//String map_r = Statics.GetMapFilename(game.level);
-			//AbstractLevelData original_level_data = new LoadMap(map_r);
+			/*game.level++;
 			GameModule mod = new GameModule(act, game.level);
 			game.getThread().setNextModule(mod);
-			destroy(0, false, null);
+			destroy(0, false, null);*/
+			player.completedLevel = true;
+			player.remove(); //.removeFromParent();
 			break;
+			
 		case Block.SAND:
 			destroy(2, false, null);
 		}
@@ -361,8 +355,6 @@ public class Block extends GameObject {
 
 	public static boolean BlocksDownMovement(byte type) {
 		switch (type) {
-		case TREE_BRANCH_RIGHT:
-		case TREE_BRANCH_LEFT:
 		case FLINT:
 		case LADDER:
 		case ROPE:
@@ -460,10 +452,6 @@ public class Block extends GameObject {
 			return img_cache.getImage("tree_bark", w, h);
 		case ACORN:
 			return img_cache.getImage("acorn", w, h);
-		case TREE_BRANCH_LEFT:
-			return img_cache.getImage("tree_branch_left", w, h);
-		case TREE_BRANCH_RIGHT:
-			return img_cache.getImage("tree_branch_right", w, h);
 		case FLINT:
 			return img_cache.getImage("flint", w, h);
 		case ADAMANTIUM:
@@ -676,13 +664,13 @@ public class Block extends GameObject {
 				}
 			}
 			g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint); // bmp.getWidth()
-			if (this.on_fire) {
+			/*if (this.on_fire) {
 				if (Functions.rnd(1, 2) == 2) {
 					g.drawBitmap(fire_bmp1, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
 				} else {
 					g.drawBitmap(fire_bmp2, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
 				}
-			}
+			}*/
 		}
 	}
 
@@ -707,7 +695,7 @@ public class Block extends GameObject {
 			remove_from_process = false;
 			int i = Functions.rnd(1, 10); 
 			if (i <= 3) {
-				if (this.on_fire == false) {
+				//if (this.on_fire == false) {
 					byte[] types2 = {NOTHING_DAYLIGHT};
 					if (checkAndChangeAdjacentSquares(-1, 0, types2, TANGLEWEED, true)) {
 						break;
@@ -721,7 +709,7 @@ public class Block extends GameObject {
 					if (checkAndChangeAdjacentSquares(0, -1, types2, TANGLEWEED, true)) {
 						break;
 					}
-				}
+				//}
 			} else if (i == 10){
 				remove_from_process = true;
 			}
@@ -749,7 +737,7 @@ public class Block extends GameObject {
 			break;
 		}
 
-		if (this.getType() == Block.FIRE || this.on_fire) {
+		if (this.getType() == Block.FIRE) {// || this.on_fire) {
 			/*if (checkFire()) {
 				remove_from_process = false;
 			}*/

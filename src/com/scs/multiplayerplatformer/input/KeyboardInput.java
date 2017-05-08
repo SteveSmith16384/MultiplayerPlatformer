@@ -5,8 +5,6 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
-import com.scs.multiplayerplatformer.Statics;
-
 public class KeyboardInput implements IInputDevice, KeyListener {
 
 	private volatile boolean left, right, jump, up, down, fire;
@@ -134,7 +132,6 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 	@Override
 	public float getStickDistance() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 

@@ -18,7 +18,6 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 	private static final int TURN_DURATION = 4000; // In case can't get to player
 
 	private static final int MAX_FRAMES = 8;
-	private static final byte HEALTH = 1;
 
 	private int x_offset = -1;
 	private boolean tried_jumping = false;
@@ -59,7 +58,7 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 
 
 	private EnemyNinjaEasy(GameModule _game, float x, float y) {
-		super(_game, "Enemy Ninja", x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, HEALTH, MAX_FRAMES, 200, true, false, Statics.SD_ENEMY_SIDE, true);
+		super(_game, "Enemy Ninja", x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, MAX_FRAMES, 200, true, false, Statics.SD_ENEMY_SIDE, true);
 
 		a_bmp_left[0] = Statics.img_cache.getImage("easy_ninja_l0", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
 		a_bmp_left[1] = Statics.img_cache.getImage("easy_ninja_l1", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
@@ -143,7 +142,7 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 
 
 	@Override
-	protected void died() {
+	public void died() {
 		new DyingEnemy(game, "easy_ninja_dying", this);
 		Explosion.CreateExplosion(game, 2, this.getWorldCentreX(), this.getWorldCentreY(), "blood_spurt");
 		this.remove(); // Must be before we drop an item

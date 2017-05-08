@@ -18,7 +18,7 @@ public class PlatformMob extends AbstractMob {
 
 
 	public PlatformMob(GameModule _game, float x, float y, float w, float h, String _r, float off_x, float off_y, float _dist) {
-		super(_game, "Platform", x, y, w, h, (byte)1, false, false, (byte)-1);
+		super(_game, "Platform", x, y, w, h, false, false, (byte)-1);
 
 		move_x = off_x * Statics.PLATFORM_SPEED;
 		move_y = off_y * Statics.PLATFORM_SPEED;
@@ -60,12 +60,14 @@ public class PlatformMob extends AbstractMob {
 		this.move_y = this.move_y * -1;
 	}
 
+	
 	@Override
-	protected void died() {
+	public void died() {
 		// Do nothing
 
 	}
 
+	
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
 		g.drawBitmap(bmp, this.getWorldX() - cam.left, this.getWorldY() - cam.top, paint);

@@ -57,7 +57,7 @@ public class Bullet extends GameObject {
 				} else {
 					if (c instanceof AbstractMob) {
 						AbstractMob m = (AbstractMob)c;
-						m.damage(damage);
+						m.died();//.damage(damage);
 					}
 					this.remove();
 				}

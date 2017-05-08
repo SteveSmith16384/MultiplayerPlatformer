@@ -31,8 +31,8 @@ public abstract class AbstractLandMob extends AbstractMob {
 	public boolean moving_down = false;
 	protected long frozenUntil = 0;
 
-	public AbstractLandMob(GameModule _game, String name, float x, float y, float w, float h, byte health, int _max_frames, long _frame_interval, boolean remove_if_far_away, boolean destroy_blocks, byte side, boolean _can_swim) {
-		super(_game, name, x, y, w, h, health, remove_if_far_away, destroy_blocks, side);
+	public AbstractLandMob(GameModule _game, String name, float x, float y, float w, float h, int _max_frames, long _frame_interval, boolean remove_if_far_away, boolean destroy_blocks, byte side, boolean _can_swim) {
+		super(_game, name, x, y, w, h, remove_if_far_away, destroy_blocks, side);
 
 		max_frames = _max_frames;
 		frame_interval = _frame_interval;
@@ -118,13 +118,14 @@ public abstract class AbstractLandMob extends AbstractMob {
 		float ladder_x = 0;
 		boolean in_water = false;
 
-		// Check for harmful blocks
+		// Check for special blocks
 		ArrayList<AbstractRectangle> colls = game.new_grid.getColliders(this.getWorldBounds());
 		for (AbstractRectangle g : colls) {
 			if (g instanceof Block) {
 				Block b = (Block)g;
 				if (Block.GetHarm(b.getType()) > 0) {
-					this.health -= Block.GetHarm(b.getType());
+					this.died();//.health -= Block.GetHarm(b.getType());
+					return;
 				}
 				if (b.getType() == Block.WATER) {
 					in_water = true;
@@ -233,8 +234,8 @@ public abstract class AbstractLandMob extends AbstractMob {
 			this.move(pm.move_x, pm.move_y, false);
 			return false;
 		} else if (g instanceof PlayersAvatar) {
-			// Todo - check who's highest
-			return true;
+			// Do nothing
+			return false;
 		} else if (g instanceof ThrownItem) {
 			return false; // The ThrownItem class handles collisions
 		}

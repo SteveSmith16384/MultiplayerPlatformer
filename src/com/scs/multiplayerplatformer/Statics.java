@@ -39,15 +39,12 @@ public final class Statics {
 	public static final String MUSIC_R = "chippytoon";
 	public static final int WINDOW_TOP_OFFSET = 25;
 	public static String BACKGROUND_R;
-	public static boolean USE_CONTROLLERS = true;
 	public static final long FREEZE_DUR = 1000;
 	
 	public static Typeface stdfnt, iconfnt, bigfnt;
 
 	public static ImageCache img_cache;
 
-	// Game settings
-	public static boolean player_loses_health = false;
 
 	// Bitmap scales
 	private static float SQ_SIZE_PCENT = 4f;

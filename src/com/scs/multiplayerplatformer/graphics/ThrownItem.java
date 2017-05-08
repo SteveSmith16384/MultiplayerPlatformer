@@ -83,7 +83,7 @@ public class ThrownItem extends GameObject {
 						return;
 					} else if (c instanceof EnemyNinjaEasy) {
 						AbstractMob m = (AbstractMob)c;
-						m.damage(damage);
+						m.died();//damage(damage);
 						this.remove();
 						return;
 					} else if (c instanceof PlayersAvatar) {

@@ -7,12 +7,9 @@ import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
-import ssmith.android.lib2d.shapes.Geometry;
 
-import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
-import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 
 public abstract class Collectable extends GameObject {

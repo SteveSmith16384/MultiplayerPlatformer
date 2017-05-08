@@ -20,7 +20,6 @@ import ssmith.android.lib2d.shapes.BitmapRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
 
 import com.scs.multiplayerplatformer.Statics;
-import com.scs.multiplayerplatformer.game.GameModule;
 
 public final class StartupModule extends AbstractModule {
 
@@ -141,7 +140,6 @@ public final class StartupModule extends AbstractModule {
 	private void startNewGame() {
 		AbstractActivity act = Statics.act;
 
-		Statics.player_loses_health = false;
 		AbstractModule game = null;
 		game = new SelectLevelModule(act, this);
 		this.getThread().setNextModule(game);

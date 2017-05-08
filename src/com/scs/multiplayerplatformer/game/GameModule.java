@@ -1,22 +1,15 @@
 package com.scs.multiplayerplatformer.game;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import org.gamepad4j.ButtonID;
-import org.gamepad4j.Controllers;
-import org.gamepad4j.IController;
 
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
-import ssmith.android.compatibility.RectF;
 import ssmith.android.compatibility.Style;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 import ssmith.android.framework.modules.AbstractModule;
-import ssmith.android.lib2d.gui.Button;
 import ssmith.android.lib2d.gui.GUIFunctions;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
@@ -35,20 +28,15 @@ import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 import com.scs.multiplayerplatformer.input.IInputDevice;
-import com.scs.multiplayerplatformer.input.KeyboardInput;
-import com.scs.multiplayerplatformer.input.PS4Controller;
+import com.scs.multiplayerplatformer.input.NewControllerListener;
 import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
 import com.scs.multiplayerplatformer.mapgen.LoadMap;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 
 
-public final class GameModule extends AbstractModule implements IDisplayText {
+public final class GameModule extends AbstractModule implements IDisplayText, NewControllerListener {
 
 	public static final byte HAND = 1;
-
-	// Icons
-	private static String CURRENT_ITEM;
-	private static String MENU;
 
 	private static Paint paint_health_bar = new Paint();
 	private static Paint paint_health_bar_outline = new Paint();
@@ -57,24 +45,17 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private static Paint paint_inv_ink = new Paint(); // For inv qty
 	private static Paint paint_text_ink = new Paint(); // For timer, dist
 
-	private TSArrayList<IProcessable> others_instant;
+	private TSArrayList<IProcessable> entities;
 	public AbstractLevelData original_level_data;
 	public MyEfficientGridLayout new_grid;
 	public TimedString msg;
-	private RectF health_bar = new RectF();
-	private RectF health_bar_outline = new RectF();
 	private Rectangle dummy_rect = new Rectangle(); // for checking the area is clear
-	private boolean game_over = false;
-	private String game_over_reason;
 	private Timer time_remaining;
 	public int level;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
 
 	public List<PlayersAvatar> players = new ArrayList<>();
-	//private IController[] gamepads;
-	//private IInputDevice keyboard;
-
 
 	static {
 		paint_health_bar.setARGB(150, 200, 0, 0); // This is set elsewhere
@@ -105,23 +86,40 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public GameModule(AbstractActivity act, int _level) { // AbstractLevelData _original_level_data, 
 		super(act, null);
 
-		level = _level;
+		//this.stat_node_back.updateGeometricState();
+		this.stat_cam.lookAtTopLeft(true);
 
-		original_level_data = new LoadMap(Statics.GetMapFilename(_level));
-		original_level_data.getMap();
+		str_time_remaining = act.getString("time_remaining");
 
-		CURRENT_ITEM = "";// No, we show the qty instead, on the overlaying icon act.getString(R.string.icon_inv);
-		MENU = act.getString("icon_menu");
+		this.setBackground("ninja_background2");
 
-		others_instant = new TSArrayList<IProcessable>();
-		//others_slow = new TSArrayList<IProcessable>();
-		//others_very_slow = new TSArrayList<Block>();
+		// Load a player for each controller
+		startNewLevel(_level);
+
+		Iterator<IInputDevice> it = act.thread.deviceThread.createdDevices.values().iterator();
+		while (it.hasNext()) {
+			IInputDevice input = it.next();
+			this.loadPlayer(input);
+		}
+		act.thread.deviceThread.addListener(this);
 
 		msg = new TimedString(this, 2000);
+
+		showToast("PRESS FIRE TO START!");
+	}
+
+
+	private void startNewLevel(int _level) {
+		level = _level;
 
 		this.root_node.detachAllChildren();
 		this.stat_node_back.detachAllChildren();
 		this.stat_node_front.detachAllChildren();
+
+		original_level_data = new LoadMap(Statics.GetMapFilename(_level));
+		original_level_data.getMap();
+
+		entities = new TSArrayList<IProcessable>();
 
 		this.mapGeneratedOrLoaded();
 		loadMap();
@@ -130,17 +128,13 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			new Cloud(this);
 		}
 
-		this.stat_node_back.updateGeometricState();
-		this.stat_cam.lookAtTopLeft(true);
+		// mark all players as not completed level
+		for(PlayersAvatar player : players) {
+			player.completedLevel = false;
+			restartPlayer(player);
+		}
 
-		str_time_remaining = act.getString("time_remaining");
-
-		this.setBackground("ninja_background2");
 		this.showToast("Level " + this.level + "!");
-
-		//keyboard = new KeyboardInput(act.thread.window);
-
-		showToast("PRESS FIRE TO START!");
 	}
 
 
@@ -252,30 +246,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public void updateGame(long interpol) {
 		AbstractActivity act = Statics.act;
 
-		long total_start = System.currentTimeMillis();
-
-		// See if any humans have pressed Fire, and thus need an avatar creating
-		/*if (keyboard.isThrowPressed()) {
-			if (createdDevices.get(-1) == null) {
-				this.loadPlayer(keyboard, -1); // todo - make -1 a const
-			}
-		}*/
-
-		// todo - check all controllers have a player
-		/*if (gamepads != null) {
-			for (IController gamepad : gamepads) {
-				if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
-					if (createdDevices.get(gamepad.getDeviceID()) == null) {
-						this.loadPlayer(new PS4Controller(gamepad), gamepad.getDeviceID());
-					}
-				}
-			}
-		}*/
+		//long total_start = System.currentTimeMillis();
 
 		// Remove any objects marked for removal
-		this.others_instant.refresh();
-		//this.others_slow.refresh();
-		//this.others_very_slow.refresh();
+		this.entities.refresh();
 
 		/*if (got_map == false) {
 			if (this.original_level_data.isAlive()) {
@@ -290,9 +264,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}
 		 */
 		// Process the rest
-		long start_instant = System.currentTimeMillis();
-		if (others_instant != null) {
-			for (IProcessable o : others_instant) {
+		//long start_instant = System.currentTimeMillis();
+		if (entities != null) {
+			for (IProcessable o : entities) {
 				o.process(interpol);
 			}
 		}
@@ -345,17 +319,21 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 		if (players.size() > 0) {
-			//if (camTimer.hasHit(interpol)) {
 			float x = 0, y = 0;
+			boolean allCompleted = true;
 			for (PlayersAvatar player : players) {
 				x += player.getWorldX();
 				y += player.getWorldY();
+				allCompleted = allCompleted && player.completedLevel; 
 			}
-			//PlayersAvatar player = this.players.get(0);
 			x = x / this.players.size();
 			y = y / this.players.size();
 			this.root_cam.lookAt(x, y, false);
-			//}
+			
+			if (allCompleted) {
+				this.startNewLevel(this.level + 1);
+			}
+			
 		} else {
 			this.root_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT, false);
 		}
@@ -363,13 +341,11 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		if (this.time_remaining != null) {
 			if (time_remaining.hasHit(interpol)) {
-				this.gameOver(act.getString("out_of_time"));
+				//todo this.gameOver(act.getString("out_of_time"));
 			}
 		}
 
-		checkGameOver();
-
-		total_time = System.currentTimeMillis() - total_start;
+		//checkGameOver();
 
 	}
 
@@ -413,24 +389,11 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		}
 
-		/*todo if (this.player != null) {
-			// Health bar
-			float height = (Statics.HEALTH_BAR_HEIGHT / 100) * this.player.getHealth();
-			health_bar.set(0, Statics.SCREEN_HEIGHT-height, Statics.HEALTH_BAR_WIDTH, Statics.SCREEN_HEIGHT);
-			paint_health_bar.setARGB(150, 200-(player.getHealth()*2), player.getHealth()*2, 0);
-			g.drawRect(health_bar, paint_health_bar);
-			if (health_bar_outline != null) {
-				g.drawRect(health_bar_outline, paint_health_bar_outline);
-			}
-
-			//g.drawText("Health: " + this.player.getHealth(), 10, paint_text_ink.getTextSize(), paint_text_ink);
-			//g.drawText("Rocks: " + this.player.rocks, 10, (paint_text_ink.getTextSize()*2), paint_text_ink);
-		}*/
 		if (this.time_remaining != null) {
 			g.drawText(this.str_time_remaining + ": " + (this.time_remaining.getTimeRemaining()/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
 		}
 		if (Statics.SHOW_STATS) {
-			g.drawText("Inst Objects: " + this.others_instant.size(), 10, paint_text_ink.getTextSize()*4, paint_text_ink);
+			g.drawText("Inst Objects: " + this.entities.size(), 10, paint_text_ink.getTextSize()*4, paint_text_ink);
 			//g.drawText("Slow Objects: " + this.others_slow.size(), 10, paint_text_ink.getTextSize()*5, paint_text_ink);
 			//g.drawText("V. Slow Objects: " + this.others_very_slow.size(), 10, paint_text_ink.getTextSize()*6, paint_text_ink);
 			//g.drawText("Darkness: " + this.dark_adj_cont.size(), 10, paint_text_ink.getTextSize()*7, paint_text_ink);
@@ -464,7 +427,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		this.cmd_menu.setLocation(Statics.ICON_SIZE, 0);
 		this.stat_node_front.attachChild(this.cmd_menu);*/
 
-		msg.setText("");
+		//msg.setText("");
 
 		new_grid = new MyEfficientGridLayout(this, original_level_data.getGridWidth(), original_level_data.getGridHeight(), Statics.SQ_SIZE);
 
@@ -479,7 +442,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		new EnemyEventTimer(this);
 
-		health_bar_outline = new RectF(0, Statics.SCREEN_HEIGHT-Statics.HEALTH_BAR_HEIGHT, Statics.HEALTH_BAR_WIDTH, Statics.SCREEN_HEIGHT);
+		//health_bar_outline = new RectF(0, Statics.SCREEN_HEIGHT-Statics.HEALTH_BAR_HEIGHT, Statics.HEALTH_BAR_WIDTH, Statics.SCREEN_HEIGHT);
 
 	}
 
@@ -496,15 +459,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		for (int map_y=0 ; map_y<original_level_data.getGridHeight() ; map_y++) {
 			for (int map_x=0 ; map_x<this.original_level_data.getGridWidth()-1 ; map_x++) {
 				byte sb = original_level_data.getGridDataAt(map_x, map_y);
-				//if (sb != null) {
-				byte data = sb;//.type;
+				byte data = sb;
 				if (data > 0) {
-					Block block = this.addBlock(data, map_x, map_y, false);
-					/*if (original_level_data.getGridDataAt(map_x, map_y).on_fire) {
-							block.on_fire = true;
-						}*/
+					this.addBlock(data, map_x, map_y, false);
 				}
-				//}
 			}
 		}
 		this.new_grid.parent.updateGeometricState();
@@ -577,12 +535,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 	public void addToProcess_Instant(IProcessable o) {
-		this.others_instant.add(o);
+		this.entities.add(o);
 	}
 
 
 	public void removeFromProcess(IProcessable o) {
-		this.others_instant.remove(o);
+		this.entities.remove(o);
 	}
 
 
@@ -592,19 +550,19 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	public void gameOver(String reason) {
+	/*public void gameOver(String reason) {
 		game_over_reason = reason;
 		this.game_over = true;
-	}
+	}*/
 
 
-	private void checkGameOver() {
+	/*private void checkGameOver() {
 		AbstractActivity act = Statics.act;
 
 		if (this.game_over) {
 			this.getThread().setNextModule(new GameOverModule(act, this, game_over_reason));
 		}
-	}
+	}*/
 
 
 	public void explosionWithDamage(int block_rad, int dam, int pieces, float pxl_x, float pxl_y) {
@@ -634,7 +592,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		for (Geometry c : colls) {
 			if (c instanceof AbstractMob) {
 				AbstractMob m = (AbstractMob)c;
-				m.damage(dam);
+				m.died();//.damage(dam);
 			}
 		}
 		dummy_rect.removeFromParent();
@@ -642,7 +600,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 	public int getNumProcessInstant() {
-		return this.others_instant.size();
+		return this.entities.size();
 	}
 
 
@@ -685,31 +643,24 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}*/
 
 
-	private synchronized void loadPlayer(IInputDevice input, int controllerID) {
-		/*this.game_over = false;
-		/*if (players[id] != null) {
-			players[id].removeFromParent();
-			this.removeFromProcess(players[id]);
-			this.others_instant.refresh();
-		}*/
+	private synchronized void loadPlayer(IInputDevice input) {
 		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
 		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
 		PlayersAvatar player = new PlayersAvatar(this, players.size(), x, y, input);//, controllerID);
 		player.inv = new BlockInventory(this, player);
 		this.players.add(player);
 		player.parent.updateGeometricState();
-		//setCurrentItemIcon(player);
-		//checkIfMapNeedsLoading();
-
-		// Load inventory
-		/*if (original_level_data.block_inv != null) {
-			player.inv.putAll(original_level_data.block_inv);
-		}*/
-		//this.players.add(player);
-		//this.createdDevices.put(controllerID, input);
-
+		//this.restartPlayer(player);
 	}
 
+	
+	public void restartPlayer(PlayersAvatar player) {
+		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
+		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
+		player.setLocation(x, y);
+		player.parent.updateGeometricState();
+
+	}
 
 	/*public void checkIfMapNeedsLoading() {
 		if (players.size() > 0) {
@@ -726,7 +677,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 	public TSArrayList<IProcessable> getOthersInstant() {
-		return this.others_instant;
+		return this.entities;
 	}
 
 
@@ -736,9 +687,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	/*	private IInputDevice getPlayerFromInput(int id) {
-		return createdDevices.get(id);
+	@Override
+	public void newController(IInputDevice input) {
+		this.loadPlayer(input);
+
 	}
-	 */
+
+
 }
 
