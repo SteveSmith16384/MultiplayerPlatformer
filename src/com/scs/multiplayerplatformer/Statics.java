@@ -40,7 +40,7 @@ public final class Statics {
 	public static final int WINDOW_TOP_OFFSET = 25;
 	public static String BACKGROUND_R;
 	public static final long FREEZE_DUR = 1000;
-	
+
 	public static Typeface stdfnt, iconfnt, bigfnt;
 
 	public static ImageCache img_cache;
@@ -129,10 +129,10 @@ public final class Statics {
 				bigfnt = new Typeface("SF Distant Galaxy", Font.BOLD, 28);
 			} catch (Exception e) {
 				e.printStackTrace();*/
-				// just use helvetica
-				iconfnt = new Typeface("Helvetica", Font.PLAIN, 10);
-				stdfnt = new Typeface("Helvetica", Font.BOLD, 14);
-				bigfnt = new Typeface("Helvetica", Font.BOLD, 28);
+			// just use helvetica
+			iconfnt = new Typeface("Helvetica", Font.PLAIN, 10);
+			stdfnt = new Typeface("Helvetica", Font.BOLD, 14);
+			bigfnt = new Typeface("Helvetica", Font.BOLD, 28);
 			//}
 
 			initd = true;
@@ -156,11 +156,15 @@ public final class Statics {
 
 
 	public static String GetMapFilename(int level) {
-		return "ninja_level" + level + ".csv";
+		if (Statics.DEBUG) {
+			return "testmap" + level + ".csv";
+		} else {
+			return "ninja_level" + level + ".csv";
+		}
 	}
 
 	// ----------------------------------------------------------------------
-	
+
 	public static void p(String s) {
 		System.out.println(s);
 	}

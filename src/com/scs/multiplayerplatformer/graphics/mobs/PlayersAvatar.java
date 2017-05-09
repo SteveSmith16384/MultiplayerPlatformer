@@ -28,6 +28,7 @@ public class PlayersAvatar extends AbstractLandMob {
 
 		playerNum = playernum;
 		input = _input;
+		inv = new BlockInventory(game, this);
 
 		this.setNumFrames(8);
 		a_bmp_left[0] = Statics.img_cache.getImage("ninja" + playernum + "_l0", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);

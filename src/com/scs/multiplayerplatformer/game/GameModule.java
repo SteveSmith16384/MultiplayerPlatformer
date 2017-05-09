@@ -415,7 +415,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	private void mapGeneratedOrLoaded() {
+	private void mapGeneratedOrLoaded() { // todo - rename
 		// Add icons
 		/*curr_item_icon = new Button(CURRENT_ITEM, CURRENT_ITEM, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage("button_red", Statics.ICON_SIZE, Statics.ICON_SIZE));
 		//curr_item_icon.setByLTWH(Statics.SCREEN_WIDTH-(Statics.ICON_SIZE*3), 0, Statics.ICON_SIZE, Statics.ICON_SIZE);
@@ -455,7 +455,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	private void loadMap() {
+	private void loadMap() { // todo - rename
 		for (int map_y=0 ; map_y<original_level_data.getGridHeight() ; map_y++) {
 			for (int map_x=0 ; map_x<this.original_level_data.getGridWidth()-1 ; map_x++) {
 				byte sb = original_level_data.getGridDataAt(map_x, map_y);
@@ -647,7 +647,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
 		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
 		PlayersAvatar player = new PlayersAvatar(this, players.size(), x, y, input);//, controllerID);
-		player.inv = new BlockInventory(this, player);
+		//player.inv = new BlockInventory(this, player);
 		this.players.add(player);
 		player.parent.updateGeometricState();
 		//this.restartPlayer(player);
@@ -658,7 +658,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
 		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
 		player.setLocation(x, y);
-		player.parent.updateGeometricState();
+		addToProcess_Instant(player);
+		root_node.attachChild(player);
+		player.updateGeometricState();
 
 	}
 

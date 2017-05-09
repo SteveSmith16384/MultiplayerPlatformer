@@ -8,6 +8,12 @@ Change colour of p2+p3 sprites
 
 
 TODO
+Restart player if they fall off the map
+Improve error "map not found"
+say "Player 1 has completed the level!"
+Create static collision functions
+Close window on error?
+Not getting harmed by enemies
 Get points for being quickest
 	Restart at start of level when killed
 	restartPlayer() method
