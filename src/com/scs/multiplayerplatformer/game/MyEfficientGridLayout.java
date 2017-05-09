@@ -27,6 +27,7 @@ public class MyEfficientGridLayout extends EfficientGridLayout {
 		return isSquareEmpty(map_x, map_y, true);
 	}
 	
+	
 	public boolean isSquareEmpty(int map_x, int map_y, boolean check_mobs) {
 		// Check area is clear of mobs
 		if (check_mobs == false || this.game.isAreaClear(map_x*Statics.SQ_SIZE, map_y*Statics.SQ_SIZE, Statics.SQ_SIZE, Statics.SQ_SIZE, false)) {

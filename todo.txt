@@ -8,22 +8,20 @@ Change colour of p2+p3 sprites
 
 
 TODO
-Restart player if they fall off the map
-Improve error "map not found"
-say "Player 1 has completed the level!"
-Create static collision functions
-Close window on error?
-Not getting harmed by enemies
 Get points for being quickest
-	Restart at start of level when killed
-	restartPlayer() method
-	Check if all players have completed a level
-	Players don't collide
+	Speed up camera
+Close window on error?
+	say "Player 1 has completed the level!"
+	Create static collision functions
+	Not getting harmed by enemies
 Turn off ps4 debugging
 Search for todos
 
 
 LATER
+Restart player if they fall off the map
+Scale graphics as
+Logical and physical position?
 Hold down jump to jump higher
 Control menus with controller
 More types of enemy

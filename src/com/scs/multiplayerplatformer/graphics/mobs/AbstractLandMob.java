@@ -9,6 +9,7 @@ import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
 
+import com.scs.multiplayerplatformer.Collision;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.PhysicsEngine;
@@ -228,7 +229,7 @@ public abstract class AbstractLandMob extends AbstractMob {
 
 	@Override
 	protected boolean hasCollidedWith(Geometry g) {
-		if (g instanceof PlatformMob) { // try and get this to work
+		/*if (g instanceof PlatformMob) { // try and get this to work
 			PlatformMob pm = (PlatformMob)g;
 			// Move us in the same direction as the platform.
 			this.move(pm.move_x, pm.move_y, false);
@@ -239,7 +240,8 @@ public abstract class AbstractLandMob extends AbstractMob {
 		} else if (g instanceof ThrownItem) {
 			return false; // The ThrownItem class handles collisions
 		}
-		return true; // Move us back
+		return true; // Move us back*/
+		return Collision.Collided(this, g);
 	}
 
 }

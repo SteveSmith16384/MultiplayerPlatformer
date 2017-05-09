@@ -19,7 +19,6 @@ import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 
 public class Block extends GameObject {
 
-	// THERE MUST BE NO GAPS IN THE SEQUENCE OF NUMBERS
 	public static final byte NOTHING_DAYLIGHT = 0;
 	public static final byte GRASS = 2;
 	public static final byte SOIL = 3;
@@ -46,53 +45,48 @@ public class Block extends GameObject {
 	public static final byte AMULET = 29;
 	public static final byte SLIME = 30;
 	public static final byte STONE = 31;
-	public static final byte GIRDER = 33; // Add to wiki
+	public static final byte GIRDER = 33; 
 	public static final byte WEEDS = 38;
 	public static final byte STICKS = 40;
-	public static final byte BONES = 42;  // Add to wiki
+	public static final byte BONES = 42;  
 	public static final byte COBWEB = 43;
-	public static final byte GLASS = 48;  // Add to wiki
+	public static final byte GLASS = 48;  
 	public static final byte CLAY = 49; 
 	public static final byte BRICKS = 50;
-	//public static final byte BED = 51;
-	public static final byte RAW_BEEF = 52;  // Add to wiki
-	public static final byte RAW_DEAD_CHICKEN = 53;  // Add to wiki
-	public static final byte RAW_PORK = 54;  // Add to wiki
-	public static final byte EGG = 55;  // Add to wiki
-	public static final byte SHURIKEN = 56;  // Add to wiki
-	public static final byte CRATE = 57;  // Add to wiki
+	public static final byte RAW_BEEF = 52;  
+	public static final byte RAW_DEAD_CHICKEN = 53;  
+	public static final byte RAW_PORK = 54;  
+	public static final byte EGG = 55;  
+	public static final byte SHURIKEN = 56;  
+	public static final byte CRATE = 57;  
 	public static final byte MEDIKIT = 58;
-	//public static final byte SAVEPOINT = 59;
 	public static final byte END_OF_LEVEL = 60;
 	public static final byte BARREL = 61;
 	public static final byte ROPE = 62;
 	public static final byte SLIME_SPURT = 63;
 	public static final byte BLOOD_SPURT = 64;
-	public static final byte MAX_BLOCK_ID = 64;
 
 	// Misc
 	private static final int MOB_GEN_DURATION = 5000;
-	private static final int FIRE_DURATION = 200;
 	private static final int SLIME_DURATION = 300;
 
-	private static BufferedImage fire_bmp1, fire_bmp2;
+	//private static BufferedImage fire_bmp1, fire_bmp2;
 
 	private byte type;
 	private BufferedImage bmp, bmp2;
 	private byte health = 1;
 	private int map_x, map_y;
 	private long event_time = System.currentTimeMillis() + 10000; // So they don't start straight away
-	//public boolean on_fire = false;
 
 	public Block(GameModule _game, byte _type, int _map_x, int _map_y) {
 		super(_game, "Block", true, 0, 0, Statics.SQ_SIZE, Statics.SQ_SIZE);
 
-		if (fire_bmp1 == null) {
+		/*if (fire_bmp1 == null) {
 			fire_bmp1 = GetBitmap(Statics.img_cache, Block.FIRE, Statics.SQ_SIZE, Statics.SQ_SIZE);
 		}
 		if (fire_bmp2 == null) {
 			fire_bmp2 = Statics.img_cache.getImage("fire2", Statics.SQ_SIZE, Statics.SQ_SIZE);//GetBitmap(_game.img_cache, Block.FIRE, Statics.SQ_SIZE, Statics.SQ_SIZE);
-		}
+		}*/
 
 		type =_type;
 		map_x = _map_x;
@@ -344,6 +338,7 @@ public class Block extends GameObject {
 			game.getThread().setNextModule(mod);
 			destroy(0, false, null);*/
 			player.completedLevel = true;
+			game.displayText("Player " + player.playerNum + " finished!");
 			player.remove(); //.removeFromParent();
 			break;
 			
@@ -594,9 +589,6 @@ public class Block extends GameObject {
 		if (give_to_player) {
 			if (Block.AddToInv(this.getType())) {
 				player.inv.addBlock(Block.GetInvType(this.getType()), 1);
-				if (getType() == Block.AMULET) {
-					game.newAmulet();
-				}
 			}
 		} else {
 			if (getType() == Block.DYNAMITE) {

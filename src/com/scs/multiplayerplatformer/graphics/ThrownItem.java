@@ -81,7 +81,7 @@ public class ThrownItem extends GameObject {
 						((ThrownItem) c).remove();
 						this.remove(); // Knock other shurikens out of sky
 						return;
-					} else if (c instanceof EnemyNinjaEasy) {
+					}/* else if (c instanceof EnemyNinjaEasy) {
 						AbstractMob m = (AbstractMob)c;
 						m.died();//damage(damage);
 						this.remove();
@@ -90,7 +90,7 @@ public class ThrownItem extends GameObject {
 						this.thrower.score += 100;
 						this.remove();
 						return;
-					}
+					}*/
 				}
 			}
 		}

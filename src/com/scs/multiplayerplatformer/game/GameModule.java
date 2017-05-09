@@ -48,14 +48,15 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private TSArrayList<IProcessable> entities;
 	public AbstractLevelData original_level_data;
 	public MyEfficientGridLayout new_grid;
-	public TimedString msg;
+	private TimedString msg;
 	private Rectangle dummy_rect = new Rectangle(); // for checking the area is clear
 	private Timer time_remaining;
 	public int level;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
-
 	public List<PlayersAvatar> players = new ArrayList<>();
+	
+	public int sq_size = Statics.SQ_SIZE_INT;
 
 	static {
 		paint_health_bar.setARGB(150, 200, 0, 0); // This is set elsewhere
@@ -105,7 +106,11 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		msg = new TimedString(this, 2000);
 
-		showToast("PRESS FIRE TO START!");
+		if (level <= 1) {
+			showToast("PRESS FIRE TO START!");
+		} else {
+			showToast("LEVEL " + level);
+		}
 	}
 
 
@@ -116,13 +121,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		this.stat_node_back.detachAllChildren();
 		this.stat_node_front.detachAllChildren();
 
-		original_level_data = new LoadMap(Statics.GetMapFilename(_level));
-		original_level_data.getMap();
-
-		entities = new TSArrayList<IProcessable>();
-
-		this.mapGeneratedOrLoaded();
 		loadMap();
+
+		new EnemyEventTimer(this);
 
 		for (int i=0 ; i<3 ; i++) {
 			new Cloud(this);
@@ -144,98 +145,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	@Override
 	public boolean processEvent(MyEvent ev) throws Exception {
 		try {
-			/*if ((ev.getAction() == MotionEvent.ACTION_DOWN || ev.getAction() == MotionEvent.ACTION_POINTER_DOWN)) {// && is_down == false) {
-					if (Statics.cfg.using_buttons == false) {
-						checkForHighlights(ev, true);
-					} else {
-						if (this.arrow_left.contains(ev.getX(), ev.getY())) {
-							this.arrow_left.pressed = true;
-						}
-						if (this.arrow_right.contains(ev.getX(), ev.getY())) {
-							this.arrow_right.pressed = true;
-						}
-						if (this.arrow_up.contains(ev.getX(), ev.getY())) {
-							this.arrow_up.pressed = true;
-						}
-						if (this.arrow_down.contains(ev.getX(), ev.getY())) {
-							this.arrow_down.pressed = true;
-						}
-					}
-					//is_down = true;
-					act_start_drag.x = ev.getX();
-					act_start_drag.y = ev.getY();
-
-				} else if ((ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_POINTER_UP)) {// && is_down) {
-					if (Statics.cfg.using_buttons == false) {
-					} else {
-						if (this.arrow_left != null) { // here
-							if (this.arrow_left.contains(ev.getX(), ev.getY())) {
-								this.arrow_left.pressed = false;
-							}
-							if (this.arrow_right.contains(ev.getX(), ev.getY())) {
-								this.arrow_right.pressed = false;
-							}
-							if (this.arrow_up.contains(ev.getX(), ev.getY())) {
-								this.arrow_up.pressed = false;
-							}
-							if (this.arrow_down.contains(ev.getX(), ev.getY())) {
-								this.arrow_down.pressed = false;
-							}
-						}
-					}
-					//is_down = false;
-
-						if (player.is_on_ice == false) {
-							player.move_x_offset = 0;
-						}
-						this.player.moving_down = false;
-						player.moving_with_keys = false;
-
-						float drag_dist = act_start_drag.subtract(ev.getX(), ev.getY()).length();
-						float drag_start = GeometryFuncs.distance(act_start_drag.x, act_start_drag.y, Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT/2);
-						if (drag_dist < THROW_DRAG_DIST || drag_start > Statics.SQ_SIZE*2) {
-							// Might be an icon
-							// Need this on OnUp so it doesn't register a keypress with the inventory as well
-							/*AbstractComponent c = this.GetComponentAt(stat_node_front, ev.getX(), ev.getY());
-							if (c != null) {
-								if (c instanceof Button) {
-									Button b = (Button)c;
-									if (b.getActionCommand() == ID) {
-										ToggleButton t = (ToggleButton)c;
-										t.toggeSelected();
-										if (t.isSelected()) {
-											this.showToast(act.getString(R.string.click_on_a_block));
-										}
-									} else if (b.getActionCommand() == TEST) {
-									}
-									return true;
-								}
-							}
-							// Adjust for camera location
-							float rel_x = ev.getX() + root_cam.left;
-							float rel_y = ev.getY() + root_cam.top;
-
-							if (this.btn_id.isSelected()) {
-								Block block_found = (Block)this.new_grid.getBlockAtPixel_MaybeNull(rel_x, rel_y);
-								if (block_found != null) {
-									new BlockHighlighter(this, block_found);
-									//this.msg.setText(act.getString(R.string.that_is, block_found.getDesc()));
-									this.showToast(act.getString(R.string.that_is, block_found.getDesc()));
-									this.btn_id.setSelected(false);
-									return true;
-								}
-							} else {
-								digOrBuild(rel_x, rel_y);
-							}
-						} else {
-							throwItem(ev);
-							updateInvIconAmt();
-						}
-					act_start_drag.x = ev.getX();
-					act_start_drag.y = ev.getY();
-				} else if (ev.getAction() == MotionEvent.ACTION_MOVE) {// && is_down) {  //MotionEvent.
-					checkForHighlights(ev, true);
-				}*/
+			// Do nothing
 		} catch (RuntimeException ex) {
 			AbstractActivity.HandleError(null, ex);
 		}
@@ -244,75 +154,16 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	public void updateGame(long interpol) {
-		AbstractActivity act = Statics.act;
-
-		//long total_start = System.currentTimeMillis();
-
 		// Remove any objects marked for removal
 		this.entities.refresh();
 
-		/*if (got_map == false) {
-			if (this.original_level_data.isAlive()) {
-				if (original_level_data.max_rows != 0) {
-					msg.setText(act.getString("loading_map") + " (" + original_level_data.row + "/" + original_level_data.max_rows + ")");
-				} else {
-					msg.setText(act.getString("loading_map"));
-				}
-			} else {
-				this.mapGeneratedOrLoaded();
-			}
-		}
-		 */
 		// Process the rest
-		//long start_instant = System.currentTimeMillis();
 		if (entities != null) {
 			for (IProcessable o : entities) {
 				o.process(interpol);
 			}
 		}
-		// Check for any very_slow blocks that are close
-		/*if (others_very_slow != null && this.players.size() > 0) {
-			for (int i=0 ; i<20 ; i++) {
-				if (last_very_slow_object_processed < others_very_slow.size()) {
-					Block ip = others_very_slow.get(last_very_slow_object_processed);
-					//if (GeometryFuncs.distance(this.player.getWorldCentreX(), this.player.getWorldCentreY(), ip.getWorldCentreX(), ip.getWorldCentreY()) < Statics.SCREEN_WIDTH) {
-					if (ip.getDistanceToClosestPlayer(null) < Statics.SCREEN_WIDTH) {
-						this.others_very_slow.remove(last_very_slow_object_processed);
-						this.others_slow.add(ip);
-					}
-					last_very_slow_object_processed++;
-				} else {
-					last_very_slow_object_processed = 0;
-				}
-			}
-		}*/
-
-
-		// Move any slow objects?
-		/*if (others_slow != null) {
-			for (int i=0 ; i<2 ; i++) {
-				if (last_slow_object_processed < others_slow.size()) {
-					IProcessable o = others_slow.get(last_slow_object_processed);
-					if (o != null) {
-						o.process(interpol);
-					}
-					// See if it needs moving as it's far away
-					if (o instanceof Block) {
-						Block b = (Block)o;
-						if (b.alwaysProcess() == false) {
-							if (b.getDistanceToClosestPlayer(null) > Statics.SCREEN_WIDTH) {
-								this.others_slow.remove(last_slow_object_processed);
-								this.others_very_slow.add(o);
-							}
-						}
-					}
-					last_slow_object_processed++;
-				} else {
-					last_slow_object_processed = 0;
-				}
-			}
-		}*/
-
+		
 		if (check_for_new_mobs.hitInterval()) {
 			this.checkIfMobsNeedCreating();
 		}
@@ -328,7 +179,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			}
 			x = x / this.players.size();
 			y = y / this.players.size();
-			this.root_cam.lookAt(x, y, false);
+			this.root_cam.lookAt(x, y, true);
 			
 			if (allCompleted) {
 				this.startNewLevel(this.level + 1);
@@ -341,12 +192,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		if (this.time_remaining != null) {
 			if (time_remaining.hasHit(interpol)) {
-				//todo this.gameOver(act.getString("out_of_time"));
+				this.startNewLevel(level++);
 			}
 		}
-
-		//checkGameOver();
-
 	}
 
 
@@ -380,9 +228,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	public void doDraw(Canvas g, long interpol) {
-		long start = System.currentTimeMillis();
 		super.doDraw(g, interpol);
-
 
 		for (PlayersAvatar player : players) {
 			g.drawText("Player " + (player.playerNum+1) + " Score: " + player.score, 10, 50+(player.playerNum * paint_text_ink.getTextSize()), paint_text_ink);
@@ -392,6 +238,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		if (this.time_remaining != null) {
 			g.drawText(this.str_time_remaining + ": " + (this.time_remaining.getTimeRemaining()/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
 		}
+		
 		if (Statics.SHOW_STATS) {
 			g.drawText("Inst Objects: " + this.entities.size(), 10, paint_text_ink.getTextSize()*4, paint_text_ink);
 			//g.drawText("Slow Objects: " + this.others_slow.size(), 10, paint_text_ink.getTextSize()*5, paint_text_ink);
@@ -415,57 +262,27 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	private void mapGeneratedOrLoaded() { // todo - rename
-		// Add icons
-		/*curr_item_icon = new Button(CURRENT_ITEM, CURRENT_ITEM, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage("button_red", Statics.ICON_SIZE, Statics.ICON_SIZE));
-		//curr_item_icon.setByLTWH(Statics.SCREEN_WIDTH-(Statics.ICON_SIZE*3), 0, Statics.ICON_SIZE, Statics.ICON_SIZE);
-		curr_item_icon.setLocation(0, 0);
-		this.stat_node_front.attachChild(curr_item_icon);
-
-		this.cmd_menu = new Button(MENU, MENU, paint_icon_background, paint_icon_ink, Statics.img_cache.getImage("button_red", Statics.ICON_SIZE, Statics.ICON_SIZE));
-		//this.cmd_menu.setByLTWH(Statics.SCREEN_WIDTH-(Statics.ICON_SIZE*2), 0, Statics.ICON_SIZE, Statics.ICON_SIZE);
-		this.cmd_menu.setLocation(Statics.ICON_SIZE, 0);
-		this.stat_node_front.attachChild(this.cmd_menu);*/
-
-		//msg.setText("");
+	private void loadMap() {
+		entities = new TSArrayList<IProcessable>();
+		original_level_data = new LoadMap(Statics.GetMapFilename(level));
+		original_level_data.getMap();
 
 		new_grid = new MyEfficientGridLayout(this, original_level_data.getGridWidth(), original_level_data.getGridHeight(), Statics.SQ_SIZE);
-
 		this.root_node.attachChild(new_grid);	
-
-		this.root_node.updateGeometricState();
 
 		this.stat_node_back.updateGeometricState();
 		this.stat_node_front.updateGeometricState();
+		//this.root_cam.lookAt(root_node, false);
 
-		this.root_cam.lookAt(root_node, false);
-
-		new EnemyEventTimer(this);
-
-		//health_bar_outline = new RectF(0, Statics.SCREEN_HEIGHT-Statics.HEALTH_BAR_HEIGHT, Statics.HEALTH_BAR_WIDTH, Statics.SCREEN_HEIGHT);
-
-	}
-
-
-	public void newAmulet() {
-		int ax = Functions.rnd(10, original_level_data.getGridWidth()-1);
-		int ay = Functions.rnd(original_level_data.getGridHeight()/2, original_level_data.getGridHeight()-1);
-		this.addBlock(Block.AMULET, ax, ay, true);
-		original_level_data.data[ax][ay] = Block.AMULET;
-	}
-
-
-	private void loadMap() { // todo - rename
 		for (int map_y=0 ; map_y<original_level_data.getGridHeight() ; map_y++) {
 			for (int map_x=0 ; map_x<this.original_level_data.getGridWidth()-1 ; map_x++) {
-				byte sb = original_level_data.getGridDataAt(map_x, map_y);
-				byte data = sb;
+				byte data = original_level_data.getGridDataAt(map_x, map_y);
 				if (data > 0) {
 					this.addBlock(data, map_x, map_y, false);
 				}
 			}
 		}
-		this.new_grid.parent.updateGeometricState();
+		this.root_node.updateGeometricState();
 
 	}
 

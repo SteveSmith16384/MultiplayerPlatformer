@@ -32,7 +32,7 @@ public class EfficientGridLayout extends AbstractRectangle {
 		blocks_width = w;
 		blocks_height = h;
 		blocks = new AbstractRectangle[w][h];
-		tile_size = _tile_size;//((float)Math.ceil((double)_tile_size) + 1);
+		tile_size = _tile_size;
 
 		this.updateCoordsXYWH(0, 0, w * tile_size, h * tile_size);
 
@@ -91,7 +91,6 @@ public class EfficientGridLayout extends AbstractRectangle {
 
 	public ArrayList<AbstractRectangle> getColliders(RectF rect) {
 		ArrayList<AbstractRectangle> colls = new ArrayList<AbstractRectangle>();
-		//colls.clear();
 
 		draw_width = (int)((rect.right - rect.left) / tile_size);
 		draw_height = (int)((rect.bottom - rect.top) / tile_size);
