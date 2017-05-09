@@ -19,11 +19,10 @@ import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 public class ThrownItem extends GameObject {
 
 	private PhysicsEngine phys;
-	private BufferedImage bmp;
+	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH];
 	private AbstractMob thrower;
 	private byte type;
 	private int damage;
-	
 	
 	public static void ThrowRock(GameModule _game, byte _type, AbstractMob _thrower, MyPointF _dir) {
 		new ThrownItem(_game, _type, _thrower, _dir, 1, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.ROCK_SIZE);
@@ -45,7 +44,7 @@ public class ThrownItem extends GameObject {
 
 		type = _type;
 		phys = new PhysicsEngine(_dir, speed, grav);
-		bmp = Block.GetBitmap(Statics.img_cache, _type, size, size);
+		//bmp = Block.GetBufferedImage(Statics.img_cache, _type, size, size);
 		thrower = _thrower;
 		damage = _damage;
 
@@ -57,9 +56,7 @@ public class ThrownItem extends GameObject {
 
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
-		if (this.visible) {
-			g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
-		}
+		// Do nothing
 	}
 
 
@@ -122,6 +119,19 @@ public class ThrownItem extends GameObject {
 
 	public byte getType() {
 		return this.type;
+	}
+
+
+	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
+		if (this.visible) {
+			int width = (int)(this.getWidth() * scale);
+			if (bmp[width] == null) {
+				bmp[width] = Block.GetBufferedImage(Statics.img_cache, type, this.getHeight() * scale, this.getWidth() * scale);
+			}
+			g.drawBitmap(bmp[width], (this.world_bounds.left - cam.left) * scale, (this.world_bounds.top - cam.top) * scale, paint);
+		}
+		
 	}
 
 }

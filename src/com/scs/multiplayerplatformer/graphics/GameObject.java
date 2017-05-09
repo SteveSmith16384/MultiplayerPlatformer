@@ -6,10 +6,11 @@ import ssmith.util.ReturnObject;
 
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
+import com.scs.multiplayerplatformer.game.IDrawable;
 import com.scs.multiplayerplatformer.game.IProcessable;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 
-public abstract class GameObject extends AbstractRectangle implements IProcessable {
+public abstract class GameObject extends AbstractRectangle implements IProcessable, IDrawable {
 
 	protected static Paint paint = new Paint();
 

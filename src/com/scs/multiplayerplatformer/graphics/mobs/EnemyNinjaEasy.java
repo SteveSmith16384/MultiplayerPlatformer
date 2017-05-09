@@ -13,7 +13,7 @@ import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 
-public class EnemyNinjaEasy extends AbstractLandMob {
+public class EnemyNinjaEasy extends AbstractWalkingMob {
 
 	private static final int TURN_DURATION = 4000; // In case can't get to player
 
@@ -59,26 +59,8 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 
 	private EnemyNinjaEasy(GameModule _game, float x, float y) {
 		super(_game, "Enemy Ninja", x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, MAX_FRAMES, 200, true, false, Statics.SD_ENEMY_SIDE, true);
-
-		a_bmp_left[0] = Statics.img_cache.getImage("easy_ninja_l0", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[1] = Statics.img_cache.getImage("easy_ninja_l1", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[2] = Statics.img_cache.getImage("easy_ninja_l2", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[3] = Statics.img_cache.getImage("easy_ninja_l3", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[4] = Statics.img_cache.getImage("easy_ninja_l4", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[5] = Statics.img_cache.getImage("easy_ninja_l5", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[6] = Statics.img_cache.getImage("easy_ninja_l6", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[7] = Statics.img_cache.getImage("easy_ninja_l7", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-
-		a_bmp_right[0] = Statics.img_cache.getImage("easy_ninja_r0", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[1] = Statics.img_cache.getImage("easy_ninja_r1", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[2] = Statics.img_cache.getImage("easy_ninja_r2", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[3] = Statics.img_cache.getImage("easy_ninja_r3", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[4] = Statics.img_cache.getImage("easy_ninja_r4", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[5] = Statics.img_cache.getImage("easy_ninja_r5", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[6] = Statics.img_cache.getImage("easy_ninja_r6", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[7] = Statics.img_cache.getImage("easy_ninja_r7", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
 	}
-
+	
 
 	@Override
 	public void process(long interpol) {
@@ -148,16 +130,27 @@ public class EnemyNinjaEasy extends AbstractLandMob {
 		this.remove(); // Must be before we drop an item
 	}
 
-	/*
-	@Override
-	protected boolean hasCollidedWith(Geometry g) {
-		if (g instanceof PlayersAvatar) {
-			AbstractMob am = (AbstractMob)g;
-			am.damage(2);
-		}
-		return true;
 
+	@Override
+	protected void generateBitmaps(int size, float scale) {
+		a_bmp_left[size][0] = Statics.img_cache.getImage("easy_ninja_l0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][1] = Statics.img_cache.getImage("easy_ninja_l1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][2] = Statics.img_cache.getImage("easy_ninja_l2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][3] = Statics.img_cache.getImage("easy_ninja_l3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][4] = Statics.img_cache.getImage("easy_ninja_l4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][5] = Statics.img_cache.getImage("easy_ninja_l5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][6] = Statics.img_cache.getImage("easy_ninja_l6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][7] = Statics.img_cache.getImage("easy_ninja_l7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+
+		a_bmp_right[size][0] = Statics.img_cache.getImage("easy_ninja_r0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][1] = Statics.img_cache.getImage("easy_ninja_r1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][2] = Statics.img_cache.getImage("easy_ninja_r2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][3] = Statics.img_cache.getImage("easy_ninja_r3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][4] = Statics.img_cache.getImage("easy_ninja_r4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][5] = Statics.img_cache.getImage("easy_ninja_r5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][6] = Statics.img_cache.getImage("easy_ninja_r6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][7] = Statics.img_cache.getImage("easy_ninja_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 	}
-	 */
+
 
 }

@@ -16,13 +16,13 @@ import com.scs.multiplayerplatformer.game.PhysicsEngine;
 import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
-public abstract class AbstractLandMob extends AbstractMob {
+public abstract class AbstractWalkingMob extends AbstractMob {
 
 	private BufferedImage bmp_left, bmp_right;
 	protected boolean is_on_ground_or_ladder, can_swim;
 	protected boolean facing_left = false; // Default to facing right
-	protected BufferedImage a_bmp_left[];
-	protected BufferedImage a_bmp_right[];
+	protected BufferedImage a_bmp_left[][]; // Size/FrameNum
+	protected BufferedImage a_bmp_right[][]; // Size/FrameNum
 	private int max_frames, curr_frame;
 	private long frame_time=0, frame_interval;
 	protected boolean jumping = false;
@@ -32,7 +32,7 @@ public abstract class AbstractLandMob extends AbstractMob {
 	public boolean moving_down = false;
 	protected long frozenUntil = 0;
 
-	public AbstractLandMob(GameModule _game, String name, float x, float y, float w, float h, int _max_frames, long _frame_interval, boolean remove_if_far_away, boolean destroy_blocks, byte side, boolean _can_swim) {
+	public AbstractWalkingMob(GameModule _game, String name, float x, float y, float w, float h, int _max_frames, long _frame_interval, boolean remove_if_far_away, boolean destroy_blocks, byte side, boolean _can_swim) {
 		super(_game, name, x, y, w, h, remove_if_far_away, destroy_blocks, side);
 
 		max_frames = _max_frames;
@@ -45,8 +45,8 @@ public abstract class AbstractLandMob extends AbstractMob {
 
 
 	protected void setNumFrames(int f) {
-		a_bmp_left = new BufferedImage[f];
-		a_bmp_right = new BufferedImage[f];
+		a_bmp_left = new BufferedImage[Statics.MAX_BMP_WIDTH][f];
+		a_bmp_right = new BufferedImage[Statics.MAX_BMP_WIDTH][f];
 
 	}
 
@@ -62,12 +62,12 @@ public abstract class AbstractLandMob extends AbstractMob {
 				}
 			}
 
-			this.bmp_left = this.a_bmp_left[this.curr_frame];
+			/*todo? this.bmp_left = this.a_bmp_left[this.curr_frame];
 			this.bmp_right = this.a_bmp_right[this.curr_frame];
 
 			if (bmp_left == null || bmp_right == null) {
 				throw new RuntimeException("No bitmaps to draw for " + name) ;
-			}
+			}*/
 		}
 
 		if (off_x < 0) {
@@ -82,22 +82,38 @@ public abstract class AbstractLandMob extends AbstractMob {
 
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
-		if (this.visible) {
-			frame_time += interpol;
-			if (facing_left) {
-				if (bmp_left == null) {
-					bmp_left = a_bmp_left[0];
-				}
-				g.drawBitmap(bmp_left, this.getWorldX() - cam.left, this.getWorldY() - cam.top, paint);
-			} else {
-				if (bmp_right == null) {
-					bmp_right = a_bmp_right[0];
-				}
-				g.drawBitmap(bmp_right, this.getWorldX() - cam.left, this.getWorldY() - cam.top, paint);
-			}
-		}
+		// Do nothing
 	}
 
+
+	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
+		if (this.visible) {
+			frame_time += interpol;
+			int width = (int)(this.getWidth() * scale);
+			if (facing_left) {
+				if (a_bmp_left[width][0] == null) {
+					this.generateBitmaps(width, scale);
+				}
+				if (bmp_left == null) {
+					bmp_left = a_bmp_left[width][0];
+				}
+				g.drawBitmap(bmp_left, (this.getWorldX() - cam.left) * scale, (this.getWorldY() - cam.top) * scale, paint);
+			} else {
+				if (a_bmp_right[width][0] == null) {
+					this.generateBitmaps(width, scale);
+				}
+				if (bmp_right == null) {
+					bmp_right = a_bmp_right[width][0];
+				}
+				g.drawBitmap(bmp_right, (this.getWorldX() - cam.left) * scale, (this.getWorldY() - cam.top) * scale, paint);
+			}
+		}
+		
+	}
+	
+	
+	protected abstract void generateBitmaps(int size, float scale);
 
 	protected void startJumping() {
 		if (is_on_ground_or_ladder && jumping == false) {

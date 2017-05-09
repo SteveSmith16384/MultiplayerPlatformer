@@ -12,14 +12,16 @@ import com.scs.multiplayerplatformer.game.PhysicsEngine;
 
 public class DyingEnemy extends GameObject {
 
-	private BufferedImage bmp;
+	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH];
 	private PhysicsEngine phys;
+	private String filename; 
 
 	public DyingEnemy(GameModule _game, String r, GameObject o) {
 		super(_game, "DyingEnemy", false, o.getWorldX(), o.getWorldY(), o.getHeight(), o.getWidth()); // Notice height and width are reversed since the dying enemy is on it's side
 
+		filename = r;
+		
 		phys = new PhysicsEngine(new MyPointF(0, -1), Statics.ROCK_SPEED*2, Statics.ROCK_GRAVITY*2);
-		bmp = Statics.img_cache.getImage(r, o.getHeight(), o.getWidth()); // Notice height and width are reversed since the dying enemy is on it's side
 		
 		this.game.root_node.attachChild(this);
 		this.updateGeometricState();
@@ -29,10 +31,21 @@ public class DyingEnemy extends GameObject {
 
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
-		if (this.visible) {
-			g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
-		}
+		// Do nothing
+	}
 
+
+	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
+		if (this.visible) {
+			int width = (int)(this.getWidth() * scale);
+			if (bmp[width] == null) {
+				bmp[width] = Statics.img_cache.getImage(filename, this.getHeight() * scale, this.getWidth() * scale); // Notice height and width are reversed since the dying enemy is on it's side
+			}
+
+			g.drawBitmap(bmp[width], (this.world_bounds.left - cam.left) * scale, (this.world_bounds.top - cam.top) * scale, paint);
+		}
+	
 	}
 
 

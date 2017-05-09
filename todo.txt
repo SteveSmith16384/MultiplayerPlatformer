@@ -8,6 +8,7 @@ Change colour of p2+p3 sprites
 
 
 TODO
+Determine scale based on location of players
 Get points for being quickest
 	Speed up camera
 Close window on error?

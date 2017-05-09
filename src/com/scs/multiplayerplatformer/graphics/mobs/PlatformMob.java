@@ -70,8 +70,7 @@ public class PlatformMob extends AbstractMob {
 	
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
-		g.drawBitmap(bmp, this.getWorldX() - cam.left, this.getWorldY() - cam.top, paint);
-
+		// Do nothing
 	}
 
 
@@ -87,6 +86,13 @@ public class PlatformMob extends AbstractMob {
 		}
 		//return true;
 		return true;
+	}
+
+
+	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
+		g.drawBitmap(bmp, (this.getWorldX() - cam.left) * scale, (this.getWorldY() - cam.top) * scale, paint);
+		
 	}
 
 }

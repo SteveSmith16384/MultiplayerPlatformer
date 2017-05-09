@@ -40,6 +40,7 @@ public final class Statics {
 	public static final int WINDOW_TOP_OFFSET = 25;
 	public static String BACKGROUND_R;
 	public static final long FREEZE_DUR = 1000;
+	public static final int MAX_BMP_WIDTH = 50;
 
 	public static Typeface stdfnt, iconfnt, bigfnt;
 
@@ -91,7 +92,7 @@ public final class Statics {
 				SCREEN_HEIGHT = 600;
 			}
 
-			SQ_SIZE = SCREEN_WIDTH * (SQ_SIZE_PCENT/100);
+			SQ_SIZE = 50; //SCREEN_WIDTH * (SQ_SIZE_PCENT/100);
 			SQ_SIZE_INT = (int)Math.ceil(SQ_SIZE);
 			ICON_SIZE = SCREEN_WIDTH * (ICON_SIZE_PCENT/100);
 			PLAYER_WIDTH = SQ_SIZE * 0.8f;

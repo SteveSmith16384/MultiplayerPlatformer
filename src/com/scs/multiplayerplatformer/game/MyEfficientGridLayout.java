@@ -3,9 +3,12 @@ package com.scs.multiplayerplatformer.game;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.layouts.EfficientGridLayout;
+import ssmith.android.lib2d.shapes.AbstractRectangle;
 
-public class MyEfficientGridLayout extends EfficientGridLayout {
+public class MyEfficientGridLayout extends EfficientGridLayout implements IProcessable, IDrawable {
 
 	private GameModule game;
 
@@ -16,6 +19,11 @@ public class MyEfficientGridLayout extends EfficientGridLayout {
 	}
 
 
+	public void doDraw(Canvas g, Camera cam, long interpol) {
+		// Do nothing
+	}
+	
+	
 	/**
 	 * 
 	 * @param map_x
@@ -60,6 +68,45 @@ public class MyEfficientGridLayout extends EfficientGridLayout {
 		} catch (java.lang.ArrayIndexOutOfBoundsException ex) {
 			return true;
 		}
+	}
+
+
+	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
+		float tile_size = Statics.SQ_SIZE * scale;
+		int draw_width = (int)((cam.right - cam.left) / tile_size);
+		int draw_height = (int)((cam.bottom - cam.top) / tile_size);
+
+		int s_x = (int)(cam.left / tile_size);
+		int s_y = (int)(cam.top / tile_size);
+
+		objects_being_drawn = 0;
+
+		for (int y=s_y ; y<=s_y + draw_height+1 ; y++) {
+			if (y >= 0 && y < blocks[0].length) {
+				for (int x=s_x ; x<=s_x + draw_width+1 ; x++) {
+					if (x >= 0 && x < blocks.length) {
+						try {
+							if (blocks[x][y] != null) {
+								Block block = (Block)blocks[x][y];
+								block.doDraw(g, cam, interpol, scale); // block.bmp.getWidth()
+								objects_being_drawn++;
+							}
+						} catch (ArrayIndexOutOfBoundsException ex) {
+							//AbstractActivity.HandleError(null, ex);
+						}
+					}
+				}
+			}
+		}
+		
+	}
+
+
+	@Override
+	public void process(long interpol) {
+		// Do nothing
+		
 	}
 
 

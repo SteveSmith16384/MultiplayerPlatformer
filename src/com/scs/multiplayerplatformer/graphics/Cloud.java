@@ -32,14 +32,7 @@ public class Cloud extends GameObject {
 
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
-		if (this.visible) {
-			//if (game.is_day) {
-			g.drawBitmap(bmp_day, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
-			/*} else {
-				g.drawBitmap(bmp_night, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
-			}*/
-		}
-
+		// Do nothing
 	}
 
 
@@ -53,6 +46,15 @@ public class Cloud extends GameObject {
 			new Cloud(game);
 
 		}
+	}
+
+
+	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
+		if (this.visible) {
+			g.drawBitmap(bmp_day, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+		}
+		
 	}
 
 

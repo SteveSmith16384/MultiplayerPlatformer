@@ -27,10 +27,6 @@ public class AirBubble extends GameObject {
 
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
-		if (this.visible) {
-			g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
-		}
-
 	}
 
 
@@ -48,6 +44,15 @@ public class AirBubble extends GameObject {
 		} else {
 			this.remove();
 		}
+	}
+
+
+	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
+		if (this.visible) {
+			g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+		}
+
 	}
 
 

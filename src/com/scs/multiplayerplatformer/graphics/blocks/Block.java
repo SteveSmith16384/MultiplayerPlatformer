@@ -70,10 +70,9 @@ public class Block extends GameObject {
 	private static final int MOB_GEN_DURATION = 5000;
 	private static final int SLIME_DURATION = 300;
 
-	//private static BufferedImage fire_bmp1, fire_bmp2;
-
 	private byte type;
-	private BufferedImage bmp, bmp2;
+	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH]; // Bmp for each size
+	private BufferedImage bmp2[] = new BufferedImage[Statics.MAX_BMP_WIDTH];  // Bmp for each size
 	private byte health = 1;
 	private int map_x, map_y;
 	private long event_time = System.currentTimeMillis() + 10000; // So they don't start straight away
@@ -91,7 +90,14 @@ public class Block extends GameObject {
 		type =_type;
 		map_x = _map_x;
 		map_y = _map_y;
-		bmp = GetBitmap(Statics.img_cache, type, Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
+	}
+	
+	
+	private void generateImages(int width, float scale) {
+		if (Statics.DEBUG) {
+			Statics.p("Generating images for blocks size " + width + " for " + map_x + ", " + map_y);
+		}
+		bmp[width] = GetBufferedImage(Statics.img_cache, type, Statics.SQ_SIZE_INT*scale, Statics.SQ_SIZE_INT*scale);
 
 		switch (type) {
 		case ROCK:
@@ -100,20 +106,20 @@ public class Block extends GameObject {
 			break;
 		case WATER:
 			health = (byte)100;
-			bmp2 = Statics.img_cache.getImage("water2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
+			bmp2[width] = Statics.img_cache.getImage("water2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
 			break;
 		case FIRE:
 			health = (byte)100;
-			bmp2 = Statics.img_cache.getImage("fire2", Statics.SQ_SIZE, Statics.SQ_SIZE);
+			bmp2[width] = Statics.img_cache.getImage("fire2", Statics.SQ_SIZE, Statics.SQ_SIZE);
 			//on_fire = true;
 			break;
 		case LAVA:
 			health = (byte)100;
-			bmp2 = Statics.img_cache.getImage("lava2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
+			bmp2[width] = Statics.img_cache.getImage("lava2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
 			break;
 		case SLIME:
 			health = (byte)100;
-			bmp2 = Statics.img_cache.getImage("slime2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
+			bmp2[width] = Statics.img_cache.getImage("slime2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
 			break;
 		case MONSTER_GENERATOR:
 			health = (byte)(health * 2);
@@ -338,7 +344,7 @@ public class Block extends GameObject {
 			game.getThread().setNextModule(mod);
 			destroy(0, false, null);*/
 			player.completedLevel = true;
-			game.displayText("Player " + player.playerNum + " finished!");
+			game.displayText("Player " + player.playernum + " finished!");
 			player.remove(); //.removeFromParent();
 			break;
 			
@@ -409,7 +415,7 @@ public class Block extends GameObject {
 	}
 
 
-	public static BufferedImage GetBitmap(ImageCache img_cache, byte type, float w, float h) {
+	public static BufferedImage GetBufferedImage(ImageCache img_cache, byte type, float w, float h) {
 		switch (type) {
 		case SOIL:
 			return img_cache.getImage("mud", w, h);
@@ -647,23 +653,7 @@ public class Block extends GameObject {
 
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
-		if (this.visible) {
-			// If they have an alt image, choose one randomly
-			if (bmp2 != null) {
-				if (Functions.rnd(1, 2) == 2) {
-					g.drawBitmap(bmp2, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
-					return;
-				}
-			}
-			g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint); // bmp.getWidth()
-			/*if (this.on_fire) {
-				if (Functions.rnd(1, 2) == 2) {
-					g.drawBitmap(fire_bmp1, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
-				} else {
-					g.drawBitmap(fire_bmp2, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
-				}
-			}*/
-		}
+		// Do nothing
 	}
 
 
@@ -884,6 +874,26 @@ public class Block extends GameObject {
 
 	public int getMapY() {
 		return this.map_y;
+	}
+
+
+	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
+		if (this.visible) {
+			int width = (int)(this.getWidth() * scale);
+			if (bmp[width] == null) {
+				this.generateImages(width, scale);
+			}
+			// If they have an alt image, choose one randomly
+			if (bmp2[width] != null) {
+				if (Functions.rnd(1, 2) == 2) {
+					g.drawBitmap(bmp2[width], this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+					return;
+				}
+			}
+			g.drawBitmap(bmp[width], (this.world_bounds.left - cam.left) * scale, (this.world_bounds.top - cam.top) * scale, paint);
+		}
+		
 	}
 
 }

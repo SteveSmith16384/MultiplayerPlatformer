@@ -15,9 +15,9 @@ import com.scs.multiplayerplatformer.game.PhysicsEngine;
 public class Explosion extends GameObject {
 	
 	private PhysicsEngine phys;
-	private BufferedImage bmp;
+	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH];
 	private MyPointF pxl_origin;
-	private String r;
+	private String filename;
 	
 	public static void CreateExplosion(GameModule game, int pieces, float pxl_x, float pxl_y, String _r) {
 		//game.act.sound_manager.playSound(R.raw.explosion1);
@@ -36,9 +36,9 @@ public class Explosion extends GameObject {
 	private Explosion(GameModule _game, MyPointF _pxl_origin, MyPointF _dir, Node parent, String _r) {
 		super(_game, "Explosion", false, _pxl_origin.x, _pxl_origin.y, Statics.ROCK_SIZE, Statics.ROCK_SIZE);
 		
-		r = _r;
+		filename = _r;
 		phys = new PhysicsEngine(_dir, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
-		bmp = Statics.img_cache.getImage(r, Statics.ROCK_SIZE, Statics.ROCK_SIZE);
+		//bmp = Statics.img_cache.getImage(r, Statics.ROCK_SIZE, Statics.ROCK_SIZE);
 		pxl_origin = _pxl_origin;
 		
 		parent.attachChild(this);
@@ -50,10 +50,7 @@ public class Explosion extends GameObject {
 	
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
-		if (this.visible) {
-			g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
-		}
-		
+		// Do nothing
 	}
 
 	
@@ -68,6 +65,18 @@ public class Explosion extends GameObject {
 			this.updateGeometricState();
 		}
 		
+	}
+
+
+	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
+		if (this.visible) {
+			int width = (int)(this.getWidth() * scale);
+			if (bmp[width] == null) {
+				bmp[width] = Statics.img_cache.getImage(filename, Statics.ROCK_SIZE * scale, Statics.ROCK_SIZE * scale); // Notice height and width are reversed since the dying enemy is on it's side
+			}
+			g.drawBitmap(bmp[width], (this.world_bounds.left - cam.left) * scale, (this.world_bounds.top - cam.top) * scale, paint);
+		}
 	}
 
 }

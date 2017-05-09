@@ -55,8 +55,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
 	public List<PlayersAvatar> players = new ArrayList<>();
-	
-	public int sq_size = Statics.SQ_SIZE_INT;
+
+	public float current_scale = 1;//.5f;
+	public float target_scale = 1;//.5f;
 
 	static {
 		paint_health_bar.setARGB(150, 200, 0, 0); // This is set elsewhere
@@ -163,7 +164,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 				o.process(interpol);
 			}
 		}
-		
+
 		if (check_for_new_mobs.hitInterval()) {
 			this.checkIfMobsNeedCreating();
 		}
@@ -180,13 +181,14 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			x = x / this.players.size();
 			y = y / this.players.size();
 			this.root_cam.lookAt(x, y, true);
-			
+
 			if (allCompleted) {
 				this.startNewLevel(this.level + 1);
 			}
-			
+
 		} else {
 			this.root_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT, false);
+			this.current_scale = 1f;
 		}
 		this.root_cam.update(interpol);
 
@@ -229,16 +231,26 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	public void doDraw(Canvas g, long interpol) {
 		super.doDraw(g, interpol);
+		
+		// Manually draw our entities
+		synchronized (entities) {
+			for (IProcessable o : this.entities) {
+				if (o instanceof IDrawable) {
+					IDrawable id = (IDrawable)o;
+					id.doDraw(g, this.root_cam, interpol, current_scale);
+				}
+			}
+		}
 
 		for (PlayersAvatar player : players) {
-			g.drawText("Player " + (player.playerNum+1) + " Score: " + player.score, 10, 50+(player.playerNum * paint_text_ink.getTextSize()), paint_text_ink);
+			g.drawText("Player " + (player.playernum+1) + " Score: " + player.score, 10, 50+(player.playernum * paint_text_ink.getTextSize()), paint_text_ink);
 
 		}
 
 		if (this.time_remaining != null) {
 			g.drawText(this.str_time_remaining + ": " + (this.time_remaining.getTimeRemaining()/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
 		}
-		
+
 		if (Statics.SHOW_STATS) {
 			g.drawText("Inst Objects: " + this.entities.size(), 10, paint_text_ink.getTextSize()*4, paint_text_ink);
 			//g.drawText("Slow Objects: " + this.others_slow.size(), 10, paint_text_ink.getTextSize()*5, paint_text_ink);
@@ -268,7 +280,8 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		original_level_data.getMap();
 
 		new_grid = new MyEfficientGridLayout(this, original_level_data.getGridWidth(), original_level_data.getGridHeight(), Statics.SQ_SIZE);
-		this.root_node.attachChild(new_grid);	
+		this.root_node.attachChild(new_grid);
+		this.entities.add(new_grid);
 
 		this.stat_node_back.updateGeometricState();
 		this.stat_node_front.updateGeometricState();
@@ -470,7 +483,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		//this.restartPlayer(player);
 	}
 
-	
+
 	public void restartPlayer(PlayersAvatar player) {
 		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
 		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed

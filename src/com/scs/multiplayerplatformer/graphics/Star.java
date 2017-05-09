@@ -1,5 +1,7 @@
 package com.scs.multiplayerplatformer.graphics;
 
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 
 import com.scs.multiplayerplatformer.game.GameModule;
