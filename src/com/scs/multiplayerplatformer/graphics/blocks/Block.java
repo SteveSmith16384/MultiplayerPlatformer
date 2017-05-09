@@ -891,7 +891,7 @@ public class Block extends GameObject {
 					return;
 				}
 			}
-			g.drawBitmap(bmp[width], (this.world_bounds.left - cam.left) * scale, (this.world_bounds.top - cam.top) * scale, paint);
+			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
 		}
 		
 	}

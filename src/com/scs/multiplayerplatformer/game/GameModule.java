@@ -56,8 +56,8 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private Interval check_for_new_mobs = new Interval(500, true);
 	public List<PlayersAvatar> players = new ArrayList<>();
 
-	public float current_scale = 1;//.5f;
-	public float target_scale = 1;//.5f;
+	public float current_scale = .25f;//1;//.5f;
+	//public float target_scale = 1;//.5f;
 
 	static {
 		paint_health_bar.setARGB(150, 200, 0, 0); // This is set elsewhere
@@ -171,6 +171,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 		if (players.size() > 0) {
+			this.current_scale = .3f; // todo - config
 			float x = 0, y = 0;
 			boolean allCompleted = true;
 			for (PlayersAvatar player : players) {
@@ -180,15 +181,16 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			}
 			x = x / this.players.size();
 			y = y / this.players.size();
-			this.root_cam.lookAt(x, y, true);
+			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
 
 			if (allCompleted) {
 				this.startNewLevel(this.level + 1);
 			}
 
 		} else {
+			// No players yet!
 			this.root_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT, false);
-			this.current_scale = 1f;
+			this.current_scale = .8f; // todo - config
 		}
 		this.root_cam.update(interpol);
 

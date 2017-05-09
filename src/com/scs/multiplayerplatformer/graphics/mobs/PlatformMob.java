@@ -91,7 +91,7 @@ public class PlatformMob extends AbstractMob {
 
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
-		g.drawBitmap(bmp, (this.getWorldX() - cam.left) * scale, (this.getWorldY() - cam.top) * scale, paint);
+		g.drawBitmap(bmp, (this.getWorldX()) * scale - cam.left, (this.getWorldY()) * scale - cam.top, paint);
 		
 	}
 

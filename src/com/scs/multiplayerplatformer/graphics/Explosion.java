@@ -75,7 +75,7 @@ public class Explosion extends GameObject {
 			if (bmp[width] == null) {
 				bmp[width] = Statics.img_cache.getImage(filename, Statics.ROCK_SIZE * scale, Statics.ROCK_SIZE * scale); // Notice height and width are reversed since the dying enemy is on it's side
 			}
-			g.drawBitmap(bmp[width], (this.world_bounds.left - cam.left) * scale, (this.world_bounds.top - cam.top) * scale, paint);
+			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
 		}
 	}
 

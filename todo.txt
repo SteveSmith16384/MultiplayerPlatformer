@@ -8,10 +8,9 @@ Change colour of p2+p3 sprites
 
 
 TODO
+End game when window closed
 Determine scale based on location of players
 Get points for being quickest
-	Speed up camera
-Close window on error?
 	say "Player 1 has completed the level!"
 	Create static collision functions
 	Not getting harmed by enemies

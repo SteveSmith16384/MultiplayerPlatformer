@@ -98,7 +98,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 				if (bmp_left == null) {
 					bmp_left = a_bmp_left[width][0];
 				}
-				g.drawBitmap(bmp_left, (this.getWorldX() - cam.left) * scale, (this.getWorldY() - cam.top) * scale, paint);
+				g.drawBitmap(bmp_left, (this.getWorldX()) * scale - cam.left, (this.getWorldY()) * scale - cam.top, paint);
 			} else {
 				if (a_bmp_right[width][0] == null) {
 					this.generateBitmaps(width, scale);
@@ -106,7 +106,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 				if (bmp_right == null) {
 					bmp_right = a_bmp_right[width][0];
 				}
-				g.drawBitmap(bmp_right, (this.getWorldX() - cam.left) * scale, (this.getWorldY() - cam.top) * scale, paint);
+				g.drawBitmap(bmp_right, (this.getWorldX()) * scale - cam.left, (this.getWorldY()) * scale - cam.top, paint);
 			}
 		}
 		

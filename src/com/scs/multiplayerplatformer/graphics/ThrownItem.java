@@ -129,7 +129,7 @@ public class ThrownItem extends GameObject {
 			if (bmp[width] == null) {
 				bmp[width] = Block.GetBufferedImage(Statics.img_cache, type, this.getHeight() * scale, this.getWidth() * scale);
 			}
-			g.drawBitmap(bmp[width], (this.world_bounds.left - cam.left) * scale, (this.world_bounds.top - cam.top) * scale, paint);
+			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
 		}
 		
 	}
