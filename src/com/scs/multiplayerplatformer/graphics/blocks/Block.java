@@ -53,9 +53,6 @@ public class Block extends GameObject {
 	public static final byte GLASS = 48;  
 	public static final byte CLAY = 49; 
 	public static final byte BRICKS = 50;
-	public static final byte RAW_BEEF = 52;  
-	public static final byte RAW_DEAD_CHICKEN = 53;  
-	public static final byte RAW_PORK = 54;  
 	public static final byte EGG = 55;  
 	public static final byte SHURIKEN = 56;  
 	public static final byte CRATE = 57;  
@@ -95,7 +92,7 @@ public class Block extends GameObject {
 	
 	private void generateImages(int width, float scale) {
 		if (Statics.DEBUG) {
-			Statics.p("Generating images for blocks size " + width + " for " + map_x + ", " + map_y);
+			//Statics.p("Generating images for blocks size " + width + " for " + map_x + ", " + map_y);
 		}
 		bmp[width] = GetBufferedImage(Statics.img_cache, type, Statics.SQ_SIZE_INT*scale, Statics.SQ_SIZE_INT*scale);
 
@@ -106,20 +103,20 @@ public class Block extends GameObject {
 			break;
 		case WATER:
 			health = (byte)100;
-			bmp2[width] = Statics.img_cache.getImage("water2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
+			bmp2[width] = Statics.img_cache.getImage("water2", Statics.SQ_SIZE_INT*scale, Statics.SQ_SIZE_INT*scale);
 			break;
 		case FIRE:
 			health = (byte)100;
-			bmp2[width] = Statics.img_cache.getImage("fire2", Statics.SQ_SIZE, Statics.SQ_SIZE);
+			bmp2[width] = Statics.img_cache.getImage("fire2", Statics.SQ_SIZE*scale, Statics.SQ_SIZE*scale);
 			//on_fire = true;
 			break;
 		case LAVA:
 			health = (byte)100;
-			bmp2[width] = Statics.img_cache.getImage("lava2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
+			bmp2[width] = Statics.img_cache.getImage("lava2", Statics.SQ_SIZE_INT*scale, Statics.SQ_SIZE_INT*scale);
 			break;
 		case SLIME:
 			health = (byte)100;
-			bmp2[width] = Statics.img_cache.getImage("slime2", Statics.SQ_SIZE_INT, Statics.SQ_SIZE_INT);
+			bmp2[width] = Statics.img_cache.getImage("slime2", Statics.SQ_SIZE_INT*scale, Statics.SQ_SIZE_INT*scale);
 			break;
 		case MONSTER_GENERATOR:
 			health = (byte)(health * 2);
@@ -198,9 +195,6 @@ public class Block extends GameObject {
 		case COAL:
 		case CHEST:
 		case COBWEB:
-		case RAW_BEEF:
-		case RAW_DEAD_CHICKEN:
-		case RAW_PORK:
 		case BARREL:
 		case CRATE:
 		case ROPE:
@@ -297,9 +291,6 @@ public class Block extends GameObject {
 		case TREE_BARK:
 		case WEEDS:
 		case COBWEB:
-		case RAW_BEEF:
-		case RAW_DEAD_CHICKEN:
-		case RAW_PORK:
 		case EGG:
 		case ROPE:
 			return false;
@@ -468,7 +459,7 @@ public class Block extends GameObject {
 		case STONE:
 			return img_cache.getImage("stone", w, h);
 		case GIRDER:
-			return img_cache.getImage("girder", w, h);
+			return img_cache.getImage("girder.gif", w, h);
 		case WEEDS:
 			return img_cache.getImage("weeds", w, h);
 		case STICKS:
@@ -483,12 +474,6 @@ public class Block extends GameObject {
 			return img_cache.getImage("clay", w, h);
 		case BRICKS:
 			return img_cache.getImage("bricks", w, h);
-		case RAW_BEEF:
-			return img_cache.getImage("raw_beef", w, h);
-		case RAW_DEAD_CHICKEN:
-			return img_cache.getImage("raw_dead_chicken", w, h);
-		case RAW_PORK:
-			return img_cache.getImage("raw_pork", w, h);
 		case EGG:
 			return img_cache.getImage("egg", w, h);
 		case SHURIKEN:
@@ -524,12 +509,6 @@ public class Block extends GameObject {
 		switch (type) {
 		case APPLE:
 			return 10;
-		case RAW_BEEF:
-			return 40;
-		case RAW_DEAD_CHICKEN:
-			return 40;
-		case RAW_PORK:
-			return 40;
 		case EGG:
 			return 30;
 		default:

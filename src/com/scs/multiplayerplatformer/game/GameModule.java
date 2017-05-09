@@ -491,7 +491,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
 		player.setLocation(x, y);
 		addToProcess_Instant(player);
-		root_node.attachChild(player);
+		//root_node.attachChild(player); already attached!
 		player.updateGeometricState();
 
 	}

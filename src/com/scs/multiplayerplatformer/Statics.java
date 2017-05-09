@@ -26,10 +26,7 @@ public final class Statics {
 	public static final byte SD_ENEMY_SIDE = 1;
 
 	public static AbstractActivity act;
-	public static String VERSION_NAME;
-	public static String NAME;
-	public static float SCREEN_WIDTH, SCREEN_HEIGHT;
-	public static boolean SHOW_STATS = false;
+	public static final boolean SHOW_STATS = false;
 	public static final int LOOP_DELAY = 30;
 	public static final int MAX_INSTANTS = 999;
 	public static final int DYNAMITE_DAMAGE = 10;
@@ -48,7 +45,10 @@ public final class Statics {
 
 
 	// Bitmap scales
-	private static float SQ_SIZE_PCENT = 4f;
+	public static String VERSION_NAME;
+	public static String NAME;
+	public static float SCREEN_WIDTH, SCREEN_HEIGHT;
+	//private static float SQ_SIZE_PCENT = 4f;
 	public static float SQ_SIZE;
 	public static int SQ_SIZE_INT;
 	private static final float ICON_SIZE_PCENT = 11f;
@@ -62,7 +62,7 @@ public final class Statics {
 	public static float ROCK_SIZE, SLIME_SIZE;
 	private static final float ROCK_SPEED_PCENT = 1.5f;
 	public static float ROCK_SPEED;
-	public static float ROCK_GRAVITY;
+	public static final float ROCK_GRAVITY = 0.06f;// 0.0598f; // Must be constant!
 	private static final float BULLET_SPEED_PCENT = 2f;
 	public static float BULLET_SPEED;
 	private static final float BUBBLE_SPEED_PCENT = .5f;
@@ -98,14 +98,13 @@ public final class Statics {
 			PLAYER_WIDTH = SQ_SIZE * 0.8f;
 			PLAYER_HEIGHT = (SQ_SIZE*2) * 0.9f;
 			PLAYER_SPEED = SQ_SIZE / PLAYER_SPEED_DIVISOR;//10f;
-			JUMP_Y = -SQ_SIZE/30;
+			JUMP_Y = -SQ_SIZE/40;//30;
 			PLAYER_FALL_SPEED = PLAYER_SPEED/3f;
 			MAX_FALL_SPEED = Statics.SQ_SIZE/2; 
 			ENEMY_NINJA_SPEED = PLAYER_SPEED * 0.25f;
 			ROCK_SIZE = SCREEN_WIDTH * (ROCK_SIZE_PCENT/100);
 			SLIME_SIZE = SCREEN_WIDTH * (SLIME_SIZE_PCENT/100);
 			ROCK_SPEED = SCREEN_WIDTH * (ROCK_SPEED_PCENT/100);
-			ROCK_GRAVITY = 0.0598f; // Must be constant!
 			BULLET_SPEED = SCREEN_WIDTH * (BULLET_SPEED_PCENT/100);
 			BUBBLE_SPEED = SCREEN_WIDTH * (BUBBLE_SPEED_PCENT/100);
 			PLATFORM_SPEED = SCREEN_WIDTH * (PLATFORM_SPEED_PCENT/100);

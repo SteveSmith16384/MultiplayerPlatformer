@@ -3,17 +3,20 @@ Who has the most points at the end
 Race to complete each small level
 
 HOME
+Convert music to mp3
 Create new maps - ice
 Change colour of p2+p3 sprites
+Music and sfx
 
 
 TODO
+Check if hit by slime
+Bring wasp back
+Choose menu option with keys
+Clouds in front of map
 End game when window closed
 Determine scale based on location of players
 Get points for being quickest
-	say "Player 1 has completed the level!"
-	Create static collision functions
-	Not getting harmed by enemies
 Turn off ps4 debugging
 Search for todos
 
@@ -35,12 +38,16 @@ Restart player if they die
 
 GAMEMODES
 Collect as many stars as possible
+Complete levels as quickly as possible
+
+
+CREDITS
+Music: https://opengameart.org/content/nes-shooter-music-5-tracks-3-jingles
 
 
 LOW PRI
 Physics
 Get a font
 Create icon
-	"press fire to join game"
 Enemies not sinking in water
 

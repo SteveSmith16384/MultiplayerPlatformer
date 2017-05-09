@@ -64,9 +64,6 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 	public static void HandleError(Throwable ex) {
 		try {
 			ex.printStackTrace();
-			ErrorReporter.getInstance().handleSilentException(ex);
-			//AbstractModule m = Statics.GetStartupModule(Statics.act);
-			//AbstractActivity.thread.setNextModule(new ErrorModule(Statics.act, m, ex));
 		} catch (Exception ex2) {
 			ex2.printStackTrace();
 		}

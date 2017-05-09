@@ -123,7 +123,7 @@ public abstract class AbstractMob extends GameObject {
 					blocked = true;
 				}
 				if (blocked) {
-					this.is_on_ice = (b.getType() == Block.SNOW);
+					this.is_on_ice = (b.getType() == Block.SNOW); // todo - Block.isSlippery()
 
 					// Move us up to the object we hit
 					if (off_x < 0) {

@@ -1,18 +1,16 @@
 package com.scs.multiplayerplatformer.graphics.mobs;
 
-import ssmith.android.compatibility.Canvas;
-import ssmith.android.compatibility.PointF;
-import ssmith.android.framework.AbstractActivity;
-import ssmith.android.lib2d.Camera;
-import ssmith.android.lib2d.MyPointF;
-import ssmith.lang.GeometryFuncs;
-
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.BlockInventory;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.input.IInputDevice;
+
+import ssmith.android.compatibility.PointF;
+import ssmith.android.framework.AbstractActivity;
+import ssmith.android.lib2d.MyPointF;
+import ssmith.lang.GeometryFuncs;
 
 public class PlayersAvatar extends AbstractWalkingMob {
 
