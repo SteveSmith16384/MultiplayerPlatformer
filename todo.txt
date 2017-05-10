@@ -10,6 +10,12 @@ Music and sfx
 
 
 TODO
+Add music
+Created another PS4 player?
+Stop creating players at max
+Players should move through each other
+Scale blocks better to avoid gaps
+Multiple keyboard players
 	don't change zoom if not needed
 	Adjust zoom by multiplying, not add/sub
 Start pos very high

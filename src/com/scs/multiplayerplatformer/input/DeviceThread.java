@@ -60,9 +60,9 @@ public class DeviceThread extends Thread {
 
 				}
 				if (keyboard.isThrowPressed()) {
-					//todo - re-add if (createdDevices.get(-1) == null) {
+					if (createdDevices.get(-1) == null) {
 						this.createController(-1, keyboard);
-					//}
+					}
 				}
 				Functions.delay(100);
 			} 

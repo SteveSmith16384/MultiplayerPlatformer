@@ -15,7 +15,6 @@ public class Collision {
 
 	// Returns whether a should move back
 	public static boolean Collided(Geometry a, Geometry b) {
-		// todo - shurikens
 		if (a instanceof PlayersAvatar) {
 			if (b instanceof EnemyNinjaEasy) {
 				return Player_EnemyMob((PlayersAvatar)a, (EnemyNinjaEasy)b);

@@ -16,6 +16,7 @@ import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.android.lib2d.shapes.Rectangle;
 import ssmith.android.util.Timer;
 import ssmith.lang.GeometryFuncs;
+import ssmith.lang.NumberFunctions;
 import ssmith.util.IDisplayText;
 import ssmith.util.Interval;
 import ssmith.util.TSArrayList;
@@ -165,8 +166,10 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		} else if (new_scale < Statics.MIN_ZOOM) {
 			new_scale = Statics.MIN_ZOOM;
 		}
+		this.current_scale = new_scale;
+		
 		/*if (this.current_scale != this.target_scale) {
-			if (Math.signum(this.current_scale - this.target_scale) < 0.01f) {
+			if (Math.x(this.current_scale - this.target_scale) < 0.01f) {
 				if (this.current_scale > this.target_scale) {
 					this.current_scale = this.current_scale * Statics.ZOOM_SPEED;
 				} else {
@@ -221,12 +224,12 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 					} else {
 						// don't change if not needed
 						new_scale *= Statics.ZOOM_SPEED;
-						if (Math.signum(this.current_scale - this.new_scale) > 0.01f) {
+						/*if (NumberFunctions.mod(this.current_scale - this.new_scale) < 0.01f) {
 							new_scale = current_scale; // Undo it
-						}
+						}*/
 					}
 					if (Statics.DEBUG) {
-						Statics.p("Zoom: " + this.current_scale);
+						Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
 					}
 				} else {
 					// Only one player - set zoom to 1
@@ -237,7 +240,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		} else {
 			// No players yet!
 			this.root_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT, false);
-			this.current_scale = .8f; // todo - config
+			new_scale = Statics.MAX_ZOOM;
 		}
 		this.root_cam.update(interpol);
 
