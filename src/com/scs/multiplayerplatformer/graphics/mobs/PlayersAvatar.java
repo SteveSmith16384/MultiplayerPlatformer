@@ -32,25 +32,7 @@ public class PlayersAvatar extends AbstractWalkingMob {
 
 		this.setNumFrames(8);
 	}
-/*
- 		a_bmp_left[0] = Statics.img_cache.getImage("ninja" + playernum + "_l0", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[1] = Statics.img_cache.getImage("ninja" + playernum + "_l1", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[2] = Statics.img_cache.getImage("ninja" + playernum + "_l2", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[3] = Statics.img_cache.getImage("ninja" + playernum + "_l3", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[4] = Statics.img_cache.getImage("ninja" + playernum + "_l4", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[5] = Statics.img_cache.getImage("ninja" + playernum + "_l5", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[6] = Statics.img_cache.getImage("ninja" + playernum + "_l6", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_left[7] = Statics.img_cache.getImage("ninja" + playernum + "_l7", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
 
-		a_bmp_right[0] = Statics.img_cache.getImage("ninja" + playernum + "_r0", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[1] = Statics.img_cache.getImage("ninja" + playernum + "_r1", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[2] = Statics.img_cache.getImage("ninja" + playernum + "_r2", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[3] = Statics.img_cache.getImage("ninja" + playernum + "_r3", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[4] = Statics.img_cache.getImage("ninja" + playernum + "_r4", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[5] = Statics.img_cache.getImage("ninja" + playernum + "_r5", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[6] = Statics.img_cache.getImage("ninja" + playernum + "_r6", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-		a_bmp_right[7] = Statics.img_cache.getImage("ninja" + playernum + "_r7", Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
-*/
 
 	@Override
 	public void process(long interpol) {
@@ -94,8 +76,6 @@ public class PlayersAvatar extends AbstractWalkingMob {
 
 		performJumpingOrGravity();
 		checkForSuffocation();
-		//checkForHarmingBlocks();  already does this
-
 	}
 
 

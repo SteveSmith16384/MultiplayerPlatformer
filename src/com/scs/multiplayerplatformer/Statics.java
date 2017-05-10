@@ -38,6 +38,10 @@ public final class Statics {
 	public static String BACKGROUND_R;
 	public static final long FREEZE_DUR = 1000;
 	public static final int MAX_BMP_WIDTH = 50;
+	
+	public static final float ZOOM_SPEED = 1.01f;
+	public static final float MIN_ZOOM = 0.3f;
+	public static final float MAX_ZOOM = 1f;
 
 	public static Typeface stdfnt, iconfnt, bigfnt;
 

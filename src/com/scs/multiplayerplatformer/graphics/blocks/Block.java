@@ -334,9 +334,7 @@ public class Block extends GameObject {
 			GameModule mod = new GameModule(act, game.level);
 			game.getThread().setNextModule(mod);
 			destroy(0, false, null);*/
-			player.completedLevel = true;
-			game.displayText("Player " + player.playernum + " finished!");
-			player.remove(); //.removeFromParent();
+			game.playerCompletedLevel(player);
 			break;
 			
 		case Block.SAND:
@@ -590,7 +588,7 @@ public class Block extends GameObject {
 	/**
 	 * Don't call this directly, call damage();
 	 */
-	protected void remove() {
+	public void remove() {
 		if (getType() == Block.CHEST) {
 			int i = Functions.rnd(1, 4);
 			switch (i) {
@@ -866,7 +864,7 @@ public class Block extends GameObject {
 			// If they have an alt image, choose one randomly
 			if (bmp2[width] != null) {
 				if (Functions.rnd(1, 2) == 2) {
-					g.drawBitmap(bmp2[width], this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+					g.drawBitmap(bmp2[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
 					return;
 				}
 			}

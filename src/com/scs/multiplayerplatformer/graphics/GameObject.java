@@ -25,7 +25,7 @@ public abstract class GameObject extends AbstractRectangle implements IProcessab
 	}
 
 
-	protected void remove() {
+	public void remove() {
 		this.removeFromParent();
 		this.game.removeFromProcess(this);
 	}

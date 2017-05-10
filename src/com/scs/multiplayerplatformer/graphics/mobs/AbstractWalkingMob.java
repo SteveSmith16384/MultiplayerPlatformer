@@ -18,7 +18,7 @@ import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
 public abstract class AbstractWalkingMob extends AbstractMob {
 
-	private BufferedImage bmp_left, bmp_right;
+	//private BufferedImage bmp_left, bmp_right; // todo 
 	protected boolean is_on_ground_or_ladder, can_swim;
 	protected boolean facing_left = false; // Default to facing right
 	protected BufferedImage a_bmp_left[][]; // Size/FrameNum
@@ -62,7 +62,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 				}
 			}
 
-			/*todo? this.bmp_left = this.a_bmp_left[this.curr_frame];
+			/*this.bmp_left = this.a_bmp_left[this.curr_frame];
 			this.bmp_right = this.a_bmp_right[this.curr_frame];
 
 			if (bmp_left == null || bmp_right == null) {
@@ -92,24 +92,34 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 			frame_time += interpol;
 			int width = (int)(this.getWidth() * scale);
 			if (facing_left) {
-				if (a_bmp_left[width][0] == null) {
+				if (a_bmp_left[width][this.curr_frame] == null) {
 					this.generateBitmaps(width, scale);
 				}
-				if (bmp_left == null) {
-					bmp_left = a_bmp_left[width][0];
-				}
-				g.drawBitmap(bmp_left, (this.getWorldX()) * scale - cam.left, (this.getWorldY()) * scale - cam.top, paint);
+				/*if (bmp_left == null) {
+					bmp_left = a_bmp_left[width][0];// a_bmp_right[width][0].getWidth()
+				}*/
+				g.drawBitmap(a_bmp_left[width][this.curr_frame], (this.getWorldX()) * scale - cam.left, (this.getWorldY()) * scale - cam.top, paint);
 			} else {
-				if (a_bmp_right[width][0] == null) {
+				if (a_bmp_right[width][this.curr_frame] == null) {
 					this.generateBitmaps(width, scale);
 				}
-				if (bmp_right == null) {
+				/*if (bmp_right == null) {
 					bmp_right = a_bmp_right[width][0];
-				}
-				g.drawBitmap(bmp_right, (this.getWorldX()) * scale - cam.left, (this.getWorldY()) * scale - cam.top, paint);
+				}*/
+				g.drawBitmap(a_bmp_right[width][this.curr_frame], getWindowX(cam, scale), getWindowY(cam, scale), paint);
 			}
 		}
 		
+	}
+	
+	
+	public float getWindowX(Camera cam, float scale) {
+		return (this.getWorldX()) * scale - cam.left;
+	}
+	
+	
+	public float getWindowY(Camera cam, float scale) {
+		return (this.getWorldY()) * scale - cam.top;
 	}
 	
 	
@@ -200,6 +210,10 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 						curr_fall_speed = curr_fall_speed * 2f;
 						if (curr_fall_speed > Statics.MAX_FALL_SPEED) {
 							curr_fall_speed = Statics.MAX_FALL_SPEED;
+						}
+						// Have we fallen off bottom of map?
+						if (this.getWorldY() > game.new_grid.getHeight() * 2) { // game.new_grid.getWorldX()
+							this.died();
 						}
 					}
 				}

@@ -10,28 +10,35 @@ Music and sfx
 
 
 TODO
-Map gen
-Check if hit by slime
-Bring wasp back
-Choose menu option with keys
-Clouds in front of map
-End game when window closed
-Determine scale based on location of players
-Get points for being quickest
-Turn off ps4 debugging
+	don't change zoom if not needed
+	Adjust zoom by multiplying, not add/sub
+Start pos very high
+	Make writing white
+	Restart player if they fall off the map
 Search for todos
-Parallax
+Use sfx
+	Get points for being quickest
+	Determine scale based on location of players
+Check if hit by slime
+Choose menu option with keys
+	End game when window closed
+
+
+LEVELS
+Maze-like level
 
 
 LATER
-Restart player if they fall off the map
-Scale graphics as
-Logical and physical position?
+Turn off ps4 debugging
+Map gen
+Parallax
+	Clouds in front of map
+Bring wasp back
 Hold down jump to jump higher
 Control menus with controller
 More types of enemy
 Use interpol
-FPS not working
+	FPS not working
 Randomly drop stars
 SelectGameMode module
 Get star image

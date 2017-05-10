@@ -24,6 +24,8 @@ public class DeviceThread extends Thread {
 	public DeviceThread(JFrame window) {
 		super(DeviceThread.class.getSimpleName());
 
+		this.setDaemon(true);
+		
 		try {
 			Controllers.initialize();
 			Runtime.getRuntime().addShutdownHook(new DeviceShutdownHook());
@@ -58,9 +60,9 @@ public class DeviceThread extends Thread {
 
 				}
 				if (keyboard.isThrowPressed()) {
-					if (createdDevices.get(-1) == null) {
+					//todo - re-add if (createdDevices.get(-1) == null) {
 						this.createController(-1, keyboard);
-					}
+					//}
 				}
 				Functions.delay(100);
 			} 

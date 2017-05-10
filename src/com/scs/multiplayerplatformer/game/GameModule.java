@@ -15,7 +15,6 @@ import ssmith.android.lib2d.shapes.AbstractRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.android.lib2d.shapes.Rectangle;
 import ssmith.android.util.Timer;
-import ssmith.lang.Functions;
 import ssmith.lang.GeometryFuncs;
 import ssmith.util.IDisplayText;
 import ssmith.util.Interval;
@@ -56,8 +55,8 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private Interval check_for_new_mobs = new Interval(500, true);
 	public List<PlayersAvatar> players = new ArrayList<>();
 
-	public float current_scale = .25f;//1;//.5f;
-	//public float target_scale = 1;//.5f;
+	public float current_scale = Statics.MAX_ZOOM;// .25f;//1;//.5f;
+	public float new_scale = current_scale;
 
 	static {
 		paint_health_bar.setARGB(150, 200, 0, 0); // This is set elsewhere
@@ -74,7 +73,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		paint_icon_background.setARGB(155, 255, 255, 255);
 
-		paint_text_ink.setARGB(255, 125, 125, 125);
+		paint_text_ink.setARGB(255, 255, 255, 255);
 		paint_text_ink.setAntiAlias(true);
 		paint_text_ink.setTextSize(GUIFunctions.GetTextSizeToFit("99XX", Statics.SCREEN_WIDTH/10));
 
@@ -85,10 +84,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	public GameModule(AbstractActivity act, int _level) { // AbstractLevelData _original_level_data, 
+	public GameModule(AbstractActivity act, int _level) { 
 		super(act, null);
 
-		//this.stat_node_back.updateGeometricState();
 		this.stat_cam.lookAtTopLeft(true);
 
 		str_time_remaining = act.getString("time_remaining");
@@ -118,17 +116,20 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private void startNewLevel(int _level) {
 		level = _level;
 
+		entities = new TSArrayList<IProcessable>();
+
 		this.root_node.detachAllChildren();
 		this.stat_node_back.detachAllChildren();
 		this.stat_node_front.detachAllChildren();
 
-		loadMap();
-
-		new EnemyEventTimer(this);
-
 		for (int i=0 ; i<3 ; i++) {
 			new Cloud(this);
 		}
+
+		new EnemyEventTimer(this);
+		time_remaining = new Timer(20 * 1000);
+
+		loadMap();
 
 		// mark all players as not completed level
 		for(PlayersAvatar player : players) {
@@ -158,6 +159,24 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		// Remove any objects marked for removal
 		this.entities.refresh();
 
+		// Adjust scale
+		if (new_scale > Statics.MAX_ZOOM) {
+			new_scale = Statics.MAX_ZOOM;
+		} else if (new_scale < Statics.MIN_ZOOM) {
+			new_scale = Statics.MIN_ZOOM;
+		}
+		/*if (this.current_scale != this.target_scale) {
+			if (Math.signum(this.current_scale - this.target_scale) < 0.01f) {
+				if (this.current_scale > this.target_scale) {
+					this.current_scale = this.current_scale * Statics.ZOOM_SPEED;
+				} else {
+					this.current_scale / this.current_scale * Statics.ZOOM_SPEED;
+				}
+			} else {
+				this.current_scale = this.target_scale;
+			}
+		}*/
+
 		// Process the rest
 		if (entities != null) {
 			for (IProcessable o : entities) {
@@ -171,7 +190,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 		if (players.size() > 0) {
-			this.current_scale = .3f; // todo - config
 			float x = 0, y = 0;
 			boolean allCompleted = true;
 			for (PlayersAvatar player : players) {
@@ -183,8 +201,37 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			y = y / this.players.size();
 			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
 
+
 			if (allCompleted) {
 				this.startNewLevel(this.level + 1);
+			} else {
+				// Do we need to zoom out
+				if (players.size() > 1) {
+					boolean zoomOut = false;
+					for (PlayersAvatar player : players) {
+						float sx = player.getWindowX(this.root_cam, this.current_scale);
+						float sy = player.getWindowY(this.root_cam, this.current_scale);
+						zoomOut = sx < Statics.SCREEN_WIDTH * 0.2f || sx > Statics.SCREEN_WIDTH * .8f || sy < Statics.SCREEN_HEIGHT * 0.2f || sy > Statics.SCREEN_HEIGHT * .8f;
+						if (zoomOut) {
+							break;
+						}
+					}
+					if (zoomOut){
+						new_scale /= Statics.ZOOM_SPEED;
+					} else {
+						// don't change if not needed
+						new_scale *= Statics.ZOOM_SPEED;
+						if (Math.signum(this.current_scale - this.new_scale) > 0.01f) {
+							new_scale = current_scale; // Undo it
+						}
+					}
+					if (Statics.DEBUG) {
+						Statics.p("Zoom: " + this.current_scale);
+					}
+				} else {
+					// Only one player - set zoom to 1
+					this.new_scale = Statics.MAX_ZOOM;
+				}
 			}
 
 		} else {
@@ -196,7 +243,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		if (this.time_remaining != null) {
 			if (time_remaining.hasHit(interpol)) {
-				this.startNewLevel(level++);
+				//this.startNewLevel(level++);
 			}
 		}
 	}
@@ -233,7 +280,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	public void doDraw(Canvas g, long interpol) {
 		super.doDraw(g, interpol);
-		
+
 		// Manually draw our entities
 		synchronized (entities) {
 			for (IProcessable o : this.entities) {
@@ -277,7 +324,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	private void loadMap() {
-		entities = new TSArrayList<IProcessable>();
 		original_level_data = new LoadMap(Statics.GetMapFilename(level));
 		original_level_data.getMap();
 
@@ -528,5 +574,12 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
+	public void playerCompletedLevel(PlayersAvatar player) {
+		player.completedLevel = true;
+		long score_inc = (this.time_remaining.getTimeRemaining() / 100);
+		player.score += score_inc;
+		displayText("Player " + player.playernum + " finished!  Have " + score_inc + " points!");
+		player.remove(); //.removeFromParent();
+	}
 }
 
