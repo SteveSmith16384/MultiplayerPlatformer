@@ -43,6 +43,7 @@ public class Collision {
 
 	private static boolean Player_EnemyMob(PlayersAvatar player, EnemyNinjaEasy enemy) {
 		player.died();
+		enemy.died();
 		return true;
 	}
 

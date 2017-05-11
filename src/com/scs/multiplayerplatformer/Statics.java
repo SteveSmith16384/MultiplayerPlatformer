@@ -37,10 +37,10 @@ public final class Statics {
 	public static final int WINDOW_TOP_OFFSET = 25;
 	public static String BACKGROUND_R;
 	public static final long FREEZE_DUR = 1000;
-	public static final int MAX_BMP_WIDTH = 50;
+	public static final int MAX_BMP_WIDTH = 100;
 	
-	public static final float ZOOM_SPEED = 1.01f;
-	public static final float MIN_ZOOM = 0.3f;
+	public static final float ZOOM_SPEED = 1.02f;
+	public static final float MIN_ZOOM = 0.1f;
 	public static final float MAX_ZOOM = 1f;
 
 	public static Typeface stdfnt, iconfnt, bigfnt;
@@ -160,11 +160,11 @@ public final class Statics {
 
 
 	public static String GetMapFilename(int level) {
-		if (Statics.DEBUG) {
-			return "testmap" + level + ".csv";
-		} else {
+		///if (Statics.DEBUG) {
+		//	return "testmap" + level + ".csv";
+		//} else {
 			return "ninja_level" + level + ".csv";
-		}
+		//}
 	}
 
 	// ----------------------------------------------------------------------

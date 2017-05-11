@@ -192,32 +192,32 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
 
 
-				// Do we need to zoom out
-				if (avatars.size() > 1) {
-					boolean zoomOut = false;
-					boolean zoomIn = true;
-					float OUTER = 0.2f;
-					float INNER = 0.4f;
-					for (PlayersAvatar player : avatars) {
-						float sx = player.getWindowX(this.root_cam, this.current_scale);
-						float sy = player.getWindowY(this.root_cam, this.current_scale);
-						zoomOut = sx < Statics.SCREEN_WIDTH * OUTER || sx > Statics.SCREEN_WIDTH * (1f-OUTER) || sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
-						if (zoomOut) {
-							break;
-						}
-						zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
-					}
+			// Do we need to zoom out
+			if (avatars.size() > 1) {
+				boolean zoomOut = false;
+				boolean zoomIn = true;
+				float OUTER = 0.2f;
+				float INNER = 0.4f;
+				for (PlayersAvatar player : avatars) {
+					float sx = player.getWindowX(this.root_cam, this.current_scale);
+					float sy = player.getWindowY(this.root_cam, this.current_scale);
+					zoomOut = sx < Statics.SCREEN_WIDTH * OUTER || sx > Statics.SCREEN_WIDTH * (1f-OUTER) || sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
 					if (zoomOut) {
-						new_scale /= Statics.ZOOM_SPEED;
-					} else if (zoomIn) {
-						new_scale *= Statics.ZOOM_SPEED;
+						break;
 					}
-					if (Statics.DEBUG) {
-						Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
-					}
-				} else {
-					// Only one player - set zoom to 1
-					this.new_scale = Statics.MAX_ZOOM;
+					zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
+				}
+				if (zoomOut) {
+					new_scale /= Statics.ZOOM_SPEED;
+				} else if (zoomIn) {
+					new_scale *= Statics.ZOOM_SPEED;
+				}
+				/*if (Statics.DEBUG) {
+					Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
+				}*/
+			} else {
+				// Only one player - set zoom to 1
+				this.new_scale = Statics.MAX_ZOOM;
 			}
 
 		} else {
@@ -248,7 +248,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 				}
 			}
 		}
-
 	}
 
 

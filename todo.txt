@@ -12,18 +12,24 @@ Change colour of p2+p3 sprites
 
 
 TODO
+Create start position block
+zoom based on dist to edge of screen
+Check area clear when restarting player
+Esc to quit back to menu
+Remove "you have nothing to throw"
+Show players score even when completed level
+	Dead enemy too thin
+Cache bmps at start
+Scale based on screen size
+	Guards not killing player
+	Test full screen
 Timer - stop at zero
 Add music
 Choose menu option with keys
 Start pos very high
 Search for todos
 Check if hit by slime
-	Cam not putting player in middle
-	Not checking if a player has finished!
 	Use sfx
-	Created another PS4 player?
-	Stop creating players at max
-	Make writing white
 	Get points for being quickest
 
 

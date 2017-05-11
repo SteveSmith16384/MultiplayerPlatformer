@@ -17,7 +17,7 @@ public class DyingEnemy extends GameObject {
 	private String filename; 
 
 	public DyingEnemy(GameModule _game, String r, GameObject o) {
-		super(_game, "DyingEnemy", false, o.getWorldX(), o.getWorldY(), o.getHeight(), o.getWidth()); // Notice height and width are reversed since the dying enemy is on it's side
+		super(_game, "DyingEnemy", false, o.getWorldX(), o.getWorldY(), o.getWidth(), o.getHeight()); // Notice height and width are reversed since the dying enemy is on it's side
 
 		filename = r;
 		
