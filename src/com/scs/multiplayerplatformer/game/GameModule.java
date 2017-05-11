@@ -54,7 +54,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	public int level;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
-	public List<PlayersAvatar> players = new ArrayList<>();
+	public List<PlayersAvatar> avatars = new ArrayList<>();
 
 	public float current_scale = Statics.MAX_ZOOM;// .25f;//1;//.5f;
 	public float new_scale = current_scale;
@@ -97,11 +97,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		// Load a player for each controller
 		startNewLevel(_level);
 
-		Iterator<IInputDevice> it = act.thread.deviceThread.createdDevices.values().iterator();
-		while (it.hasNext()) {
-			IInputDevice input = it.next();
-			this.loadPlayer(input);
-		}
 		act.thread.deviceThread.addListener(this);
 
 		msg = new TimedString(this, 2000);
@@ -115,8 +110,8 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	private void startNewLevel(int _level) {
+		Statics.act.sound_manager.levelStart();
 		level = _level;
-
 		entities = new TSArrayList<IProcessable>();
 
 		this.root_node.detachAllChildren();
@@ -132,11 +127,16 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		loadMap();
 
-		// mark all players as not completed level
-		for(PlayersAvatar player : players) {
-			player.completedLevel = false;
-			restartPlayer(player);
+		Iterator<IInputDevice> it = Statics.act.thread.deviceThread.getDevices().iterator();//.createdDevices.values().iterator();
+		while (it.hasNext()) {
+			IInputDevice input = it.next();
+			this.loadPlayer(input);
 		}
+
+		/*for(PlayersAvatar player : avatars) {
+			//player.completedLevel = false;
+			restartPlayer(player);
+		}*/
 
 		this.showToast("Level " + this.level + "!");
 	}
@@ -167,18 +167,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			new_scale = Statics.MIN_ZOOM;
 		}
 		this.current_scale = new_scale;
-		
-		/*if (this.current_scale != this.target_scale) {
-			if (Math.x(this.current_scale - this.target_scale) < 0.01f) {
-				if (this.current_scale > this.target_scale) {
-					this.current_scale = this.current_scale * Statics.ZOOM_SPEED;
-				} else {
-					this.current_scale / this.current_scale * Statics.ZOOM_SPEED;
-				}
-			} else {
-				this.current_scale = this.target_scale;
-			}
-		}*/
 
 		// Process the rest
 		if (entities != null) {
@@ -187,46 +175,42 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			}
 		}
 
-		if (check_for_new_mobs.hitInterval()) {
-			this.checkIfMobsNeedCreating();
-		}
+		if (avatars.size() > 0) {
+			if (check_for_new_mobs.hitInterval()) {
+				this.checkIfMobsNeedCreating();
+			}
 
-
-		if (players.size() > 0) {
 			float x = 0, y = 0;
-			boolean allCompleted = true;
-			for (PlayersAvatar player : players) {
+			//boolean allCompleted = true;
+			for (PlayersAvatar player : avatars) {
 				x += player.getWorldX();
 				y += player.getWorldY();
-				allCompleted = allCompleted && player.completedLevel; 
+				//allCompleted = allCompleted && player.completedLevel; 
 			}
-			x = x / this.players.size();
-			y = y / this.players.size();
+			x = x / this.avatars.size();
+			y = y / this.avatars.size();
 			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
 
 
-			if (allCompleted) {
-				this.startNewLevel(this.level + 1);
-			} else {
 				// Do we need to zoom out
-				if (players.size() > 1) {
+				if (avatars.size() > 1) {
 					boolean zoomOut = false;
-					for (PlayersAvatar player : players) {
+					boolean zoomIn = true;
+					float OUTER = 0.2f;
+					float INNER = 0.4f;
+					for (PlayersAvatar player : avatars) {
 						float sx = player.getWindowX(this.root_cam, this.current_scale);
 						float sy = player.getWindowY(this.root_cam, this.current_scale);
-						zoomOut = sx < Statics.SCREEN_WIDTH * 0.2f || sx > Statics.SCREEN_WIDTH * .8f || sy < Statics.SCREEN_HEIGHT * 0.2f || sy > Statics.SCREEN_HEIGHT * .8f;
+						zoomOut = sx < Statics.SCREEN_WIDTH * OUTER || sx > Statics.SCREEN_WIDTH * (1f-OUTER) || sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
 						if (zoomOut) {
 							break;
 						}
+						zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
 					}
-					if (zoomOut){
+					if (zoomOut) {
 						new_scale /= Statics.ZOOM_SPEED;
-					} else {
-						// don't change if not needed
+					} else if (zoomIn) {
 						new_scale *= Statics.ZOOM_SPEED;
-						/*if (NumberFunctions.mod(this.current_scale - this.new_scale) < 0.01f) {
-							new_scale = current_scale; // Undo it
-						}*/
 					}
 					if (Statics.DEBUG) {
 						Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
@@ -234,7 +218,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 				} else {
 					// Only one player - set zoom to 1
 					this.new_scale = Statics.MAX_ZOOM;
-				}
 			}
 
 		} else {
@@ -242,7 +225,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			this.root_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT, false);
 			new_scale = Statics.MAX_ZOOM;
 		}
-		this.root_cam.update(interpol);
+		//this.root_cam.update(interpol);
 
 		if (this.time_remaining != null) {
 			if (time_remaining.hasHit(interpol)) {
@@ -254,7 +237,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	private void checkIfMobsNeedCreating() {
 		// Load mobs
-		if (original_level_data.mobs != null && this.players.size() > 0) {
+		if (original_level_data.mobs != null && this.avatars.size() > 0) {
 			for (int i=0 ; i<original_level_data.mobs.size() ; i++) {
 				SimpleMobData sm = original_level_data.mobs.get(i);
 				float dist = getDistanceToClosestPlayer(sm.pixel_x); // NumberFunctions.mod(this.player.getWorldX() - sm.pixel_x); 
@@ -271,7 +254,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	public float getDistanceToClosestPlayer(float xpos) {
 		float closest = 9999;
-		for(PlayersAvatar player : players) {
+		for(PlayersAvatar player : avatars) {
 			float dist = Math.abs(player.getWorldX() - xpos); 
 			if (dist < closest) {
 				closest = dist;
@@ -294,7 +277,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			}
 		}
 
-		for (PlayersAvatar player : players) {
+		for (PlayersAvatar player : avatars) {
 			g.drawText("Player " + (player.playernum+1) + " Score: " + player.score, 10, 50+(player.playernum * paint_text_ink.getTextSize()), paint_text_ink);
 
 		}
@@ -402,12 +385,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 				if (Block.RequireProcessing(block.getType())) {
 					//boolean slow = block.getType() == Block.WATER || block.getType() == Block.LAVA || block.getType() == Block.FIRE; // Always process water slow!
 					this.addToProcess_Instant(block);//, slow);
-				}
-			}
-
-			if (not_loaded_from_file) { // If it's not loaded from file, we always check darkness
-				if (type == Block.FIRE) {
-					act.sound_manager.playSound("start_fire");
 				}
 			}
 		}
@@ -525,13 +502,18 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	private synchronized void loadPlayer(IInputDevice input) {
-		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
-		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
-		PlayersAvatar player = new PlayersAvatar(this, players.size(), x, y, input);//, controllerID);
-		//player.inv = new BlockInventory(this, player);
-		this.players.add(player);
-		player.parent.updateGeometricState();
-		//this.restartPlayer(player);
+		int num = avatars.size();
+		if (num <= 2) { // No gfx for players 3+ yet!
+			float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
+			float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
+			PlayersAvatar player = new PlayersAvatar(this, num, x, y, input);//, controllerID);
+			//player.inv = new BlockInventory(this, player);
+			this.avatars.add(player);
+			player.parent.updateGeometricState();
+			//this.restartPlayer(player);
+		} else {
+			this.msg.setText("No graphics for player " + num);
+		}
 	}
 
 
@@ -578,11 +560,16 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	public void playerCompletedLevel(PlayersAvatar player) {
-		player.completedLevel = true;
+		Statics.act.sound_manager.playerReachedEnd();
 		long score_inc = (this.time_remaining.getTimeRemaining() / 100);
 		player.score += score_inc;
 		displayText("Player " + player.playernum + " finished!  Have " + score_inc + " points!");
 		player.remove(); //.removeFromParent();
+		this.avatars.remove(player);
+		// check if no players left
+		if (this.avatars.isEmpty()) {
+			this.startNewLevel(this.level + 1);
+		}
 	}
 }
 

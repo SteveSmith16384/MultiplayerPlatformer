@@ -1,18 +1,17 @@
 package ssmith.android.framework;
 
-import ssmith.audio.MP3Player;
-import ssmith.audio.SoundCacheThread;
-
 import com.scs.multiplayerplatformer.MainThread;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.XMLHelper;
+import com.scs.multiplayerplatformer.sfx.ISfxPlayer;
+import com.scs.multiplayerplatformer.sfx.StdSfxPlayer;
 
 
 public abstract class AbstractActivity implements Thread.UncaughtExceptionHandler {
 
 	public static MainThread thread; // thread must be here as this is the only constant class
-	public static SoundCacheThread sound_manager;
-	public static MP3Player mp3_player;
+	public static ISfxPlayer sound_manager;
+	//public static MP3Player mp3_player;
 	private XMLHelper xml;
 
 	public AbstractActivity() {
@@ -50,7 +49,7 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 		}
 
 		if (sound_manager == null) {
-			sound_manager = new SoundCacheThread("sfx");
+			sound_manager = new StdSfxPlayer("sfx");
 		}
 
 	}

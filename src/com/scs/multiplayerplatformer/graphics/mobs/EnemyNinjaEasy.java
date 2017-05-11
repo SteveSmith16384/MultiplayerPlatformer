@@ -125,6 +125,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 
 	@Override
 	public void died() {
+		Statics.act.sound_manager.enemyDied();
 		new DyingEnemy(game, "easy_ninja_dying", this);
 		Explosion.CreateExplosion(game, 2, this.getWorldCentreX(), this.getWorldCentreY(), "blood_spurt");
 		this.remove(); // Must be before we drop an item

@@ -1,6 +1,7 @@
 package com.scs.multiplayerplatformer.input;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class DeviceThread extends Thread {
 
 	public static boolean USE_CONTROLLERS = true;
 
-	public Map<Integer, IInputDevice> createdDevices = new HashMap<>(); // todo - make private
+	private Map<Integer, IInputDevice> createdDevices = new HashMap<>();
 	private IInputDevice keyboard;
 	private List<NewControllerListener> listeners = new ArrayList<>();
 
@@ -25,7 +26,7 @@ public class DeviceThread extends Thread {
 		super(DeviceThread.class.getSimpleName());
 
 		this.setDaemon(true);
-		
+
 		try {
 			Controllers.initialize();
 			Runtime.getRuntime().addShutdownHook(new DeviceShutdownHook());
@@ -39,6 +40,10 @@ public class DeviceThread extends Thread {
 
 	}
 
+	
+	public Collection<IInputDevice> getDevices() {
+		return this.createdDevices.values();
+	}
 
 	public void run() {
 		try {
@@ -50,18 +55,20 @@ public class DeviceThread extends Thread {
 
 					for (IController gamepad : gamepads) {
 						if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
-							if (createdDevices.get(gamepad.getDeviceID()) == null) {
-								//this.loadPlayer(new PS4Controller(gamepad), gamepad.getDeviceID());
-								//this.module.newPlayer(gamepad.getDeviceID());
-								this.createController(gamepad.getDeviceID(), new PS4Controller(gamepad));
+							synchronized (createdDevices) {
+								if (createdDevices.get(gamepad.getDeviceID()) == null) {
+									this.createController(gamepad.getDeviceID(), new PS4Controller(gamepad));
+								}
 							}
 						}
 					}
 
 				}
 				if (keyboard.isThrowPressed()) {
-					if (createdDevices.get(-1) == null) {
-						this.createController(-1, keyboard);
+					synchronized (createdDevices) {
+						//if (createdDevices.get(-1) == null) {
+							this.createController(-1, keyboard);
+						//}
 					}
 				}
 				Functions.delay(100);

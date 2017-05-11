@@ -16,7 +16,7 @@ public class PlayersAvatar extends AbstractWalkingMob {
 
 	public float move_x_offset = 0;
 	public BlockInventory inv;
-	public boolean completedLevel = false;
+	//public boolean completedLevel = false;
 	public int playernum;
 	
 	private IInputDevice input;
@@ -106,7 +106,7 @@ public class PlayersAvatar extends AbstractWalkingMob {
 		}
 
 		if (thrown) {
-			act.sound_manager.playSound("throwitem");
+			//act.sound_manager.playSound("throwitem");
 			PointF p = GeometryFuncs.GetPointFromAngle(angle, power*2);
 			MyPointF dir = new MyPointF(p.x, p.y);
 			//Statics.p("Dir:" + dir);
@@ -130,6 +130,7 @@ public class PlayersAvatar extends AbstractWalkingMob {
 
 	@Override
 	public void died() {
+		Statics.act.sound_manager.playerDied();
 		game.restartPlayer(this);
 	}
 	

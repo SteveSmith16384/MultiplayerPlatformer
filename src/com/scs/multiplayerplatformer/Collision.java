@@ -18,10 +18,14 @@ public class Collision {
 		if (a instanceof PlayersAvatar) {
 			if (b instanceof EnemyNinjaEasy) {
 				return Player_EnemyMob((PlayersAvatar)a, (EnemyNinjaEasy)b);
+			} else if (b instanceof PlayersAvatar) {
+				return false;
 			}
 		} else if (b instanceof PlayersAvatar) {
 			if (a instanceof EnemyNinjaEasy) {
 				return Player_EnemyMob((PlayersAvatar)b, (EnemyNinjaEasy)a);
+			} else if (a instanceof PlayersAvatar) {
+				return false;
 			}
 		}
 		if (a instanceof ThrownItem) {

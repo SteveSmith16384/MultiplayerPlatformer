@@ -91,10 +91,11 @@ public class Block extends GameObject {
 	
 	
 	private void generateImages(int width, float scale) {
+		int size = width + 1;//(int)Math.floor(Statics.SQ_SIZE*scale);
 		if (Statics.DEBUG) {
 			//Statics.p("Generating images for blocks size " + width + " for " + map_x + ", " + map_y);
 		}
-		bmp[width] = GetBufferedImage(Statics.img_cache, type, Statics.SQ_SIZE_INT*scale, Statics.SQ_SIZE_INT*scale);
+		bmp[width] = GetBufferedImage(Statics.img_cache, type, size, size);
 
 		switch (type) {
 		case ROCK:
@@ -103,20 +104,20 @@ public class Block extends GameObject {
 			break;
 		case WATER:
 			health = (byte)100;
-			bmp2[width] = Statics.img_cache.getImage("water2", Statics.SQ_SIZE_INT*scale, Statics.SQ_SIZE_INT*scale);
+			bmp2[width] = Statics.img_cache.getImage("water2", size, size);
 			break;
 		case FIRE:
 			health = (byte)100;
-			bmp2[width] = Statics.img_cache.getImage("fire2", Statics.SQ_SIZE*scale, Statics.SQ_SIZE*scale);
+			bmp2[width] = Statics.img_cache.getImage("fire2", size, size);
 			//on_fire = true;
 			break;
 		case LAVA:
 			health = (byte)100;
-			bmp2[width] = Statics.img_cache.getImage("lava2", Statics.SQ_SIZE_INT*scale, Statics.SQ_SIZE_INT*scale);
+			bmp2[width] = Statics.img_cache.getImage("lava2", size, size);
 			break;
 		case SLIME:
 			health = (byte)100;
-			bmp2[width] = Statics.img_cache.getImage("slime2", Statics.SQ_SIZE_INT*scale, Statics.SQ_SIZE_INT*scale);
+			bmp2[width] = Statics.img_cache.getImage("slime2", size, size);
 			break;
 		case MONSTER_GENERATOR:
 			health = (byte)(health * 2);
@@ -556,7 +557,7 @@ public class Block extends GameObject {
 		AbstractActivity act = Statics.act;
 
 		this.health -= amt;
-		act.sound_manager.playSound("crumbling");
+		act.sound_manager.blockCrumbled();//.playSound("crumbling");
 		Explosion.CreateExplosion(game, 1, this.getWorldCentreX(), this.getWorldCentreY(), "thrown_rock");
 
 		if (this.health <= 0) {
@@ -688,7 +689,7 @@ public class Block extends GameObject {
 				this.event_time = System.currentTimeMillis() + SLIME_DURATION;
 				if (Functions.rnd(1, 2) == 1) {
 					if (this.getDistanceToClosestPlayer(null) <= Statics.ACTIVATE_DIST) {
-						act.sound_manager.playSound("slime");
+						act.sound_manager.slime();
 						new ThrownItem(game, Block.SLIME_SPURT, new MyPointF(this.getWorldCentreX(), this.getWorldY()), new MyPointF(Functions.rndFloat(-.5f, .5f), -1), null, 10, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.SLIME_SIZE);
 					}
 				}
@@ -857,7 +858,7 @@ public class Block extends GameObject {
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
 		if (this.visible) {
-			int width = (int)(this.getWidth() * scale);
+			int width = (int)Math.ceil(this.getWidth() * scale);
 			if (bmp[width] == null) {
 				this.generateImages(width, scale);
 			}

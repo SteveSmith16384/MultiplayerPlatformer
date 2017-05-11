@@ -1,54 +1,54 @@
+Ninjamatic
+
 Throw shurikens at each other and get high score!
 Who has the most points at the end
 Race to complete each small level
 
 HOME
-Convert music to mp3
 Create new maps - ice
-Change colour of p2+p3 sprites
+	Convert music to mp3
 Music and sfx
+Change colour of p2+p3 sprites
 
 
 TODO
+Timer - stop at zero
 Add music
-Created another PS4 player?
-Stop creating players at max
-Players should move through each other
-Scale blocks better to avoid gaps
-Multiple keyboard players
-	don't change zoom if not needed
-	Adjust zoom by multiplying, not add/sub
-Start pos very high
-	Make writing white
-	Restart player if they fall off the map
-Search for todos
-Use sfx
-	Get points for being quickest
-	Determine scale based on location of players
-Check if hit by slime
 Choose menu option with keys
-	End game when window closed
+Start pos very high
+Search for todos
+Check if hit by slime
+	Cam not putting player in middle
+	Not checking if a player has finished!
+	Use sfx
+	Created another PS4 player?
+	Stop creating players at max
+	Make writing white
+	Get points for being quickest
 
 
 LEVELS
 Maze-like level
+Lots of ropes
+Lots of small platforms
+Lots of long jumps, and must restart if fall
 
 
 LATER
+Ninja chop attack!
+Multiple keyboard players
 Turn off ps4 debugging
 Map gen
 Parallax
-	Clouds in front of map
 Bring wasp back
 Hold down jump to jump higher
 Control menus with controller
 More types of enemy
 Use interpol
-	FPS not working
+FPS not working
 Randomly drop stars
 SelectGameMode module
 Get star image
-Restart player if they die
 
 
 GAMEMODES
