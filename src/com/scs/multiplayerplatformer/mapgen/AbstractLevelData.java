@@ -31,7 +31,7 @@ public abstract class AbstractLevelData {//extends Thread {
 
 
 	public Point getStartPos() {
-		if (start_pos == null) {
+		/*if (start_pos == null) {
 			// Choose a random location
 			out: for (int i = 0 ; i<20 ; i++) { // 20 attempts
 				int x = Functions.rnd(data.length/20, data.length/5);
@@ -48,7 +48,7 @@ public abstract class AbstractLevelData {//extends Thread {
 					}
 				}
 			}
-		}
+		}*/
 		if (start_pos == null) {
 			// Can't find anywhere, so resort to original location
 			start_pos = new Point(3, (data[0].length / 4)-5);

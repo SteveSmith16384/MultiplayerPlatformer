@@ -17,9 +17,7 @@ public final class Statics {
 	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = true;
-	public static final boolean RELEASE_MODE = true; // Stricter if false
-
-	public static final int SHURIKENS_FROM_BLOCK = 5;
+	public static final boolean RELEASE_MODE = false; // Stricter if false
 
 	// Sides
 	public static final byte SD_PLAYERS_SIDE = 0;
@@ -40,8 +38,8 @@ public final class Statics {
 	public static final int MAX_BMP_WIDTH = 100;
 	
 	public static final float ZOOM_SPEED = 1.02f;
-	public static final float MIN_ZOOM = 0.1f;
-	public static final float MAX_ZOOM = 1f;
+	public static float MIN_ZOOM;// = 0.1f;
+	public static float MAX_ZOOM;// = 1f;
 
 	public static Typeface stdfnt, iconfnt, bigfnt;
 
@@ -52,7 +50,6 @@ public final class Statics {
 	public static String VERSION_NAME;
 	public static String NAME;
 	public static float SCREEN_WIDTH, SCREEN_HEIGHT;
-	//private static float SQ_SIZE_PCENT = 4f;
 	public static float SQ_SIZE;
 	public static int SQ_SIZE_INT;
 	private static final float ICON_SIZE_PCENT = 11f;
@@ -81,6 +78,7 @@ public final class Statics {
 	public static float CLOUD_SPEED;
 	public static float HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT;
 	public static float JUMP_Y;// = -1.2f;
+	public static final int SHURIKENS_FROM_BLOCK = 5;
 
 	public static boolean initd = false;
 
@@ -98,6 +96,8 @@ public final class Statics {
 
 			SQ_SIZE = 50; //SCREEN_WIDTH * (SQ_SIZE_PCENT/100);
 			SQ_SIZE_INT = (int)Math.ceil(SQ_SIZE);
+			MIN_ZOOM = SCREEN_WIDTH / 8000;//
+			MAX_ZOOM = SCREEN_WIDTH / 800;//
 			ICON_SIZE = SCREEN_WIDTH * (ICON_SIZE_PCENT/100);
 			PLAYER_WIDTH = SQ_SIZE * 0.8f;
 			PLAYER_HEIGHT = (SQ_SIZE*2) * 0.9f;

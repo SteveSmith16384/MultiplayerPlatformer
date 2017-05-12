@@ -1,16 +1,17 @@
 package com.scs.multiplayerplatformer.graphics.mobs;
 
-import com.scs.multiplayerplatformer.Statics;
-import com.scs.multiplayerplatformer.game.BlockInventory;
-import com.scs.multiplayerplatformer.game.GameModule;
-import com.scs.multiplayerplatformer.graphics.ThrownItem;
-import com.scs.multiplayerplatformer.graphics.blocks.Block;
-import com.scs.multiplayerplatformer.input.IInputDevice;
-
 import ssmith.android.compatibility.PointF;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.lang.GeometryFuncs;
+
+import com.scs.multiplayerplatformer.Statics;
+import com.scs.multiplayerplatformer.game.BlockInventory;
+import com.scs.multiplayerplatformer.game.GameModule;
+import com.scs.multiplayerplatformer.game.Player;
+import com.scs.multiplayerplatformer.graphics.ThrownItem;
+import com.scs.multiplayerplatformer.graphics.blocks.Block;
+import com.scs.multiplayerplatformer.input.IInputDevice;
 
 public class PlayersAvatar extends AbstractWalkingMob {
 
@@ -18,15 +19,17 @@ public class PlayersAvatar extends AbstractWalkingMob {
 	public BlockInventory inv;
 	//public boolean completedLevel = false;
 	public int playernum;
+	public Player player;
 	
 	private IInputDevice input;
 	private long firePressedTime;
 	private boolean prevThrowPressed = false;
 
-	public PlayersAvatar(GameModule _game, int _playernum, float x, float y, IInputDevice _input) {
+	public PlayersAvatar(GameModule _game, Player _player, float x, float y, IInputDevice _input) {
 		super(_game, Statics.act.getString("player"), x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
 
-		playernum = _playernum;
+		player = _player;
+		playernum = player.num;
 		input = _input;
 		inv = new BlockInventory(game, this);
 
@@ -101,7 +104,7 @@ public class PlayersAvatar extends AbstractWalkingMob {
 		if (inv.hasBlock(type) || Statics.DEBUG) {
 			thrown = true;
 		} else {
-			game.showToast("You have nothing to throw!  Try a shuriken");
+			game.showToast("You have nothing to throw!  Try getting a shuriken");
 			return;
 		}
 

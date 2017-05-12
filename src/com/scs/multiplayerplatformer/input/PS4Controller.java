@@ -58,9 +58,9 @@ public class PS4Controller implements IInputDevice {
 	@Override
 	public float getStickDistance() {
 		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
-		if (Statics.DEBUG) {
+		/*if (Statics.DEBUG) {
 			Statics.p("Dist=" + pos.getDistanceToCenter());
-		}
+		}*/
 		return pos.getDistanceToCenter();
 	}
 

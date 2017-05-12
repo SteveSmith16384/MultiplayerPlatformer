@@ -16,7 +16,6 @@ import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.android.lib2d.shapes.Rectangle;
 import ssmith.android.util.Timer;
 import ssmith.lang.GeometryFuncs;
-import ssmith.lang.NumberFunctions;
 import ssmith.util.IDisplayText;
 import ssmith.util.Interval;
 import ssmith.util.TSArrayList;
@@ -50,11 +49,12 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	public MyEfficientGridLayout new_grid;
 	private TimedString msg;
 	private Rectangle dummy_rect = new Rectangle(); // for checking the area is clear
-	private Timer time_remaining;
+	private long levelStartTime;
 	public int level;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
 	public List<PlayersAvatar> avatars = new ArrayList<>();
+	public List<Player> players = new ArrayList<>();
 
 	public float current_scale = Statics.MAX_ZOOM;// .25f;//1;//.5f;
 	public float new_scale = current_scale;
@@ -123,20 +123,15 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		}
 
 		new EnemyEventTimer(this);
-		time_remaining = new Timer(20 * 1000);
+		levelStartTime = System.currentTimeMillis();
 
 		loadMap();
 
-		Iterator<IInputDevice> it = Statics.act.thread.deviceThread.getDevices().iterator();//.createdDevices.values().iterator();
+		Iterator<IInputDevice> it = Statics.act.thread.deviceThread.getDevices().iterator();
 		while (it.hasNext()) {
 			IInputDevice input = it.next();
 			this.loadPlayer(input);
 		}
-
-		/*for(PlayersAvatar player : avatars) {
-			//player.completedLevel = false;
-			restartPlayer(player);
-		}*/
 
 		this.showToast("Level " + this.level + "!");
 	}
@@ -194,10 +189,10 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 			// Do we need to zoom out
 			if (avatars.size() > 1) {
-				boolean zoomOut = false;
-				boolean zoomIn = true;
 				float OUTER = 0.2f;
 				float INNER = 0.4f;
+				boolean zoomOut = false;
+				boolean zoomIn = true;
 				for (PlayersAvatar player : avatars) {
 					float sx = player.getWindowX(this.root_cam, this.current_scale);
 					float sy = player.getWindowY(this.root_cam, this.current_scale);
@@ -207,11 +202,42 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 					}
 					zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
 				}
-				if (zoomOut) {
+				if (zoomOut) { // zoom out
 					new_scale /= Statics.ZOOM_SPEED;
-				} else if (zoomIn) {
+				} else if (zoomIn) { // zoom in
 					new_scale *= Statics.ZOOM_SPEED;
-				}
+				}				
+				
+				/*float closestEdge = Statics.SCREEN_HEIGHT/2;
+				boolean zoomOut = false;
+				boolean zoomIn = false;
+				for (PlayersAvatar player : avatars) {
+					float sx = player.getWindowX(this.root_cam, this.current_scale);
+					float sy = player.getWindowY(this.root_cam, this.current_scale);
+					float z = sx;
+					if (z < closestEdge) {
+						closestEdge = z;
+					}
+					z = Statics.SCREEN_WIDTH - sx;
+					if (z < closestEdge) {
+						closestEdge = z;
+					}
+					z = sy;
+					if (z < closestEdge) {
+						closestEdge = z;
+					}
+					z = Statics.SCREEN_HEIGHT - sy;
+					if (z < closestEdge) {
+						closestEdge = z;
+					}
+				}				
+				if (closestEdge < Statics.SCREEN_HEIGHT/2) { // zoom out
+					new_scale /= Statics.ZOOM_SPEED;
+				} else if (closestEdge > Statics.SCREEN_HEIGHT/4) { // zoom in
+					new_scale *= Statics.ZOOM_SPEED;
+				}*/
+				
+				
 				/*if (Statics.DEBUG) {
 					Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
 				}*/
@@ -225,13 +251,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			this.root_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT, false);
 			new_scale = Statics.MAX_ZOOM;
 		}
-		//this.root_cam.update(interpol);
 
-		if (this.time_remaining != null) {
-			if (time_remaining.hasHit(interpol)) {
-				//this.startNewLevel(level++);
-			}
-		}
 	}
 
 
@@ -276,13 +296,14 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			}
 		}
 
-		for (PlayersAvatar player : avatars) {
-			g.drawText("Player " + (player.playernum+1) + " Score: " + player.score, 10, 50+(player.playernum * paint_text_ink.getTextSize()), paint_text_ink);
+		for (Player player : players) {
+			g.drawText("Player " + (player.num+1) + " Score: " + player.score, 10, 50+(player.num * paint_text_ink.getTextSize()), paint_text_ink);
 
 		}
 
-		if (this.time_remaining != null) {
-			g.drawText(this.str_time_remaining + ": " + (this.time_remaining.getTimeRemaining()/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
+		long timeRemaining = System.currentTimeMillis() - levelStartTime;
+		if (timeRemaining > 0) {
+			g.drawText(this.str_time_remaining + ": " + (timeRemaining/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
 		}
 
 		if (Statics.SHOW_STATS) {
@@ -371,8 +392,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	public Block addBlock(byte type, int map_x, int map_y, boolean not_loaded_from_file) {
-		AbstractActivity act = Statics.act;
-
 		Block block = null;
 		if (map_x >= 0 && map_y >= 0 && map_x < this.original_level_data.getGridWidth() && map_y < this.original_level_data.getGridHeight()) {
 			if (type != Block.NOTHING_DAYLIGHT) {
@@ -403,23 +422,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	@Override
 	public boolean onBackPressed() {
+		this.returnTo();
 		return true;
 	}
-
-
-	/*public void gameOver(String reason) {
-		game_over_reason = reason;
-		this.game_over = true;
-	}*/
-
-
-	/*private void checkGameOver() {
-		AbstractActivity act = Statics.act;
-
-		if (this.game_over) {
-			this.getThread().setNextModule(new GameOverModule(act, this, game_over_reason));
-		}
-	}*/
 
 
 	public void explosionWithDamage(int block_rad, int dam, int pieces, float pxl_x, float pxl_y) {
@@ -461,55 +466,26 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	/*public void setCurrentItemIcon(PlayersAvatar player) {
-		if (current_item_image != null) {
-			current_item_image.removeFromParent();
-		}
-		BufferedImage bmp = null;
-		float size = Statics.ICON_SIZE -(ICON_INSETS*2);
-		if (player.hasBlockSelected()) {
-			bmp = Block.GetBitmap(Statics.img_cache, player.getCurrentItemType(), size, size);
-		} else if (player.getCurrentItemType() == HAND) {
-			bmp = Statics.img_cache.getImage("hand", size, size);
-		}
-		if (bmp != null) {
-			current_item_image = new Button("Current Item", ""+player.inv.get(player.getCurrentItemType()), this.curr_item_icon.getWorldX()+ICON_INSETS, this.curr_item_icon.getWorldY()+ICON_INSETS, null, paint_inv_ink, bmp);
-			this.stat_node_front.attachChild(current_item_image);
-			current_item_image.updateGeometricState();
-		}
-		this.updateInvIconAmt(player);
-	}
-
-
-	public void updateInvIconAmt(PlayersAvatar player) {
-		if (this.current_item_image != null) {
-			this.current_item_image.setText("0");
-		}
-		try {
-			if (player != null && current_item_image != null && player.inv != null) {
-				if (player.hasBlockSelected()) {
-					if (player.inv.containsKey(player.getCurrentItemType())) {
-						int amt = player.inv.get(player.getCurrentItemType());
-						this.current_item_image.setText(""+amt);
-					}
-				}
-			}
-		} catch (RuntimeException ex) {
-			AbstractActivity.HandleError(null, ex);
-		}
-	}*/
-
-
 	private synchronized void loadPlayer(IInputDevice input) {
 		int num = avatars.size();
 		if (num <= 2) { // No gfx for players 3+ yet!
+			
+			Player player = null;
+			if (num >= players.size()) {
+				player = new Player(num);
+				this.players.add(new Player(num));
+			} else {
+				player = players.get(num);
+			}
+			
 			float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
-			float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
-			PlayersAvatar player = new PlayersAvatar(this, num, x, y, input);//, controllerID);
-			//player.inv = new BlockInventory(this, player);
-			this.avatars.add(player);
-			player.parent.updateGeometricState();
-			//this.restartPlayer(player);
+			float y = (original_level_data.getStartPos().y) * Statics.SQ_SIZE;
+			while (!this.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {
+				y = y - Statics.SQ_SIZE;
+			}
+			PlayersAvatar avatar = new PlayersAvatar(this, player, x, y, input);
+			this.avatars.add(avatar);
+			avatar.parent.updateGeometricState();
 		} else {
 			this.msg.setText("No graphics for player " + num);
 		}
@@ -558,17 +534,30 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	public void playerCompletedLevel(PlayersAvatar player) {
+	public void playerCompletedLevel(PlayersAvatar avatar) {
 		Statics.act.sound_manager.playerReachedEnd();
-		long score_inc = (this.time_remaining.getTimeRemaining() / 100);
-		player.score += score_inc;
-		displayText("Player " + player.playernum + " finished!  Have " + score_inc + " points!");
-		player.remove(); //.removeFromParent();
-		this.avatars.remove(player);
+		long score_inc = (System.currentTimeMillis() - this.levelStartTime) / 100;
+		if (score_inc > 0) { // Might be negative
+			avatar.player.score += score_inc;
+		}
+		displayText("Player " + avatar.playernum + " finished!  Have " + score_inc + " points!");
+		avatar.remove(); //.removeFromParent();
+		this.avatars.remove(avatar);
 		// check if no players left
 		if (this.avatars.isEmpty()) {
 			this.startNewLevel(this.level + 1);
 		}
 	}
+
+
+	/*	public boolean onKeyDown(int keyCode, KeyEvent msg) {
+		if (keyCode == KeyEvent.VK_ESCAPE) {
+			this.returnTo();
+			return true;
+		}
+		return false;
+	}
+	 */
+
 }
 

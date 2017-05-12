@@ -2,8 +2,12 @@ package com.scs.multiplayerplatformer.game;
 
 public class Player {
 
-	public Player() {
-		// TODO Auto-generated constructor stub
+	public int num, score;
+	
+	public Player(int _num) {
+		super();
+		
+		num = _num;
 	}
 
 }

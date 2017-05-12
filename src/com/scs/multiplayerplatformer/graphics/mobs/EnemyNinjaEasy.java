@@ -98,9 +98,9 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 				if (throw_interval.hitInterval()) {
 					player = this.getVisiblePlayer(); 
 					if (player != null) {
-						if (Statics.DEBUG == false) {
+						//if (Statics.DEBUG == false) {
 							this.throwShuriken(player);
-						}
+						//}
 					}
 				}
 			}

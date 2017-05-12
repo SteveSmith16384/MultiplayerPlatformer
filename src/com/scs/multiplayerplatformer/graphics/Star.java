@@ -1,7 +1,5 @@
 package com.scs.multiplayerplatformer.graphics;
 
-import ssmith.android.compatibility.Canvas;
-import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 
 import com.scs.multiplayerplatformer.game.GameModule;
@@ -14,8 +12,8 @@ public class Star extends Collectable {
 	}
 
 	@Override
-	protected void collected(PlayersAvatar player) {
-		player.score += 100;
+	protected void collected(PlayersAvatar avatar) {
+		avatar.player.score += 100;
 		
 	}
 

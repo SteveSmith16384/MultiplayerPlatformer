@@ -94,7 +94,6 @@ public class LoadMap extends AbstractLevelData {
 						}
 						byte this_data[] = new byte[blocks.length];
 						for (int x=0 ; x<blocks.length ; x++) {
-							//this_data[x] = new SimpleBlock();
 							if (version_found == 1) {
 								this_data[x] = Byte.parseByte(blocks[x]);
 							} else if (version_found == 2) {
@@ -127,6 +126,9 @@ public class LoadMap extends AbstractLevelData {
 							}
 							if (this_data[x] == Block.AMULET) {
 								amulet_pos = new Point(x, map_row);
+							}
+							if (this_data[x] == Block.START_POSITION) {
+								super.setStartPos(x, map_row);
 							}
 						}
 						rows.add(this_data);

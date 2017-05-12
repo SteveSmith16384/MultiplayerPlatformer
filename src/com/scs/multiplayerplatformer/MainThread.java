@@ -88,9 +88,9 @@ public final class MainThread extends Thread {
 			module.doDraw(c, Statics.LOOP_DELAY);
 		}
 
-		if (Statics.DEBUG) {
+		/*if (Statics.DEBUG) {
 			c.getGraphics().drawString("FPS: "+fps, 20, 30);
-		}
+		}*/
 
 		window.bs.show();
 	}

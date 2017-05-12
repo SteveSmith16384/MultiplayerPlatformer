@@ -20,6 +20,7 @@ import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 public class Block extends GameObject {
 
 	public static final byte NOTHING_DAYLIGHT = 0;
+	public static final byte START_POSITION = 1;
 	public static final byte GRASS = 2;
 	public static final byte SOIL = 3;
 	public static final byte ROCK = 4;
@@ -92,9 +93,9 @@ public class Block extends GameObject {
 	
 	private void generateImages(int width, float scale) {
 		int size = width + 1;//(int)Math.floor(Statics.SQ_SIZE*scale);
-		if (Statics.DEBUG) {
-			//Statics.p("Generating images for blocks size " + width + " for " + map_x + ", " + map_y);
-		}
+		/*if (Statics.DEBUG) {
+			Statics.p("Generating images for blocks size " + width + " for " + map_x + ", " + map_y);
+		}*/
 		bmp[width] = GetBufferedImage(Statics.img_cache, type, size, size);
 
 		switch (type) {

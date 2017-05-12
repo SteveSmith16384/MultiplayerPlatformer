@@ -9,6 +9,8 @@ import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
 
+import com.scs.multiplayerplatformer.Statics;
+
 public class ImageCache extends Hashtable<String, BufferedImage> {
 
 	private static final long serialVersionUID = 1L;
@@ -72,6 +74,9 @@ public class ImageCache extends Hashtable<String, BufferedImage> {
 					}
 					BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 					scaled.getGraphics().drawImage(img, 0, 0, w, h, c);
+					if (Statics.DEBUG) {
+						Statics.p("Generated image " + filename + " of " + w + "," + h);
+					}
 					img = scaled;
 					put(key, img);
 				} catch (IOException ex) {

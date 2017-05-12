@@ -5,32 +5,29 @@ Who has the most points at the end
 Race to complete each small level
 
 HOME
+Add start block to maps
 Create new maps - ice
 	Convert music to mp3
-Music and sfx
 Change colour of p2+p3 sprites
 
 
 TODO
-Create start position block
-zoom based on dist to edge of screen
-Check area clear when restarting player
-Esc to quit back to menu
-Remove "you have nothing to throw"
-Show players score even when completed level
+Add music
+	Timer - stop at zero
+	zoom based on dist to edge of screen
+	Scale based on screen size
+	Create start position block
+	Check area clear when restarting player
+	Esc to quit back to menu
+	Remove "you have nothing to throw"
+	Show players score even when completed level
 	Dead enemy too thin
-Cache bmps at start
-Scale based on screen size
 	Guards not killing player
 	Test full screen
-Timer - stop at zero
-Add music
 Choose menu option with keys
-Start pos very high
 Search for todos
 Check if hit by slime
 	Use sfx
-	Get points for being quickest
 
 
 LEVELS
