@@ -4,30 +4,14 @@ Throw shurikens at each other and get high score!
 Who has the most points at the end
 Race to complete each small level
 
+
 HOME
+Test full screen
 Add start block to maps
 Create new maps - ice
 	Convert music to mp3
 Change colour of p2+p3 sprites
-
-
-TODO
-Add music
-	Timer - stop at zero
-	zoom based on dist to edge of screen
-	Scale based on screen size
-	Create start position block
-	Check area clear when restarting player
-	Esc to quit back to menu
-	Remove "you have nothing to throw"
-	Show players score even when completed level
-	Dead enemy too thin
-	Guards not killing player
-	Test full screen
-Choose menu option with keys
-Search for todos
-Check if hit by slime
-	Use sfx
+Make video
 
 
 LEVELS
@@ -37,14 +21,36 @@ Lots of small platforms
 Lots of long jumps, and must restart if fall
 
 
+TODO
+Not restartign when falling too far
+Improve shuriken throw
+Add music
+	Timer - stop at zero
+	Scale based on screen size
+	Create start position block
+	Check area clear when restarting player
+	Esc to quit back to menu
+	Remove "you have nothing to throw"
+	Show players score even when completed level
+	Dead enemy too thin
+	Guards not killing player
+	Test full screen
+Hold down jump to jump higher
+	Choose menu option with keys
+Search for todos
+Check if hit by slime
+	Use sfx
+	Multiple keyboard players
+
+
 LATER
+Baddy that drop from sky
+Create new logo
 Ninja chop attack!
-Multiple keyboard players
 Turn off ps4 debugging
 Map gen
 Parallax
 Bring wasp back
-Hold down jump to jump higher
 Control menus with controller
 More types of enemy
 Use interpol

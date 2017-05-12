@@ -1,5 +1,6 @@
 package ssmith.android.framework.modules;
 
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -268,4 +269,11 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 	}
 
 
+	public boolean onKeyUp(int keyCode, KeyEvent msg) {
+		if (keyCode >= KeyEvent.VK_1 && keyCode <= KeyEvent.VK_9) {
+			this.optionSelected(keyCode - KeyEvent.VK_1);
+			return true;
+		}
+		return false;
+	}
 }

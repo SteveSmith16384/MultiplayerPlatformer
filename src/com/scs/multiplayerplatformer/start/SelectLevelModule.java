@@ -38,7 +38,7 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 		}
 
 	}
-	
+
 
 	@Override
 	public void optionSelected(int idx) {

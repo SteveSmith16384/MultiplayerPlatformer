@@ -17,7 +17,6 @@ public class PlayersAvatar extends AbstractWalkingMob {
 
 	public float move_x_offset = 0;
 	public BlockInventory inv;
-	//public boolean completedLevel = false;
 	public int playernum;
 	public Player player;
 	
@@ -122,13 +121,6 @@ public class PlayersAvatar extends AbstractWalkingMob {
 		}
 
 	}
-
-
-	/*@Override
-	public void damage(int amt) {
-		super.damage(amt);
-		this.startJumping();
-	}*/
 
 
 	@Override

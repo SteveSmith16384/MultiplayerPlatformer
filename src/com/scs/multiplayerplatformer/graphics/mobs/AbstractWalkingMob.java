@@ -19,7 +19,7 @@ import com.scs.multiplayerplatformer.graphics.blocks.Block;
 public abstract class AbstractWalkingMob extends AbstractMob {
 
 	protected boolean is_on_ground_or_ladder, can_swim;
-	protected boolean facing_left = false; // Default to facing right
+	protected boolean facing_left = false;
 	protected BufferedImage a_bmp_left[][]; // Size/FrameNum
 	protected BufferedImage a_bmp_right[][]; // Size/FrameNum
 	private int max_frames, curr_frame;
@@ -128,7 +128,6 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 		Statics.act.sound_manager.playerJumped();
 		if (is_on_ground_or_ladder && jumping == false) {
 			jumping = true;
-			//this.jumping_y_off = jump_speed;
 			phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
 		}
 	}
@@ -212,7 +211,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 							curr_fall_speed = Statics.MAX_FALL_SPEED;
 						}
 						// Have we fallen off bottom of map?
-						if (this.getWorldY() > game.new_grid.getHeight() * 2) { // game.new_grid.getWorldX()
+						if (this.getWorldY() > game.new_grid.getHeight() * 2) {
 							this.died();
 						}
 					}

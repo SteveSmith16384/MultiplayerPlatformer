@@ -19,7 +19,7 @@ public class DeviceThread extends Thread {
 	public static boolean USE_CONTROLLERS = true;
 
 	private Map<Integer, IInputDevice> createdDevices = new HashMap<>();
-	private IInputDevice keyboard;
+	private IInputDevice keyboard1, keyboard2;
 	private List<NewControllerListener> listeners = new ArrayList<>();
 
 	public DeviceThread(JFrame window) {
@@ -35,7 +35,8 @@ public class DeviceThread extends Thread {
 			USE_CONTROLLERS = false;
 		}
 
-		keyboard = new KeyboardInput(window);
+		keyboard1 = new KeyboardInput(window, 1);
+		keyboard2 = new KeyboardInput(window, 2);
 		start();
 
 	}
@@ -64,11 +65,18 @@ public class DeviceThread extends Thread {
 					}
 
 				}
-				if (keyboard.isThrowPressed()) {
+				if (keyboard1.isThrowPressed()) {
 					synchronized (createdDevices) {
-						//todo - re-add if (createdDevices.get(-1) == null) {
-							this.createController(-1, keyboard);
-						//}
+						if (createdDevices.get(-1) == null) {
+							this.createController(-1, keyboard1);
+						}
+					}
+				}
+				if (keyboard2.isThrowPressed()) {
+					synchronized (createdDevices) {
+						if (createdDevices.get(-2) == null) {
+							this.createController(-2, keyboard2);
+						}
 					}
 				}
 				Functions.delay(100);

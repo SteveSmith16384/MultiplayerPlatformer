@@ -176,11 +176,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			}
 
 			float x = 0, y = 0;
-			//boolean allCompleted = true;
 			for (PlayersAvatar player : avatars) {
 				x += player.getWorldX();
 				y += player.getWorldY();
-				//allCompleted = allCompleted && player.completedLevel; 
 			}
 			x = x / this.avatars.size();
 			y = y / this.avatars.size();
@@ -190,7 +188,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			// Do we need to zoom out
 			if (avatars.size() > 1) {
 				float OUTER = 0.2f;
-				float INNER = 0.4f;
+				float INNER = 0.3f;
 				boolean zoomOut = false;
 				boolean zoomIn = true;
 				for (PlayersAvatar player : avatars) {

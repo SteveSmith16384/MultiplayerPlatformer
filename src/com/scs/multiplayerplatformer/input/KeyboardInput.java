@@ -9,13 +9,16 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 	private volatile boolean left, right, jump, up, down, fire;
 	private boolean lastMoveWasLeft = false;
-	private int angle = 0;
+	private int id;
 
-	public KeyboardInput(JFrame frame) {
+	public KeyboardInput(JFrame frame, int _id) {
+		super();
+
+		id = _id;
 		frame.addKeyListener(this);
 	}
 
-	
+
 	@Override
 	public boolean isLeftPressed() {
 		if (left) {
@@ -23,7 +26,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 		}
 		return left;
 	}
-	
+
 
 	@Override
 	public boolean isRightPressed() {
@@ -33,12 +36,12 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 		return right;
 	}
 
-	
+
 	@Override
 	public boolean isJumpPressed() {
 		return jump;
 	}
-	
+
 
 	@Override
 	public boolean isUpPressed() {
@@ -57,43 +60,69 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 		return lastMoveWasLeft ? 210: 330;
 	}
 
-	
+
 	@Override
 	public boolean isThrowPressed() {
 		return fire;
 	}
-	
+
 
 	@Override
 	public void keyPressed(KeyEvent ke) {
-		switch (ke.getKeyCode()) {
-		case KeyEvent.VK_LEFT:
-			left = true;
-			break;
+		if (id == 1) {
+			switch (ke.getKeyCode()) {
+			case KeyEvent.VK_LEFT:
+				left = true;
+				break;
 
-		case KeyEvent.VK_RIGHT:
-			right = true;
-			break;
+			case KeyEvent.VK_RIGHT:
+				right = true;
+				break;
 
-		case KeyEvent.VK_UP:
-			up = true;
-			jump = true;
-			break;
+			case KeyEvent.VK_UP:
+				up = true;
+				jump = true;
+				break;
 
-		case KeyEvent.VK_DOWN:
-			down = true;
-			break;
+			case KeyEvent.VK_DOWN:
+				down = true;
+				break;
 
-		case KeyEvent.VK_SPACE:
-			fire = true;
-			//firePressedTime = System.currentTimeMillis();
-			break;
+			case KeyEvent.VK_CONTROL:
+				fire = true;
+				//firePressedTime = System.currentTimeMillis();
+				break;
+			}
+		} else if (id == 2) {
+			switch (ke.getKeyCode()) {
+			case KeyEvent.VK_A:
+				left = true;
+				break;
+
+			case KeyEvent.VK_D:
+				right = true;
+				break;
+
+			case KeyEvent.VK_W:
+				up = true;
+				jump = true;
+				break;
+
+			case KeyEvent.VK_S:
+				down = true;
+				break;
+
+			case KeyEvent.VK_SPACE:
+				fire = true;
+				//firePressedTime = System.currentTimeMillis();
+				break;
+			}
 
 		}
 
 	}
 
-	
+
 	@Override
 	public void keyReleased(KeyEvent ke) {
 		switch (ke.getKeyCode()) {
@@ -122,7 +151,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 		}
 
 	}
-	
+
 
 	@Override
 	public void keyTyped(KeyEvent ke) {
