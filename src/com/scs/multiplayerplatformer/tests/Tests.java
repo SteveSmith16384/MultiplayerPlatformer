@@ -35,7 +35,7 @@ public class Tests {
 			throw new RuntimeException("Cannot get XML");
 		}
 
-		InputStream in = this.getClass().getResourceAsStream("/assets/maps/ninja_level1.csv");
+		InputStream in = this.getClass().getResourceAsStream("/assets/maps/testlevel1.csv");
 		if (in == null) {
 			throw new RuntimeException("Map file is null");
 		} else {

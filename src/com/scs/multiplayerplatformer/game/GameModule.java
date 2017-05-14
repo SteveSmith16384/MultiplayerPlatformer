@@ -95,7 +95,11 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		this.setBackground("ninja_background2");
 
 		// Load a player for each controller
-		startNewLevel(_level);
+		if (Statics.TEST_LEVEL > 0) {
+			startNewLevel(Statics.TEST_LEVEL);
+		} else {
+			startNewLevel(_level);
+		}
 
 		act.thread.deviceThread.addListener(this);
 
@@ -118,10 +122,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		this.stat_node_back.detachAllChildren();
 		this.stat_node_front.detachAllChildren();
 
-		for (int i=0 ; i<3 ; i++) {
-			new Cloud(this);
-		}
-
 		new EnemyEventTimer(this);
 		levelStartTime = System.currentTimeMillis();
 
@@ -131,6 +131,10 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		while (it.hasNext()) {
 			IInputDevice input = it.next();
 			this.loadPlayer(input);
+		}
+
+		for (int i=0 ; i<3 ; i++) {
+			new Cloud(this);
 		}
 
 		this.showToast("Level " + this.level + "!");

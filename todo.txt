@@ -18,23 +18,30 @@ LEVELS
 Maze-like level
 Lots of ropes
 Lots of small platforms
+Lots of ladders
 Lots of long jumps, and must restart if fall
+Map with long route or difficult short route
+1 - Bit of everything
+2 - Difficult jump
+3 - Lots of small platforms
 
 
 TODO
+Give levels names
+Sometimes player kills enemy
+Special "debug full screen" mode
+Choose map files from folder
+Mix levels up, choose randomly
+Not reading last col of map file
 Not restartign when falling too far
-Improve shuriken throw
 Add music
 	Timer - stop at zero
-	Scale based on screen size
 	Create start position block
 	Check area clear when restarting player
 	Esc to quit back to menu
 	Remove "you have nothing to throw"
 	Show players score even when completed level
 	Dead enemy too thin
-	Guards not killing player
-	Test full screen
 Hold down jump to jump higher
 	Choose menu option with keys
 Search for todos
@@ -44,6 +51,7 @@ Check if hit by slime
 
 
 LATER
+Improve shuriken throw
 Baddy that drop from sky
 Create new logo
 Ninja chop attack!

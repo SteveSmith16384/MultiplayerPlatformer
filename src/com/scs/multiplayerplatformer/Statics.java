@@ -14,6 +14,7 @@ import com.scs.multiplayerplatformer.start.StartupModule;
 
 public final class Statics {
 
+	public static final int TEST_LEVEL = 3;
 	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = true;
@@ -163,7 +164,7 @@ public final class Statics {
 		///if (Statics.DEBUG) {
 		//	return "testmap" + level + ".csv";
 		//} else {
-			return "ninja_level" + level + ".csv";
+			return "testmap" + level + ".csv";
 		//}
 	}
 

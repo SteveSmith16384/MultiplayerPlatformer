@@ -69,7 +69,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent ke) {
-		if (id == 1) {
+		if (this.id == 1) {
 			switch (ke.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
 				left = true;
@@ -125,31 +125,58 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent ke) {
-		switch (ke.getKeyCode()) {
-		case KeyEvent.VK_LEFT:
-			left = false;
-			break;
+		if (this.id == 1) {
+			switch (ke.getKeyCode()) {
+			case KeyEvent.VK_LEFT:
+				left = false;
+				break;
 
-		case KeyEvent.VK_RIGHT:
-			right = false;
-			break;
+			case KeyEvent.VK_RIGHT:
+				right = false;
+				break;
 
-		case KeyEvent.VK_UP:
-			up = false;
-			jump = false;
-			break;
+			case KeyEvent.VK_UP:
+				up = false;
+				jump = false;
+				break;
 
-		case KeyEvent.VK_DOWN:
-			down = false;
-			break;
+			case KeyEvent.VK_DOWN:
+				down = false;
+				break;
 
-		case KeyEvent.VK_SPACE:
-			fire = false;
-			//this.duration = System.currentTimeMillis() - this.firePressedTime;
-			break;
+			case KeyEvent.VK_SPACE:
+				fire = false;
+				//this.duration = System.currentTimeMillis() - this.firePressedTime;
+				break;
+
+			}
+
+		} else if (id == 2) {
+			switch (ke.getKeyCode()) {
+			case KeyEvent.VK_A:
+				left = false;
+				break;
+
+			case KeyEvent.VK_D:
+				right = false;
+				break;
+
+			case KeyEvent.VK_W:
+				up = false;
+				jump = false;
+				break;
+
+			case KeyEvent.VK_S:
+				down = false;
+				break;
+
+			case KeyEvent.VK_SPACE:
+				fire = false;
+				//firePressedTime = System.currentTimeMillis();
+				break;
+			}
 
 		}
-
 	}
 
 
