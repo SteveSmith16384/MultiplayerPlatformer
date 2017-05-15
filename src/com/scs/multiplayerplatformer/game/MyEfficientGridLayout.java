@@ -1,12 +1,11 @@
 package com.scs.multiplayerplatformer.game;
 
-import com.scs.multiplayerplatformer.Statics;
-import com.scs.multiplayerplatformer.graphics.blocks.Block;
-
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.layouts.EfficientGridLayout;
-import ssmith.android.lib2d.shapes.AbstractRectangle;
+
+import com.scs.multiplayerplatformer.Statics;
+import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
 public class MyEfficientGridLayout extends EfficientGridLayout implements IProcessable, IDrawable {
 

@@ -10,13 +10,11 @@ public final class BlockInventory extends HashMap<Byte, Integer> {
 
 	private static final long serialVersionUID = 1L;
 
-	private GameModule game;
 	private PlayersAvatar player;
 
-	public BlockInventory(GameModule _game, PlayersAvatar _player) {
+	public BlockInventory(PlayersAvatar _player) {
 		super();
 
-		game = _game;
 		player = _player;
 	}
 

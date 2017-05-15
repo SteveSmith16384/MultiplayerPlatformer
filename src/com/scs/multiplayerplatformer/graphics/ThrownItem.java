@@ -13,14 +13,12 @@ import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.PhysicsEngine;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
-import com.scs.multiplayerplatformer.graphics.mobs.EnemyNinjaEasy;
-import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 
 public class ThrownItem extends GameObject {
 
 	private PhysicsEngine phys;
 	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH];
-	private AbstractMob thrower;
+	public AbstractMob thrower;
 	private byte type;
 	private int damage;
 	

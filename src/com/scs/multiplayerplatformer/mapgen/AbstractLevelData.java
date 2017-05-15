@@ -4,14 +4,10 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ssmith.lang.Functions;
-
-import com.scs.multiplayerplatformer.graphics.blocks.Block;
-
 public abstract class AbstractLevelData {//extends Thread {
 
 	public byte[][] data;
-	protected Point start_pos, amulet_pos;
+	protected Point start_pos;//, amulet_pos;
 	public HashMap<Byte, Integer> block_inv;
 	public ArrayList<SimpleMobData> mobs = new ArrayList<SimpleMobData>();
 	public volatile int row, max_rows; // To track progress
@@ -62,9 +58,9 @@ public abstract class AbstractLevelData {//extends Thread {
 	}
 
 
-	public Point getAmuletPos() {
+	/*public Point getAmuletPos() {
 		return this.amulet_pos;
-	}
+	}*/
 
 
 	public int getGridHeight() {

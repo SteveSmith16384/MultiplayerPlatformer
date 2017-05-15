@@ -1,5 +1,7 @@
 package ssmith.android.framework;
 
+import ssmith.audio.MP3Player;
+
 import com.scs.multiplayerplatformer.MainThread;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.XMLHelper;
@@ -11,7 +13,7 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 
 	public static MainThread thread; // thread must be here as this is the only constant class
 	public static ISfxPlayer sound_manager;
-	//public static MP3Player mp3_player;
+	private MP3Player mp3Music;
 	private XMLHelper xml;
 
 	public AbstractActivity() {
@@ -25,16 +27,6 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 		Statics.act = this;
 
 		Thread.setDefaultUncaughtExceptionHandler(this);
-
-		/*try {
-			Statics.VERSION_NAME = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
-			Statics.NAME = getResources().getString(R.string.app_name);
-		} catch (NameNotFoundException e) {
-			HandleError(null, e);
-		}
-		 */
-		// tell system to use the layout defined in our XML file
-		//setContentView(R.layout.lunar_layout);
 
 		xml = new XMLHelper();
 		if (thread != null) {
@@ -51,6 +43,9 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 		if (sound_manager == null) {
 			sound_manager = new StdSfxPlayer("sfx");
 		}
+
+		mp3Music = new MP3Player("music/Venus.mp3", true);
+		mp3Music.start();
 
 	}
 	
@@ -75,17 +70,6 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 	}
 
 
-	/*@Override
-	public void onBackPressed() {
-		if (thread != null) {
-			boolean res = thread.onBackPressed();
-			if (res == false) {
-				super.onBackPressed();
-			}
-		}
-	}*/
-
-
 	public String getString(String id) {
 		return xml.getString(id);
 	}
@@ -96,7 +80,8 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 		newstr = newstr.replaceAll("%", s);
 		return newstr;
 	}
-
+	
+/*
 
 	public void startMusic() {
 	}
@@ -108,6 +93,6 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 
 	public void resumeMusic() {
 	}
-
+*/
 
 }

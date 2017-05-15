@@ -318,8 +318,6 @@ public class Block extends GameObject {
 
 
 	public void touched(PlayersAvatar player) {
-		AbstractActivity act = Statics.act;
-
 		switch (type) {
 		case Block.SHURIKEN:
 			player.inv.addBlock(this.getType(), Statics.SHURIKENS_FROM_BLOCK);

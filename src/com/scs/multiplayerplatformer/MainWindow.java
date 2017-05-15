@@ -39,9 +39,8 @@ public class MainWindow extends JFrame implements MouseListener, KeyListener, Mo
 		thread = t;
 
 		if (Statics.FULL_SCREEN) {
-			//todo - re-add this.setUndecorated(true);
-			//todo - re-add this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-
+			this.setUndecorated(true);
+			this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0];
 			device.setFullScreenWindow(this);
 

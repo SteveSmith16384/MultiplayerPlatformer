@@ -294,9 +294,6 @@ public abstract class AbstractMob extends GameObject {
 			for (AbstractRectangle r : colls) {
 				Block b = (Block)r;
 				if (b != null) {
-					/*if (b.on_fire) {
-						this.died();//.damage(1);
-					}*/
 					if (Block.GetHarm(b.getType()) > 0) {
 						this.died();//.damage(Block.GetHarm(b.getType()));
 					}

@@ -13,7 +13,6 @@ import com.scs.multiplayerplatformer.Collision;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.PhysicsEngine;
-import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
 public abstract class AbstractWalkingMob extends AbstractMob {
@@ -25,11 +24,13 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 	private int max_frames, curr_frame;
 	private long frame_time=0, frame_interval;
 	protected boolean jumping = false;
-	private PhysicsEngine phys;
+	protected PhysicsEngine phys;
 	private float curr_fall_speed = Statics.PLAYER_FALL_SPEED;
 	public boolean moving_up = false;
 	public boolean moving_down = false;
 	protected long frozenUntil = 0;
+	protected boolean is_on_ladder;
+	protected float ladder_x;
 
 	public AbstractWalkingMob(GameModule _game, String name, float x, float y, float w, float h, int _max_frames, long _frame_interval, boolean remove_if_far_away, boolean destroy_blocks, byte side, boolean _can_swim) {
 		super(_game, name, x, y, w, h, remove_if_far_away, destroy_blocks, side);
@@ -60,13 +61,6 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 					this.curr_frame = 0;
 				}
 			}
-
-			/*this.bmp_left = this.a_bmp_left[this.curr_frame];
-			this.bmp_right = this.a_bmp_right[this.curr_frame];
-
-			if (bmp_left == null || bmp_right == null) {
-				throw new RuntimeException("No bitmaps to draw for " + name) ;
-			}*/
 		}
 
 		if (off_x < 0) {
@@ -94,39 +88,33 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 				if (a_bmp_left[width][this.curr_frame] == null) {
 					this.generateBitmaps(width, scale);
 				}
-				/*if (bmp_left == null) {
-					bmp_left = a_bmp_left[width][0];// a_bmp_right[width][0].getWidth()
-				}*/
 				g.drawBitmap(a_bmp_left[width][this.curr_frame], (this.getWorldX()) * scale - cam.left, (this.getWorldY()) * scale - cam.top, paint);
 			} else {
 				if (a_bmp_right[width][this.curr_frame] == null) {
 					this.generateBitmaps(width, scale);
 				}
-				/*if (bmp_right == null) {
-					bmp_right = a_bmp_right[width][0];
-				}*/
 				g.drawBitmap(a_bmp_right[width][this.curr_frame], getWindowX(cam, scale), getWindowY(cam, scale), paint);
 			}
 		}
-		
+
 	}
-	
-	
+
+
 	public float getWindowX(Camera cam, float scale) {
 		return (this.getWorldX()) * scale - cam.left;
 	}
-	
-	
+
+
 	public float getWindowY(Camera cam, float scale) {
 		return (this.getWorldY()) * scale - cam.top;
 	}
-	
-	
+
+
 	protected abstract void generateBitmaps(int size, float scale);
 
 	protected void startJumping() {
-		Statics.act.sound_manager.playerJumped();
 		if (is_on_ground_or_ladder && jumping == false) {
+			Statics.act.sound_manager.playerJumped();
 			jumping = true;
 			phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
 		}
@@ -140,8 +128,8 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 
 	protected void performJumpingOrGravity() {
 		is_on_ground_or_ladder = false;
-		boolean is_on_ladder = false;
-		float ladder_x = 0;
+		is_on_ladder = false;
+		ladder_x = 0;
 		boolean in_water = false;
 
 		// Check for special blocks
@@ -166,26 +154,6 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 			}
 		}
 
-		// Align us with the ladder
-		if (is_on_ladder && this instanceof PlayersAvatar) {
-			PlayersAvatar player = (PlayersAvatar)this;
-			if (player.move_x_offset == 0) {
-				float adj_dist = (Statics.SQ_SIZE - this.getWidth())/2;
-				float target_pos = ladder_x + adj_dist;
-				float MOVE_DIST = Statics.PLAYER_SPEED/2;
-				float diff = Math.abs(this.getWorldX() - target_pos);
-				if (diff > MOVE_DIST) {
-					if (this.getWorldX() > target_pos) {
-						this.adjustLocation(-MOVE_DIST, 0);
-						this.updateGeometricState();
-					} else if (this.getWorldX() < target_pos) {
-						this.adjustLocation(MOVE_DIST, 0);
-						this.updateGeometricState();
-					}
-				}
-			}
-		}
-
 		if (jumping) {
 			phys.process();
 			if (is_on_ground_or_ladder && this.getJumpingYOff() >= 0) {
@@ -198,21 +166,18 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 		} else {
 			if (is_on_ground_or_ladder == false) {
 				// Gravity
-				if (in_water && can_swim) {
-					//is_on_ground_or_ladder = false; // So we can't jump
-				} else {
+				if (!in_water || !can_swim) {
 					is_on_ground_or_ladder = (this.move(0, curr_fall_speed, true) == false);
 					if (is_on_ground_or_ladder) {
 						curr_fall_speed = Statics.PLAYER_FALL_SPEED; // Reset current fall speed
 					} else {
-						//this.move(0, curr_fall_speed); // Actually fall
 						curr_fall_speed = curr_fall_speed * 2f;
 						if (curr_fall_speed > Statics.MAX_FALL_SPEED) {
 							curr_fall_speed = Statics.MAX_FALL_SPEED;
 						}
 						// Have we fallen off bottom of map?
 						if (this.getWorldY() > game.new_grid.getHeight() * 2) {
-							this.died();
+							this.died(); // To restart
 						}
 					}
 				}
@@ -221,9 +186,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 				if (this.moving_up) {
 					this.move(0, -Statics.PLAYER_SPEED, false);
 				} else if (moving_down) {
-					//if (is_on_ladder) {
 					this.move(0, Statics.PLAYER_SPEED, false);
-					//}
 				}
 			}
 		}
@@ -245,6 +208,30 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 		}
 		return true;
 	}*/
+
+
+	protected void alignWithLadder() {
+		// Align us with the ladder
+		if (is_on_ladder) {
+			PlayersAvatar player = (PlayersAvatar)this;
+			if (player.move_x_offset == 0) {
+				float adj_dist = (Statics.SQ_SIZE - this.getWidth())/2;
+				float target_pos = ladder_x + adj_dist;
+				float MOVE_DIST = Statics.PLAYER_SPEED/2;
+				float diff = Math.abs(this.getWorldX() - target_pos);
+				if (diff > MOVE_DIST) {
+					if (this.getWorldX() > target_pos) {
+						this.adjustLocation(-MOVE_DIST, 0);
+						this.updateGeometricState();
+					} else if (this.getWorldX() < target_pos) {
+						this.adjustLocation(MOVE_DIST, 0);
+						this.updateGeometricState();
+					}
+				}
+			}
+		}
+
+	}
 
 
 	protected float getJumpingYOff() {

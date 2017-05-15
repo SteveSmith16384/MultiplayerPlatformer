@@ -3,7 +3,6 @@ package com.scs.multiplayerplatformer;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.util.Hashtable;
 
 import ssmith.android.compatibility.Typeface;
 import ssmith.android.framework.AbstractActivity;
@@ -14,7 +13,8 @@ import com.scs.multiplayerplatformer.start.StartupModule;
 
 public final class Statics {
 
-	public static final int TEST_LEVEL = 3;
+	public static final int TEST_LEVEL = -1;
+	public static final boolean RANDOM_LEVELS = true;
 	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = true;
@@ -24,7 +24,7 @@ public final class Statics {
 	public static final byte SD_PLAYERS_SIDE = 0;
 	public static final byte SD_ENEMY_SIDE = 1;
 
-	public static AbstractActivity act;
+	public static final int MAX_LEVEL_NUM = 3;
 	public static final boolean SHOW_STATS = false;
 	public static final int LOOP_DELAY = 30;
 	public static final int MAX_INSTANTS = 999;
@@ -32,18 +32,19 @@ public final class Statics {
 	public static final String EMAIL = "help@penultimateapps.com"; 
 	public static final float LABEL_SPACING = 1.2f;
 	public static float ACTIVATE_DIST, DEACTIVATE_DIST;
-	public static final String MUSIC_R = "chippytoon";
+	public static final String MUSIC_R = "Venus.mp3";
 	public static final int WINDOW_TOP_OFFSET = 25;
 	public static String BACKGROUND_R;
 	public static final long FREEZE_DUR = 1000;
 	public static final int MAX_BMP_WIDTH = 100;
+	public static final int MAX_PLAYER_SPRITES = 3;
 	
 	public static final float ZOOM_SPEED = 1.02f;
 	public static float MIN_ZOOM;// = 0.1f;
 	public static float MAX_ZOOM;// = 1f;
 
+	public static AbstractActivity act;
 	public static Typeface stdfnt, iconfnt, bigfnt;
-
 	public static ImageCache img_cache;
 
 
@@ -159,14 +160,6 @@ public final class Statics {
 		return new StartupModule(act);
 	}
 
-
-	public static String GetMapFilename(int level) {
-		///if (Statics.DEBUG) {
-		//	return "testmap" + level + ".csv";
-		//} else {
-			return "testmap" + level + ".csv";
-		//}
-	}
 
 	// ----------------------------------------------------------------------
 

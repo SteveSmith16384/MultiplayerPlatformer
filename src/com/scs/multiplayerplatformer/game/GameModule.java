@@ -14,8 +14,8 @@ import ssmith.android.lib2d.gui.GUIFunctions;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.android.lib2d.shapes.Rectangle;
-import ssmith.android.util.Timer;
 import ssmith.lang.GeometryFuncs;
+import ssmith.lang.NumberFunctions;
 import ssmith.util.IDisplayText;
 import ssmith.util.Interval;
 import ssmith.util.TSArrayList;
@@ -49,7 +49,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	public MyEfficientGridLayout new_grid;
 	private TimedString msg;
 	private Rectangle dummy_rect = new Rectangle(); // for checking the area is clear
-	private long levelStartTime;
+	private long levelEndTime;
 	public int level;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
@@ -95,11 +95,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		this.setBackground("ninja_background2");
 
 		// Load a player for each controller
-		if (Statics.TEST_LEVEL > 0) {
-			startNewLevel(Statics.TEST_LEVEL);
-		} else {
-			startNewLevel(_level);
-		}
+		startNewLevel(_level);
 
 		act.thread.deviceThread.addListener(this);
 
@@ -115,7 +111,13 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	private void startNewLevel(int _level) {
 		Statics.act.sound_manager.levelStart();
-		level = _level;
+		
+		if (Statics.RANDOM_LEVELS) {
+			level = NumberFunctions.rnd(1, Statics.MAX_LEVEL_NUM);
+		} else {
+			level = _level;
+		}
+		
 		entities = new TSArrayList<IProcessable>();
 
 		this.root_node.detachAllChildren();
@@ -123,7 +125,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		this.stat_node_front.detachAllChildren();
 
 		new EnemyEventTimer(this);
-		levelStartTime = System.currentTimeMillis();
+		levelEndTime = System.currentTimeMillis() + 20;
 
 		loadMap();
 
@@ -209,7 +211,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 				} else if (zoomIn) { // zoom in
 					new_scale *= Statics.ZOOM_SPEED;
 				}				
-				
+
 				/*float closestEdge = Statics.SCREEN_HEIGHT/2;
 				boolean zoomOut = false;
 				boolean zoomIn = false;
@@ -238,8 +240,8 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 				} else if (closestEdge > Statics.SCREEN_HEIGHT/4) { // zoom in
 					new_scale *= Statics.ZOOM_SPEED;
 				}*/
-				
-				
+
+
 				/*if (Statics.DEBUG) {
 					Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
 				}*/
@@ -303,7 +305,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		}
 
-		long timeRemaining = System.currentTimeMillis() - levelStartTime;
+		long timeRemaining = levelEndTime - System.currentTimeMillis();
 		if (timeRemaining > 0) {
 			g.drawText(this.str_time_remaining + ": " + (timeRemaining/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
 		}
@@ -332,7 +334,13 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	private void loadMap() {
-		original_level_data = new LoadMap(Statics.GetMapFilename(level));
+		String filename = null;
+		if (Statics.TEST_LEVEL > 0) {
+			filename = "testmap" + Statics.TEST_LEVEL + ".csv";
+		} else {
+			filename = "testmap" + level + ".csv";
+		}
+		original_level_data = new LoadMap(filename);
 		original_level_data.getMap();
 
 		new_grid = new MyEfficientGridLayout(this, original_level_data.getGridWidth(), original_level_data.getGridHeight(), Statics.SQ_SIZE);
@@ -470,27 +478,23 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	private synchronized void loadPlayer(IInputDevice input) {
 		int num = avatars.size();
-		if (num <= 2) { // No gfx for players 3+ yet!
-			
-			Player player = null;
-			if (num >= players.size()) {
-				player = new Player(num);
-				this.players.add(new Player(num));
-			} else {
-				player = players.get(num);
-			}
-			
-			float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
-			float y = (original_level_data.getStartPos().y) * Statics.SQ_SIZE;
-			while (!this.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {
-				y = y - Statics.SQ_SIZE;
-			}
-			PlayersAvatar avatar = new PlayersAvatar(this, player, x, y, input);
-			this.avatars.add(avatar);
-			avatar.parent.updateGeometricState();
+
+		Player player = null;
+		if (num >= players.size()) {
+			player = new Player(num);
+			this.players.add(new Player(num));
 		} else {
-			this.msg.setText("No graphics for player " + num);
+			player = players.get(num);
 		}
+
+		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
+		float y = (original_level_data.getStartPos().y) * Statics.SQ_SIZE;
+		while (!this.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {
+			y = y - Statics.SQ_SIZE;
+		}
+		PlayersAvatar avatar = new PlayersAvatar(this, player, x, y, input);
+		this.avatars.add(avatar);
+		avatar.parent.updateGeometricState();
 	}
 
 
@@ -538,11 +542,11 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	public void playerCompletedLevel(PlayersAvatar avatar) {
 		Statics.act.sound_manager.playerReachedEnd();
-		long score_inc = (System.currentTimeMillis() - this.levelStartTime) / 100;
+		long score_inc = (levelEndTime - System.currentTimeMillis()) / 100;
 		if (score_inc > 0) { // Might be negative
 			avatar.player.score += score_inc;
 		}
-		displayText("Player " + avatar.playernum + " finished!  Have " + score_inc + " points!");
+		displayText("Player " + avatar.playernumZB + " finished!  Have " + score_inc + " points!");
 		avatar.remove(); //.removeFromParent();
 		this.avatars.remove(avatar);
 		// check if no players left

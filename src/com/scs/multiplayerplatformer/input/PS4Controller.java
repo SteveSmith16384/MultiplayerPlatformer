@@ -7,8 +7,6 @@ import org.gamepad4j.IStick;
 import org.gamepad4j.StickID;
 import org.gamepad4j.StickPosition;
 
-import com.scs.multiplayerplatformer.Statics;
-
 public class PS4Controller implements IInputDevice {
 
 	private IController gamepad;

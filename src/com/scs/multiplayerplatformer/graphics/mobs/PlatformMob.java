@@ -54,7 +54,7 @@ public class PlatformMob extends AbstractMob {
 
 	private void reverseDir() {
 		long end = System.currentTimeMillis();
-		long diff = end - start;
+		//long diff = end - start;
 		start = System.currentTimeMillis(); // down = 5, up = 8, down = 2.5, up = 5
 		this.move_x = this.move_x * -1;
 		this.move_y = this.move_y * -1;

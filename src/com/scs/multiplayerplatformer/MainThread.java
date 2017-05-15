@@ -31,7 +31,6 @@ public final class MainThread extends Thread {
 	public AbstractModule next_module;
 	private long last_onback_pressed;
 	public Canvas c;
-	private long fps;
 	public MainWindow window;
 	public DeviceThread deviceThread;
 	
@@ -62,9 +61,6 @@ public final class MainThread extends Thread {
 				doDrawing();
 
 				long diff = System.currentTimeMillis() - start;
-				if (diff != 0) {
-					fps = 1000/diff;
-				}
 				Functions.delay(Statics.LOOP_DELAY - diff);
 			}
 		} catch (Exception ex) {

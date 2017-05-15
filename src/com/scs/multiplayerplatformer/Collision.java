@@ -49,9 +49,12 @@ public class Collision {
 
 
 	private static boolean ThrownItem_AbstractWalkingMob(ThrownItem thrown, AbstractWalkingMob mob) {
-		thrown.remove();
-		mob.died();
-		return true;
+		if (thrown.thrower != mob) {
+			thrown.remove();
+			mob.died();
+			return true;
+		}
+		return false;
 	}
 
 }

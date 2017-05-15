@@ -6,20 +6,22 @@ Race to complete each small level
 
 
 HOME
+Make levels look better
 Test full screen
-Add start block to maps
 Create new maps - ice
-	Convert music to mp3
+Get a font
 Change colour of p2+p3 sprites
 Make video
 
 
 LEVELS
+Show Harry how to design level
 Maze-like level
 Lots of ropes
 Lots of small platforms
 Lots of ladders
 Lots of long jumps, and must restart if fall
+Manic Miner mission
 Map with long route or difficult short route
 1 - Bit of everything
 2 - Difficult jump
@@ -27,30 +29,25 @@ Map with long route or difficult short route
 
 
 TODO
-Give levels names
-Sometimes player kills enemy
-Special "debug full screen" mode
-Choose map files from folder
-Mix levels up, choose randomly
 Not reading last col of map file
-Not restartign when falling too far
-Add music
-	Timer - stop at zero
-	Create start position block
-	Check area clear when restarting player
-	Esc to quit back to menu
-	Remove "you have nothing to throw"
-	Show players score even when completed level
-	Dead enemy too thin
+	Time left going up!
 Hold down jump to jump higher
+Sometimes player kills enemy
+	Mix levels up, choose randomly
+	Wrap graphic around if no graphics
+Choose map files from folder
+	Add music
+	Timer - stop at zero
+	Esc to quit back to menu
 	Choose menu option with keys
 Search for todos
 Check if hit by slime
 	Use sfx
-	Multiple keyboard players
 
 
 LATER
+Give levels names
+Conveyor belts
 Improve shuriken throw
 Baddy that drop from sky
 Create new logo
@@ -71,6 +68,7 @@ Get star image
 GAMEMODES
 Collect as many stars as possible
 Complete levels as quickly as possible
+Cops and Robbers
 
 
 CREDITS
@@ -79,7 +77,6 @@ Music: https://opengameart.org/content/nes-shooter-music-5-tracks-3-jingles
 
 LOW PRI
 Physics
-Get a font
 Create icon
 Enemies not sinking in water
 

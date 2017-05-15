@@ -1,8 +1,6 @@
 package com.scs.multiplayerplatformer.mapgen;
 
-import java.awt.Point;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,13 +98,9 @@ public class LoadMap extends AbstractLevelData {
 								String pieces[] = blocks[x].split("\\|");
 								if (NumberFunctions.IsNumeric(pieces[0])) { // Std block
 									byte b = Byte.parseByte(pieces[0]);
-									this_data[x] = b;//Byte.parseByte(b);
+									this_data[x] = b;
 								} else { // Special code
-									//checkSpecial(this_data[x], pieces[0], x, map_row);
 									if (pieces[0].length() > 0) {
-										/*if (pieces[0].toLowerCase().startsWith("c:")) {
-											this_data[x].collectable_type = pieces[0].substring(2);
-										} else*/
 										if (pieces[0].toLowerCase().startsWith("m:")) {
 											mobs.add(new SimpleMobData(NumberFunctions.ParseByte(pieces[0].substring(2)), x * Statics.SQ_SIZE, (row-6) * Statics.SQ_SIZE)); // -6 so we start above it
 										} else {
@@ -116,17 +110,12 @@ public class LoadMap extends AbstractLevelData {
 										}
 									}
 								}
-								/*for (int i=1 ; i<pieces.length ; i++) {
-									if (pieces[i].equalsIgnoreCase(ON_FIRE)) {
-										this_data[x].on_fire = true;
-									}
-								}*/
 							} else {
 								throw new RuntimeException("Unknown file version: " + this.version_found);
 							}
-							if (this_data[x] == Block.AMULET) {
+							/*if (this_data[x] == Block.AMULET) {
 								amulet_pos = new Point(x, map_row);
-							}
+							}*/
 							if (this_data[x] == Block.START_POSITION) {
 								super.setStartPos(x, map_row);
 							}
@@ -142,9 +131,6 @@ public class LoadMap extends AbstractLevelData {
 						super.block_inv.put(NumberFunctions.ParseByte(line[0]), NumberFunctions.ParseInt(line[1]));
 					} else if (stage.equalsIgnoreCase(MOB_DATA_TAG)) {
 						// Load mobs
-						/*if (mobs == null) {
-							mobs = new ArrayList<SimpleMobData>();
-						}*/
 						String line[] = lines[row].split(",");
 						mobs.add(new SimpleMobData(NumberFunctions.ParseByte(line[0].trim()), NumberFunctions.ParseInt(line[1]), NumberFunctions.ParseInt(line[2])));
 					} else {
@@ -157,10 +143,8 @@ public class LoadMap extends AbstractLevelData {
 			data = new byte[max_row_length][rows.size()];
 			int row_num = 0;
 			for (byte[] row : rows) {
-				for (int x=0 ; x<row.length ; x++) {
-					//if (row[x] != null) {
+				for (int x=0 ; x<max_row_length ; x++) {
 					data[x][row_num] = row[x];
-					//}
 				}
 				row_num++;
 			}
@@ -170,12 +154,5 @@ public class LoadMap extends AbstractLevelData {
 	}
 
 
-	/*private void checkSpecial(SimpleBlock b, String code, int map_x, int map_y) {
-		if (code.equalsIgnoreCase(AbstractCollectable.MEDIKIT)) {
-			//mobs.add(new SimpleMobData(NumberFunctions.ParseByte(line[0].trim()), NumberFunctions.ParseInt(line[1]), NumberFunctions.ParseInt(line[2])));
-			b.collectable_type = code;
-		} else {
-			throw new RuntimeException("Unknown collectable type: " + code)
-		}
-	}*/
 }
+
