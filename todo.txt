@@ -1,7 +1,7 @@
 Ninjamatic
 
 HOME
-Put original Ninja levels in this game
+	Put original Ninja levels in this game
 Create new logo
 Make video
 Add baddies to levels
@@ -10,7 +10,6 @@ Test full screen
 Create new maps - ice
 Get a font
 Change colour of p2+p3 sprites
-Show Harry how to design level
 Give levels names
 
 
@@ -29,16 +28,20 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
-	Choose map files from folder
+GameModule - set mod_return_to
+Negative score
+Not showing time
+Enemy ninja shurikan killing other enemy ninjas
+Show filename if no level name
+Start cam on player start pos
 Sometimes player kills enemy
 Check if hit by slime
 Cache bitmaps
 	Restart players when another one joins
 	Time left going up!
-	Wrap graphic around if no graphics
-	Add music
+music not found
 	Timer - stop at zero
-	Esc to quit back to menu
+Esc to quit back to menu
 	Choose menu option with keys
 Search for todos
 	Use sfx
