@@ -352,7 +352,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		//this.root_cam.lookAt(root_node, false);
 
 		for (int map_y=0 ; map_y<original_level_data.getGridHeight() ; map_y++) {
-			for (int map_x=0 ; map_x<this.original_level_data.getGridWidth()-1 ; map_x++) {
+			for (int map_x=0 ; map_x<this.original_level_data.getGridWidth() ; map_x++) {
 				byte data = original_level_data.getGridDataAt(map_x, map_y);
 				if (data > 0) {
 					this.addBlock(data, map_x, map_y, false);

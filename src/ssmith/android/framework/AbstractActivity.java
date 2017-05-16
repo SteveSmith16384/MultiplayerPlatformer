@@ -42,6 +42,7 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 
 		if (sound_manager == null) {
 			sound_manager = new StdSfxPlayer("sfx");
+			
 		}
 
 		mp3Music = new MP3Player("music/Venus.mp3", true);

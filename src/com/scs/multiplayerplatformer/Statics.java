@@ -13,7 +13,7 @@ import com.scs.multiplayerplatformer.start.StartupModule;
 
 public final class Statics {
 
-	public static final int TEST_LEVEL = -1;
+	public static final int TEST_LEVEL = 4;
 	public static final boolean RANDOM_LEVELS = true;
 	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;

@@ -6,34 +6,35 @@ Race to complete each small level
 
 
 HOME
+Add baddies to levels
 Make levels look better
 Test full screen
 Create new maps - ice
 Get a font
 Change colour of p2+p3 sprites
 Make video
+Show Harry how to design level
 
 
 LEVELS
-Show Harry how to design level
 Maze-like level
 Lots of ropes
-Lots of small platforms
 Lots of ladders
-Lots of long jumps, and must restart if fall
 Manic Miner mission
 Map with long route or difficult short route
+
 1 - Bit of everything
 2 - Difficult jump
 3 - Lots of small platforms
-
+4 - Donkey Kong
+5 - Manic miner
 
 TODO
-Not reading last col of map file
+Do damage squares
+Restart players when another one joins
 	Time left going up!
 Hold down jump to jump higher
 Sometimes player kills enemy
-	Mix levels up, choose randomly
 	Wrap graphic around if no graphics
 Choose map files from folder
 	Add music
