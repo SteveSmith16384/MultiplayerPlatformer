@@ -9,7 +9,7 @@ import ssmith.lang.Functions;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 
-public class Cloud extends GameObject {
+public final class Cloud extends GameObject {
 
 	private BufferedImage bmp_day;//, bmp_night;
 	private float speed;

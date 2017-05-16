@@ -12,7 +12,7 @@ import ssmith.lang.GeometryFuncs;
 
 import com.scs.multiplayerplatformer.XMLHelper;
 
-public class Tests {
+public final class Tests {
 
 	public Tests() {
 		for (int i=0 ; i<360 ; i += 10) {

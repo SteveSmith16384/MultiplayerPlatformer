@@ -12,7 +12,7 @@ import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.PhysicsEngine;
 
-public class Explosion extends GameObject {
+public final class Explosion extends GameObject {
 	
 	private PhysicsEngine phys;
 	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH];

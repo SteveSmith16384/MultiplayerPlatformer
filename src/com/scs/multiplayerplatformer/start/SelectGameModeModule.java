@@ -9,7 +9,7 @@ import ssmith.android.lib2d.gui.GUIFunctions;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 
-public class SelectGameModeModule extends AbstractOptionsModule2 {
+public final class SelectGameModeModule extends AbstractOptionsModule2 {
 
 	private static final float ICON_WIDTH = Statics.SCREEN_WIDTH * 0.4f;
 

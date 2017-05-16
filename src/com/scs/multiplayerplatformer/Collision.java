@@ -7,7 +7,7 @@ import com.scs.multiplayerplatformer.graphics.mobs.AbstractWalkingMob;
 import com.scs.multiplayerplatformer.graphics.mobs.EnemyNinjaEasy;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 
-public class Collision {
+public final class Collision {
 
 	private Collision() {
 	}

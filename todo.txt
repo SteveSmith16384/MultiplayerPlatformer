@@ -1,6 +1,7 @@
 Ninjamatic
 
 HOME
+Put original Ninja levels in this game
 Create new logo
 Make video
 Add baddies to levels

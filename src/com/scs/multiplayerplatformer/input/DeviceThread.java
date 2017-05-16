@@ -14,7 +14,7 @@ import org.gamepad4j.IController;
 
 import ssmith.lang.Functions;
 
-public class DeviceThread extends Thread {
+public final class DeviceThread extends Thread {
 
 	public static boolean USE_CONTROLLERS = true;
 

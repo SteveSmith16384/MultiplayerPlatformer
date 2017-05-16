@@ -13,7 +13,7 @@ import ssmith.lang.NumberFunctions;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
-public class MapLoader extends AbstractLevelData {
+public final class MapLoader extends AbstractLevelData {
 
 	// Tags
 	public static final String HEADER_TAG = "Worldcrafter Save File";

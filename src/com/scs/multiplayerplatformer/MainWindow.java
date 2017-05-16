@@ -28,8 +28,10 @@ import javax.swing.JOptionPane;
 import ssmith.android.framework.MyEvent;
 
 
-public class MainWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener, WindowListener, MouseWheelListener {
+public final class MainWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener, WindowListener, MouseWheelListener {
 
+	private static final long serialVersionUID = 1L;
+	
 	public BufferStrategy bs;
 	private MainThread thread;
 

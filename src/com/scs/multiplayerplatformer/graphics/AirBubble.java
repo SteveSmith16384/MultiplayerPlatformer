@@ -10,7 +10,7 @@ import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 
-public class AirBubble extends GameObject {
+public final class AirBubble extends GameObject {
 
 	private BufferedImage bmp;
 	

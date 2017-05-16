@@ -2,8 +2,7 @@ package com.scs.multiplayerplatformer.mapgen;
 
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 
-
-public class SimpleMobData {
+public final class SimpleMobData {
 
 	private final byte type;
 	public float pixel_x, pixel_y;
@@ -17,9 +16,6 @@ public class SimpleMobData {
 		pixel_x = px;
 		pixel_y = py;
 		
-		/*if (type == AbstractMob.ENEMY_NINJA_EASY) {
-			System.out.print("");
-		}*/
 	}
 	
 	

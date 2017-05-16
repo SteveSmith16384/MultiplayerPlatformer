@@ -2,7 +2,7 @@ package com.scs.multiplayerplatformer.game;
 
 import ssmith.android.lib2d.MyPointF;
 
-public class PhysicsEngine {
+public final class PhysicsEngine {
 	
 	private MyPointF dir;
 	public MyPointF offset;

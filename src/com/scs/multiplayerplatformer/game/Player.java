@@ -1,6 +1,6 @@
 package com.scs.multiplayerplatformer.game;
 
-public class Player {
+public final class Player {
 
 	public int num, score;
 	

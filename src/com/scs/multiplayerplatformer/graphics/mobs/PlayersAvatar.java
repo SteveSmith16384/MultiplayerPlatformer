@@ -14,7 +14,7 @@ import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.input.IInputDevice;
 
-public class PlayersAvatar extends AbstractWalkingMob {
+public final class PlayersAvatar extends AbstractWalkingMob {
 
 	public float move_x_offset = 0;
 	public BlockInventory inv;

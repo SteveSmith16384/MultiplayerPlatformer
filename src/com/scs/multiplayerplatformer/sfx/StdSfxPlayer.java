@@ -2,7 +2,7 @@ package com.scs.multiplayerplatformer.sfx;
 
 import ssmith.audio.SoundCacheThread;
 
-public class StdSfxPlayer extends SoundCacheThread implements ISfxPlayer {
+public final class StdSfxPlayer extends SoundCacheThread implements ISfxPlayer {
 
 	public StdSfxPlayer(String _root) {
 		super(_root);

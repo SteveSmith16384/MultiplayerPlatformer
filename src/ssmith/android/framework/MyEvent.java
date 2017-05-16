@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 
 import com.scs.multiplayerplatformer.Statics;
 
-public class MyEvent {
+public final class MyEvent {
 	
 	private MouseEvent mouseEvent;
 	

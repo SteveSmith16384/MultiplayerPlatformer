@@ -15,7 +15,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class XMLHelper {
+public final class XMLHelper {
 
 	private HashMap<String, String> map = new HashMap<>();
 

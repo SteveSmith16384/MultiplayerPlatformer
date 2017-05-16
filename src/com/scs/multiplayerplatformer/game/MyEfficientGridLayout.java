@@ -7,7 +7,7 @@ import ssmith.android.lib2d.layouts.EfficientGridLayout;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
-public class MyEfficientGridLayout extends EfficientGridLayout implements IProcessable, IDrawable {
+public final class MyEfficientGridLayout extends EfficientGridLayout implements IProcessable, IDrawable {
 
 	private GameModule game;
 

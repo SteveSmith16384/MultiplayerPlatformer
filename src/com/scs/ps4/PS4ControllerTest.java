@@ -9,7 +9,7 @@ import org.gamepad4j.IStick;
 import org.gamepad4j.StickID;
 import org.gamepad4j.StickPosition;
 
-public class PS4ControllerTest {
+public final class PS4ControllerTest {
 
 	public static void main(String[] args) {
 		new PS4ControllerTest();

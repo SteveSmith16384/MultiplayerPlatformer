@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 
 import com.scs.multiplayerplatformer.Statics;
 
-public class ImageCache extends Hashtable<String, BufferedImage> implements Runnable {
+public class ImageCache extends Hashtable<String, BufferedImage> {//implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 	

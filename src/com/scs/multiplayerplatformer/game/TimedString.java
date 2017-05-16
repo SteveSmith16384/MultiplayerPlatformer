@@ -1,6 +1,6 @@
 package com.scs.multiplayerplatformer.game;
 
-public class TimedString implements IProcessable {
+public final class TimedString implements IProcessable {
 	
 	private String text = "";
 	private long duration;

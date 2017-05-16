@@ -1,7 +1,7 @@
 package ssmith.android.framework;
 
 
-public class ErrorReporter {
+public final class ErrorReporter {
 
 	private ErrorReporter() {
 		
