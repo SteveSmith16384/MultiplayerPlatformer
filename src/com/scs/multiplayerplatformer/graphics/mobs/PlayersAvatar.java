@@ -49,9 +49,9 @@ public class PlayersAvatar extends AbstractWalkingMob {
 			if (is_on_ice == false) {
 				move_x_offset = 0;
 			}
-			if (input == null) {
+			/*if (input == null) {
 				Statics.pe("Error!");
-			}
+			}*/
 			if (input.isLeftPressed()) { // todo - null?
 				move_x_offset = -1 * input.getStickDistance();
 			} else if (input.isRightPressed()) {

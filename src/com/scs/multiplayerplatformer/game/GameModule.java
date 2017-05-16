@@ -1,5 +1,6 @@
 package com.scs.multiplayerplatformer.game;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,7 +30,7 @@ import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 import com.scs.multiplayerplatformer.input.IInputDevice;
 import com.scs.multiplayerplatformer.input.NewControllerListener;
 import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
-import com.scs.multiplayerplatformer.mapgen.LoadMap;
+import com.scs.multiplayerplatformer.mapgen.MapLoader;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 
 
@@ -85,7 +86,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	public GameModule(AbstractActivity act, int _level) { 
+	public GameModule(AbstractActivity act) { 
 		super(act, null);
 
 		this.stat_cam.lookAtTopLeft(true);
@@ -95,7 +96,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		this.setBackground("ninja_background2");
 
 		// Load a player for each controller
-		startNewLevel(_level);
+		startNewLevel();
 
 		act.thread.deviceThread.addListener(this);
 
@@ -109,15 +110,23 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	private void startNewLevel(int _level) {
+	private void startNewLevel() {
 		Statics.act.sound_manager.levelStart();
+
+		new File(Statics.MAP_DIR).mkdirs();
 		
-		if (Statics.RANDOM_LEVELS) {
+		String maps[] = new File(Statics.MAP_DIR).list();
+		
+		if (maps == null || maps.length <= 0) {
+			throw new RuntimeException("No maps found!  Put them in " + Statics.MAP_DIR);
+		}
+		
+		/*if (Statics.RANDOM_LEVELS) {
 			level = NumberFunctions.rnd(1, Statics.MAX_LEVEL_NUM);
 		} else {
 			level = _level;
-		}
-		
+		}*/
+
 		entities = new TSArrayList<IProcessable>();
 
 		this.root_node.detachAllChildren();
@@ -127,7 +136,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		new EnemyEventTimer(this);
 		levelEndTime = System.currentTimeMillis() + 20;
 
-		loadMap();
+		loadMap(Statics.MAP_DIR + maps[NumberFunctions.rnd(0, maps.length-1)]);
 
 		Iterator<IInputDevice> it = Statics.act.thread.deviceThread.getDevices().iterator();
 		while (it.hasNext()) {
@@ -140,6 +149,36 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		}
 
 		this.showToast("Level " + this.level + "!");
+	}
+
+
+	private void loadMap(String filename) {
+		/*String filename = null;
+		if (Statics.TEST_LEVEL > 0) {
+			filename = "testmap" + Statics.TEST_LEVEL + ".csv";
+		} else {
+			filename = "testmap" + level + ".csv";
+		}*/
+		original_level_data = new MapLoader(filename, false);
+		original_level_data.getMap();
+
+		new_grid = new MyEfficientGridLayout(this, original_level_data.getGridWidth(), original_level_data.getGridHeight(), Statics.SQ_SIZE);
+		this.root_node.attachChild(new_grid);
+		this.entities.add(new_grid);
+
+		this.stat_node_back.updateGeometricState();
+		this.stat_node_front.updateGeometricState();
+
+		for (int map_y=0 ; map_y<original_level_data.getGridHeight() ; map_y++) {
+			for (int map_x=0 ; map_x<this.original_level_data.getGridWidth() ; map_x++) {
+				byte data = original_level_data.getGridDataAt(map_x, map_y);
+				if (data > 0) {
+					this.addBlock(data, map_x, map_y, false);
+				}
+			}
+		}
+		this.root_node.updateGeometricState();
+
 	}
 
 
@@ -333,37 +372,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	private void loadMap() {
-		String filename = null;
-		if (Statics.TEST_LEVEL > 0) {
-			filename = "testmap" + Statics.TEST_LEVEL + ".csv";
-		} else {
-			filename = "testmap" + level + ".csv";
-		}
-		original_level_data = new LoadMap(filename);
-		original_level_data.getMap();
-
-		new_grid = new MyEfficientGridLayout(this, original_level_data.getGridWidth(), original_level_data.getGridHeight(), Statics.SQ_SIZE);
-		this.root_node.attachChild(new_grid);
-		this.entities.add(new_grid);
-
-		this.stat_node_back.updateGeometricState();
-		this.stat_node_front.updateGeometricState();
-		//this.root_cam.lookAt(root_node, false);
-
-		for (int map_y=0 ; map_y<original_level_data.getGridHeight() ; map_y++) {
-			for (int map_x=0 ; map_x<this.original_level_data.getGridWidth() ; map_x++) {
-				byte data = original_level_data.getGridDataAt(map_x, map_y);
-				if (data > 0) {
-					this.addBlock(data, map_x, map_y, false);
-				}
-			}
-		}
-		this.root_node.updateGeometricState();
-
-	}
-
-
 	public boolean isAreaClear(float x, float y, float w, float h, boolean check_blocks) {
 		dummy_rect.setByLTWH(x, y, w, h);
 		return isAreaClear(dummy_rect, check_blocks);
@@ -477,6 +485,14 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	private synchronized void loadPlayer(IInputDevice input) {
+		if (input == null) {
+			throw new NullPointerException("Input is null");
+		}
+		// Restart all other players
+		for(PlayersAvatar avatar : this.avatars) {
+			this.restartPlayer(avatar);
+		}
+
 		int num = avatars.size();
 
 		Player player = null;
@@ -498,28 +514,14 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	public void restartPlayer(PlayersAvatar player) {
+	public void restartPlayer(PlayersAvatar avatar) {
 		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
 		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
-		player.setLocation(x, y);
-		addToProcess_Instant(player);
-		//root_node.attachChild(player); already attached!
-		player.updateGeometricState();
+		avatar.setLocation(x, y);
+		addToProcess_Instant(avatar);
+		avatar.updateGeometricState();
 
 	}
-
-	/*public void checkIfMapNeedsLoading() {
-		if (players.size() > 0) {
-			for (PlayersAvatar player : this.players) {
-				int pl_sq = (int)((player.getWorldX() + Statics.SCREEN_WIDTH) / Statics.SQ_SIZE);
-				if (pl_sq > this.map_loaded_up_to_col) {
-					loadMoreMap(pl_sq);
-				}
-			}
-		} else {
-			loadMoreMap((int)(Statics.SCREEN_WIDTH/Statics.SQ_SIZE_INT));
-		}
-	}*/
 
 
 	public TSArrayList<IProcessable> getOthersInstant() {
@@ -551,19 +553,10 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		this.avatars.remove(avatar);
 		// check if no players left
 		if (this.avatars.isEmpty()) {
-			this.startNewLevel(this.level + 1);
+			this.startNewLevel();
 		}
 	}
 
-
-	/*	public boolean onKeyDown(int keyCode, KeyEvent msg) {
-		if (keyCode == KeyEvent.VK_ESCAPE) {
-			this.returnTo();
-			return true;
-		}
-		return false;
-	}
-	 */
 
 }
 

@@ -4,10 +4,10 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class AbstractLevelData {//extends Thread {
+public abstract class AbstractLevelData {
 
 	public byte[][] data;
-	protected Point start_pos;//, amulet_pos;
+	protected Point start_pos;
 	public HashMap<Byte, Integer> block_inv;
 	public ArrayList<SimpleMobData> mobs = new ArrayList<SimpleMobData>();
 	public volatile int row, max_rows; // To track progress
@@ -27,27 +27,8 @@ public abstract class AbstractLevelData {//extends Thread {
 
 
 	public Point getStartPos() {
-		/*if (start_pos == null) {
-			// Choose a random location
-			out: for (int i = 0 ; i<20 ; i++) { // 20 attempts
-				int x = Functions.rnd(data.length/20, data.length/5);
-				for (int y=1 ; y<data[0].length ; y++) {
-					if (data[x][y] != Block.NOTHING_DAYLIGHT) {
-						if (Block.IsSolidGround(data[x][y]) == false) {// != Block.SOIL && data[x][y].type != Block.GRASS && data[x][y].type != Block.SNOW) {
-							//if (data[x][y].type != Block.GRASS) {
-							//i--;
-							break;
-						}
-						//if (data[x][y].type == Block.GRASS || data[x][y].type == Block.SOIL || data[x][y].type == Block.SNOW) {
-						start_pos = new Point(x, y-3);
-						break out;
-					}
-				}
-			}
-		}*/
 		if (start_pos == null) {
-			// Can't find anywhere, so resort to original location
-			start_pos = new Point(3, (data[0].length / 4)-5);
+			throw new NullPointerException("No start position defined");
 		}
 		return this.start_pos;
 	}
@@ -56,11 +37,6 @@ public abstract class AbstractLevelData {//extends Thread {
 	public void setStartPos(int map_x, int map_y) {
 		start_pos = new Point(map_x, map_y);
 	}
-
-
-	/*public Point getAmuletPos() {
-		return this.amulet_pos;
-	}*/
 
 
 	public int getGridHeight() {

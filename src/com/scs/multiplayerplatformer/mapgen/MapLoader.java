@@ -2,6 +2,8 @@ package com.scs.multiplayerplatformer.mapgen;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +13,7 @@ import ssmith.lang.NumberFunctions;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
-public class LoadMap extends AbstractLevelData {
+public class MapLoader extends AbstractLevelData {
 
 	// Tags
 	public static final String HEADER_TAG = "Worldcrafter Save File";
@@ -19,19 +21,23 @@ public class LoadMap extends AbstractLevelData {
 	public static final String MAP_DATA_TAG = "Map_data";
 	public static final String INV_DATA_TAG = "Inv_data";
 	public static final String MOB_DATA_TAG = "Mob_data";
+	public static final String NAME_TAG = "Name:";
 
 	// Block Codes
-	public static final String ON_FIRE = "of";
+	//public static final String ON_FIRE = "of";
 
 	public static final int VERSION = 2;
 
 	private String stage = "", filename = "";
+	private boolean is_resource;
 	private int version_found = 1;
+	public String mapName = "";
 
-	public LoadMap(String _filename) {
+	public MapLoader(String _filename, boolean _is_resource) {
 		super();
 
 		filename = _filename;
+		is_resource = _is_resource;
 	}
 
 
@@ -39,16 +45,21 @@ public class LoadMap extends AbstractLevelData {
 	public void getMap() {
 		try {
 			List<String> text = new ArrayList<>();
-			BufferedReader txtReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/assets/maps/" + filename)));
-			while (true) {
-				String s = txtReader.readLine();
-				if (s != null) {
-					text.add(s);
-				} else {
-					break;
+			if (is_resource) {
+				BufferedReader txtReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/assets/maps/" + filename)));
+				while (true) {
+					String s = txtReader.readLine();
+					if (s != null) {
+						text.add(s);
+					} else {
+						break;
+					}
 				}
+				txtReader.close();
+			} else {
+				text = Files.readAllLines(FileSystems.getDefault().getPath(filename, ""));
 			}
-			txtReader.close();
+
 
 			String lines[] = new String[text.size()];
 			lines = text.toArray(lines);
@@ -75,6 +86,9 @@ public class LoadMap extends AbstractLevelData {
 						continue;
 					} else if (cell.equalsIgnoreCase(MOB_DATA_TAG)) {
 						stage = MOB_DATA_TAG;
+						continue;
+					} else if (cell.equalsIgnoreCase(NAME_TAG)) {
+						mapName = cell.substring(NAME_TAG.length());
 						continue;
 					} 
 

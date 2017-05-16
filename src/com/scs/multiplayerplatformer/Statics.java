@@ -14,7 +14,7 @@ import com.scs.multiplayerplatformer.start.StartupModule;
 public final class Statics {
 
 	public static final int TEST_LEVEL = 4;
-	public static final boolean RANDOM_LEVELS = true;
+	//public static final boolean RANDOM_LEVELS = true;
 	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = true;
@@ -24,7 +24,7 @@ public final class Statics {
 	public static final byte SD_PLAYERS_SIDE = 0;
 	public static final byte SD_ENEMY_SIDE = 1;
 
-	public static final int MAX_LEVEL_NUM = 3;
+	public static final String MAP_DIR = "./maps/";
 	public static final boolean SHOW_STATS = false;
 	public static final int LOOP_DELAY = 30;
 	public static final int MAX_INSTANTS = 999;

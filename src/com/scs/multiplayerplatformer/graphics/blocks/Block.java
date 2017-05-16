@@ -89,8 +89,8 @@ public class Block extends GameObject {
 		map_x = _map_x;
 		map_y = _map_y;
 	}
-	
-	
+
+
 	private void generateImages(int width, float scale) {
 		int size = width + 1;//(int)Math.floor(Statics.SQ_SIZE*scale);
 		/*if (Statics.DEBUG) {
@@ -323,12 +323,12 @@ public class Block extends GameObject {
 			player.inv.addBlock(this.getType(), Statics.SHURIKENS_FROM_BLOCK);
 			destroy(0, false, null);
 			break;
-			
+
 		case Block.MEDIKIT:
 			//player.incHealthToMax();
 			destroy(0, false, null);
 			break;
-			
+
 		case Block.END_OF_LEVEL:
 			/*game.level++;
 			GameModule mod = new GameModule(act, game.level);
@@ -336,7 +336,7 @@ public class Block extends GameObject {
 			destroy(0, false, null);*/
 			game.playerCompletedLevel(player);
 			break;
-			
+
 		case Block.SAND:
 			destroy(2, false, null);
 		}
@@ -655,23 +655,23 @@ public class Block extends GameObject {
 			int i = Functions.rnd(1, 10); 
 			if (i <= 3) {
 				//if (this.on_fire == false) {
-					byte[] types2 = {NOTHING_DAYLIGHT};
-					if (checkAndChangeAdjacentSquares(-1, 0, types2, TANGLEWEED, true)) {
-						break;
-					}
-					if (checkAndChangeAdjacentSquares(1, 0, types2, TANGLEWEED, true)) {
-						break;
-					}
-					if (checkAndChangeAdjacentSquares(0, 1, types2, TANGLEWEED, true)) {
-						break;
-					}
-					if (checkAndChangeAdjacentSquares(0, -1, types2, TANGLEWEED, true)) {
-						break;
-					}
+				byte[] types2 = {NOTHING_DAYLIGHT};
+				if (checkAndChangeAdjacentSquares(-1, 0, types2, TANGLEWEED, true)) {
+					break;
+				}
+				if (checkAndChangeAdjacentSquares(1, 0, types2, TANGLEWEED, true)) {
+					break;
+				}
+				if (checkAndChangeAdjacentSquares(0, 1, types2, TANGLEWEED, true)) {
+					break;
+				}
+				if (checkAndChangeAdjacentSquares(0, -1, types2, TANGLEWEED, true)) {
+					break;
+				}
 				//}
-			} else if (i == 10){
-				remove_from_process = true;
-			}
+		} else if (i == 10){
+			remove_from_process = true;
+		}
 			break;
 		case MONSTER_GENERATOR:
 			remove_from_process = false;
@@ -702,26 +702,6 @@ public class Block extends GameObject {
 			}*/
 		}
 
-		/*if (Falls(this.getType())) {
-			if (game.new_grid.isSquareEmpty(this.map_x, this.map_y+1)) {
-				game.addBlock(this.getType(), this.map_x, this.map_y+1, true);
-				this.remove();
-			}
-		} else { // Always falls if not attached to anything UNLESS DARKNESS!
-			//if (this.getType() != Block.DARKNESS && this.getType() != Block.DARKNESS2) {
-			if (game.new_grid.isSquareEmpty(this.map_x, this.map_y+1)) {
-				if (game.new_grid.isSquareEmpty(this.map_x, this.map_y-1)) {
-					if (game.new_grid.isSquareEmpty(this.map_x+1, this.map_y)) {
-						if (game.new_grid.isSquareEmpty(this.map_x-1, this.map_y)) {
-							game.addBlock(this.getType(), this.map_x, this.map_y+1, true);
-							this.remove();
-						}
-					}
-				}
-			}
-			//}
-		}*/
-
 		if (remove_from_process) {
 			this.game.removeFromProcess(this);
 		}
@@ -740,92 +720,11 @@ public class Block extends GameObject {
 	}
 
 
-	/**
-	 * Returns false if fire is out.
-	 * @return
-	 */
-	/*private boolean checkFire() {
-		if (this.event_time < System.currentTimeMillis()) {
-			event_time = System.currentTimeMillis() + FIRE_DURATION;
-			int i = Functions.rnd(1, 8);
-			if (i == 1) {
-				this.remove();
-				return false;
-			} else { // Spread!
-				Block b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x+1, this.map_y);
-				if (b != null) {
-					if (Flammable(b.getType()) && b.on_fire == false) {
-						b.on_fire = true;
-						game.addToProcess_Instant(b, true);
-					}
-				}
-				b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x-1, this.map_y);
-				if (b != null) {
-					if (Flammable(b.getType()) && b.on_fire == false) {
-						b.on_fire = true;
-						game.addToProcess_Slow(b, true);
-					}
-				}
-				b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x, this.map_y+1);
-				if (b != null) {
-					if (Flammable(b.getType()) && b.on_fire == false) {
-						b.on_fire = true;
-						game.addToProcess_Slow(b, true);
-					}
-				}
-				b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x, this.map_y-1);
-				if (b != null) {
-					if (Flammable(b.getType()) && b.on_fire == false) {
-						b.on_fire = true;
-						game.addToProcess_Slow(b, true);
-					}
-				}
-			}
-		}
-		return true;
-	}*/
-
-
-	/*private void checkLavaSquares() {
-		this.checkSpecificLavaSquare(-1, 0);
-		this.checkSpecificLavaSquare(1, 0);
-		this.checkSpecificLavaSquare(0, -1);
-		this.checkSpecificLavaSquare(0, 1);
-	}*/
-
-
-	/*private void checkSpecificLavaSquare(int off_x, int off_y) {
-		if (off_y >= 0) { // Lava only flows across and down
-			byte[] types_lava = {NOTHING_DAYLIGHT, FIRE, APPLE, CHEST, GOLD, MONSTER_GENERATOR, DYNAMITE, ACORN, LADDER, COAL, TREE_BRANCH_LEFT, TREE_BRANCH_RIGHT, ROPE};
-			checkAndChangeAdjacentSquares(off_x, off_y, types_lava, LAVA, false);
-			byte[] types_lava2 = {WATER};
-			checkAndChangeAdjacentSquares(off_x, off_y, types_lava2, ROCK, true);
-		}
-		Block b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x+off_x, this.map_y+off_y);
-		if (b != null) {
-			if (Flammable(b.getType())) {
-				b.on_fire = true;
-				game.addToProcess_Slow(b, true);
-				//this.game.addBlock(Block.FIRE, this.map_x+off_x, this.map_y+off_y, true, false);
-			}
-		}
-	}*/
-
-
 	private boolean checkAndChangeAdjacentSquares(int off_x, int off_y, byte[] from, byte to, boolean check_for_sprites) {
 		for(int i=0 ;i<from.length ; i++) {
-			//if (this.map_x+off_x <= game.map_loaded_up_to_col) {
-				Block b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x+off_x, this.map_y+off_y);
-				if (b != null) {
-					if (b.getType() == from[i]) {
-						// Check area is clear
-						if (check_for_sprites == false || game.isAreaClear((map_x+off_x)*Statics.SQ_SIZE, (map_y+off_y)*Statics.SQ_SIZE, Statics.SQ_SIZE, Statics.SQ_SIZE, false)) {
-							game.addBlock(to, map_x+off_x, map_y+off_y, true);
-							return true;
-						}
-						break;
-					}
-				} else if (from[i] == NOTHING_DAYLIGHT) {
+			Block b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x+off_x, this.map_y+off_y);
+			if (b != null) {
+				if (b.getType() == from[i]) {
 					// Check area is clear
 					if (check_for_sprites == false || game.isAreaClear((map_x+off_x)*Statics.SQ_SIZE, (map_y+off_y)*Statics.SQ_SIZE, Statics.SQ_SIZE, Statics.SQ_SIZE, false)) {
 						game.addBlock(to, map_x+off_x, map_y+off_y, true);
@@ -833,7 +732,14 @@ public class Block extends GameObject {
 					}
 					break;
 				}
-			//}
+			} else if (from[i] == NOTHING_DAYLIGHT) {
+				// Check area is clear
+				if (check_for_sprites == false || game.isAreaClear((map_x+off_x)*Statics.SQ_SIZE, (map_y+off_y)*Statics.SQ_SIZE, Statics.SQ_SIZE, Statics.SQ_SIZE, false)) {
+					game.addBlock(to, map_x+off_x, map_y+off_y, true);
+					return true;
+				}
+				break;
+			}
 		}
 		return false;
 	}
@@ -870,7 +776,7 @@ public class Block extends GameObject {
 			}
 			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
 		}
-		
+
 	}
 
 }

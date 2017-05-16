@@ -1,68 +1,61 @@
 Ninjamatic
 
-Throw shurikens at each other and get high score!
-Who has the most points at the end
-Race to complete each small level
-
-
 HOME
+Create new logo
+Make video
 Add baddies to levels
 Make levels look better
 Test full screen
 Create new maps - ice
 Get a font
 Change colour of p2+p3 sprites
-Make video
 Show Harry how to design level
+Give levels names
 
 
 LEVELS
 Maze-like level
 Lots of ropes
 Lots of ladders
-Manic Miner mission
 Map with long route or difficult short route
+Level where jump over lots of dangerous blocks
 
 1 - Bit of everything
 2 - Difficult jump
 3 - Lots of small platforms
 4 - Donkey Kong
-5 - Manic miner
+5 - Manic miner TODO
+
 
 TODO
-Do damage squares
-Restart players when another one joins
-	Time left going up!
-Hold down jump to jump higher
+	Choose map files from folder
 Sometimes player kills enemy
+Check if hit by slime
+Cache bitmaps
+	Restart players when another one joins
+	Time left going up!
 	Wrap graphic around if no graphics
-Choose map files from folder
 	Add music
 	Timer - stop at zero
 	Esc to quit back to menu
 	Choose menu option with keys
 Search for todos
-Check if hit by slime
 	Use sfx
 
 
 LATER
-Give levels names
+Hold down jump to jump higher
 Conveyor belts
 Improve shuriken throw
 Baddy that drop from sky
-Create new logo
 Ninja chop attack!
+Do damage squares
 Turn off ps4 debugging
-Map gen
 Parallax
 Bring wasp back
 Control menus with controller
 More types of enemy
-Use interpol
-FPS not working
 Randomly drop stars
-SelectGameMode module
 Get star image
 
 
@@ -70,9 +63,13 @@ GAMEMODES
 Collect as many stars as possible
 Complete levels as quickly as possible
 Cops and Robbers
+Throw shurikens at each other and get high score!
+Who has the most points at the end
+Race to complete each small level
 
 
 CREDITS
+Gamepad Code thanks to Marcel Schoen (https://github.com/marcelschoen/gamepad4j)
 Music: https://opengameart.org/content/nes-shooter-music-5-tracks-3-jingles
 
 

@@ -167,7 +167,7 @@ public final class MainThread extends Thread {
 		} else {
 			// Load default module
 			if (Statics.DEBUG) {
-				this.setNextModule(new GameModule(Statics.act, 1));
+				this.setNextModule(new GameModule(Statics.act));
 			} else {
 				this.setNextModule(new StartupModule(Statics.act));
 			}

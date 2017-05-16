@@ -2,6 +2,7 @@ package ssmith.awt;
 
 import java.awt.Component;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,11 +12,12 @@ import javax.imageio.ImageIO;
 
 import com.scs.multiplayerplatformer.Statics;
 
-public class ImageCache extends Hashtable<String, BufferedImage> {
+public class ImageCache extends Hashtable<String, BufferedImage> implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 	
 	private static final String IMAGES_DIR = "assets/gfx/";
+	private static final String CACHE_DIR = "./data/imagecache";
 
 	private Component c;
 
@@ -23,6 +25,8 @@ public class ImageCache extends Hashtable<String, BufferedImage> {
 		super();
 
 		c = _c;
+		
+		new File(CACHE_DIR).mkdirs();
 	}
 
 
@@ -79,6 +83,8 @@ public class ImageCache extends Hashtable<String, BufferedImage> {
 					}
 					img = scaled;
 					put(key, img);
+					
+					//ImageIO.write(arg0, arg1, arg2)
 				} catch (IOException ex) {
 					ex.printStackTrace();
 				}

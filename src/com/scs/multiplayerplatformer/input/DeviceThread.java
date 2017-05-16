@@ -37,6 +37,7 @@ public class DeviceThread extends Thread {
 
 		keyboard1 = new KeyboardInput(window, 1);
 		keyboard2 = new KeyboardInput(window, 2);
+		
 		start();
 
 	}
