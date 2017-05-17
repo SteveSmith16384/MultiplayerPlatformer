@@ -45,7 +45,7 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 			
 		}
 
-		mp3Music = new MP3Player("music/Venus.mp3", true);
+		mp3Music = new MP3Player("assets/music/Venus.mp3", true);
 		mp3Music.start();
 
 	}

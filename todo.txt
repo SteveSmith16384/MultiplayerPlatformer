@@ -1,16 +1,17 @@
 Ninjamatic
 
 HOME
-	Put original Ninja levels in this game
-Create new logo
+Remove header tags
+Make music mono
 Make video
+Sound not working
+Create new logo
 Add baddies to levels
 Make levels look better
-Test full screen
+	Test full screen
 Create new maps - ice
 Get a font
 Change colour of p2+p3 sprites
-Give levels names
 
 
 LEVELS
@@ -28,34 +29,35 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
-Getting multiple players
-null controllers still
-GameModule - set mod_return_to
-Esc to quit back to menu
-Negative score
-Not showing time
-Enemy ninja shurikan killing other enemy ninjas
-Show filename if no level name
-Start cam on player start pos
 Sometimes player kills enemy
+Not dying if on top of enemy
+	Show filename if no level name
+	Enemy ninja shurikan killing other enemy ninjas
+	Start cam on player start pos
 Check if hit by slime
-Cache bitmaps
-	Restart players when another one joins
+	Getting multiple players
+	PS4 controller - down left for down
+	null controllers still
+	GameModule - set mod_return_to
+	Esc to quit back to menu
+	Negative score
+	Not showing time
 	Time left going up!
 music not found
 	Timer - stop at zero
 	Choose menu option with keys
 Search for todos
 	Use sfx
+Give levels their own background
 
 
 LATER
+Give each level its own time
 Hold down jump to jump higher
 Conveyor belts
 Improve shuriken throw
 Baddy that drop from sky
 Ninja chop attack!
-Do damage squares
 Turn off ps4 debugging
 Parallax
 Bring wasp back
@@ -65,7 +67,7 @@ Randomly drop stars
 Get star image
 
 
-GAMEMODES
+GAME MODES
 Collect as many stars as possible
 Complete levels as quickly as possible
 Cops and Robbers

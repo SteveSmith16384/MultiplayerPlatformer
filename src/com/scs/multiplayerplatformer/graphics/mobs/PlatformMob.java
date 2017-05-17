@@ -84,7 +84,6 @@ public class PlatformMob extends AbstractMob {
 				return false; // So it doesn't stop us moving up
 			}
 		}
-		//return true;
 		return true;
 	}
 

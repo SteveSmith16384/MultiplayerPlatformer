@@ -2,15 +2,15 @@ package com.scs.multiplayerplatformer.mapgen;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public abstract class AbstractLevelData {
 
 	public byte[][] data;
 	protected Point start_pos;
-	public HashMap<Byte, Integer> block_inv;
+	//public HashMap<Byte, Integer> block_inv;
 	public ArrayList<SimpleMobData> mobs = new ArrayList<SimpleMobData>();
-	public volatile int row, max_rows; // To track progress
+	//public volatile int row, max_rows; // To track progress
+	public String levelName;
 
 	public AbstractLevelData() {
 		//super("MapGen");

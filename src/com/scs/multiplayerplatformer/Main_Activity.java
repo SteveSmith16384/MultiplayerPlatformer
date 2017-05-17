@@ -13,7 +13,7 @@ public final class Main_Activity extends AbstractActivity {
 	public void onCreate() {
 		super.onCreate();
 
-		Statics.BACKGROUND_R = "ninja_background2";
+		Statics.BACKGROUND_R = "ninja_background2.jpg";
 		Statics.PLAYER_SPEED_DIVISOR = 7f;
 	}
 

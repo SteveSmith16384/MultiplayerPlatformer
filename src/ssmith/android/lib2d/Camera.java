@@ -9,7 +9,7 @@ import com.scs.multiplayerplatformer.Statics;
 public class Camera extends RectF {
 
 	//public static final long CAM_UPDATE = 0;
-	private static final float MOVE_SPEED = .1f;
+	//private static final float MOVE_SPEED = .1f;
 	private static final float LOCKON_DIST = 20; // Was 10
 
 	public int zoom = 1;

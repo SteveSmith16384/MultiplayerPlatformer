@@ -606,12 +606,12 @@ public class Block extends GameObject {
 			this.game.addBlock(Block.NOTHING_DAYLIGHT, this.map_x, this.map_y, true);
 		}
 		this.game.removeFromProcess(this);
-		if (this.getType() != Block.NOTHING_DAYLIGHT) {
+		/*if (this.getType() != Block.NOTHING_DAYLIGHT) {
 			this.addAdjacentBlocksToProcess();
-		}
+		}*/
 	}
 
-
+/*
 	private void addAdjacentBlocksToProcess() {
 		addBlockToProcess(this.map_x+1, this.map_y);
 		addBlockToProcess(this.map_x-1, this.map_y);
@@ -622,11 +622,11 @@ public class Block extends GameObject {
 
 	private void addBlockToProcess(int map_x, int map_y) {
 		Block b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(map_x, map_y);
-		/*if (b != null) {
+		if (b != null) {
 			game.addToProcess(b, false);
-		}*/
+		}
 	}
-
+*/
 
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {

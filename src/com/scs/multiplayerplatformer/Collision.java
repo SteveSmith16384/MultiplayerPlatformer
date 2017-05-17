@@ -49,7 +49,11 @@ public final class Collision {
 
 
 	private static boolean ThrownItem_AbstractWalkingMob(ThrownItem thrown, AbstractWalkingMob mob) {
-		if (thrown.thrower != mob) {
+		byte side = -1;
+		if (thrown.thrower != null) {
+			side = thrown.thrower.side;
+		}
+		if (side != mob.side) {
 			thrown.remove();
 			mob.died();
 			return true;

@@ -80,7 +80,7 @@ public final class DeviceThread extends Thread {
 						}
 					}
 				}
-				Functions.delay(100);
+				Functions.delay(1000);
 			} 
 		} catch (Exception ex) {
 			ex.printStackTrace();

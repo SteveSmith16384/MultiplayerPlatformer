@@ -32,6 +32,7 @@ import com.scs.multiplayerplatformer.input.NewControllerListener;
 import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
 import com.scs.multiplayerplatformer.mapgen.MapLoader;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
+import com.scs.multiplayerplatformer.start.StartupModule;
 
 
 public final class GameModule extends AbstractModule implements IDisplayText, NewControllerListener {
@@ -47,7 +48,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	private TSArrayList<IProcessable> entities;
 	public AbstractLevelData original_level_data;
-	public MyEfficientGridLayout new_grid;
+	public MyEfficientGridLayout new_grid; // todo - rename
 	private TimedString msg;
 	private Rectangle dummy_rect = new Rectangle(); // for checking the area is clear
 	private long levelEndTime;
@@ -56,6 +57,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private Interval check_for_new_mobs = new Interval(500, true);
 	public List<PlayersAvatar> avatars = new ArrayList<>();
 	public List<Player> players = new ArrayList<>();
+	private List<IInputDevice> newControllers = new ArrayList<>();
 
 	public float current_scale = Statics.MAX_ZOOM;// .25f;//1;//.5f;
 	public float new_scale = current_scale;
@@ -89,11 +91,13 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	public GameModule(AbstractActivity act) { 
 		super(act, null);
 
+		this.mod_return_to = new StartupModule(act);
+
 		this.stat_cam.lookAtTopLeft(true);
 
 		str_time_remaining = act.getString("time_remaining");
 
-		this.setBackground("ninja_background2");
+		this.setBackground(Statics.BACKGROUND_R);
 
 		// Load a player for each controller
 		startNewLevel();
@@ -114,18 +118,12 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		Statics.act.sound_manager.levelStart();
 
 		new File(Statics.MAP_DIR).mkdirs();
-		
+
 		String maps[] = new File(Statics.MAP_DIR).list();
-		
+
 		if (maps == null || maps.length <= 0) {
 			throw new RuntimeException("No maps found!  Put them in " + Statics.MAP_DIR);
 		}
-		
-		/*if (Statics.RANDOM_LEVELS) {
-			level = NumberFunctions.rnd(1, Statics.MAX_LEVEL_NUM);
-		} else {
-			level = _level;
-		}*/
 
 		entities = new TSArrayList<IProcessable>();
 
@@ -134,7 +132,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		this.stat_node_front.detachAllChildren();
 
 		new EnemyEventTimer(this);
-		levelEndTime = System.currentTimeMillis() + 20;
+		levelEndTime = System.currentTimeMillis() + (20 * 1000);
 
 		loadMap(Statics.MAP_DIR + maps[NumberFunctions.rnd(0, maps.length-1)]);
 
@@ -197,6 +195,12 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	public void updateGame(long interpol) {
+		synchronized (newControllers) {
+			while (this.newControllers.isEmpty() == false) {
+				this.loadPlayer(this.newControllers.remove(0));
+			}
+		}
+
 		// Remove any objects marked for removal
 		this.entities.refresh();
 
@@ -251,35 +255,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 					new_scale *= Statics.ZOOM_SPEED;
 				}				
 
-				/*float closestEdge = Statics.SCREEN_HEIGHT/2;
-				boolean zoomOut = false;
-				boolean zoomIn = false;
-				for (PlayersAvatar player : avatars) {
-					float sx = player.getWindowX(this.root_cam, this.current_scale);
-					float sy = player.getWindowY(this.root_cam, this.current_scale);
-					float z = sx;
-					if (z < closestEdge) {
-						closestEdge = z;
-					}
-					z = Statics.SCREEN_WIDTH - sx;
-					if (z < closestEdge) {
-						closestEdge = z;
-					}
-					z = sy;
-					if (z < closestEdge) {
-						closestEdge = z;
-					}
-					z = Statics.SCREEN_HEIGHT - sy;
-					if (z < closestEdge) {
-						closestEdge = z;
-					}
-				}				
-				if (closestEdge < Statics.SCREEN_HEIGHT/2) { // zoom out
-					new_scale /= Statics.ZOOM_SPEED;
-				} else if (closestEdge > Statics.SCREEN_HEIGHT/4) { // zoom in
-					new_scale *= Statics.ZOOM_SPEED;
-				}*/
-
 
 				/*if (Statics.DEBUG) {
 					Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
@@ -291,7 +266,11 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		} else {
 			// No players yet!
-			this.root_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT, false);
+			float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
+			//x += this.new_grid.getWorldX();
+			float y = (original_level_data.getStartPos().y) * Statics.SQ_SIZE;
+			//y += this.new_grid.getWorldY();
+			this.root_cam.lookAt(x, y, true);
 			new_scale = Statics.MAX_ZOOM;
 		}
 
@@ -347,10 +326,13 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		long timeRemaining = levelEndTime - System.currentTimeMillis();
 		if (timeRemaining > 0) {
 			g.drawText(this.str_time_remaining + ": " + (timeRemaining/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
+		} else {
+			g.drawText("TIME OUT", 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
 		}
+		g.drawText(this.original_level_data.levelName, 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*5), paint_text_ink);
 
 		if (Statics.SHOW_STATS) {
-			g.drawText("Inst Objects: " + this.entities.size(), 10, paint_text_ink.getTextSize()*4, paint_text_ink);
+			g.drawText("Inst Objects: " + this.entities.size(), 10, paint_text_ink.getTextSize()*7, paint_text_ink);
 			//g.drawText("Slow Objects: " + this.others_slow.size(), 10, paint_text_ink.getTextSize()*5, paint_text_ink);
 			//g.drawText("V. Slow Objects: " + this.others_very_slow.size(), 10, paint_text_ink.getTextSize()*6, paint_text_ink);
 			//g.drawText("Darkness: " + this.dark_adj_cont.size(), 10, paint_text_ink.getTextSize()*7, paint_text_ink);
@@ -488,6 +470,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		if (input == null) {
 			throw new NullPointerException("Input is null");
 		}
+
 		// Restart all other players
 		for(PlayersAvatar avatar : this.avatars) {
 			this.restartPlayer(avatar);
@@ -537,8 +520,16 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	@Override
 	public void newController(IInputDevice input) {
-		this.loadPlayer(input);
+		/*Statics.p("newController(): " + input);
 
+		// Check player doesn't already exist
+		for (PlayersAvatar avatar : this.avatars) {
+			if (avatar.i)
+		}
+		this.loadPlayer(input); // This gets called in sep thread!?*/
+		synchronized (newControllers) {
+			this.newControllers.add(input);
+		}
 	}
 
 
@@ -547,9 +538,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		long score_inc = (levelEndTime - System.currentTimeMillis()) / 100;
 		if (score_inc > 0) { // Might be negative
 			avatar.player.score += score_inc;
+			displayText("Player " + avatar.playernumZB + " finished!  Have " + score_inc + " points!");
 		}
-		displayText("Player " + avatar.playernumZB + " finished!  Have " + score_inc + " points!");
-		avatar.remove(); //.removeFromParent();
+		avatar.remove();
 		this.avatars.remove(avatar);
 		// check if no players left
 		if (this.avatars.isEmpty()) {

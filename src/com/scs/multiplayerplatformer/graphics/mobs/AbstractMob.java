@@ -140,7 +140,7 @@ public abstract class AbstractMob extends GameObject {
 					this.collidedWithBlock();
 
 					// Damage the block?
-					if (this.destroy_blocks && off_y == 0) { // Only destroy left.right
+					if (this.destroy_blocks && off_y == 0) { // Only destroy going left/right
 						if (Functions.rnd(1, 10) == 1) {
 							b.damage(1, false, null);
 						}
@@ -226,32 +226,6 @@ public abstract class AbstractMob extends GameObject {
 		return null;
 	}
 
-
-	/*public int getHealth() {
-		return this.health;
-	}*/
-
-
-	/*public void damage(int amt) {
-		this.health -= amt;
-		if (this.health <= 0) {
-			died();
-		}
-	}*/
-
-
-	/*public void incHealth(int amt) {
-		this.health += amt;
-		if (this.health > this.max_health) {
-			this.health = max_health;
-		}
-	}*/
-
-
-	/*public void incHealthToMax() {
-		this.health = max_health;
-	}
-*/
 
 	public void remove() {
 		this.removeFromParent();

@@ -40,18 +40,24 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		inv = new BlockInventory(this);
 
 		this.setNumFrames(8);
+
+		if (input == null) {
+			throw new RuntimeException("Input is null");
+		}
+
 	}
 
 
 	@Override
 	public void process(long interpol) {
+		/*if (input == null) {
+			return; // Player has been added, but constructor not finished!
+		}
+		*/
 		if (frozenUntil < System.currentTimeMillis()) {
 			if (is_on_ice == false) {
 				move_x_offset = 0;
 			}
-			/*if (input == null) {
-				Statics.pe("Error!");
-			}*/
 			if (input.isLeftPressed()) { // todo - null?
 				move_x_offset = -1 * input.getStickDistance();
 			} else if (input.isRightPressed()) {
@@ -110,8 +116,8 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 			}
 		}
 	}
-	
-	
+
+
 	private void stoppedJumping() {
 		/*if (jumping) {
 			jumping = false;
@@ -187,7 +193,6 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		a_bmp_right[size][6] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_right[size][7] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);		
 	}
-
 
 
 }

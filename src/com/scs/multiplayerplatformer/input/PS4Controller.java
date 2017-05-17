@@ -49,7 +49,8 @@ public final class PS4Controller implements IInputDevice {
 	@Override
 	public boolean isDownPressed() {
 		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
-		return pos.getDirection() == DpadDirection.DOWN;
+		//return pos.getDirection() == DpadDirection.DOWN;
+		return pos.getDegree() > 107 && pos.getDegree() < 252;
 	}
 
 

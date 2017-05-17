@@ -193,23 +193,6 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 
 	}
 
-	/*protected boolean checkIfCanFall() {
-		RectF r = new RectF(this.getWorldBounds().left, this.getWorldBounds().top, this.getWorldBounds().right, this.getWorldBounds().bottom);
-		r.offset(0,  1);
-		// Check for harmful blocks
-		ArrayList<AbstractRectangle> colls = game.new_grid.getColliders(r);
-		for (AbstractRectangle g : colls) {
-			if (g instanceof Block) {
-				Block b = (Block)g;
-				if (Block.BlocksDownMovement(b.getType())) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}*/
-
-
 	protected void alignWithLadder() {
 		// Align us with the ladder
 		if (is_on_ladder) {

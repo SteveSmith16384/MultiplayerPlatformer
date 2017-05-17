@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import ssmith.lang.NumberFunctions;
@@ -16,15 +15,12 @@ import com.scs.multiplayerplatformer.graphics.blocks.Block;
 public final class MapLoader extends AbstractLevelData {
 
 	// Tags
-	public static final String HEADER_TAG = "Worldcrafter Save File";
+	//public static final String HEADER_TAG_ = "Worldcrafter Save File";
 	public static final String VERSION_TAG = "File Version";
 	public static final String MAP_DATA_TAG = "Map_data";
-	public static final String INV_DATA_TAG = "Inv_data";
+	//public static final String INV_DATA_TAG = "Inv_data";
 	public static final String MOB_DATA_TAG = "Mob_data";
 	public static final String NAME_TAG = "Name:";
-
-	// Block Codes
-	//public static final String ON_FIRE = "of";
 
 	public static final int VERSION = 2;
 
@@ -38,6 +34,7 @@ public final class MapLoader extends AbstractLevelData {
 
 		filename = _filename;
 		is_resource = _is_resource;
+		levelName = this.filename;
 	}
 
 
@@ -66,9 +63,9 @@ public final class MapLoader extends AbstractLevelData {
 
 			int map_row = 0;
 			List<byte[]> rows = new ArrayList<byte[]>();
-			max_rows = lines.length;
+			int max_rows = lines.length;
 			int max_row_length = -1;
-			for (row=0 ; row<lines.length ; row++) {
+			for (int row=0 ; row<lines.length ; row++) {
 				lines[row] = lines[row].replaceAll("\"", "");
 				if (lines[row].startsWith("#") == false && lines[row].length() > 0) {
 					String cell = lines[row];
@@ -81,9 +78,9 @@ public final class MapLoader extends AbstractLevelData {
 					} else if (cell.equalsIgnoreCase(VERSION_TAG)) {
 						stage = VERSION_TAG;
 						continue;
-					} else if (cell.equalsIgnoreCase(INV_DATA_TAG)) {
+					/*} else if (cell.equalsIgnoreCase(INV_DATA_TAG)) {
 						stage = INV_DATA_TAG;
-						continue;
+						continue;*/
 					} else if (cell.equalsIgnoreCase(MOB_DATA_TAG)) {
 						stage = MOB_DATA_TAG;
 						continue;
@@ -136,13 +133,13 @@ public final class MapLoader extends AbstractLevelData {
 						}
 						rows.add(this_data);
 						map_row++;
-					} else if (stage.equalsIgnoreCase(INV_DATA_TAG)) {
+					/*} else if (stage.equalsIgnoreCase(INV_DATA_TAG)) {
 						// Load inventory
 						if (block_inv == null) {
 							super.block_inv = new HashMap<Byte, Integer>();
 						}
 						String line[] = lines[row].split(",");
-						super.block_inv.put(NumberFunctions.ParseByte(line[0]), NumberFunctions.ParseInt(line[1]));
+						super.block_inv.put(NumberFunctions.ParseByte(line[0]), NumberFunctions.ParseInt(line[1]));*/
 					} else if (stage.equalsIgnoreCase(MOB_DATA_TAG)) {
 						// Load mobs
 						String line[] = lines[row].split(",");
