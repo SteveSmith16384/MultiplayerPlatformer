@@ -9,6 +9,7 @@ import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.Functions;
 import ssmith.util.Interval;
 
+import com.scs.multiplayerplatformer.Collision;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.graphics.AirBubble;
@@ -23,6 +24,7 @@ public abstract class AbstractMob extends GameObject {
 	// Types
 	public static final byte PLAYER = 0;
 	public static final byte ENEMY_NINJA_EASY = 8;
+	public static final byte WASP = 9;
 	public static final byte PLATFORM1 = 11;
 
 	protected byte current_item = GameModule.HAND;
@@ -56,6 +58,9 @@ public abstract class AbstractMob extends GameObject {
 		case AbstractMob.ENEMY_NINJA_EASY:
 			EnemyNinjaEasy.Subfactory(game, sm.pixel_x, sm.pixel_y);
 			break;
+		case AbstractMob.WASP:
+			Wasp.Subfactory(game, sm.pixel_x, sm.pixel_y);
+			break;
 		case AbstractMob.PLATFORM1:
 			//new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE, Statics.SQ_SIZE, R.drawable.grass, 1, 0, Statics.SQ_SIZE * 4);
 			new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE*2, Statics.SQ_SIZE, "grass", 0, -1, Statics.SQ_SIZE * 4);
@@ -82,10 +87,7 @@ public abstract class AbstractMob extends GameObject {
 	}
 
 
-	/**
-	 * Returns if the move was successful.
-	 * 
-	 */
+	// Returns true of move() was successful
 	protected boolean move(float off_x, float off_y, boolean ladderBlocks) {
 		if (remove_if_far_away) {
 			if (checkIfTooFarAway()) { 
@@ -154,26 +156,9 @@ public abstract class AbstractMob extends GameObject {
 		// Check for collisons with sprites
 		ArrayList<Geometry> colls2 = this.getColliders(this.game.root_node);
 		for (Geometry g : colls2) {
-			/*if (this instanceof PlatformMob || g instanceof PlatformMob) {
-			if (g instanceof PlatformMob) {
-				PlatformMob p = (PlatformMob)g;
-				this.move(p.move_x, p.move_y);
-			}
-			} else if (g instanceof AbstractMob) {
-				AbstractMob am = (AbstractMob)g;
-				if (am.side >= -1 && this.side >= 0 && am.side != this.side) { // Only the players side gets damaged, and only mobs with side >= 0 do damage
-					if (this.side == Statics.SD_PLAYERS_SIDE) {
-						this.damage(2);
-					} else {
-						am.damage(2);
-					}
-				}
-				return false;
-			}*/
-			if (this.collidedWith(g, prev_x, prev_y)) {
+			if (this.collidedWith(g, prev_x, prev_y) == false) {
 				return false;
 			}
-			//return false;
 		}
 		return true;
 	}
@@ -184,13 +169,14 @@ public abstract class AbstractMob extends GameObject {
 	}
 
 
+	// Returns false on a collision!
 	private boolean collidedWith(Geometry g, float prev_x, float prev_y) {
 		if (hasCollidedWith(g)) {
 			this.setLocation(prev_x, prev_y);
 			this.updateGeometricState();
-			return true;
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 
@@ -199,7 +185,11 @@ public abstract class AbstractMob extends GameObject {
 	 * @param g
 	 * @return
 	 */
-	protected abstract boolean hasCollidedWith(Geometry g);
+	//protected abstract boolean hasCollidedWith(Geometry g);
+	protected final boolean hasCollidedWith(Geometry g) {
+		return Collision.Collided(this, g);
+	}
+
 
 
 	protected PlayersAvatar getVisiblePlayer() {

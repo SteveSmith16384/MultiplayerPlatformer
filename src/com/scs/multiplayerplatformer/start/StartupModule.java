@@ -52,7 +52,7 @@ public final class StartupModule extends AbstractModule {
 	public StartupModule(AbstractActivity act) {
 		super(act, null);
 
-		background = Statics.img_cache.getImage(Statics.BACKGROUND_R, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT);
+		background = Statics.img_cache.getImage(Statics.BACKGROUND_IMAGE, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT);
 
 	}
 

@@ -13,28 +13,36 @@ public final class Collision {
 	}
 
 
-	// Returns whether a should move back
+	// Returns FALSE if the colliders should move back
 	public static boolean Collided(Geometry a, Geometry b) {
 		if (a instanceof PlayersAvatar) {
 			if (b instanceof EnemyNinjaEasy) {
 				return Player_EnemyMob((PlayersAvatar)a, (EnemyNinjaEasy)b);
 			} else if (b instanceof PlayersAvatar) {
-				return false;
+				return true;
+			} else if (b instanceof ThrownItem) {
+				return ThrownItem_AbstractWalkingMob((ThrownItem)b, (AbstractWalkingMob)a);
 			}
 		} else if (b instanceof PlayersAvatar) {
 			if (a instanceof EnemyNinjaEasy) {
 				return Player_EnemyMob((PlayersAvatar)b, (EnemyNinjaEasy)a);
 			} else if (a instanceof PlayersAvatar) {
-				return false;
+				return true;
+			} else if (a instanceof ThrownItem) {
+				return ThrownItem_AbstractWalkingMob((ThrownItem)a, (AbstractWalkingMob)b);
 			}
 		}
 		if (a instanceof ThrownItem) {
 			if (b instanceof AbstractWalkingMob) {
 				return ThrownItem_AbstractWalkingMob((ThrownItem)a, (AbstractWalkingMob)b);
+			} else if (b instanceof ThrownItem) {
+				return ThrownItem_ThrownItem((ThrownItem)a, (ThrownItem)b);
 			}
 		} else if (b instanceof ThrownItem) {
 			if (a instanceof AbstractWalkingMob) {
 				return ThrownItem_AbstractWalkingMob((ThrownItem)b, (AbstractWalkingMob)a);
+			} else if (a instanceof ThrownItem) {
+				return ThrownItem_ThrownItem((ThrownItem)a, (ThrownItem)b);
 			}
 		}
 		return true;
@@ -43,7 +51,13 @@ public final class Collision {
 
 	private static boolean Player_EnemyMob(PlayersAvatar player, EnemyNinjaEasy enemy) {
 		player.died();
-		//enemy.died();
+		return false;
+	}
+
+
+	private static boolean ThrownItem_ThrownItem(ThrownItem ti1, ThrownItem ti2) {
+		ti1.remove();
+		ti2.remove();
 		return true;
 	}
 
@@ -56,9 +70,9 @@ public final class Collision {
 		if (side != mob.side) {
 			thrown.remove();
 			mob.died();
-			return true;
+			return true; // Don't move back!
 		}
-		return false;
+		return true;
 	}
 
 }

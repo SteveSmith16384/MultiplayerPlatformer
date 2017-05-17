@@ -93,7 +93,7 @@ public class ImageCache extends Hashtable<String, BufferedImage> {//implements R
 				return null;
 			}
 		} catch (IOException ex) {
-			throw new RuntimeException(ex.getMessage());
+			throw new RuntimeException(ex.getMessage(), ex);
 		}
 
 	}

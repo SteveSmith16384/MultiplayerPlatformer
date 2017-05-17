@@ -160,7 +160,7 @@ public final class MapLoader extends AbstractLevelData {
 				row_num++;
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException("Error loading map", ex);
+			throw new RuntimeException("Error loading map '" + filename + "':", ex);
 		}
 	}
 

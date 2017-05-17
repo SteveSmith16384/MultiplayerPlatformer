@@ -52,6 +52,8 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 
 
 	// This just adjusts the animation before calling the super().
+	// Returns true of move() was successful
+	@Override
 	public boolean move(float off_x, float off_y, boolean ladderBlocks) {
 		if (off_x != 0) {
 			if (frame_time > frame_interval && frame_interval > 0) {
@@ -97,16 +99,6 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 			}
 		}
 
-	}
-
-
-	public float getWindowX(Camera cam, float scale) {
-		return (this.getWorldX()) * scale - cam.left;
-	}
-
-
-	public float getWindowY(Camera cam, float scale) {
-		return (this.getWorldY()) * scale - cam.top;
 	}
 
 
@@ -226,21 +218,9 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 	}
 
 
-	@Override
+/*	@Override
 	protected boolean hasCollidedWith(Geometry g) {
-		/*if (g instanceof PlatformMob) { // try and get this to work
-			PlatformMob pm = (PlatformMob)g;
-			// Move us in the same direction as the platform.
-			this.move(pm.move_x, pm.move_y, false);
-			return false;
-		} else if (g instanceof PlayersAvatar) {
-			// Do nothing
-			return false;
-		} else if (g instanceof ThrownItem) {
-			return false; // The ThrownItem class handles collisions
-		}
-		return true; // Move us back*/
 		return Collision.Collided(this, g);
 	}
-
+*/
 }

@@ -1,6 +1,7 @@
 package com.scs.multiplayerplatformer.graphics;
 
 import ssmith.android.compatibility.Paint;
+import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
 import ssmith.util.ReturnObject;
 
@@ -55,6 +56,15 @@ public abstract class GameObject extends AbstractRectangle implements IProcessab
 	}
 
 
-}
+	public float getWindowX(Camera cam, float scale) {
+		return (this.getWorldX()) * scale - cam.left;
+	}
 
+
+	public float getWindowY(Camera cam, float scale) {
+		return (this.getWorldY()) * scale - cam.top;
+	}
+
+
+}
 

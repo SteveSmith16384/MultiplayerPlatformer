@@ -47,7 +47,7 @@ public final class GameOverModule extends SimpleAbstractModule {
 
 		game = _game;
 
-		this.setBackground(Statics.BACKGROUND_R);
+		this.setBackground(Statics.BACKGROUND_IMAGE);
 
 		RESTART = act.getString("replay_map");
 		RETURN = act.getString("main_menu");

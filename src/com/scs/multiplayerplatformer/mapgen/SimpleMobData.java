@@ -23,6 +23,7 @@ public final class SimpleMobData {
 		return this.type;
 	}
 	
+	
 	public String toString() {
 		return "Type: " + type + " (" + pixel_x + "," + pixel_y +")"; 
 	}

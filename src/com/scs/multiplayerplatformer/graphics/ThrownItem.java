@@ -8,6 +8,7 @@ import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.Geometry;
 
+import com.scs.multiplayerplatformer.Collision;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.PhysicsEngine;
@@ -42,7 +43,6 @@ public class ThrownItem extends GameObject {
 
 		type = _type;
 		phys = new PhysicsEngine(_dir, speed, grav);
-		//bmp = Block.GetBufferedImage(Statics.img_cache, _type, size, size);
 		thrower = _thrower;
 		damage = _damage;
 
@@ -69,24 +69,17 @@ public class ThrownItem extends GameObject {
 		ArrayList<Geometry> colls = this.getColliders(this.game.root_node);
 		if (colls.size() > 0) {
 			for (Geometry c : colls) { // this
-				if (c == thrower) {
+				Collision.Collided(this, c);
+				/*if (c == thrower) {
 					// Do nothing
 				} else {
 					if (c instanceof ThrownItem) {
 						((ThrownItem) c).remove();
 						this.remove(); // Knock other shurikens out of sky
 						return;
-					}/* else if (c instanceof EnemyNinjaEasy) {
-						AbstractMob m = (AbstractMob)c;
-						m.died();//damage(damage);
-						this.remove();
-						return;
-					} else if (c instanceof PlayersAvatar) {
-						this.thrower.score += 100;
-						this.remove();
-						return;
-					}*/
-				}
+					}
+				}*/
+				
 			}
 		}
 
@@ -97,12 +90,6 @@ public class ThrownItem extends GameObject {
 				this.remove();
 				if (Block.DamagedByThrownObject(block.getType())) {
 					block.damage(1, false, null);
-				} else {
-					/*boolean used = checkCrafting(block, this.type, block.getType());
-					if (used == false && thrower == game.player && Block.AddToInv(this.type)) {
-						// Return it to the players inventory
-						this.game.inv.addBlock(type, 1);
-					}*/
 				}
 				return;
 			}

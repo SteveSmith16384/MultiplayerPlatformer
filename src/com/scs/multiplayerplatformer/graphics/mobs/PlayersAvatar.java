@@ -50,10 +50,6 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	@Override
 	public void process(long interpol) {
-		/*if (input == null) {
-			return; // Player has been added, but constructor not finished!
-		}
-		*/
 		if (frozenUntil < System.currentTimeMillis()) {
 			if (is_on_ice == false) {
 				move_x_offset = 0;

@@ -34,7 +34,7 @@ public final class Statics {
 	public static float ACTIVATE_DIST, DEACTIVATE_DIST;
 	public static final String MUSIC_R = "Venus.mp3";
 	public static final int WINDOW_TOP_OFFSET = 25;
-	public static String BACKGROUND_R;
+	public static String BACKGROUND_IMAGE;
 	public static final long FREEZE_DUR = 1000;
 	public static final int MAX_BMP_WIDTH = 100;
 	public static final int MAX_PLAYER_SPRITES = 3;
@@ -78,9 +78,10 @@ public final class Statics {
 	public static float CLOUD_HEIGHT;
 	public static final float CLOUD_SPEED_PCENT = .4f;
 	public static float CLOUD_SPEED;
-	public static float HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT;
+	//public static float HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT;
 	public static float JUMP_Y;// = -1.2f;
 	public static final int SHURIKENS_FROM_BLOCK = 5;
+	public static float WASP_WIDTH, WASP_HEIGHT, WASP_SPEED;
 
 	public static boolean initd = false;
 
@@ -117,9 +118,12 @@ public final class Statics {
 			CLOUD_WIDTH = SCREEN_WIDTH * (CLOUD_WIDTH_PCENT/100);
 			CLOUD_HEIGHT = SCREEN_WIDTH * (CLOUD_HEIGHT_PCENT/100);
 			CLOUD_SPEED = SCREEN_WIDTH * (CLOUD_SPEED_PCENT/100);
+			WASP_WIDTH = PLAYER_WIDTH;
+			WASP_HEIGHT = PLAYER_WIDTH * 1.5f;
+			WASP_SPEED = PLAYER_SPEED /2;
 
-			HEALTH_BAR_HEIGHT =  Statics.SCREEN_HEIGHT/3;
-			HEALTH_BAR_WIDTH =  Statics.SCREEN_WIDTH * 0.05f;
+			//HEALTH_BAR_HEIGHT =  Statics.SCREEN_HEIGHT/3;
+			//HEALTH_BAR_WIDTH =  Statics.SCREEN_WIDTH * 0.05f;
 
 			ACTIVATE_DIST = Statics.SCREEN_WIDTH * .65f; // Dist when something should be processed 
 			DEACTIVATE_DIST = Statics.SCREEN_WIDTH * .75f; // Dist when something should be removed

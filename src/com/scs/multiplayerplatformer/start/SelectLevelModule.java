@@ -26,7 +26,7 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 	public SelectLevelModule(AbstractActivity act, AbstractModule _return_to) {
 		super(act, _return_to, 2, paint_text, Statics.img_cache.getImage("button_blue", ICON_WIDTH, Statics.SCREEN_WIDTH/10), 0, false, "", true);
 
-		this.setBackground("ninja_background2");
+		this.setBackground(Statics.BACKGROUND_IMAGE);
 	}
 
 

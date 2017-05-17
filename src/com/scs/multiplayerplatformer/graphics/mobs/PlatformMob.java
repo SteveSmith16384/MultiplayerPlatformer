@@ -74,7 +74,7 @@ public class PlatformMob extends AbstractMob {
 	}
 
 
-	@Override
+	/*@Override
 	protected boolean hasCollidedWith(Geometry g) {
 		if (this.move_y < 0) {
 			// Move the mob up with us
@@ -85,7 +85,7 @@ public class PlatformMob extends AbstractMob {
 			}
 		}
 		return true;
-	}
+	}*/
 
 
 	@Override

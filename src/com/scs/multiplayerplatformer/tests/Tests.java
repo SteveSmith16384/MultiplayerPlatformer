@@ -24,7 +24,7 @@ public final class Tests {
 		JFrame frame = new JFrame();
 		frame.setVisible(true);
 		ImageCache imageCache = new ImageCache(frame);
-		BufferedImage bi = imageCache.getImage("ninja_background2", 100, 100);
+		BufferedImage bi = imageCache.getImage("ninja_background2.jpg", 100, 100);
 		if (bi == null) {
 			throw new RuntimeException("Image is null");
 		}

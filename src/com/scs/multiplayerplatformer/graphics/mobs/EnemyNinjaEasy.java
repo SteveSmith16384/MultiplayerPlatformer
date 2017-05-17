@@ -113,7 +113,6 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 			// Re-add them to list to create
 			this.game.original_level_data.mobs.add(new SimpleMobData(AbstractMob.ENEMY_NINJA_EASY, this.getWorldX(), this.getWorldY()));
 		}
-		//}
 
 	}
 

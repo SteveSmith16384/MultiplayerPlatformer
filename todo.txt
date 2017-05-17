@@ -3,6 +3,7 @@ Ninjamatic
 HOME
 Remove header tags
 Make music mono
+Add wasps to maps
 Make video
 Sound not working
 Create new logo
@@ -29,11 +30,13 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
+	Clarify true/false for collion/move
+	Slime spurt only colliding if player moves into it
+Restart if player falls too far
 Sometimes player kills enemy
 Not dying if on top of enemy
 	Show filename if no level name
 	Enemy ninja shurikan killing other enemy ninjas
-	Start cam on player start pos
 Check if hit by slime
 	Getting multiple players
 	PS4 controller - down left for down
