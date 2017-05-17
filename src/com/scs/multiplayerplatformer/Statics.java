@@ -13,9 +13,9 @@ import com.scs.multiplayerplatformer.start.StartupModule;
 
 public final class Statics {
 
-	public static final int TEST_LEVEL = 4;
+	public static final String TEST_LEVEL = "testmap_harry.csv";
 	//public static final boolean RANDOM_LEVELS = true;
-	public static final boolean FULL_SCREEN = false;
+	public static final boolean FULL_SCREEN = true;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = true;
 	public static final boolean RELEASE_MODE = false; // Stricter if false

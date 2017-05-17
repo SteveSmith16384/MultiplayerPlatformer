@@ -152,13 +152,13 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	private void loadMap(String filename) {
-		/*String filename = null;
-		if (Statics.TEST_LEVEL > 0) {
-			filename = "testmap" + Statics.TEST_LEVEL + ".csv";
+	private void loadMap(String filename2) {
+		String filename = null;
+		if (Statics.TEST_LEVEL != null) {
+			filename = "./maps/" + Statics.TEST_LEVEL;
 		} else {
-			filename = "testmap" + level + ".csv";
-		}*/
+			filename = filename2;
+		}
 		original_level_data = new MapLoader(filename, false);
 		original_level_data.getMap();
 

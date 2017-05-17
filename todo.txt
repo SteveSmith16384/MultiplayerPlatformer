@@ -28,7 +28,10 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
+Getting multiple players
+null controllers still
 GameModule - set mod_return_to
+Esc to quit back to menu
 Negative score
 Not showing time
 Enemy ninja shurikan killing other enemy ninjas
@@ -41,7 +44,6 @@ Cache bitmaps
 	Time left going up!
 music not found
 	Timer - stop at zero
-Esc to quit back to menu
 	Choose menu option with keys
 Search for todos
 	Use sfx
