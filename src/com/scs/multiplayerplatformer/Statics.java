@@ -3,6 +3,7 @@ package com.scs.multiplayerplatformer;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.io.File;
 
 import ssmith.android.compatibility.Typeface;
 import ssmith.android.framework.AbstractActivity;
@@ -59,8 +60,8 @@ public final class Statics {
 	public static float PLAYER_SPEED_DIVISOR = 7f;
 	public static float PLAYER_SPEED, ENEMY_NINJA_SPEED;
 	public static float PLAYER_FALL_SPEED, MAX_FALL_SPEED;
-	private static final float ROCK_SIZE_PCENT = 3f;
-	private static final float SLIME_SIZE_PCENT = 3f;
+	private static final float ROCK_SIZE_PCENT = 60f; //3f;
+	private static final float SLIME_SIZE_PCENT = 30f; //3f;
 	public static float ROCK_SIZE, SLIME_SIZE;
 	private static final float ROCK_SPEED_PCENT = 22f;//1.5f;
 	public static float ROCK_SPEED;
@@ -144,19 +145,21 @@ public final class Statics {
 			bigfnt = new Typeface("Helvetica", Font.BOLD, 28);
 			//}
 
+			new File(Statics.MAP_DIR).mkdirs();
+
 			initd = true;
 		}
 	}
 
 
-	public static float GetHeightScaled(float frac) { // todo - needed?
+	/*public static float GetHeightScaled_(float frac) {
 		return SCREEN_HEIGHT * frac;
 	}
 
 
-	public static float GetWidthScaled(float frac) { // todo - needed?
+	public static float GetWidthScaled(float frac) {
 		return SCREEN_WIDTH * frac;
-	}
+	}*/
 
 
 	public static AbstractModule GetStartupModule(AbstractActivity act) {

@@ -72,6 +72,10 @@ public final class MainThread extends Thread {
 
 
 	public void doDrawing() {
+		if (!mRun) {
+			return;
+		}
+		
 		c = new Canvas(window.bs.getDrawGraphics()); // todo - error when closing
 		if (Statics.FULL_SCREEN == false) {
 			c.translate(0, Statics.WINDOW_TOP_OFFSET); // Take into account window title
@@ -166,11 +170,11 @@ public final class MainThread extends Thread {
 			module.updateGame(Statics.LOOP_DELAY);
 		} else {
 			// Load default module
-			if (Statics.DEBUG) {
-				this.setNextModule(new GameModule(Statics.act));
-			} else {
+			/*if (Statics.DEBUG) {
+				this.setNextModule(new GameModule(Statics.act, null));
+			} else {*/
 				this.setNextModule(new StartupModule(Statics.act));
-			}
+			//}
 		}
 	}
 

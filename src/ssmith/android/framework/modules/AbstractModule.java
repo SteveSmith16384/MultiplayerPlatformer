@@ -154,7 +154,7 @@ public abstract class AbstractModule extends Thread {
 		this.dismissPleaseWait();
 		if (please_wait_dialog == null) {
 			please_wait_dialog = new PleaseWaitDialog(msg);
-			this.stat_node_front.attachChild(please_wait_dialog);
+			this.stat_node_front.attachChild(stat_node_front.getNumChildren(), please_wait_dialog);
 			this.stat_node_front.updateGeometricState();
 			this.getThread().doDrawing();
 		}

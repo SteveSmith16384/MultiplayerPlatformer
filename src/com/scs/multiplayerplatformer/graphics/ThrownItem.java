@@ -84,7 +84,7 @@ public class ThrownItem extends GameObject {
 		}
 
 		// Has it hit the ground
-		Block block = (Block)game.new_grid.getBlockAtPixel_MaybeNull(this.getWorldCentreX(), this.getWorldCentreY());
+		Block block = (Block)game.blockGrid.getBlockAtPixel_MaybeNull(this.getWorldCentreX(), this.getWorldCentreY());
 		if (block != null) {
 			if (Block.CanBeHitByThrownObject(block.getType())) {
 				this.remove();

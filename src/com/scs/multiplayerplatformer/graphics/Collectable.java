@@ -49,7 +49,7 @@ public abstract class Collectable extends GameObject {
 		boolean moveBack = false;
 
 		// Check for landing
-		ArrayList<AbstractRectangle> colls = game.new_grid.getColliders(this.getWorldBounds());
+		ArrayList<AbstractRectangle> colls = game.blockGrid.getColliders(this.getWorldBounds());
 		for (AbstractRectangle g : colls) {
 			if (g instanceof Block) {
 				Block b = (Block)g;

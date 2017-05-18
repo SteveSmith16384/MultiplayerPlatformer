@@ -1,6 +1,8 @@
 Ninjamatic
 
+
 HOME
+	PS4 controller - down left for down
 Remove header tags
 Make music mono
 Add wasps to maps
@@ -30,33 +32,30 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
-Dont use level selector
-Jumping very high?
-	Clarify true/false for collion/move
-	Slime spurt only colliding if player moves into it
-Restart if player falls too far
-Sometimes player kills enemy
+Give limited shurikens, replenish on death
+Put clouds in background
 Not dying if on top of enemy
-	Show filename if no level name
+"Press fire to start" is hidden
+	Starting on top of enemy
+	Too far zoomed in with one player
+Restart if player falls too far
+	Gaps between squares when scaling
+	Error when closing window
+Test shurikens
+	Slime spurt only colliding if player moves into it
+Sometimes player kills enemy
 	Enemy ninja shurikan killing other enemy ninjas
-Check if hit by slime
-	Getting multiple players
-	PS4 controller - down left for down
-	null controllers still
-	GameModule - set mod_return_to
-	Esc to quit back to menu
 	Negative score
 	Not showing time
 	Time left going up!
-music not found
 	Timer - stop at zero
 	Choose menu option with keys
 Search for todos
-	Use sfx
-Give levels their own background
 
 
 LATER
+Give levels their own background
+Bonus for being first
 Give each level its own time
 Hold down jump to jump higher
 Conveyor belts

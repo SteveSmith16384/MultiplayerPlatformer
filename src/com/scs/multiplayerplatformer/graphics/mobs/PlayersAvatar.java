@@ -28,7 +28,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 
 	public PlayersAvatar(GameModule _game, Player _player, float x, float y, IInputDevice _input) {
-		super(_game, Statics.act.getString("player"), x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
+		super(_game, Statics.act.getString("player")  + _player.num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
 
 		player = _player;
 		playernumZB = player.num;
@@ -54,7 +54,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 			if (is_on_ice == false) {
 				move_x_offset = 0;
 			}
-			if (input.isLeftPressed()) { // todo - null?
+			if (input.isLeftPressed()) {
 				move_x_offset = -1 * input.getStickDistance();
 			} else if (input.isRightPressed()) {
 				move_x_offset = 1 * input.getStickDistance();
@@ -103,9 +103,9 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 			if (is_on_ground_or_ladder) {
 				Statics.act.sound_manager.playerJumped();
 				jumping = true;
-				if (Statics.DEBUG) {
+				/*if (Statics.DEBUG) {
 					Statics.p("JUMP_Y=" + Statics.JUMP_Y + ", Statics.ROCK_SPEED="+Statics.ROCK_SPEED + ", Statics.ROCK_GRAVITY=" + Statics.ROCK_GRAVITY);
-				}
+				}*/
 				phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
 				this.jumpPressedTime = System.currentTimeMillis();
 			}
@@ -142,7 +142,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		}
 
 		boolean thrown = false;
-		if (inv.hasBlock(type) || Statics.DEBUG) {
+		if (inv.hasBlock(type)) {
 			thrown = true;
 		} else {
 			game.showToast("You have nothing to throw!  Try getting a shuriken");

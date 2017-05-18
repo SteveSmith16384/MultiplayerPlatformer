@@ -1,5 +1,7 @@
 package com.scs.multiplayerplatformer.start;
 
+import java.io.File;
+
 import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.modules.AbstractModule;
@@ -15,6 +17,8 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 
 	private static Paint paint_text = new Paint();
 
+	private String maps[];
+
 	static {
 		paint_text.setARGB(255, 255, 255, 255);
 		paint_text.setAntiAlias(true);
@@ -27,14 +31,16 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 		super(act, _return_to, 2, paint_text, Statics.img_cache.getImage("button_blue", ICON_WIDTH, Statics.SCREEN_WIDTH/10), 0, false, "", true);
 
 		this.setBackground(Statics.BACKGROUND_IMAGE);
+
+		maps = new File(Statics.MAP_DIR).list();
 	}
 
 
 	@Override
 	public void getOptions() {
-		int max = 6;
-		for (int i=1 ; i<=max ; i++) {
-			this.addOption("Level " + i);
+		this.addOption("Random");
+		for (int i=1 ; i<maps.length ; i++) {
+			this.addOption(maps[i]);
 		}
 
 	}
@@ -42,9 +48,12 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 
 	@Override
 	public void optionSelected(int idx) {
-		int level = idx+1;
-		//AbstractLevelData original_level_data = new LoadMap(Statics.GetMapFilename(level));
-		GameModule game = new GameModule(Statics.act);
+		GameModule game = null;
+		if (idx <= 0) {
+			game = new GameModule(Statics.act, null);
+		} else {
+			game = new GameModule(Statics.act, maps[idx]);
+		}
 		this.getThread().setNextModule(game);
 	}
 

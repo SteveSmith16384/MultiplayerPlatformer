@@ -12,13 +12,11 @@ import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 
 public final class AirBubble extends GameObject {
 
-	private BufferedImage bmp;
+	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH];
 	
 	public AirBubble(GameModule _game, AbstractMob _thrower) {
-		super(_game, "AirBubble", true, _thrower.getWorldCentreX(), _thrower.getWorldCentreY(), Statics.ROCK_SIZE, Statics.ROCK_SIZE);
+		super(_game, "AirBubble", true, _thrower.getWorldCentreX(), _thrower.getWorldCentreY(), Statics.ROCK_SIZE/3, Statics.ROCK_SIZE/3);
 
-		bmp = Statics.img_cache.getImage("bubble", Statics.ROCK_SIZE/3, Statics.ROCK_SIZE/3); // todo - scale
-		
 		this.game.root_node.attachChild(this);
 		this.updateGeometricState();
 		this.game.addToProcess_Instant(this);
@@ -36,7 +34,7 @@ public final class AirBubble extends GameObject {
 		this.parent.updateGeometricState();
 
 		// Has it hit the ground
-		Block b = (Block)game.new_grid.getBlockAtPixel_MaybeNull(this.getWorldCentreX(), this.getWorldCentreY());
+		Block b = (Block)game.blockGrid.getBlockAtPixel_MaybeNull(this.getWorldCentreX(), this.getWorldCentreY());
 		if (b != null) {
 			if (b.getType() != Block.WATER) {
 				this.remove();
@@ -50,7 +48,12 @@ public final class AirBubble extends GameObject {
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
 		if (this.visible) {
-			g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+			//g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+			int width = (int)(this.getWidth() * scale);
+			if (bmp[width] == null) {
+				bmp[width] = Statics.img_cache.getImage("bubble",  this.getHeight() * scale, this.getWidth() * scale);//Block.GetBufferedImage(Statics.img_cache, type, this.getHeight() * scale, this.getWidth() * scale);
+			}
+			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
 		}
 
 	}

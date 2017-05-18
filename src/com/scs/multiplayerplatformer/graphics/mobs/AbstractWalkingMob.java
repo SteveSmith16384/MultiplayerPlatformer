@@ -125,7 +125,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 		boolean in_water = false;
 
 		// Check for special blocks
-		ArrayList<AbstractRectangle> colls = game.new_grid.getColliders(this.getWorldBounds());
+		ArrayList<AbstractRectangle> colls = game.blockGrid.getColliders(this.getWorldBounds());
 		for (AbstractRectangle g : colls) {
 			if (g instanceof Block) {
 				Block b = (Block)g;
@@ -153,6 +153,12 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 			} else {
 				if (this.move(0, this.getJumpingYOff(), false) == false) { // Hit a ceiling?
 					this.jumping = false;
+				} else {
+					// Have we fallen off bottom of map?
+					if (this.getWorldY() > game.blockGrid.getHeight() * 2) {
+						this.died(); // To restart
+						return;
+					}
 				}
 			}
 		} else {
@@ -166,10 +172,6 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 						curr_fall_speed = curr_fall_speed * 2f;
 						if (curr_fall_speed > Statics.MAX_FALL_SPEED) {
 							curr_fall_speed = Statics.MAX_FALL_SPEED;
-						}
-						// Have we fallen off bottom of map?
-						if (this.getWorldY() > game.new_grid.getHeight() * 2) {
-							this.died(); // To restart
 						}
 					}
 				}

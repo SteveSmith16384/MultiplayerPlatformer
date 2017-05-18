@@ -33,7 +33,7 @@ public final class GameOverModule extends SimpleAbstractModule {
 		paint_large_text.setARGB(255, 255, 255, 255);
 		paint_large_text.setAntiAlias(true);
 		//paint_large_text.setStyle(Style.STROKE);
-		paint_large_text.setTextSize(Statics.GetHeightScaled(0.1f));
+		//paint_large_text.setTextSize(Statics.GetHeightScaled(0.1f));
 
 		paint_ink.setARGB(255, 255, 255, 255);
 		paint_ink.setAntiAlias(true);
@@ -84,7 +84,7 @@ public final class GameOverModule extends SimpleAbstractModule {
 			this.getThread().setNextModule(Statics.GetStartupModule(act));
 		} else {
 			//game.loadPlayer();
-			this.getThread().setNextModule(new GameModule(act));
+			this.getThread().setNextModule(new GameModule(act, null));
 		}
 	}
 

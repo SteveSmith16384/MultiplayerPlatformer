@@ -186,7 +186,6 @@ public final class MainWindow extends JFrame implements MouseListener, KeyListen
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 		this.thread.setRunning(false);
-		//UpdateServerThread.stop_now = true;
 		this.dispose();
 
 	}

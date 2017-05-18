@@ -1,5 +1,5 @@
 package com.scs.multiplayerplatformer.start;
-
+/*
 import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.modules.AbstractModule;
@@ -42,10 +42,11 @@ public final class SelectGameModeModule extends AbstractOptionsModule2 {
 
 	@Override
 	public void optionSelected(int idx) {
-		int level = idx+1;
+		//int level = idx+1;
 		//AbstractLevelData original_level_data = new LoadMap(Statics.GetMapFilename(level));
-		GameModule game = new GameModule(Statics.act);
+		GameModule game = new GameModule(Statics.act, maps[idx]);
 		this.getThread().setNextModule(game);
 	}
 
 }
+*/

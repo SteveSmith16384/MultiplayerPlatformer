@@ -611,7 +611,7 @@ public class Block extends GameObject {
 		}*/
 	}
 
-/*
+	/*
 	private void addAdjacentBlocksToProcess() {
 		addBlockToProcess(this.map_x+1, this.map_y);
 		addBlockToProcess(this.map_x-1, this.map_y);
@@ -626,7 +626,7 @@ public class Block extends GameObject {
 			game.addToProcess(b, false);
 		}
 	}
-*/
+	 */
 
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
@@ -669,9 +669,9 @@ public class Block extends GameObject {
 					break;
 				}
 				//}
-		} else if (i == 10){
-			remove_from_process = true;
-		}
+			} else if (i == 10){
+				remove_from_process = true;
+			}
 			break;
 		case MONSTER_GENERATOR:
 			remove_from_process = false;
@@ -722,7 +722,7 @@ public class Block extends GameObject {
 
 	private boolean checkAndChangeAdjacentSquares(int off_x, int off_y, byte[] from, byte to, boolean check_for_sprites) {
 		for(int i=0 ;i<from.length ; i++) {
-			Block b = (Block)this.game.new_grid.getBlockAtMap_MaybeNull(this.map_x+off_x, this.map_y+off_y);
+			Block b = (Block)this.game.blockGrid.getBlockAtMap_MaybeNull(this.map_x+off_x, this.map_y+off_y);
 			if (b != null) {
 				if (b.getType() == from[i]) {
 					// Check area is clear
@@ -764,6 +764,12 @@ public class Block extends GameObject {
 	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
 		if (this.visible) {
 			int width = (int)Math.ceil(this.getWidth() * scale);
+			if (Statics.DEBUG) {
+				int testWidth = (int)((this.world_bounds.right - this.world_bounds.left) * scale);
+				if (testWidth > width) {
+					Statics.p("Diff in width! width=" + width + ", testWidth=" + testWidth);
+				}
+			}
 			if (bmp[width] == null) {
 				this.generateImages(width, scale);
 			}

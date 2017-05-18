@@ -19,7 +19,7 @@ public final class ErrorModule extends AbstractSingleScreenModule {
 		paint_large_text.setAntiAlias(true);
 		//paint_large_text.setStyle(Style.STROKE);
 		//paint_large_text.setTextSize(28);
-		paint_large_text.setTextSize(Statics.GetHeightScaled(0.09f)); // Was 28
+		//paint_large_text.setTextSize(Statics.GetHeightScaled(0.09f)); // Was 28
 
 		paint_normal_text.setARGB(255, 255, 255, 255);
 		paint_normal_text.setAntiAlias(true);
@@ -45,7 +45,7 @@ public final class ErrorModule extends AbstractSingleScreenModule {
 		l.setCentre(Statics.SCREEN_WIDTH/2, paint_large_text.getTextSize());
 		this.stat_node_front.attachChild(l);
 
-		paint_normal_text.setTextSize(Statics.GetHeightScaled(0.05f));
+		//paint_normal_text.setTextSize(Statics.GetHeightScaled(0.05f));
 
 		MultiLineLabel label2 = new MultiLineLabel("credits", text, null, paint_normal_text, true, Statics.SCREEN_WIDTH * 0.9f);
 		label2.setLocation(10, Statics.SCREEN_HEIGHT/2);

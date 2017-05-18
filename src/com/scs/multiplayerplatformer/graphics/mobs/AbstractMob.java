@@ -107,7 +107,7 @@ public abstract class AbstractMob extends GameObject {
 
 		is_on_ice = false;
 
-		ArrayList<AbstractRectangle> colls = game.new_grid.getColliders(this.getWorldBounds());
+		ArrayList<AbstractRectangle> colls = game.blockGrid.getColliders(this.getWorldBounds());
 
 		for (AbstractRectangle ar : colls) {
 			if (ar instanceof Block) {
@@ -203,7 +203,7 @@ public abstract class AbstractMob extends GameObject {
 				float y = this.getWorldCentreY() + (dir.y * i);
 				int map_x = (int)(x / Statics.SQ_SIZE);
 				int map_y = (int)(y / Statics.SQ_SIZE);
-				Block b = (Block) game.new_grid.getBlockAtMap_MaybeNull(map_x, map_y);
+				Block b = (Block) game.blockGrid.getBlockAtMap_MaybeNull(map_x, map_y);
 				if (b != null) {
 					if (b.getType() != Block.NOTHING_DAYLIGHT) {
 						//return false;
@@ -227,7 +227,7 @@ public abstract class AbstractMob extends GameObject {
 
 
 	protected void checkForSuffocation() { 
-		Block b = (Block)game.new_grid.getBlockAtPixel_MaybeNull(this.getWorldCentreX(), this.getWorldY());
+		Block b = (Block)game.blockGrid.getBlockAtPixel_MaybeNull(this.getWorldCentreX(), this.getWorldY());
 		if (b != null) {
 			if (b.getType() == Block.WATER || b.getType() == Block.LAVA) {
 				if (bubble_int.hitInterval()) {
@@ -252,7 +252,7 @@ public abstract class AbstractMob extends GameObject {
 	protected void checkForHarmingBlocks() {
 		this.tmp_rect.set(this.getWorldBounds());
 		this.tmp_rect.bottom += 2; // In case we're walking on an object on fire.  Must be 2?
-		ArrayList<AbstractRectangle> colls = game.new_grid.getColliders(tmp_rect);
+		ArrayList<AbstractRectangle> colls = game.blockGrid.getColliders(tmp_rect);
 		if (colls.size() > 0) {
 			for (AbstractRectangle r : colls) {
 				Block b = (Block)r;

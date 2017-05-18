@@ -2,8 +2,11 @@ package com.scs.multiplayerplatformer.start;
 
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 import ssmith.android.compatibility.MotionEvent;
 import ssmith.android.compatibility.Paint;
@@ -18,6 +21,7 @@ import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.layouts.GridLayout;
 import ssmith.android.lib2d.shapes.BitmapRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
+import ssmith.awt.ImageCache;
 
 import com.scs.multiplayerplatformer.Statics;
 
@@ -31,7 +35,7 @@ public final class StartupModule extends AbstractModule {
 	static {
 		paint_large_text.setARGB(255, 255, 255, 255);
 		paint_large_text.setAntiAlias(true);
-		paint_large_text.setTextSize(Statics.GetHeightScaled(0.12f)); // Was 28
+		//paint_large_text.setTextSize(Statics.GetHeightScaled(0.12f)); // Was 28
 
 		paint_button_text.setARGB(255, 0, 0, 0);
 		paint_button_text.setAntiAlias(true);
@@ -54,6 +58,12 @@ public final class StartupModule extends AbstractModule {
 
 		background = Statics.img_cache.getImage(Statics.BACKGROUND_IMAGE, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT);
 
+		// Check for image cache
+		File f = new File(ImageCache.CACHE_DIR);
+		if (f.exists() == false || f.list().length <= 0) {
+			JOptionPane.showMessageDialog(null, "Please note that the first time you play this game,\nthe images will need to be generated, so it will be slow and jerky.", "Slow on First Game", JOptionPane.ERROR_MESSAGE);
+		}
+		
 	}
 
 
@@ -140,8 +150,7 @@ public final class StartupModule extends AbstractModule {
 	private void startNewGame() {
 		AbstractActivity act = Statics.act;
 
-		AbstractModule game = null;
-		game = new SelectLevelModule(act, this);
+		AbstractModule game = new SelectLevelModule(act, this);//new GameModule(act); //
 		this.getThread().setNextModule(game);
 
 	}

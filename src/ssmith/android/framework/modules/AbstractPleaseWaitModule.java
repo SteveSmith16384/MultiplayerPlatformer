@@ -21,11 +21,11 @@ public abstract class AbstractPleaseWaitModule extends SimpleAbstractModule impl
 		paint_large_text.setARGB(255, 255, 255, 255);
 		paint_large_text.setAntiAlias(true);
 		//paint_large_text.setStyle(Style.STROKE);
-		paint_large_text.setTextSize(Statics.GetHeightScaled(0.09f));
+		//paint_large_text.setTextSize(Statics.GetHeightScaled(0.09f));
 
 		paint_normal_text.setARGB(255, 255, 255, 255);
 		paint_normal_text.setAntiAlias(true);
-		paint_normal_text.setTextSize(Statics.GetHeightScaled(0.05f));
+		//paint_normal_text.setTextSize(Statics.GetHeightScaled(0.05f));
 	}
 	
 	

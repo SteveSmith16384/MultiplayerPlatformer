@@ -17,7 +17,7 @@ public class ImageCache extends Hashtable<String, BufferedImage> {//implements R
 	private static final long serialVersionUID = 1L;
 
 	private static final String RESOURCE_DIR = "assets/gfx/";
-	private static final String CACHE_DIR = "./data/imagecache/";
+	public static final String CACHE_DIR = "./data/imagecache/";
 
 	private Component c;
 

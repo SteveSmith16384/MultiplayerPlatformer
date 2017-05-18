@@ -48,7 +48,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	private TSArrayList<IProcessable> entities;
 	public AbstractLevelData original_level_data;
-	public MyEfficientGridLayout new_grid; // todo - rename
+	public MyEfficientGridLayout blockGrid;
 	private TimedString msg;
 	private Rectangle dummy_rect = new Rectangle(); // for checking the area is clear
 	private long levelEndTime;
@@ -58,6 +58,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	public List<PlayersAvatar> avatars = new ArrayList<>();
 	public List<Player> players = new ArrayList<>();
 	private List<IInputDevice> newControllers = new ArrayList<>();
+	private String filename;
 
 	public float current_scale = Statics.MAX_ZOOM;// .25f;//1;//.5f;
 	public float new_scale = current_scale;
@@ -88,19 +89,18 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	public GameModule(AbstractActivity act) { 
+	public GameModule(AbstractActivity act, String _filename) { 
 		super(act, null);
 
 		this.mod_return_to = new StartupModule(act);
+		filename = _filename;
 
 		this.stat_cam.lookAtTopLeft(true);
-
 		str_time_remaining = act.getString("time_remaining");
-
 		this.setBackground(Statics.BACKGROUND_IMAGE);
 
 		// Load a player for each controller
-		startNewLevel();
+		startNewLevel(_filename);
 
 		act.thread.deviceThread.addListener(this);
 
@@ -114,16 +114,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	private void startNewLevel() {
+	// filename = null to load random map
+	private void startNewLevel(String filename) {
 		Statics.act.sound_manager.levelStart();
-
-		new File(Statics.MAP_DIR).mkdirs();
-
-		String maps[] = new File(Statics.MAP_DIR).list();
-
-		if (maps == null || maps.length <= 0) {
-			throw new RuntimeException("No maps found!  Put them in " + Statics.MAP_DIR);
-		}
 
 		entities = new TSArrayList<IProcessable>();
 
@@ -134,7 +127,15 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		new EnemyEventTimer(this);
 		levelEndTime = System.currentTimeMillis() + (20 * 1000);
 
-		loadMap(Statics.MAP_DIR + maps[NumberFunctions.rnd(0, maps.length-1)]);
+		if (filename == null) {
+			String maps[] = new File(Statics.MAP_DIR).list();
+			if (maps == null || maps.length <= 0) {
+				throw new RuntimeException("No maps found!  Put them in " + Statics.MAP_DIR);
+			}
+			loadMap(Statics.MAP_DIR + maps[NumberFunctions.rnd(0, maps.length-1)]);
+		} else {
+			loadMap(Statics.MAP_DIR + filename);
+		}
 
 		Iterator<IInputDevice> it = Statics.act.thread.deviceThread.getDevices().iterator();
 		while (it.hasNext()) {
@@ -152,17 +153,17 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	private void loadMap(String filename2) {
 		String filename = null;
-		if (Statics.TEST_LEVEL != null) {
+		/*if (Statics.TEST_LEVEL != null) {
 			filename = "./maps/" + Statics.TEST_LEVEL;
-		} else {
+		} else {*/
 			filename = filename2;
-		}
+		//}
 		original_level_data = new MapLoader(filename, false);
 		original_level_data.getMap();
 
-		new_grid = new MyEfficientGridLayout(this, original_level_data.getGridWidth(), original_level_data.getGridHeight(), Statics.SQ_SIZE);
-		this.root_node.attachChild(new_grid);
-		this.entities.add(new_grid);
+		blockGrid = new MyEfficientGridLayout(this, original_level_data.getGridWidth(), original_level_data.getGridHeight(), Statics.SQ_SIZE);
+		this.root_node.attachChild(blockGrid);
+		this.entities.add(blockGrid);
 
 		this.stat_node_back.updateGeometricState();
 		this.stat_node_front.updateGeometricState();
@@ -376,7 +377,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		r.removeFromParent();
 
 		if (result && check_blocks) {
-			ArrayList<AbstractRectangle> colls = new_grid.getColliders(r.getWorldBounds());
+			ArrayList<AbstractRectangle> colls = blockGrid.getColliders(r.getWorldBounds());
 			for (AbstractRectangle ar : colls) {
 				if (ar instanceof Block) {
 					Block b = (Block)ar;
@@ -397,7 +398,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			if (type != Block.NOTHING_DAYLIGHT) {
 				block = new Block(this, type, map_x, map_y);
 			}
-			new_grid.setRectAtMap(block, map_x, map_y);
+			blockGrid.setRectAtMap(block, map_x, map_y);
 
 			if (block != null) {
 				if (Block.RequireProcessing(block.getType())) {
@@ -437,7 +438,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			for (int x=map_x-block_rad ; x<=map_x+block_rad ; x++) {
 				float dist = (float)GeometryFuncs.distance(map_x, map_y, x, y);
 				if (dist <= block_rad) {
-					Block b = (Block)this.new_grid.getBlockAtMap_MaybeNull(x, y);
+					Block b = (Block)this.blockGrid.getBlockAtMap_MaybeNull(x, y);
 					if (b != null) {
 						b.damage(2, false, null);
 					}
@@ -486,24 +487,25 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			player = players.get(num);
 		}
 
-		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
-		float y = (original_level_data.getStartPos().y) * Statics.SQ_SIZE;
-		while (!this.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {
-			y = y - Statics.SQ_SIZE;
-		}
-		PlayersAvatar avatar = new PlayersAvatar(this, player, x, y, input);
+		PlayersAvatar avatar = new PlayersAvatar(this, player, 0, 0, input);
 		this.avatars.add(avatar);
-		avatar.parent.updateGeometricState();
+		addToProcess_Instant(avatar);
+		//avatar.parent.updateGeometricState();
+		this.restartPlayer(avatar);
 	}
 
 
 	public void restartPlayer(PlayersAvatar avatar) {
 		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
-		float y = (original_level_data.getStartPos().y-2) * Statics.SQ_SIZE; // -2 so we start above the bed
+		float y = (original_level_data.getStartPos().y) * Statics.SQ_SIZE; // -2 so we start above the bed
+		//float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
+		//float y = (original_level_data.getStartPos().y) * Statics.SQ_SIZE;
+		while (!this.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {
+			y = y - Statics.SQ_SIZE;
+		}
 		avatar.setLocation(x, y);
-		addToProcess_Instant(avatar);
+		//addToProcess_Instant(avatar);
 		avatar.updateGeometricState();
-
 	}
 
 
@@ -544,7 +546,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		this.avatars.remove(avatar);
 		// check if no players left
 		if (this.avatars.isEmpty()) {
-			this.startNewLevel();
+			this.startNewLevel(filename);
 		}
 	}
 
