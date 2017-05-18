@@ -72,7 +72,7 @@ public final class MainThread extends Thread {
 
 
 	public void doDrawing() {
-		c = new Canvas(window.bs.getDrawGraphics());
+		c = new Canvas(window.bs.getDrawGraphics()); // todo - error when closing
 		if (Statics.FULL_SCREEN == false) {
 			c.translate(0, Statics.WINDOW_TOP_OFFSET); // Take into account window title
 		}

@@ -13,7 +13,7 @@ import com.scs.multiplayerplatformer.start.StartupModule;
 
 public final class Statics {
 
-	public static final String TEST_LEVEL = null;//"testmap_harry.csv";
+	public static final String TEST_LEVEL = "testmap_harry.csv";
 	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = true;
@@ -98,8 +98,8 @@ public final class Statics {
 
 			SQ_SIZE = 50; //SCREEN_WIDTH * (SQ_SIZE_PCENT/100);
 			SQ_SIZE_INT = (int)Math.ceil(SQ_SIZE);
-			MIN_ZOOM = SCREEN_WIDTH / 8000;//
-			MAX_ZOOM = SCREEN_WIDTH / 800;//
+			MIN_ZOOM = SCREEN_WIDTH / 9000;
+			MAX_ZOOM = SCREEN_WIDTH / 800;
 			ICON_SIZE = SCREEN_WIDTH * (ICON_SIZE_PCENT/100);
 			PLAYER_WIDTH = SQ_SIZE * 0.8f;
 			PLAYER_HEIGHT = (SQ_SIZE*2) * 0.9f;

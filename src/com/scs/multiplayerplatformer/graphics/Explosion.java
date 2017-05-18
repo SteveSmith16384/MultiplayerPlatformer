@@ -56,7 +56,7 @@ public final class Explosion extends GameObject {
 	
 	@Override
 	public void process(long interpol) {
-		float len = this.pxl_origin.subtract(this.getWorldCentre_CreatesNew()).length();
+		float len = this.pxl_origin.subtract(this.getWorldCentre_CreatesNew()).length(); // todo - check physical pos
 		if (len > Statics.SCREEN_WIDTH) { // Are we off the screen?
 			this.remove();
 		} else {

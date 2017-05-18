@@ -227,7 +227,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			float x = 0, y = 0;
 			for (PlayersAvatar player : avatars) {
 				x += player.getWorldX();
-				y += player.getWorldY();
+				y += player.getWorldY() + (Statics.PLAYER_HEIGHT/2);
 			}
 			x = x / this.avatars.size();
 			y = y / this.avatars.size();
