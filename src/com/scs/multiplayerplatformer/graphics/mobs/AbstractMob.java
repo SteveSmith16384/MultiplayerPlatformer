@@ -171,7 +171,7 @@ public abstract class AbstractMob extends GameObject {
 
 	// Returns false on a collision!
 	private boolean collidedWith(Geometry g, float prev_x, float prev_y) {
-		if (hasCollidedWith(g)) {
+		if (hasCollidedWith(g) == false) {
 			this.setLocation(prev_x, prev_y);
 			this.updateGeometricState();
 			return false;

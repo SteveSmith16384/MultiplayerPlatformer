@@ -14,7 +14,6 @@ import com.scs.multiplayerplatformer.start.StartupModule;
 public final class Statics {
 
 	public static final String TEST_LEVEL = null;//"testmap_harry.csv";
-	//public static final boolean RANDOM_LEVELS = true;
 	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = true;
@@ -63,7 +62,7 @@ public final class Statics {
 	private static final float ROCK_SIZE_PCENT = 3f;
 	private static final float SLIME_SIZE_PCENT = 3f;
 	public static float ROCK_SIZE, SLIME_SIZE;
-	private static final float ROCK_SPEED_PCENT = 1.5f;
+	private static final float ROCK_SPEED_PCENT = 22f;//1.5f;
 	public static float ROCK_SPEED;
 	public static final float ROCK_GRAVITY = 0.06f;// 0.0598f; // Must be constant!
 	private static final float BULLET_SPEED_PCENT = 2f;
@@ -109,15 +108,15 @@ public final class Statics {
 			PLAYER_FALL_SPEED = PLAYER_SPEED/3f;
 			MAX_FALL_SPEED = Statics.SQ_SIZE/2; 
 			ENEMY_NINJA_SPEED = PLAYER_SPEED * 0.25f;
-			ROCK_SIZE = SCREEN_WIDTH * (ROCK_SIZE_PCENT/100);
-			SLIME_SIZE = SCREEN_WIDTH * (SLIME_SIZE_PCENT/100);
-			ROCK_SPEED = SCREEN_WIDTH * (ROCK_SPEED_PCENT/100);
-			BULLET_SPEED = SCREEN_WIDTH * (BULLET_SPEED_PCENT/100);
-			BUBBLE_SPEED = SCREEN_WIDTH * (BUBBLE_SPEED_PCENT/100);
-			PLATFORM_SPEED = SCREEN_WIDTH * (PLATFORM_SPEED_PCENT/100);
+			ROCK_SIZE = SQ_SIZE * (ROCK_SIZE_PCENT/100);
+			SLIME_SIZE = SQ_SIZE * (SLIME_SIZE_PCENT/100);
+			ROCK_SPEED = SQ_SIZE * (ROCK_SPEED_PCENT/100);
+			BULLET_SPEED = SQ_SIZE * (BULLET_SPEED_PCENT/100);
+			BUBBLE_SPEED = SQ_SIZE * (BUBBLE_SPEED_PCENT/100);
+			PLATFORM_SPEED = SQ_SIZE * (PLATFORM_SPEED_PCENT/100);
 			CLOUD_WIDTH = SCREEN_WIDTH * (CLOUD_WIDTH_PCENT/100);
 			CLOUD_HEIGHT = SCREEN_WIDTH * (CLOUD_HEIGHT_PCENT/100);
-			CLOUD_SPEED = SCREEN_WIDTH * (CLOUD_SPEED_PCENT/100);
+			CLOUD_SPEED = SQ_SIZE * (CLOUD_SPEED_PCENT/100);
 			WASP_WIDTH = PLAYER_WIDTH;
 			WASP_HEIGHT = PLAYER_WIDTH * 1.5f;
 			WASP_SPEED = PLAYER_SPEED /2;
@@ -150,12 +149,12 @@ public final class Statics {
 	}
 
 
-	public static float GetHeightScaled(float frac) {
+	public static float GetHeightScaled(float frac) { // todo - needed?
 		return SCREEN_HEIGHT * frac;
 	}
 
 
-	public static float GetWidthScaled(float frac) {
+	public static float GetWidthScaled(float frac) { // todo - needed?
 		return SCREEN_WIDTH * frac;
 	}
 

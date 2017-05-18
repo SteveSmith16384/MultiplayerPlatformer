@@ -30,6 +30,8 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
+Dont use level selector
+Jumping very high?
 	Clarify true/false for collion/move
 	Slime spurt only colliding if player moves into it
 Restart if player falls too far
