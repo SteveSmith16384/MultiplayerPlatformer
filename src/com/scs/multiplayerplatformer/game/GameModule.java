@@ -2,8 +2,25 @@ package com.scs.multiplayerplatformer.game;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
+
+import org.gamepad4j.Controllers;
+
+import com.scs.multiplayerplatformer.Statics;
+import com.scs.multiplayerplatformer.graphics.Cloud;
+import com.scs.multiplayerplatformer.graphics.Explosion;
+import com.scs.multiplayerplatformer.graphics.blocks.Block;
+import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
+import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
+import com.scs.multiplayerplatformer.input.DeviceThread;
+import com.scs.multiplayerplatformer.input.IInputDevice;
+import com.scs.multiplayerplatformer.input.NewControllerListener;
+import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
+import com.scs.multiplayerplatformer.mapgen.MapLoader;
+import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
+import com.scs.multiplayerplatformer.start.StartupModule;
 
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
@@ -20,19 +37,6 @@ import ssmith.lang.NumberFunctions;
 import ssmith.util.IDisplayText;
 import ssmith.util.Interval;
 import ssmith.util.TSArrayList;
-
-import com.scs.multiplayerplatformer.Statics;
-import com.scs.multiplayerplatformer.graphics.Cloud;
-import com.scs.multiplayerplatformer.graphics.Explosion;
-import com.scs.multiplayerplatformer.graphics.blocks.Block;
-import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
-import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
-import com.scs.multiplayerplatformer.input.IInputDevice;
-import com.scs.multiplayerplatformer.input.NewControllerListener;
-import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
-import com.scs.multiplayerplatformer.mapgen.MapLoader;
-import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
-import com.scs.multiplayerplatformer.start.StartupModule;
 
 
 public final class GameModule extends AbstractModule implements IDisplayText, NewControllerListener {
@@ -156,7 +160,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		/*if (Statics.TEST_LEVEL != null) {
 			filename = "./maps/" + Statics.TEST_LEVEL;
 		} else {*/
-			filename = filename2;
+		filename = filename2;
 		//}
 		original_level_data = new MapLoader(filename, false);
 		original_level_data.getMap();
@@ -200,6 +204,10 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			while (this.newControllers.isEmpty() == false) {
 				this.loadPlayer(this.newControllers.remove(0));
 			}
+		}
+
+		if (DeviceThread.USE_CONTROLLERS) {
+			Controllers.checkControllers();
 		}
 
 		// Remove any objects marked for removal
@@ -310,13 +318,17 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		super.doDraw(g, interpol);
 
 		// Manually draw our entities
-		synchronized (entities) {
-			for (IProcessable o : this.entities) {
-				if (o instanceof IDrawable) {
-					IDrawable id = (IDrawable)o;
-					id.doDraw(g, this.root_cam, interpol, current_scale);
+		try {
+			synchronized (entities) {
+				for (IProcessable o : this.entities) { // todo - concurrent mod exception
+					if (o instanceof IDrawable) {
+						IDrawable id = (IDrawable)o;
+						id.doDraw(g, this.root_cam, interpol, current_scale);
+					}
 				}
 			}
+		} catch (ConcurrentModificationException x) {
+			// Do nothing
 		}
 
 		for (Player player : players) {

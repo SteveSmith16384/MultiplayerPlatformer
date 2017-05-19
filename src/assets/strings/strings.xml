@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Ninja!</string>
+    <string name="app_name">Ninjamatic!</string>
     <string name="main_menu">Main Menu</string>
     <string name="block_created">% created</string>
     <string name="icon_inv">INV</string>

@@ -58,9 +58,7 @@ public class ImageCache extends Hashtable<String, BufferedImage> {//implements R
 				File f = new File(CACHE_DIR + key); 
 				if (f.exists()) {
 					img = ImageIO.read(f);
-					/*if (Statics.DEBUG) {
-						Statics.p("Loading " + key + " from cache");
-					}*/
+					Statics.p("Loading " + key + " from cache");
 					put(key, img); // Put it in the hashmap
 					return img;
 				}
@@ -77,9 +75,9 @@ public class ImageCache extends Hashtable<String, BufferedImage> {//implements R
 					}
 					BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 					scaled.getGraphics().drawImage(img, 0, 0, w, h, c);
-					if (Statics.DEBUG) {
+					//if (Statics.DEBUG) {
 						Statics.p("Generated image " + filename + " of " + w + "," + h);
-					}
+					//}
 					img = scaled;
 					put(key, img);
 

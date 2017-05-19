@@ -86,7 +86,7 @@ public final class StartupModule extends AbstractModule {
 
 		menu_node.attachChild(new Button(act.getString("start_game"), null, paint_button_text, bmp_mf_blue), 0, 0);
 		//menu_node.attachChild(new Button(act.getString("settings"), null, paint_button_text, bmp_mf_blue), 0, 1);
-		menu_node.attachChild(new Button(act.getString("quit"), null, paint_button_text, bmp_mf_blue), 0, 1);
+		menu_node.attachChild(new Button("Quit", null, paint_button_text, bmp_mf_blue), 0, 1);
 
 		menu_node.updateGeometricState();
 

@@ -7,6 +7,8 @@ import org.gamepad4j.IStick;
 import org.gamepad4j.StickID;
 import org.gamepad4j.StickPosition;
 
+import com.scs.multiplayerplatformer.Statics;
+
 public final class PS4Controller implements IInputDevice {
 
 	private IController gamepad;
@@ -20,7 +22,8 @@ public final class PS4Controller implements IInputDevice {
 	public boolean isLeftPressed() {
 		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
 		//return pos.getDirection() == DpadDirection.LEFT;
-		return pos.getDegree() > 252 && pos.getDegree() < 360;
+		//Statics.p("Left=" + pos.getDegree());
+		return pos.getDegree() > 252 && pos.getDegree() < 360; // 90=right, 270=left
 
 	}
 
@@ -29,7 +32,7 @@ public final class PS4Controller implements IInputDevice {
 	public boolean isRightPressed() {
 		StickPosition pos = gamepad.getStick(StickID.LEFT).getPosition();
 		//return pos.getDirection() == DpadDirection.RIGHT;
-		return pos.getDegree() > 17 && pos.getDegree() < 152;
+		return pos.getDegree() > 17 && pos.getDegree() < 152; // 90=right, 270=left
 	}
 
 

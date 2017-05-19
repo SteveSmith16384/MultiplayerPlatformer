@@ -2,11 +2,11 @@ Ninjamatic
 
 
 HOME
+Make video
 	PS4 controller - down left for down
 Remove header tags
 Make music mono
 Add wasps to maps
-Make video
 Sound not working
 Create new logo
 Add baddies to levels
@@ -32,15 +32,18 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
+Dont hide enemies outside LOS
+Change start square for empty, not wood
+Cache images hasmap serialize
+Only list CSV files in map dir
+Add mousewheel to menus
 Give limited shurikens, replenish on death
 Put clouds in background
 Not dying if on top of enemy
 "Press fire to start" is hidden
 	Starting on top of enemy
-	Too far zoomed in with one player
 Restart if player falls too far
-	Gaps between squares when scaling
-	Error when closing window
+Gaps between squares when scaling
 Test shurikens
 	Slime spurt only colliding if player moves into it
 Sometimes player kills enemy

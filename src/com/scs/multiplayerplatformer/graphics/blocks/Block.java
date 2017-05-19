@@ -92,7 +92,7 @@ public class Block extends GameObject {
 
 
 	private void generateImages(int width, float scale) {
-		int size = width + 1;//(int)Math.floor(Statics.SQ_SIZE*scale);
+		int size = width + 2;//(int)Math.floor(Statics.SQ_SIZE*scale);
 		/*if (Statics.DEBUG) {
 			Statics.p("Generating images for blocks size " + width + " for " + map_x + ", " + map_y);
 		}*/

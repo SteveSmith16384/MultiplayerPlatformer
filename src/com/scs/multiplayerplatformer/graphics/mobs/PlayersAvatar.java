@@ -63,6 +63,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 			moving_up = false;
 			moving_down = false;
 			if (input.isJumpPressed()) {
+				//Statics.p("JUMP!");
 				startJumping();
 			} else {
 				stoppedJumping();
