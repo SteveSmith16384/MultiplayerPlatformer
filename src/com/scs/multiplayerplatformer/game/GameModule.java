@@ -50,12 +50,11 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private static Paint paint_text_ink = new Paint(); // For timer, dist
 
 	private TSArrayList<IProcessable> entities = new TSArrayList<IProcessable>();;
-	public AbstractLevelData original_level_data;
+	public AbstractLevelData levelData;
 	public MyEfficientGridLayout blockGrid;
 	private TimedString msg;
 	private Rectangle dummy_rect = new Rectangle(); // for checking the area is clear
 	private long levelEndTime;
-	public int level;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
 	public List<PlayersAvatar> avatars = new ArrayList<>();
@@ -63,7 +62,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private List<IInputDevice> newControllers = new ArrayList<>();
 	private String filename;
 
-	public float current_scale = Statics.MAX_ZOOM;// .25f;//1;//.5f;
+	public float current_scale = Statics.MAX_ZOOM_IN;
 	private float new_scale = current_scale;
 
 	static {
@@ -109,11 +108,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		msg = new TimedString(this, 2000);
 
-		if (level <= 1) {
-			showToast("PRESS FIRE TO START!");
-		} else {
-			showToast("LEVEL " + level);
-		}
 	}
 
 
@@ -132,14 +126,10 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		}
 
 		new EnemyEventTimer(this);
-		levelEndTime = System.currentTimeMillis() + (20 * 1000);
+		levelEndTime = System.currentTimeMillis() + (Statics.LEVEL_TIME_SECS * 1000);
 
 		if (filename == null) {
-			//String maps[] = new File(Statics.MAP_DIR).list();
-			/*todoif (maps == null || maps.length <= 0) {
-				throw new RuntimeException("No maps found!  Put them in " + Statics.MAP_DIR);
-			}*/
-			loadMap(MapLoader.GetRandomMap());//Statics.MAP_DIR + maps[NumberFunctions.rnd(0, maps.length-1)]);
+			loadMap(MapLoader.GetRandomMap());
 		} else {
 			loadMap(filename);
 		}
@@ -150,26 +140,26 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			this.loadPlayer(input);
 		}
 
-		this.showToast("Level " + this.level + "!");
+		showToast(this.levelData.levelName);
 	}
 
 
 	private void loadMap(String filename) {
 		//String filename = filename2;
 		//}
-		original_level_data = new MapLoader(filename, false);
-		original_level_data.getMap();
+		levelData = new MapLoader(filename, false);
+		levelData.getMap();
 
-		blockGrid = new MyEfficientGridLayout(this, original_level_data.getGridWidth(), original_level_data.getGridHeight(), Statics.SQ_SIZE);
+		blockGrid = new MyEfficientGridLayout(this, levelData.getGridWidth(), levelData.getGridHeight(), Statics.SQ_SIZE);
 		this.root_node.attachChild(blockGrid);
 		this.entities.add(blockGrid);
 
 		this.stat_node_back.updateGeometricState();
 		this.stat_node_front.updateGeometricState();
 
-		for (int map_y=0 ; map_y<original_level_data.getGridHeight() ; map_y++) {
-			for (int map_x=0 ; map_x<this.original_level_data.getGridWidth() ; map_x++) {
-				byte data = original_level_data.getGridDataAt(map_x, map_y);
+		for (int map_y=0 ; map_y<levelData.getGridHeight() ; map_y++) {
+			for (int map_x=0 ; map_x<this.levelData.getGridWidth() ; map_x++) {
+				byte data = levelData.getGridDataAt(map_x, map_y);
 				if (data > 0) {
 					this.addBlock(data, map_x, map_y, false);
 				}
@@ -209,10 +199,10 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		this.entities.refresh();
 
 		// Adjust scale
-		if (new_scale > Statics.MAX_ZOOM) {
-			new_scale = Statics.MAX_ZOOM;
-		} else if (new_scale < Statics.MIN_ZOOM) {
-			new_scale = Statics.MIN_ZOOM;
+		if (new_scale > Statics.MAX_ZOOM_IN) {
+			new_scale = Statics.MAX_ZOOM_IN;
+		} else if (new_scale < Statics.MAX_ZOOM_OUT) {
+			new_scale = Statics.MAX_ZOOM_OUT;
 		}
 		this.current_scale = new_scale;
 
@@ -265,17 +255,17 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 				}*/
 			} else {
 				// Only one player - set zoom to 1
-				this.new_scale = Statics.MAX_ZOOM;
+				this.new_scale = Statics.MAX_ZOOM_IN;
 			}
 
 		} else {
 			// No players yet!
-			float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
+			float x = levelData.getStartPos().x * Statics.SQ_SIZE;
 			//x += this.new_grid.getWorldX();
-			float y = (original_level_data.getStartPos().y) * Statics.SQ_SIZE;
+			float y = (levelData.getStartPos().y) * Statics.SQ_SIZE;
 			//y += this.new_grid.getWorldY();
 			this.root_cam.lookAt(x, y, true);
-			new_scale = Statics.MAX_ZOOM;
+			new_scale = Statics.MAX_ZOOM_IN;
 		}
 
 	}
@@ -283,14 +273,14 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	private void checkIfMobsNeedCreating() {
 		// Load mobs
-		if (original_level_data.mobs != null && this.avatars.size() > 0) {
-			for (int i=0 ; i<original_level_data.mobs.size() ; i++) {
-				SimpleMobData sm = original_level_data.mobs.get(i);
+		if (levelData.mobs != null && this.avatars.size() > 0) {
+			for (int i=0 ; i<levelData.mobs.size() ; i++) {
+				SimpleMobData sm = levelData.mobs.get(i);
 				//float dist = getDistanceToClosestPlayer(sm.pixel_x); // NumberFunctions.mod(this.player.getWorldX() - sm.pixel_x);
 				boolean onscreen = this.isOnScreen(root_cam,  this.current_scale, sm.pixel_x, sm.pixel_y);
 				if (onscreen) {//dist < Statics.ACTIVATE_DIST) { // Needs to be screen width in case we've walked too fast into their "creation zone"
 					AbstractMob.CreateMob(this, sm);
-					original_level_data.mobs.remove(i);
+					levelData.mobs.remove(i);
 					i--;
 				}
 			}
@@ -338,7 +328,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		} else {
 			g.drawText("TIME OUT", 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
 		}
-		g.drawText(this.original_level_data.levelName, 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*5), paint_text_ink);
+		g.drawText(this.levelData.levelName, 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*5), paint_text_ink);
 
 		if (Statics.SHOW_STATS) {
 			g.drawText("Inst Objects: " + this.entities.size(), 10, paint_text_ink.getTextSize()*7, paint_text_ink);
@@ -402,7 +392,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	public Block addBlock(byte type, int map_x, int map_y, boolean not_loaded_from_file) {
 		Block block = null;
-		if (map_x >= 0 && map_y >= 0 && map_x < this.original_level_data.getGridWidth() && map_y < this.original_level_data.getGridHeight()) {
+		if (map_x >= 0 && map_y >= 0 && map_x < this.levelData.getGridWidth() && map_y < this.levelData.getGridHeight()) {
 			if (type != Block.NOTHING_DAYLIGHT) {
 				block = new Block(this, type, map_x, map_y);
 			}
@@ -504,8 +494,8 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	public void restartPlayer(PlayersAvatar avatar) {
-		float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
-		float y = (original_level_data.getStartPos().y) * Statics.SQ_SIZE; // -2 so we start above the bed
+		float x = levelData.getStartPos().x * Statics.SQ_SIZE;
+		float y = (levelData.getStartPos().y) * Statics.SQ_SIZE; // -2 so we start above the bed
 		//float x = original_level_data.getStartPos().x * Statics.SQ_SIZE;
 		//float y = (original_level_data.getStartPos().y) * Statics.SQ_SIZE;
 		while (!this.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {

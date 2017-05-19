@@ -51,9 +51,6 @@ public abstract class AbstractMob extends GameObject {
 
 
 	public static void CreateMob(GameModule game, SimpleMobData sm) {
-		/*if (Statics.DEBUGGING) {
-			return;
-		}*/
 		switch (sm.getType()) {
 		case AbstractMob.ENEMY_NINJA_EASY:
 			EnemyNinjaEasy.Subfactory(game, sm.pixel_x, sm.pixel_y);
@@ -75,7 +72,7 @@ public abstract class AbstractMob extends GameObject {
 	}
 
 
-	public byte getType() {
+	/*public byte getType() {
 		if (this instanceof PlayersAvatar) {
 			return PLAYER;
 		} else {
@@ -84,7 +81,7 @@ public abstract class AbstractMob extends GameObject {
 			}
 			return -1;
 		}
-	}
+	}*/
 
 
 	// Returns true of move() was successful

@@ -33,27 +33,16 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
-Slime spurts cancelling each other out
-Only list CSV files in map dir
-Add mousewheel to menus
 "Press fire to start" is hidden
-	Cache images hashmap serialize
+	Slime spurts cancelling each other out
 	Dont hide enemies outside LOS
 	Change start square for empty, not wood
 Give limited shurikens, replenish on death
-	Put clouds in background
 Not dying if on top of enemy
 Restart if player falls too far
-	Gaps between squares when scaling
 	Slime spurt only colliding if player moves into it
-Sometimes player kills enemy
-	Enemy ninja shurikan killing other enemy ninjas
-	Negative score
-	Not showing time
-	Time left going up!
-	Timer - stop at zero
-	Choose menu option with keys
 Search for todos
+Add mousewheel to menus
 
 
 LATER

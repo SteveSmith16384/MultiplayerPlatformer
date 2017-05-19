@@ -36,10 +36,10 @@ public final class Statics {
 	public static final long FREEZE_DUR = 1000;
 	public static final int MAX_BMP_WIDTH = 100;
 	public static final int MAX_PLAYER_SPRITES = 3;
-	
+	public static final int LEVEL_TIME_SECS = 60;
 	public static final float ZOOM_SPEED = 1.02f;
-	public static float MIN_ZOOM;// = 0.1f;
-	public static float MAX_ZOOM;// = 1f; // todo - rename to "scale"
+	public static float MAX_ZOOM_OUT;
+	public static float MAX_ZOOM_IN;
 
 	public static AbstractActivity act;
 	public static Typeface stdfnt, iconfnt, bigfnt;
@@ -97,8 +97,8 @@ public final class Statics {
 
 			SQ_SIZE = 50; //SCREEN_WIDTH * (SQ_SIZE_PCENT/100);
 			SQ_SIZE_INT = (int)Math.ceil(SQ_SIZE);
-			MIN_ZOOM = SCREEN_WIDTH / 4000;
-			MAX_ZOOM = SCREEN_WIDTH / 800;
+			MAX_ZOOM_OUT = SCREEN_WIDTH / 6000;
+			MAX_ZOOM_IN = SCREEN_WIDTH / 800;
 			ICON_SIZE = SCREEN_WIDTH * (ICON_SIZE_PCENT/100);
 			PLAYER_WIDTH = SQ_SIZE * 0.8f;
 			PLAYER_HEIGHT = (SQ_SIZE*2) * 0.9f;
@@ -120,11 +120,7 @@ public final class Statics {
 			WASP_HEIGHT = PLAYER_WIDTH * 1.5f;
 			WASP_SPEED = PLAYER_SPEED /2;
 
-			//HEALTH_BAR_HEIGHT =  Statics.SCREEN_HEIGHT/3;
-			//HEALTH_BAR_WIDTH =  Statics.SCREEN_WIDTH * 0.05f;
-
 			ACTIVATE_DIST = Statics.SQ_SIZE * 10;// Statics.SCREEN_WIDTH * .65f; // Dist when something should be processed 
-			//DEACTIVATE_DIST = Statics.SCREEN_WIDTH * .75f; // Dist when something should be removed
 
 			// Load font
 			/*try {

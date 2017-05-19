@@ -689,7 +689,7 @@ public class Block extends GameObject {
 				if (Functions.rnd(1, 2) == 1) {
 					if (this.getDistanceToClosestPlayer(null) <= Statics.ACTIVATE_DIST) {
 						act.sound_manager.slime();
-						new ThrownItem(game, Block.SLIME_SPURT, new MyPointF(this.getWorldCentreX(), this.getWorldY()), new MyPointF(Functions.rndFloat(-.5f, .5f), -1), null, 10, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.SLIME_SIZE);
+						new ThrownItem(game, Block.SLIME_SPURT, new MyPointF(this.getWorldCentreX(), this.getWorldY()), new MyPointF(Functions.rndFloat(-.5f, .5f), -1), null, 10, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.SLIME_SIZE, false);
 					}
 				}
 			}

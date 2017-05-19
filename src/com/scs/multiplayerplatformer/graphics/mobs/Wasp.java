@@ -151,7 +151,7 @@ public class Wasp extends AbstractMob {
 		} else { //if (dist > Statics.DEACTIVATE_DIST) {
 			this.remove();
 			// Re-add them to list to create
-			this.game.original_level_data.mobs.add(new SimpleMobData(AbstractMob.WASP, this.getWorldX(), this.getWorldY()));
+			this.game.levelData.mobs.add(new SimpleMobData(AbstractMob.WASP, this.getWorldX(), this.getWorldY()));
 		}
 	}
 

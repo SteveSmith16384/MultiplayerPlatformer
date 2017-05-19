@@ -56,9 +56,12 @@ public final class Collision {
 
 
 	private static boolean ThrownItem_ThrownItem(ThrownItem ti1, ThrownItem ti2) {
-		ti1.remove();
-		ti2.remove();
-		return true;
+		if (ti1.collidesWithothers && ti2.collidesWithothers) {
+			ti1.remove();
+			ti2.remove();
+			return true;
+		}
+		return false;
 	}
 
 

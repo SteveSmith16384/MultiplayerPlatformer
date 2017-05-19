@@ -21,30 +21,30 @@ public class ThrownItem extends GameObject {
 	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH];
 	public AbstractMob thrower;
 	private byte type;
-	//private int damage;
-	
+	public boolean collidesWithothers;
+
 	public static void ThrowRock(GameModule _game, byte _type, AbstractMob _thrower, MyPointF _dir) {
 		new ThrownItem(_game, _type, _thrower, _dir, 1, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.ROCK_SIZE);
 	}
 
-	
+
 	public static void ThrowShuriken(GameModule _game, AbstractMob _thrower, MyPointF _dir) {
 		new ThrownItem(_game, Block.SHURIKEN, _thrower, _dir, 1, Statics.ROCK_SPEED*2, Statics.ROCK_GRAVITY/2, Statics.ROCK_SIZE);
 	}
 
-	
+
 	private ThrownItem(GameModule _game, byte _type, AbstractMob _thrower, MyPointF _dir, int _damage, float speed, float grav, float size) {
-		this(_game, _type, new MyPointF(_thrower.getWorldCentreX(), _thrower.getWorldBounds().top + (_thrower.getHeight()*.25f)), _dir, _thrower, _damage, speed, grav, size);
+		this(_game, _type, new MyPointF(_thrower.getWorldCentreX(), _thrower.getWorldBounds().top + (_thrower.getHeight()*.25f)), _dir, _thrower, _damage, speed, grav, size, false);
 	}
 
 
-	public ThrownItem(GameModule _game, byte _type, MyPointF _start, MyPointF _dir, AbstractMob _thrower, int _damage, float speed, float grav, float size) {
+	public ThrownItem(GameModule _game, byte _type, MyPointF _start, MyPointF _dir, AbstractMob _thrower, int _damage, float speed, float grav, float size, boolean _collidesWithothers) {
 		super(_game, "ThrownItem", true, _start.x, _start.y, size, size);
 
 		type = _type;
 		phys = new PhysicsEngine(_dir, speed, grav);
 		thrower = _thrower;
-		//damage = _damage;
+		collidesWithothers = _collidesWithothers;
 
 		this.game.root_node.attachChild(this);
 		this.updateGeometricState();
@@ -70,16 +70,6 @@ public class ThrownItem extends GameObject {
 		if (colls.size() > 0) {
 			for (Geometry c : colls) { // this
 				Collision.Collided(this, c);
-				/*if (c == thrower) {
-					// Do nothing
-				} else {
-					if (c instanceof ThrownItem) {
-						((ThrownItem) c).remove();
-						this.remove(); // Knock other shurikens out of sky
-						return;
-					}
-				}*/
-				
 			}
 		}
 
@@ -94,7 +84,7 @@ public class ThrownItem extends GameObject {
 				return;
 			}
 		}
-		
+
 		// See if we're off the map
 		if (this.getWorldY() < 0) {
 			this.remove();
@@ -116,7 +106,7 @@ public class ThrownItem extends GameObject {
 			}
 			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
 		}
-		
+
 	}
 
 }
