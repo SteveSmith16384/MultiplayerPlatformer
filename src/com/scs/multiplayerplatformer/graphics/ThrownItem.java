@@ -21,7 +21,7 @@ public class ThrownItem extends GameObject {
 	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH];
 	public AbstractMob thrower;
 	private byte type;
-	private int damage;
+	//private int damage;
 	
 	public static void ThrowRock(GameModule _game, byte _type, AbstractMob _thrower, MyPointF _dir) {
 		new ThrownItem(_game, _type, _thrower, _dir, 1, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.ROCK_SIZE);
@@ -44,11 +44,11 @@ public class ThrownItem extends GameObject {
 		type = _type;
 		phys = new PhysicsEngine(_dir, speed, grav);
 		thrower = _thrower;
-		damage = _damage;
+		//damage = _damage;
 
 		this.game.root_node.attachChild(this);
 		this.updateGeometricState();
-		this.game.addToProcess_Instant(this);
+		this.game.addToProcess(this);
 	}
 
 

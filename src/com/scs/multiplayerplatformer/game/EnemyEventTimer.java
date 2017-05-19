@@ -16,7 +16,7 @@ public class EnemyEventTimer extends Timer implements IProcessable {
 
 		game = _game;
 
-		game.addToProcess_Instant(this);
+		game.addToProcess(this);
 	}
 
 

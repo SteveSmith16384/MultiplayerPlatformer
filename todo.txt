@@ -2,6 +2,7 @@ Ninjamatic
 
 
 HOME
+Post to java-gaming
 Make video
 	PS4 controller - down left for down
 Remove header tags
@@ -32,19 +33,18 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
-Dont hide enemies outside LOS
-Change start square for empty, not wood
-Cache images hasmap serialize
+Slime spurts cancelling each other out
 Only list CSV files in map dir
 Add mousewheel to menus
-Give limited shurikens, replenish on death
-Put clouds in background
-Not dying if on top of enemy
 "Press fire to start" is hidden
-	Starting on top of enemy
+	Cache images hashmap serialize
+	Dont hide enemies outside LOS
+	Change start square for empty, not wood
+Give limited shurikens, replenish on death
+	Put clouds in background
+Not dying if on top of enemy
 Restart if player falls too far
-Gaps between squares when scaling
-Test shurikens
+	Gaps between squares when scaling
 	Slime spurt only colliding if player moves into it
 Sometimes player kills enemy
 	Enemy ninja shurikan killing other enemy ninjas

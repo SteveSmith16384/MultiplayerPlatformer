@@ -1,12 +1,27 @@
 package com.scs.multiplayerplatformer.game;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 
 import org.gamepad4j.Controllers;
+
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.Paint;
+import ssmith.android.compatibility.Style;
+import ssmith.android.framework.AbstractActivity;
+import ssmith.android.framework.MyEvent;
+import ssmith.android.framework.modules.AbstractModule;
+import ssmith.android.lib2d.Camera;
+import ssmith.android.lib2d.gui.GUIFunctions;
+import ssmith.android.lib2d.shapes.AbstractRectangle;
+import ssmith.android.lib2d.shapes.Geometry;
+import ssmith.android.lib2d.shapes.Rectangle;
+import ssmith.lang.GeometryFuncs;
+import ssmith.util.IDisplayText;
+import ssmith.util.Interval;
+import ssmith.util.TSArrayList;
 
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.graphics.Cloud;
@@ -22,22 +37,6 @@ import com.scs.multiplayerplatformer.mapgen.MapLoader;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 import com.scs.multiplayerplatformer.start.StartupModule;
 
-import ssmith.android.compatibility.Canvas;
-import ssmith.android.compatibility.Paint;
-import ssmith.android.compatibility.Style;
-import ssmith.android.framework.AbstractActivity;
-import ssmith.android.framework.MyEvent;
-import ssmith.android.framework.modules.AbstractModule;
-import ssmith.android.lib2d.gui.GUIFunctions;
-import ssmith.android.lib2d.shapes.AbstractRectangle;
-import ssmith.android.lib2d.shapes.Geometry;
-import ssmith.android.lib2d.shapes.Rectangle;
-import ssmith.lang.GeometryFuncs;
-import ssmith.lang.NumberFunctions;
-import ssmith.util.IDisplayText;
-import ssmith.util.Interval;
-import ssmith.util.TSArrayList;
-
 
 public final class GameModule extends AbstractModule implements IDisplayText, NewControllerListener {
 
@@ -50,7 +49,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private static Paint paint_inv_ink = new Paint(); // For inv qty
 	private static Paint paint_text_ink = new Paint(); // For timer, dist
 
-	private TSArrayList<IProcessable> entities;
+	private TSArrayList<IProcessable> entities = new TSArrayList<IProcessable>();;
 	public AbstractLevelData original_level_data;
 	public MyEfficientGridLayout blockGrid;
 	private TimedString msg;
@@ -65,7 +64,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private String filename;
 
 	public float current_scale = Statics.MAX_ZOOM;// .25f;//1;//.5f;
-	public float new_scale = current_scale;
+	private float new_scale = current_scale;
 
 	static {
 		paint_health_bar.setARGB(150, 200, 0, 0); // This is set elsewhere
@@ -122,23 +121,27 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private void startNewLevel(String filename) {
 		Statics.act.sound_manager.levelStart();
 
-		entities = new TSArrayList<IProcessable>();
+		entities.clear();//.re = new TSArrayList<IProcessable>();
 
 		this.root_node.detachAllChildren();
 		this.stat_node_back.detachAllChildren();
 		this.stat_node_front.detachAllChildren();
 
+		for (int i=0 ; i<3 ; i++) {
+			new Cloud(this);
+		}
+
 		new EnemyEventTimer(this);
 		levelEndTime = System.currentTimeMillis() + (20 * 1000);
 
 		if (filename == null) {
-			String maps[] = new File(Statics.MAP_DIR).list();
-			if (maps == null || maps.length <= 0) {
+			//String maps[] = new File(Statics.MAP_DIR).list();
+			/*todoif (maps == null || maps.length <= 0) {
 				throw new RuntimeException("No maps found!  Put them in " + Statics.MAP_DIR);
-			}
-			loadMap(Statics.MAP_DIR + maps[NumberFunctions.rnd(0, maps.length-1)]);
+			}*/
+			loadMap(MapLoader.GetRandomMap());//Statics.MAP_DIR + maps[NumberFunctions.rnd(0, maps.length-1)]);
 		} else {
-			loadMap(Statics.MAP_DIR + filename);
+			loadMap(filename);
 		}
 
 		Iterator<IInputDevice> it = Statics.act.thread.deviceThread.getDevices().iterator();
@@ -147,20 +150,12 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			this.loadPlayer(input);
 		}
 
-		for (int i=0 ; i<3 ; i++) {
-			new Cloud(this);
-		}
-
 		this.showToast("Level " + this.level + "!");
 	}
 
 
-	private void loadMap(String filename2) {
-		String filename = null;
-		/*if (Statics.TEST_LEVEL != null) {
-			filename = "./maps/" + Statics.TEST_LEVEL;
-		} else {*/
-		filename = filename2;
+	private void loadMap(String filename) {
+		//String filename = filename2;
 		//}
 		original_level_data = new MapLoader(filename, false);
 		original_level_data.getMap();
@@ -291,8 +286,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		if (original_level_data.mobs != null && this.avatars.size() > 0) {
 			for (int i=0 ; i<original_level_data.mobs.size() ; i++) {
 				SimpleMobData sm = original_level_data.mobs.get(i);
-				float dist = getDistanceToClosestPlayer(sm.pixel_x); // NumberFunctions.mod(this.player.getWorldX() - sm.pixel_x); 
-				if (dist < Statics.ACTIVATE_DIST) { // Needs to be screen width in case we've walked too fast into their "creation zone"
+				//float dist = getDistanceToClosestPlayer(sm.pixel_x); // NumberFunctions.mod(this.player.getWorldX() - sm.pixel_x);
+				boolean onscreen = this.isOnScreen(root_cam,  this.current_scale, sm.pixel_x, sm.pixel_y);
+				if (onscreen) {//dist < Statics.ACTIVATE_DIST) { // Needs to be screen width in case we've walked too fast into their "creation zone"
 					AbstractMob.CreateMob(this, sm);
 					original_level_data.mobs.remove(i);
 					i--;
@@ -415,7 +411,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			if (block != null) {
 				if (Block.RequireProcessing(block.getType())) {
 					//boolean slow = block.getType() == Block.WATER || block.getType() == Block.LAVA || block.getType() == Block.FIRE; // Always process water slow!
-					this.addToProcess_Instant(block);//, slow);
+					this.addToProcess(block);//, slow);
 				}
 			}
 		}
@@ -423,7 +419,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	public void addToProcess_Instant(IProcessable o) {
+	public void addToProcess(IProcessable o) {
 		this.entities.add(o);
 	}
 
@@ -501,7 +497,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		PlayersAvatar avatar = new PlayersAvatar(this, player, 0, 0, input);
 		this.avatars.add(avatar);
-		addToProcess_Instant(avatar);
+		addToProcess(avatar);
 		//avatar.parent.updateGeometricState();
 		this.restartPlayer(avatar);
 	}
@@ -521,10 +517,10 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	public TSArrayList<IProcessable> getOthersInstant() {
+	/*public TSArrayList<IProcessable> getOthersInstant() {
 		return this.entities;
 	}
-
+*/
 
 	@Override
 	public void displayText(String s) {
@@ -563,5 +559,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
+	public boolean isOnScreen(Camera cam, float scale, float x, float y) {
+		return x >= 0 && x <= Statics.SCREEN_WIDTH && y >= 0 && y<= Statics.SCREEN_HEIGHT;
+	}
+	
 }
 

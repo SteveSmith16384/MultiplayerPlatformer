@@ -1,7 +1,6 @@
 package com.scs.multiplayerplatformer.graphics.mobs;
 
 import ssmith.android.compatibility.PointF;
-import ssmith.android.framework.AbstractActivity;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.lang.GeometryFuncs;
 

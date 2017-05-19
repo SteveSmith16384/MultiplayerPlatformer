@@ -25,7 +25,7 @@ public class DyingEnemy extends GameObject {
 		
 		this.game.root_node.attachChild(this);
 		this.updateGeometricState();
-		this.game.addToProcess_Instant(this);
+		this.game.addToProcess(this);
 	}
 
 

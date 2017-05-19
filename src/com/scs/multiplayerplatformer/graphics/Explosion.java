@@ -42,7 +42,7 @@ public final class Explosion extends GameObject {
 		pxl_origin = _pxl_origin;
 		
 		parent.attachChild(this);
-		this.game.addToProcess_Instant(this);
+		this.game.addToProcess(this);
 		
 		//this.collides = false;
 	}

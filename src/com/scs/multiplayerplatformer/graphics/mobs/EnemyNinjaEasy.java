@@ -60,13 +60,14 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 	private EnemyNinjaEasy(GameModule _game, float x, float y) {
 		super(_game, "Enemy Ninja", x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, MAX_FRAMES, 200, true, false, Statics.SD_ENEMY_SIDE, true);
 	}
-	
+
 
 	@Override
 	public void process(long interpol) {
 		ReturnObject<PlayersAvatar> playerTemp = new ReturnObject<>();
-		float dist = this.getDistanceToClosestPlayer(playerTemp); 
-		if (dist < Statics.ACTIVATE_DIST) { // Only process if close
+		float dist = this.getDistanceToClosestPlayer(playerTemp);
+
+		if (this.isOnScreen(game.root_cam, game.current_scale)) { //dist < Statics.ACTIVATE_DIST) { // Only process if close
 			PlayersAvatar player = playerTemp.toReturn;
 			if (turn_interval.hitInterval()) {
 				if (player != null) {
@@ -99,7 +100,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 					player = this.getVisiblePlayer(); 
 					if (player != null) {
 						//if (Statics.DEBUG == false) {
-							this.throwShuriken(player);
+						this.throwShuriken(player);
 						//}
 					}
 				}
@@ -108,7 +109,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 			if (is_on_ground_or_ladder) { // Must be after we've jumped!
 				tried_jumping = false;
 			}
-		} else if (dist > Statics.DEACTIVATE_DIST) {
+		} else { //if (dist > Statics.DEACTIVATE_DIST) {
 			this.remove();
 			// Re-add them to list to create
 			this.game.original_level_data.mobs.add(new SimpleMobData(AbstractMob.ENEMY_NINJA_EASY, this.getWorldX(), this.getWorldY()));

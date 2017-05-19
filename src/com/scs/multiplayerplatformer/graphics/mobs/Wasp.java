@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.lib2d.Camera;
-import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.Functions;
 import ssmith.lang.NumberFunctions;
 import ssmith.util.ReturnObject;
@@ -23,7 +22,7 @@ public class Wasp extends AbstractMob {
 	private int off_x = 1, off_y;
 	private boolean facing_left = true;
 	private int left_right_timer, up_down_timer;
-	private long frame_time=0, frame_interval;
+	//private long frame_time=0, frame_interval;
 
 
 	public static void Factory(GameModule game, Block gen) { // gen == null for normal appearance
@@ -88,7 +87,7 @@ public class Wasp extends AbstractMob {
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
 		if (this.visible) {
-			frame_time += interpol;
+			//frame_time += interpol;
 			int width = (int)(this.getWidth() * scale);
 			int frame = Functions.rnd(0, 1);
 			if (facing_left) {
@@ -117,8 +116,8 @@ public class Wasp extends AbstractMob {
 	@Override
 	public void process(long interpol) {
 		ReturnObject<PlayersAvatar> playerTemp = new ReturnObject<>();
-		float dist = this.getDistanceToClosestPlayer(playerTemp); 
-		if (dist < Statics.ACTIVATE_DIST) { // Only process if close
+		//float dist = this.getDistanceToClosestPlayer(playerTemp);
+		if (this.isOnScreen(game.root_cam, game.current_scale)) { //dist < Statics.ACTIVATE_DIST) { // Only process if close
 			PlayersAvatar player = playerTemp.toReturn;
 			if (Functions.rnd(1, 10) == 1) {
 				// move randomly
@@ -149,7 +148,7 @@ public class Wasp extends AbstractMob {
 					this.up_down_timer = TURN_DURATION;
 				}
 			}
-		} else if (dist > Statics.DEACTIVATE_DIST) {
+		} else { //if (dist > Statics.DEACTIVATE_DIST) {
 			this.remove();
 			// Re-add them to list to create
 			this.game.original_level_data.mobs.add(new SimpleMobData(AbstractMob.WASP, this.getWorldX(), this.getWorldY()));

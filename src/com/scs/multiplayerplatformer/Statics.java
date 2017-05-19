@@ -3,7 +3,6 @@ package com.scs.multiplayerplatformer;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.io.File;
 
 import ssmith.android.compatibility.Typeface;
 import ssmith.android.framework.AbstractActivity;
@@ -24,14 +23,13 @@ public final class Statics {
 	public static final byte SD_PLAYERS_SIDE = 0;
 	public static final byte SD_ENEMY_SIDE = 1;
 
-	public static final String MAP_DIR = "./maps/";
 	public static final boolean SHOW_STATS = false;
 	public static final int LOOP_DELAY = 30;
 	public static final int MAX_INSTANTS = 999;
 	public static final int DYNAMITE_DAMAGE = 10;
 	public static final String EMAIL = "help@penultimateapps.com"; 
 	public static final float LABEL_SPACING = 1.2f;
-	public static float ACTIVATE_DIST, DEACTIVATE_DIST;
+	public static float ACTIVATE_DIST; //, DEACTIVATE_SQUARES;
 	public static final String MUSIC_R = "Venus.mp3";
 	public static final int WINDOW_TOP_OFFSET = 25;
 	public static String BACKGROUND_IMAGE;
@@ -125,8 +123,8 @@ public final class Statics {
 			//HEALTH_BAR_HEIGHT =  Statics.SCREEN_HEIGHT/3;
 			//HEALTH_BAR_WIDTH =  Statics.SCREEN_WIDTH * 0.05f;
 
-			ACTIVATE_DIST = Statics.SCREEN_WIDTH * .65f; // Dist when something should be processed 
-			DEACTIVATE_DIST = Statics.SCREEN_WIDTH * .75f; // Dist when something should be removed
+			ACTIVATE_DIST = Statics.SQ_SIZE * 10;// Statics.SCREEN_WIDTH * .65f; // Dist when something should be processed 
+			//DEACTIVATE_DIST = Statics.SCREEN_WIDTH * .75f; // Dist when something should be removed
 
 			// Load font
 			/*try {
@@ -145,7 +143,7 @@ public final class Statics {
 			bigfnt = new Typeface("Helvetica", Font.BOLD, 28);
 			//}
 
-			new File(Statics.MAP_DIR).mkdirs();
+			//new File(Statics.MAP_DIR).mkdirs();
 
 			initd = true;
 		}

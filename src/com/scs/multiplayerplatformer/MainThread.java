@@ -12,7 +12,6 @@ import ssmith.android.framework.modules.AbstractModule;
 import ssmith.awt.ImageCache;
 import ssmith.lang.Functions;
 
-import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.input.DeviceThread;
 import com.scs.multiplayerplatformer.start.ErrorModule;
 import com.scs.multiplayerplatformer.start.StartupModule;
@@ -46,7 +45,8 @@ public final class MainThread extends Thread {
 		this.setDaemon(true);
 
 		window = new MainWindow(this);
-		Statics.img_cache = new ImageCache(window);
+		Statics.img_cache = ImageCache.GetInstance();// new ImageCache(window);
+		Statics.img_cache.c = window;
 		deviceThread = new DeviceThread(window);
 	}
 

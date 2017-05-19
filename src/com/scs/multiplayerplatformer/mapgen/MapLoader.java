@@ -1,6 +1,7 @@
 package com.scs.multiplayerplatformer.mapgen;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -13,6 +14,8 @@ import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
 public final class MapLoader extends AbstractLevelData {
+
+	private static final String MAP_DIR = "./maps/";
 
 	// Tags
 	//public static final String HEADER_TAG_ = "Worldcrafter Save File";
@@ -32,9 +35,37 @@ public final class MapLoader extends AbstractLevelData {
 	public MapLoader(String _filename, boolean _is_resource) {
 		super();
 
-		filename = _filename;
+		filename = MAP_DIR + _filename;
 		is_resource = _is_resource;
 		levelName = this.filename;
+	}
+	
+	
+	public static String GetRandomMap() {
+		/*String[] maps = new File(MAP_DIR).list();
+		List<String> csv = new ArrayList<>();
+			
+		for(String s : maps) {
+			if (s.toLowerCase().endsWith(".csv")) {
+				csv.add(s);
+			}
+		}*/
+		List<String> csv = GetMaps();
+		return csv.get(NumberFunctions.rnd(0, csv.size()-1));
+	}
+
+
+	public static List<String> GetMaps() {
+		String[] maps = new File(MAP_DIR).list();
+		List<String> csv = new ArrayList<>();
+			
+		for(String s : maps) {
+			if (s.toLowerCase().endsWith(".csv")) {
+				csv.add(s);
+			}
+		}
+		
+		return csv;
 	}
 
 
@@ -63,7 +94,7 @@ public final class MapLoader extends AbstractLevelData {
 
 			int map_row = 0;
 			List<byte[]> rows = new ArrayList<byte[]>();
-			int max_rows = lines.length;
+			//int max_rows = lines.length;
 			int max_row_length = -1;
 			for (int row=0 ; row<lines.length ; row++) {
 				lines[row] = lines[row].replaceAll("\"", "");
@@ -129,6 +160,7 @@ public final class MapLoader extends AbstractLevelData {
 							}*/
 							if (this_data[x] == Block.START_POSITION) {
 								super.setStartPos(x, map_row);
+								this_data[x] = Block.NOTHING_DAYLIGHT;
 							}
 						}
 						rows.add(this_data);

@@ -34,5 +34,12 @@ public class TSArrayList<E> extends ArrayList<E> {
 	public boolean remove(Object o) {
 		return this.to_remove.add((E)o);
 	}
+	
+	
+	public void clear() {
+		while (this.isEmpty() == false) {
+			this.to_remove.add(super.remove(0)); // SUPER.REMOVE()!!
+		}
+	}
 
 }

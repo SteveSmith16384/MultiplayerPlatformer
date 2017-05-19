@@ -43,7 +43,7 @@ public abstract class AbstractMob extends GameObject {
 		destroy_blocks = _destroy_blocks;
 		side = _side;
 
-		game.addToProcess_Instant(this);
+		game.addToProcess(this);
 		game.root_node.attachChild(this);
 
 		this.updateGeometricState();
@@ -63,7 +63,7 @@ public abstract class AbstractMob extends GameObject {
 			break;
 		case AbstractMob.PLATFORM1:
 			//new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE, Statics.SQ_SIZE, R.drawable.grass, 1, 0, Statics.SQ_SIZE * 4);
-			new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE*2, Statics.SQ_SIZE, "grass", 0, -1, Statics.SQ_SIZE * 4);
+			//new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE*2, Statics.SQ_SIZE, "grass", 0, -1, Statics.SQ_SIZE * 4);
 			break;
 		default:
 			if (Statics.RELEASE_MODE == false) {

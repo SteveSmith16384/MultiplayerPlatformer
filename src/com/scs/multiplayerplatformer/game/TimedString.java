@@ -10,7 +10,7 @@ public final class TimedString implements IProcessable {
 		duration = dur;
 		this.setText("");
 		
-		game.addToProcess_Instant(this);
+		game.addToProcess(this);
 	}
 
 	
