@@ -16,4 +16,5 @@ public interface ISfxPlayer {
 	
 	void slime();
 
+	void playSound(String f);
 }

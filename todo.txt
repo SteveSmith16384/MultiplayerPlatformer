@@ -2,20 +2,19 @@ Ninjamatic
 
 
 HOME
-Post to java-gaming
-Make video
-	PS4 controller - down left for down
-Remove header tags
-Make music mono
-Add wasps to maps
 Sound not working
-Create new logo
-Add baddies to levels
 Make levels look better
+Post to java-gaming
+	Make video
+	PS4 controller - down left for down
+	Remove header tags
+	Make music mono
+Add baddies to levels
+Add wasps to maps
+Create new logo
 	Test full screen
 Create new maps - ice
 Get a font
-Change colour of p2+p3 sprites
 
 
 LEVELS
@@ -33,6 +32,11 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
+Show player numbers above players
+UTFDataFormatException
+No "die" or "level complete" sfx
+Play sound when player joins
+Programatically adjust players colours
 "Press fire to start" is hidden
 	Slime spurts cancelling each other out
 	Dont hide enemies outside LOS

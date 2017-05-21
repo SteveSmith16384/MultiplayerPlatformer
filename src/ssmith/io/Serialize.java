@@ -22,12 +22,17 @@ public class Serialize {
 
 
 	public static Object DeserializeObject(String file) throws IOException, ClassNotFoundException {
-		FileInputStream fileIn = new FileInputStream(file);
-		ObjectInputStream in = new ObjectInputStream(fileIn);
-		Object e = in.readObject();
-		in.close();
-		fileIn.close();
-		return e;
+		FileInputStream fileIn = null;
+		ObjectInputStream in = null;
+		try {
+			fileIn = new FileInputStream(file);
+			in = new ObjectInputStream(fileIn);
+			Object e = in.readObject();
+			return e;
+		} finally {
+			in.close();
+			fileIn.close();
+		}
 	}
-	
+
 }

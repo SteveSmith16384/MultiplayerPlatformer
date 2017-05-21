@@ -34,10 +34,10 @@ public class Log implements ILog {
 	public static LogLevel level = null;
 	
 	/** Debug logging flag. */
-	public static boolean debugEnabled = true;
+	public static boolean debugEnabled = false;
 	
 	/** Info logging flag. */
-	public static boolean infoEnabled = true;
+	public static boolean infoEnabled = false;
 	
 	/** Error logging flag. */
 	public static boolean errorEnabled = true;

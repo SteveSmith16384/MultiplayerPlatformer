@@ -35,7 +35,7 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 			if (new File(CACHE_FILE).exists()) {
 				try {
 					if (Statics.DEBUG) {
-						Statics.p("Loading image cache");
+						Statics.p("Loading image cache...");
 					}
 					instance = (ImageCache) Serialize.DeserializeObject(CACHE_FILE);
 					if (Statics.DEBUG) {

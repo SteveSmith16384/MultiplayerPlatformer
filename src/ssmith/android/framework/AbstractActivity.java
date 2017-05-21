@@ -41,12 +41,12 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 		}
 
 		if (sound_manager == null) {
-			sound_manager = new StdSfxPlayer("sfx");
-			
+			sound_manager = new StdSfxPlayer("assets/sfx/");
+			sound_manager.playSound("Venus.ogg");
 		}
 
-		mp3Music = new MP3Player("assets/music/Venus.mp3", true);
-		mp3Music.start();
+		//mp3Music = new MP3Player("assets/music/Venus.ogg", true);
+		//mp3Music.start();
 
 	}
 	

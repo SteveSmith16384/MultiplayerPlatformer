@@ -30,9 +30,9 @@ public final class Statics {
 	public static final String EMAIL = "help@penultimateapps.com"; 
 	public static final float LABEL_SPACING = 1.2f;
 	public static float ACTIVATE_DIST; //, DEACTIVATE_SQUARES;
-	public static final String MUSIC_R = "Venus.mp3";
+	//public static final String MUSIC_R = "Venus.ogg";//mp3";
 	public static final int WINDOW_TOP_OFFSET = 25;
-	public static String BACKGROUND_IMAGE;
+	public static String BACKGROUND_IMAGE = "ninja_background2.jpg";
 	public static final long FREEZE_DUR = 1000;
 	public static final int MAX_BMP_WIDTH = 100;
 	public static final int MAX_PLAYER_SPRITES = 3;
@@ -55,7 +55,7 @@ public final class Statics {
 	private static final float ICON_SIZE_PCENT = 11f;
 	public static float ICON_SIZE;
 	public static float PLAYER_WIDTH, PLAYER_HEIGHT;
-	public static float PLAYER_SPEED_DIVISOR = 7f;
+	public static final float PLAYER_SPEED_DIVISOR = 7f;
 	public static float PLAYER_SPEED, ENEMY_NINJA_SPEED;
 	public static float PLAYER_FALL_SPEED, MAX_FALL_SPEED;
 	private static final float ROCK_SIZE_PCENT = 60f; //3f;
