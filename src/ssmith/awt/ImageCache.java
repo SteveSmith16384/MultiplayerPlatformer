@@ -2,6 +2,8 @@ package ssmith.awt;
 
 import java.awt.Component;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,7 +33,7 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 
 	public static ImageCache GetInstance() {
 		if (instance == null) {
-			new File("./data/").mkdir();
+			new File("./data/").mkdirs();
 			if (new File(CACHE_FILE).exists()) {
 				try {
 					if (Statics.DEBUG) {
@@ -42,8 +44,10 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 						Statics.p("Finished loading image cache");
 					}
 				} catch (Exception e) {
-					new File(CACHE_FILE).delete();
 					e.printStackTrace();
+
+					Statics.p("Deleting image cache");
+					new File(CACHE_FILE).delete();
 					instance = new ImageCache();
 				}
 			} else {
@@ -52,6 +56,7 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 		}
 		return instance;
 	}
+
 
 	private ImageCache() {
 		super();
@@ -138,7 +143,16 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 		out.writeInt(cache.size()); // how many images are serialized?
 		for (String key : cache.keySet()) {
 			out.writeUTF(key);
-			ImageIO.write(cache.get(key), "png", out);
+			//out.writeBytes(key + "\n");
+			BufferedImage img = cache.get(key); 
+
+			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+	        ImageIO.write(img, "png", buffer);
+
+	        out.writeInt(buffer.size()); // Prepend image with byte count
+	        buffer.writeTo(out);         // Write image
+	        
+	        //ImageIO.write(img, "png", out);
 		}
 	}
 
@@ -147,11 +161,18 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 		in.defaultReadObject();
 		final int imageCount = in.readInt();
 		cache = new Hashtable<String, BufferedImage>();
-		//images = new ArrayList<BufferedImage>(imageCount);
 		for (int i=0; i<imageCount; i++) {
 			String key = in.readUTF();
-			BufferedImage img = ImageIO.read(in);
-			cache.put(key, img);
+			//BufferedImage img = ImageIO.read(in);
+
+			int size = in.readInt(); // Read byte count
+
+	        byte[] buffer = new byte[size];
+	        in.readFully(buffer); // Make sure you read all bytes of the image
+
+	        BufferedImage img = ImageIO.read(new ByteArrayInputStream(buffer));
+	        
+	        cache.put(key, img);
 		}
 	}
 
@@ -167,7 +188,6 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 				Statics.p("Finished saving image cache");
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

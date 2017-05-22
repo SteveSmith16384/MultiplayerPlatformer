@@ -65,7 +65,7 @@ public class SoundCacheThread extends Thread {
 							AudioClip clip = Applet.newAudioClip(url);
 							sounds.put(filename, clip);
 						}
-						Thread playsound = new Thread("SFX_Thread") { // todo - show filename
+						Thread playsound = new Thread("SFX_Thread_" + filename) {
 							public void run() {
 								try {
 									AudioClip clip = sounds.get(filename);
