@@ -12,6 +12,8 @@ import org.gamepad4j.ButtonID;
 import org.gamepad4j.Controllers;
 import org.gamepad4j.IController;
 
+import com.scs.multiplayerplatformer.Statics;
+
 import ssmith.lang.Functions;
 
 public final class DeviceThread extends Thread {
@@ -37,12 +39,12 @@ public final class DeviceThread extends Thread {
 
 		keyboard1 = new KeyboardInput(window, 1);
 		keyboard2 = new KeyboardInput(window, 2);
-		
-		start();
+
+		//start();
 
 	}
 
-	
+
 	public Collection<IInputDevice> getDevices() {
 		return this.createdDevices.values();
 	}
@@ -50,15 +52,15 @@ public final class DeviceThread extends Thread {
 	public void run() {
 		try {
 			while (true) {
-				IController[] gamepads = null;
 				if (USE_CONTROLLERS) {
+					IController[] gamepads = null;
 					Controllers.checkControllers();
 					gamepads = Controllers.getControllers();
 
 					for (IController gamepad : gamepads) {
 						if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
 							synchronized (createdDevices) {
-								if (createdDevices.get(gamepad.getDeviceID()) == null) {
+								if (!createdDevices.containsKey(gamepad.getDeviceID())) {
 									this.createController(gamepad.getDeviceID(), new PS4Controller(gamepad));
 								}
 							}
@@ -80,7 +82,7 @@ public final class DeviceThread extends Thread {
 						}
 					}
 				}
-				Functions.delay(1000);
+				Functions.delay(500);
 			} 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -90,6 +92,10 @@ public final class DeviceThread extends Thread {
 
 	private void createController(int id, IInputDevice input) {
 		synchronized (createdDevices) {
+			if (Statics.DEBUG) {
+				Statics.p("Devices: " + this.createdDevices.keySet());
+				Statics.p("Creating new device " + id);
+			}
 			createdDevices.put(id, input);
 		}
 

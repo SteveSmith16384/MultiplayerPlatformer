@@ -1,6 +1,10 @@
 package com.scs.multiplayerplatformer.graphics.mobs;
 
+import java.awt.image.BufferedImage;
+
+import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.PointF;
+import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.MyPointF;
 import ssmith.lang.GeometryFuncs;
 
@@ -33,7 +37,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		playernumZB = player.num;
 		spritenumZB = playernumZB;
 		while (spritenumZB > Statics.MAX_PLAYER_SPRITES) {
-			spritenumZB -= Statics.MAX_PLAYER_SPRITES;
+			spritenumZB -= Statics.MAX_PLAYER_SPRITES; // todo - not needed after programatically chanign the colours
 		}
 		input = _input;
 		inv = new BlockInventory(this);
@@ -173,6 +177,16 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 
 	@Override
+	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
+		super.doDraw(g, cam, interpol, scale);
+		if (this.visible) {
+			// Draw player number
+			g.drawText(""+(playernumZB+1), this.getWindowX(cam, scale), this.getWindowY(cam, scale), paint);
+		}
+	}
+
+
+	@Override
 	protected void generateBitmaps(int size, float scale) {
 		a_bmp_left[size][0] = Statics.img_cache.getImage("ninja" + spritenumZB + "_l0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_left[size][1] = Statics.img_cache.getImage("ninja" + spritenumZB + "_l1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
@@ -190,7 +204,23 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		a_bmp_right[size][4] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_right[size][5] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_right[size][6] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][7] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);		
+		a_bmp_right[size][7] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+
+		// Adjust colours?
+		for (int f=0 ; f<8 ; f++) {
+			BufferedImage img = a_bmp_left[size][f];
+			for (int y=0 ; y<img.getHeight() ; y++) {
+				for (int x=0 ; x<img.getWidth() ; x++) {
+					int col = img.getRGB(x, y);
+					if (col > 0 && col < 16777215) {
+						img.setRGB(x, y, 0); // todo - make better
+					} else {
+						img.setRGB(x, y, 255); // todo - make better
+					}
+				}
+			}
+			a_bmp_left[size][f] = img;
+		}
 	}
 
 

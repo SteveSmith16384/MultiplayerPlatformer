@@ -2,17 +2,16 @@ Ninjamatic
 
 
 HOME
+Ask harry for name and get him to generate logo
 Sound not working
 Make levels look better
 Post to java-gaming
-	Make video
+Make another video
 	PS4 controller - down left for down
-	Remove header tags
-	Make music mono
 Add baddies to levels
 Add wasps to maps
 Create new logo
-	Test full screen
+Test full screen
 Create new maps - ice
 Get a font
 
@@ -31,20 +30,21 @@ Level where jump over lots of dangerous blocks
 5 - Manic miner TODO
 
 
+URGENT
+Programatically adjust players colours
+	Creating new players!?
+
+
 TODO
 Down-left not moving left
 PS4 up - count up-left and up-right
-Still hiding baddies
+	Still hiding baddies
 Rnd map - dont repeat same map in a row
-Show player numbers above players
-UTFDataFormatException
+	Show player numbers above players
 No "die" or "level complete" sfx
 Play sound when player joins
-Programatically adjust players colours
 "Press fire to start" is hidden
-	Slime spurts cancelling each other out
 	Dont hide enemies outside LOS
-	Change start square for empty, not wood
 Give limited shurikens, replenish on death
 Not dying if on top of enemy
 Restart if player falls too far

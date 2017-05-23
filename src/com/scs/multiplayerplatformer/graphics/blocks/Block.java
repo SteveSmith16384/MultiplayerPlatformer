@@ -497,7 +497,7 @@ public class Block extends GameObject {
 				ErrorReporter.getInstance().handleSilentException(ex);
 
 			}*/
-			return img_cache.getImage("wood", w, h); // todo - show obvious dummy image
+			return img_cache.getImage("wood", w, h);
 		}
 	}
 

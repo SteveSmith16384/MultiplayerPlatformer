@@ -54,12 +54,6 @@ public final class StartupModule extends AbstractModule {
 
 		background = Statics.img_cache.getImage(Statics.BACKGROUND_IMAGE, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT);
 
-		// Check for image cache
-		/*todo File f = new File(ImageCache.CACHE_DIR);
-		if (f.exists() == false || f.list().length <= 0) {
-			JOptionPane.showMessageDialog(null, "Please note that the first time you play this game,\nthe images will need to be generated, so it will be slow and jerky.", "Slow on First Game", JOptionPane.ERROR_MESSAGE);
-		}*/
-		
 	}
 
 

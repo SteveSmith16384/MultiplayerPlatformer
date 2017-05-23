@@ -12,6 +12,7 @@ import ssmith.android.framework.modules.AbstractModule;
 import ssmith.awt.ImageCache;
 import ssmith.lang.Functions;
 
+import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.input.DeviceThread;
 import com.scs.multiplayerplatformer.start.ErrorModule;
 import com.scs.multiplayerplatformer.start.StartupModule;
@@ -31,7 +32,6 @@ public final class MainThread extends Thread {
 	private long last_onback_pressed;
 	public Canvas c;
 	public MainWindow window;
-	public DeviceThread deviceThread;
 	
 	static {
 		paint_black_fill.setARGB(255, 0, 0, 0);
@@ -47,7 +47,6 @@ public final class MainThread extends Thread {
 		window = new MainWindow(this);
 		Statics.img_cache = ImageCache.GetInstance();// new ImageCache(window);
 		Statics.img_cache.c = window;
-		deviceThread = new DeviceThread(window);
 	}
 
 
@@ -170,11 +169,11 @@ public final class MainThread extends Thread {
 			module.updateGame(Statics.LOOP_DELAY);
 		} else {
 			// Load default module
-			/*if (Statics.DEBUG) {
+			if (Statics.DEBUG) {
 				this.setNextModule(new GameModule(Statics.act, null));
-			} else {*/
+			} else {
 				this.setNextModule(new StartupModule(Statics.act));
-			//}
+			}
 		}
 	}
 
