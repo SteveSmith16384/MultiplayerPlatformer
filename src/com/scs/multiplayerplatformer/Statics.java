@@ -14,7 +14,7 @@ import com.scs.multiplayerplatformer.start.StartupModule;
 public final class Statics {
 
 	public static final String TEST_LEVEL = null;//"testmap_harry.csv";
-	public static final boolean FULL_SCREEN = false;
+	public static final boolean FULL_SCREEN = true;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = true;
 	public static final boolean RELEASE_MODE = false; // Stricter if false
@@ -32,7 +32,7 @@ public final class Statics {
 	public static float ACTIVATE_DIST; //, DEACTIVATE_SQUARES;
 	//public static final String MUSIC_R = "Venus.ogg";//mp3";
 	public static final int WINDOW_TOP_OFFSET = 25;
-	public static String BACKGROUND_IMAGE = "ninja_background2.jpg";
+	public static String BACKGROUND_IMAGE = "harrys_background.png"; //"ninja_background2.jpg";
 	public static final long FREEZE_DUR = 1000;
 	public static final int MAX_BMP_WIDTH = 100;
 	public static final int MAX_PLAYER_SPRITES = 3;

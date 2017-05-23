@@ -32,6 +32,10 @@ Level where jump over lots of dangerous blocks
 
 
 TODO
+Down-left not moving left
+PS4 up - count up-left and up-right
+Still hiding baddies
+Rnd map - dont repeat same map in a row
 Show player numbers above players
 UTFDataFormatException
 No "die" or "level complete" sfx
