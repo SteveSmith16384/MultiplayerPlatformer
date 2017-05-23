@@ -62,7 +62,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private List<IInputDevice> newControllers = new ArrayList<>();
 	private String filename;
 	private DeviceThread deviceThread; 
-	
+
 	public float current_scale = Statics.MAX_ZOOM_IN;
 	private float new_scale = current_scale;
 
@@ -108,7 +108,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		DeviceThread deviceThread = new DeviceThread(act.thread.window);
 		deviceThread.addListener(this);
 		deviceThread.start();
-		
+
 		msg = new TimedString(this, 2000);
 
 	}
@@ -119,9 +119,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		Statics.act.sound_manager.levelStart();
 
 		synchronized (entities) {
-		entities.clear();//.re = new TSArrayList<IProcessable>();
+			entities.clear();//.re = new TSArrayList<IProcessable>();
 		}
-		
+
 		this.root_node.detachAllChildren();
 		this.stat_node_back.detachAllChildren();
 		this.stat_node_front.detachAllChildren();
@@ -158,7 +158,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		blockGrid = new MyEfficientGridLayout(this, levelData.getGridWidth(), levelData.getGridHeight(), Statics.SQ_SIZE);
 		this.root_node.attachChild(blockGrid);
 		synchronized (entities) {
-		this.entities.add(blockGrid);
+			this.entities.add(blockGrid);
 		}
 		this.stat_node_back.updateGeometricState();
 		this.stat_node_front.updateGeometricState();
@@ -203,7 +203,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		// Remove any objects marked for removal
 		synchronized (entities) {
-		this.entities.refresh();
+			this.entities.refresh();
 		}
 
 		// Adjust scale
@@ -217,9 +217,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		// Process the rest
 		if (entities != null) {
 			synchronized (entities) {
-			for (IProcessable o : entities) {
-				o.process(interpol);
-			}
+				for (IProcessable o : entities) {
+					o.process(interpol);
+				}
 			}
 		}
 
@@ -498,9 +498,9 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		PlayersAvatar avatar = new PlayersAvatar(this, player, 0, 0, input);
 		this.avatars.add(avatar);
 		addToProcess(avatar);
-	
+
 		this.msg.setText("Player " + (num+1) + " joined!");
-		
+
 		this.restartPlayer(avatar);
 	}
 
@@ -541,7 +541,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		}
 		avatar.remove();
 		this.avatars.remove(avatar);
-		
+
 		// check if no players left
 		if (this.avatars.isEmpty()) {
 			this.startNewLevel(filename);
