@@ -2,14 +2,14 @@ Ninjamatic
 
 
 HOME
+Down-left not moving left
+Add baddies to levels
+Add wasps to maps
 Ask harry for name and get him to generate logo
 Sound not working
 Make levels look better
 Post to java-gaming
 Make another video
-	PS4 controller - down left for down
-Add baddies to levels
-Add wasps to maps
 Create new logo
 Test full screen
 Create new maps - ice
@@ -31,46 +31,34 @@ Level where jump over lots of dangerous blocks
 
 
 URGENT
-Programatically adjust players colours
-	Creating new players!?
+Search for todos
+	Programatically adjust players colours
+Creating new players!?
+	Slow down zoom in
+	Speed up zoom out
+	Move hud text up
+	Flashing baddies
 
 
 TODO
-Still getting extra players
-Move hud text up
-Down-left not moving left
-PS4 up - count up-left and up-right
-	Still hiding baddies
-Rnd map - dont repeat same map in a row
-	Show player numbers above players
 No "die" or "level complete" sfx
 Play sound when player joins
 "Press fire to start" is hidden
-	Dont hide enemies outside LOS
-Give limited shurikens, replenish on death
-Not dying if on top of enemy
 Restart if player falls too far
-	Slime spurt only colliding if player moves into it
-Search for todos
-Add mousewheel to menus
 
 
 LATER
+Add mousewheel to menus
+Give limited shurikens, replenish on death
 Give levels their own background
-Bonus for being first
 Give each level its own time
 Hold down jump to jump higher
 Conveyor belts
-Improve shuriken throw
 Baddy that drop from sky
 Ninja chop attack!
-Turn off ps4 debugging
 Parallax
-Bring wasp back
-Control menus with controller
 More types of enemy
 Randomly drop stars
-Get star image
 
 
 GAME MODES
@@ -88,7 +76,6 @@ Music: https://opengameart.org/content/nes-shooter-music-5-tracks-3-jingles
 
 
 LOW PRI
-Physics
 Create icon
 Enemies not sinking in water
 

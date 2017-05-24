@@ -13,7 +13,6 @@ import ssmith.awt.ImageCache;
 import ssmith.lang.Functions;
 
 import com.scs.multiplayerplatformer.game.GameModule;
-import com.scs.multiplayerplatformer.input.DeviceThread;
 import com.scs.multiplayerplatformer.start.ErrorModule;
 import com.scs.multiplayerplatformer.start.StartupModule;
 
@@ -45,7 +44,7 @@ public final class MainThread extends Thread {
 		this.setDaemon(true);
 
 		window = new MainWindow(this);
-		Statics.img_cache = ImageCache.GetInstance();// new ImageCache(window);
+		Statics.img_cache = ImageCache.GetInstance();
 		Statics.img_cache.c = window;
 	}
 
@@ -66,7 +65,6 @@ public final class MainThread extends Thread {
 			AbstractActivity.HandleError(ex);
 			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage() + ".  Please restart", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		//AbstractActivity.Log("MainThread ended.");
 	}
 
 
@@ -75,7 +73,7 @@ public final class MainThread extends Thread {
 			return;
 		}
 		
-		c = new Canvas(window.bs.getDrawGraphics()); // todo - error when closing
+		c = new Canvas(window.bs.getDrawGraphics());
 		if (Statics.FULL_SCREEN == false) {
 			c.translate(0, Statics.WINDOW_TOP_OFFSET); // Take into account window title
 		}

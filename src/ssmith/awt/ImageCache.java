@@ -36,18 +36,19 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 			new File("./data/").mkdirs();
 			if (new File(CACHE_FILE).exists()) {
 				try {
-					if (Statics.DEBUG) {
+					//if (Statics.DEBUG) {
 						Statics.p("Loading image cache...");
-					}
+					//}
 					instance = (ImageCache) Serialize.DeserializeObject(CACHE_FILE);
-					if (Statics.DEBUG) {
+					//if (Statics.DEBUG) {
 						Statics.p("Finished loading image cache");
-					}
+					//}
 				} catch (Exception e) {
 					e.printStackTrace();
 
 					Statics.p("Deleting image cache");
 					new File(CACHE_FILE).delete();
+					
 					instance = new ImageCache();
 				}
 			} else {
@@ -180,13 +181,13 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 	@Override
 	public void run() {
 		try {
-			if (Statics.DEBUG) {
+			//if (Statics.DEBUG) {
 				Statics.p("Saving image cache");
-			}
+			//}
 			Serialize.SerializeObject(CACHE_FILE, instance);
-			if (Statics.DEBUG) {
+			//if (Statics.DEBUG) {
 				Statics.p("Finished saving image cache");
-			}
+			//}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

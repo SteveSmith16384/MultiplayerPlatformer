@@ -60,7 +60,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	public List<PlayersAvatar> avatars = new ArrayList<>();
 	public List<Player> players = new ArrayList<>();
 	private List<IInputDevice> newControllers = new ArrayList<>();
-	private String filename;
+	//private String filename;
 	private DeviceThread deviceThread; 
 
 	public float current_scale = Statics.MAX_ZOOM_IN;
@@ -96,7 +96,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		super(act, null);
 
 		this.mod_return_to = new StartupModule(act);
-		filename = _filename;
+		//filename = _filename;
 
 		this.stat_cam.lookAtTopLeft(true);
 		str_time_remaining = act.getString("time_remaining");
@@ -150,8 +150,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	private void loadMap(String filename) {
-		//String filename = filename2;
-		//}
 		levelData = new MapLoader(filename, false);
 		levelData.getMap();
 
@@ -225,7 +223,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		if (avatars.size() > 0) {
 			if (check_for_new_mobs.hitInterval()) {
-				this.checkIfMobsNeedCreating();
+				this.checkIfMobsNeedCreating(this.current_scale, this.root_cam);
 			}
 
 			float x = 0, y = 0;
@@ -238,12 +236,12 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
 
 
-			// Do we need to zoom out
+			// Do we need to zoom in/out?
 			if (avatars.size() > 1) {
 				float OUTER = 0.2f;
-				float INNER = 0.3f;
-				boolean zoomOut = false;
-				boolean zoomIn = true;
+				float INNER = 0.4f; // 0.3f
+				boolean zoomOut = false; // Need to zoom out quickly
+				boolean zoomIn = true; // Slowly
 				for (PlayersAvatar player : avatars) {
 					float sx = player.getWindowX(this.root_cam, this.current_scale);
 					float sy = player.getWindowY(this.root_cam, this.current_scale);
@@ -253,19 +251,21 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 					}
 					zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
 				}
-				if (zoomOut) { // zoom out
-					new_scale /= Statics.ZOOM_SPEED;
-				} else if (zoomIn) { // zoom in
-					new_scale *= Statics.ZOOM_SPEED;
+				if (zoomOut) {
+					new_scale *= Statics.ZOOM_OUT_SPEED;
+				} else if (zoomIn) {
+					new_scale *= Statics.ZOOM_IN_SPEED;
 				}				
-
-
 				/*if (Statics.DEBUG) {
 					Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
 				}*/
 			} else {
-				// Only one player - set zoom to 1
-				this.new_scale = Statics.MAX_ZOOM_IN;
+				// Only one player - zoom in
+				if (this.new_scale < Statics.MAX_ZOOM_IN) {
+					new_scale *= Statics.ZOOM_OUT_SPEED;
+				} else {
+					this.new_scale = Statics.MAX_ZOOM_IN;
+				}
 			}
 
 		} else {
@@ -275,19 +275,21 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			float y = (levelData.getStartPos().y) * Statics.SQ_SIZE;
 			//y += this.new_grid.getWorldY();
 			this.root_cam.lookAt(x, y, true);
-			new_scale = Statics.MAX_ZOOM_IN;
+			new_scale = Statics.MAX_ZOOM_OUT;
 		}
 
 	}
 
 
-	private void checkIfMobsNeedCreating() {
+	private void checkIfMobsNeedCreating(float scale, Camera cam) {
 		// Load mobs
 		if (levelData.mobs != null && this.avatars.size() > 0) {
 			for (int i=0 ; i<levelData.mobs.size() ; i++) {
 				SimpleMobData sm = levelData.mobs.get(i);
 				//float dist = getDistanceToClosestPlayer(sm.pixel_x); // NumberFunctions.mod(this.player.getWorldX() - sm.pixel_x);
-				boolean onscreen = this.isOnScreen(root_cam,  this.current_scale, sm.pixel_x, sm.pixel_y);
+				int x = (int)(sm.pixel_x * scale - cam.left);
+				int y = (int)(sm.pixel_y * scale - cam.top);
+				boolean onscreen = this.isOnScreen(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
 				if (onscreen) {//dist < Statics.ACTIVATE_DIST) { // Needs to be screen width in case we've walked too fast into their "creation zone"
 					AbstractMob.CreateMob(this, sm);
 					levelData.mobs.remove(i);
@@ -327,37 +329,27 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			ex.printStackTrace();
 		}
 
+		int y = 50;
 		for (Player player : players) {
-			g.drawText("Player " + (player.num+1) + " Score: " + player.score, 10, 50+(player.num * paint_text_ink.getTextSize()), paint_text_ink);
+			g.drawText("Player " + (player.num+1) + " Score: " + player.score, 10, y, paint_text_ink);
+			y += paint_text_ink.getTextSize();
 
 		}
 
 		long timeRemaining = levelEndTime - System.currentTimeMillis();
 		if (timeRemaining > 0) {
-			g.drawText(this.str_time_remaining + ": " + (timeRemaining/1000), 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
+			g.drawText(this.str_time_remaining + ": " + (timeRemaining/1000), 10, y, paint_text_ink);
 		} else {
-			g.drawText("TIME OUT", 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*3), paint_text_ink);
+			g.drawText("TIME OUT", 10, y, paint_text_ink);
 		}
-		g.drawText(this.levelData.levelName, 10, Statics.ICON_SIZE + (paint_text_ink.getTextSize()*5), paint_text_ink);
+		y += paint_text_ink.getTextSize();
 
-		if (Statics.SHOW_STATS) {
-			g.drawText("Inst Objects: " + this.entities.size(), 10, paint_text_ink.getTextSize()*7, paint_text_ink);
-			//g.drawText("Slow Objects: " + this.others_slow.size(), 10, paint_text_ink.getTextSize()*5, paint_text_ink);
-			//g.drawText("V. Slow Objects: " + this.others_very_slow.size(), 10, paint_text_ink.getTextSize()*6, paint_text_ink);
-			//g.drawText("Darkness: " + this.dark_adj_cont.size(), 10, paint_text_ink.getTextSize()*7, paint_text_ink);
-			//g.drawText("Map Squares: " + EfficientGridLayout.objects_being_drawn, 10, paint_text_ink.getTextSize()*4, paint_text_ink);
-			//long mem = ((long)r.freeMemory()*100) / (long)r.totalMemory();//) * 100;
-			//g.drawText("Free mem: " + mem + "%", 10, paint_text_ink.getTextSize()*5, paint_text_ink);
-			/*g.drawText("draw_time: " + this.draw_time, 10, paint_text_ink.getTextSize()*7, paint_text_ink);
-			g.drawText("instant_time: " + this.instant_time, 10, paint_text_ink.getTextSize()*8, paint_text_ink);
-			g.drawText("total_time: " + this.total_time, 10, paint_text_ink.getTextSize()*9, paint_text_ink);
-			 */
-		}
+		g.drawText(this.levelData.levelName, 10, y, paint_text_ink);
+		y += paint_text_ink.getTextSize();
 
-		if (msg != null) {
-			if (msg.toString().length() > 0) {
-				g.drawText(msg.toString(), 10, Statics.SCREEN_HEIGHT - (paint_icon_ink.getTextSize()*.5f), paint_icon_ink);
-			}
+		if (msg != null && msg.toString().length() > 0) {
+			g.drawText(msg.toString(), 10, y, paint_icon_ink);
+			y += paint_text_ink.getTextSize();
 		}
 
 	}
@@ -524,8 +516,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	@Override
 	public void newController(IInputDevice input) {
-		/*Statics.p("newController(): " + input);
-		 */
 		synchronized (newControllers) {
 			this.newControllers.add(input);
 		}
@@ -535,6 +525,10 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	public void playerCompletedLevel(PlayersAvatar avatar) {
 		Statics.act.sound_manager.playerReachedEnd();
 		long score_inc = (levelEndTime - System.currentTimeMillis()) / 100;
+		if (this.avatars.size() == this.players.size()) {
+			// First player to get to the end!
+			score_inc = score_inc * 2;
+		}
 		if (score_inc > 0) { // Might be negative
 			avatar.player.score += score_inc;
 			displayText("Player " + avatar.playernumZB + " finished!  Have " + score_inc + " points!");
@@ -544,13 +538,13 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		// check if no players left
 		if (this.avatars.isEmpty()) {
-			this.startNewLevel(filename);
+			this.startNewLevel(null); // Load random map after playing first selected map
 		}
 	}
 
 
-	public boolean isOnScreen(Camera cam, float scale, float x, float y) {
-		return x >= 0 && x <= Statics.SCREEN_WIDTH && y >= 0 && y<= Statics.SCREEN_HEIGHT;
+	public boolean isOnScreen(float x, float y, float w, float h) {
+		return x+w >= 0 && x <= Statics.SCREEN_WIDTH && y+h >= 0 && y<= Statics.SCREEN_HEIGHT;
 	}
 
 }

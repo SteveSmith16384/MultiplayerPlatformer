@@ -6,15 +6,11 @@ import java.awt.Toolkit;
 
 import ssmith.android.compatibility.Typeface;
 import ssmith.android.framework.AbstractActivity;
-import ssmith.android.framework.modules.AbstractModule;
 import ssmith.awt.ImageCache;
-
-import com.scs.multiplayerplatformer.start.StartupModule;
 
 public final class Statics {
 
-	public static final String TEST_LEVEL = null;//"testmap_harry.csv";
-	public static final boolean FULL_SCREEN = true;
+	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = false;
 	public static final boolean RELEASE_MODE = false; // Stricter if false
@@ -23,21 +19,20 @@ public final class Statics {
 	public static final byte SD_PLAYERS_SIDE = 0;
 	public static final byte SD_ENEMY_SIDE = 1;
 
-	public static final boolean SHOW_STATS = false;
 	public static final int LOOP_DELAY = 30;
 	public static final int MAX_INSTANTS = 999;
 	public static final int DYNAMITE_DAMAGE = 10;
 	public static final String EMAIL = "help@penultimateapps.com"; 
 	public static final float LABEL_SPACING = 1.2f;
-	public static float ACTIVATE_DIST; //, DEACTIVATE_SQUARES;
-	//public static final String MUSIC_R = "Venus.ogg";//mp3";
+	public static float ACTIVATE_DIST;
 	public static final int WINDOW_TOP_OFFSET = 25;
 	public static String BACKGROUND_IMAGE = "harrys_background.png"; //"ninja_background2.jpg";
 	public static final long FREEZE_DUR = 1000;
 	public static final int MAX_BMP_WIDTH = 100;
 	public static final int MAX_PLAYER_SPRITES = 3;
 	public static final int LEVEL_TIME_SECS = 60;
-	public static final float ZOOM_SPEED = 1.02f;
+	public static final float ZOOM_IN_SPEED = 1.02f;
+	public static final float ZOOM_OUT_SPEED = .9f;
 	public static float MAX_ZOOM_OUT;
 	public static float MAX_ZOOM_IN;
 
@@ -76,54 +71,49 @@ public final class Statics {
 	public static float CLOUD_HEIGHT;
 	public static final float CLOUD_SPEED_PCENT = .4f;
 	public static float CLOUD_SPEED;
-	//public static float HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT;
 	public static float JUMP_Y;// = -1.2f;
 	public static final int SHURIKENS_FROM_BLOCK = 5;
 	public static float WASP_WIDTH, WASP_HEIGHT, WASP_SPEED;
 
-	public static boolean initd = false;
-
-
 	public static void init(AbstractActivity _act) {
-		if (initd == false) {
-			if (FULL_SCREEN) {
-				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-				SCREEN_WIDTH = (int)screenSize.getWidth();
-				SCREEN_HEIGHT = (int)screenSize.getHeight();
-			} else {
-				SCREEN_WIDTH = 800;
-				SCREEN_HEIGHT = 600;
-			}
+		if (FULL_SCREEN) {
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			SCREEN_WIDTH = (int)screenSize.getWidth();
+			SCREEN_HEIGHT = (int)screenSize.getHeight();
+		} else {
+			SCREEN_WIDTH = 800;
+			SCREEN_HEIGHT = 600;
+		}
 
-			SQ_SIZE = 50; //SCREEN_WIDTH * (SQ_SIZE_PCENT/100);
-			SQ_SIZE_INT = (int)Math.ceil(SQ_SIZE);
-			MAX_ZOOM_OUT = SCREEN_WIDTH / 6000;
-			MAX_ZOOM_IN = SCREEN_WIDTH / 800;
-			ICON_SIZE = SCREEN_WIDTH * (ICON_SIZE_PCENT/100);
-			PLAYER_WIDTH = SQ_SIZE * 0.8f;
-			PLAYER_HEIGHT = (SQ_SIZE*2) * 0.9f;
-			PLAYER_SPEED = SQ_SIZE / PLAYER_SPEED_DIVISOR;//10f;
-			JUMP_Y = -SQ_SIZE/40;//30;
-			PLAYER_FALL_SPEED = PLAYER_SPEED/3f;
-			MAX_FALL_SPEED = Statics.SQ_SIZE/2; 
-			ENEMY_NINJA_SPEED = PLAYER_SPEED * 0.25f;
-			ROCK_SIZE = SQ_SIZE * (ROCK_SIZE_PCENT/100);
-			SLIME_SIZE = SQ_SIZE * (SLIME_SIZE_PCENT/100);
-			ROCK_SPEED = SQ_SIZE * (ROCK_SPEED_PCENT/100);
-			BULLET_SPEED = SQ_SIZE * (BULLET_SPEED_PCENT/100);
-			BUBBLE_SPEED = SQ_SIZE * (BUBBLE_SPEED_PCENT/100);
-			PLATFORM_SPEED = SQ_SIZE * (PLATFORM_SPEED_PCENT/100);
-			CLOUD_WIDTH = SCREEN_WIDTH * (CLOUD_WIDTH_PCENT/100);
-			CLOUD_HEIGHT = SCREEN_WIDTH * (CLOUD_HEIGHT_PCENT/100);
-			CLOUD_SPEED = SQ_SIZE * (CLOUD_SPEED_PCENT/100);
-			WASP_WIDTH = PLAYER_WIDTH;
-			WASP_HEIGHT = PLAYER_WIDTH * 1.5f;
-			WASP_SPEED = PLAYER_SPEED /2;
+		SQ_SIZE = 50; //SCREEN_WIDTH * (SQ_SIZE_PCENT/100);
+		SQ_SIZE_INT = (int)Math.ceil(SQ_SIZE);
+		MAX_ZOOM_OUT = SCREEN_WIDTH / 6000;
+		MAX_ZOOM_IN = SCREEN_WIDTH / 1000;//800;
+		ICON_SIZE = SCREEN_WIDTH * (ICON_SIZE_PCENT/100);
+		PLAYER_WIDTH = SQ_SIZE * 0.8f;
+		PLAYER_HEIGHT = (SQ_SIZE*2) * 0.9f;
+		PLAYER_SPEED = SQ_SIZE / PLAYER_SPEED_DIVISOR;//10f;
+		JUMP_Y = -SQ_SIZE/40;//30;
+		PLAYER_FALL_SPEED = PLAYER_SPEED/3f;
+		MAX_FALL_SPEED = Statics.SQ_SIZE/2; 
+		ENEMY_NINJA_SPEED = PLAYER_SPEED * 0.25f;
+		ROCK_SIZE = SQ_SIZE * (ROCK_SIZE_PCENT/100);
+		SLIME_SIZE = SQ_SIZE * (SLIME_SIZE_PCENT/100);
+		ROCK_SPEED = SQ_SIZE * (ROCK_SPEED_PCENT/100);
+		BULLET_SPEED = SQ_SIZE * (BULLET_SPEED_PCENT/100);
+		BUBBLE_SPEED = SQ_SIZE * (BUBBLE_SPEED_PCENT/100);
+		PLATFORM_SPEED = SQ_SIZE * (PLATFORM_SPEED_PCENT/100);
+		CLOUD_WIDTH = SCREEN_WIDTH * (CLOUD_WIDTH_PCENT/100);
+		CLOUD_HEIGHT = SCREEN_WIDTH * (CLOUD_HEIGHT_PCENT/100);
+		CLOUD_SPEED = SQ_SIZE * (CLOUD_SPEED_PCENT/100);
+		WASP_WIDTH = PLAYER_WIDTH;
+		WASP_HEIGHT = PLAYER_WIDTH * 1.5f;
+		WASP_SPEED = PLAYER_SPEED /2;
 
-			ACTIVATE_DIST = Statics.SQ_SIZE * 10;// Statics.SCREEN_WIDTH * .65f; // Dist when something should be processed 
+		ACTIVATE_DIST = Statics.SQ_SIZE * 10;// Statics.SCREEN_WIDTH * .65f; // Dist when something should be processed 
 
-			// Load font
-			/*try {
+		// Load font
+		/*try {
 				InputStream fntStr = Statics.class.getClassLoader().getResourceAsStream("fonts/SF Distant Galaxy.ttf");
 				GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, fntStr));
@@ -133,31 +123,11 @@ public final class Statics {
 				bigfnt = new Typeface("SF Distant Galaxy", Font.BOLD, 28);
 			} catch (Exception e) {
 				e.printStackTrace();*/
-			// just use helvetica
-			iconfnt = new Typeface("Helvetica", Font.PLAIN, 10);
-			stdfnt = new Typeface("Helvetica", Font.BOLD, 14);
-			bigfnt = new Typeface("Helvetica", Font.BOLD, 28);
-			//}
+		// just use helvetica
+		iconfnt = new Typeface("Helvetica", Font.PLAIN, 10);
+		stdfnt = new Typeface("Helvetica", Font.BOLD, 14);
+		bigfnt = new Typeface("Helvetica", Font.BOLD, 28);
 
-			//new File(Statics.MAP_DIR).mkdirs();
-
-			initd = true;
-		}
-	}
-
-
-	/*public static float GetHeightScaled_(float frac) {
-		return SCREEN_HEIGHT * frac;
-	}
-
-
-	public static float GetWidthScaled(float frac) {
-		return SCREEN_WIDTH * frac;
-	}*/
-
-
-	public static AbstractModule GetStartupModule(AbstractActivity act) {
-		return new StartupModule(act);
 	}
 
 

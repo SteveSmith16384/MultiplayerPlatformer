@@ -1,5 +1,6 @@
 package com.scs.multiplayerplatformer.graphics.mobs;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import ssmith.android.compatibility.Canvas;
@@ -21,7 +22,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	public float move_x_offset = 0;
 	public BlockInventory inv;
-	public int playernumZB, spritenumZB;
+	public int playernumZB;
 	public Player player;
 
 	private IInputDevice input;
@@ -35,11 +36,8 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 		player = _player;
 		playernumZB = player.num;
-		spritenumZB = playernumZB;
-		while (spritenumZB > Statics.MAX_PLAYER_SPRITES) {
-			spritenumZB -= Statics.MAX_PLAYER_SPRITES; // todo - not needed after programatically chanign the colours
-		}
 		input = _input;
+		
 		inv = new BlockInventory(this);
 
 		this.setNumFrames(8);
@@ -188,39 +186,78 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	@Override
 	protected void generateBitmaps(int size, float scale) {
-		a_bmp_left[size][0] = Statics.img_cache.getImage("ninja" + spritenumZB + "_l0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][1] = Statics.img_cache.getImage("ninja" + spritenumZB + "_l1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][2] = Statics.img_cache.getImage("ninja" + spritenumZB + "_l2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][3] = Statics.img_cache.getImage("ninja" + spritenumZB + "_l3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][4] = Statics.img_cache.getImage("ninja" + spritenumZB + "_l4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][5] = Statics.img_cache.getImage("ninja" + spritenumZB + "_l5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][6] = Statics.img_cache.getImage("ninja" + spritenumZB + "_l6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][7] = Statics.img_cache.getImage("ninja" + spritenumZB + "_l7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][0] = Statics.img_cache.getImage("ninja" + this.playernumZB + "_l0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][1] = Statics.img_cache.getImage("ninja" + playernumZB + "_l1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][2] = Statics.img_cache.getImage("ninja" + playernumZB + "_l2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][3] = Statics.img_cache.getImage("ninja" + playernumZB + "_l3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][4] = Statics.img_cache.getImage("ninja" + playernumZB + "_l4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][5] = Statics.img_cache.getImage("ninja" + playernumZB + "_l5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][6] = Statics.img_cache.getImage("ninja" + playernumZB + "_l6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][7] = Statics.img_cache.getImage("ninja" + playernumZB + "_l7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 
-		a_bmp_right[size][0] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][1] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][2] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][3] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][4] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][5] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][6] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][7] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][0] = Statics.img_cache.getImage("ninja" + playernumZB + "_r0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][1] = Statics.img_cache.getImage("ninja" + playernumZB + "_r1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][2] = Statics.img_cache.getImage("ninja" + playernumZB + "_r2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][3] = Statics.img_cache.getImage("ninja" + playernumZB + "_r3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][4] = Statics.img_cache.getImage("ninja" + playernumZB + "_r4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][5] = Statics.img_cache.getImage("ninja" + playernumZB + "_r5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][6] = Statics.img_cache.getImage("ninja" + playernumZB + "_r6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][7] = Statics.img_cache.getImage("ninja" + playernumZB + "_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 
-		// Adjust colours?
-		/*for (int f=0 ; f<8 ; f++) {
+		// Adjust colours
+		for (int f=0 ; f<8 ; f++) {
 			BufferedImage img = a_bmp_left[size][f];
-			for (int y=0 ; y<img.getHeight() ; y++) {
-				for (int x=0 ; x<img.getWidth() ; x++) {
-					int col = img.getRGB(x, y);
-					if (col > 0 && col < 16777215) {
-						img.setRGB(x, y, 0); // todo - make better
-					} else {
-						img.setRGB(x, y, 255); // todo - make better
+			//a_bmp_left[size][f] = adjustImage(img);
+			adjustImage(img);
+
+			// bmp_right
+			img = a_bmp_right[size][f];
+			adjustImage(img);
+		}
+	}
+
+
+	private void adjustImage(BufferedImage img) {
+		for (int y=0 ; y<img.getHeight() ; y++) {
+			for (int x=0 ; x<img.getWidth() ; x++) {
+				int i = img.getRGB(x, y);
+				Color c = new Color(i);
+				if (c.getAlpha() > 0) {
+					if (c.getRed() < 250 && c.getGreen() < 250 && c.getBlue() < 250) {
+						Color newCol = null; 
+						switch (this.playernumZB) {
+						case 0:
+							newCol = c;
+							break;
+						case 1:
+							newCol = new Color(c.getRed()/2, c.getGreen(), c.getBlue());
+							break;
+						case 2:
+							newCol = new Color(c.getRed(), c.getGreen()/2, c.getBlue());
+							break;
+						case 3:
+							newCol = new Color(c.getRed(), c.getGreen(), c.getBlue()/2);
+							break;
+						case 4:
+							newCol = new Color(c.getRed(), c.getGreen()/2, c.getBlue()/2);
+							break;
+						case 5:
+							newCol = new Color(c.getRed()/2, c.getGreen()/2, c.getBlue());
+							break;
+						case 6:
+							newCol = new Color(c.getRed()/2, c.getGreen()/2, c.getBlue()/2);
+							break;
+						}
+						/*c = c.brighter();
+						for (int j=0 ; j<this.playernumZB ; j++) {
+							c = c.brighter();
+						}*/
+						img.setRGB(x, y, newCol.getRGB());
 					}
 				}
 			}
-			a_bmp_left[size][f] = img;
-		}*/
+		}
+
 	}
 
 

@@ -88,12 +88,12 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 				if (a_bmp_left[width][this.curr_frame] == null) {
 					this.generateBitmaps(width, scale);
 				}
-				g.drawBitmap(a_bmp_left[width][this.curr_frame], (this.getWorldX()) * scale - cam.left, (this.getWorldY()) * scale - cam.top, paint);
+				g.drawBitmap(a_bmp_left[width][this.curr_frame], this.getWindowX(cam, scale), this.getWindowY(cam, scale), paint);
 			} else {
 				if (a_bmp_right[width][this.curr_frame] == null) {
 					this.generateBitmaps(width, scale);
 				}
-				g.drawBitmap(a_bmp_right[width][this.curr_frame], getWindowX(cam, scale), getWindowY(cam, scale), paint);
+				g.drawBitmap(a_bmp_right[width][this.curr_frame],this.getWindowX(cam, scale), getWindowY(cam, scale), paint);
 			}
 		}
 

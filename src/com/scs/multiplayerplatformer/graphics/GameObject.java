@@ -69,7 +69,7 @@ public abstract class GameObject extends AbstractRectangle implements IProcessab
 	public boolean isOnScreen(Camera cam, float scale) {
 		float x = this.getWindowX(cam, scale);
 		float y = this.getWindowX(cam, scale);
-		return game.isOnScreen(cam, scale, x, y);
+		return game.isOnScreen(x, y, this.getWidth(), this.getHeight());
 	}
 
 

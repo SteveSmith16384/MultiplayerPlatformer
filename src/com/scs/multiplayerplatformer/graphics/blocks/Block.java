@@ -764,12 +764,12 @@ public class Block extends GameObject {
 	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
 		if (this.visible) {
 			int width = (int)Math.ceil(this.getWidth() * scale);
-			if (Statics.DEBUG) {
+			/*if (Statics.DEBUG) {
 				int testWidth = (int)((this.world_bounds.right - this.world_bounds.left) * scale);
 				if (testWidth > width) {
 					Statics.p("Diff in width! width=" + width + ", testWidth=" + testWidth);
 				}
-			}
+			}*/
 			if (bmp[width] == null) {
 				this.generateImages(width, scale);
 			}

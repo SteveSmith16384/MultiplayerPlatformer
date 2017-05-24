@@ -16,12 +16,14 @@ import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 public class EnemyNinjaEasy extends AbstractWalkingMob {
 
 	private static final int TURN_DURATION = 4000; // In case can't get to player
+	private static final int CHECK_OOB_DURATION = 4000; // In case can't get to player
 
 	private static final int MAX_FRAMES = 8;
 
 	private int x_offset = -1;
 	private boolean tried_jumping = false;
 	private Interval turn_interval = new Interval(TURN_DURATION);
+	private Interval check_oob_interval = new Interval(CHECK_OOB_DURATION);
 	private Interval throw_interval = new Interval(5000);
 
 	public static void Factory(GameModule game, Block gen) { // gen == null for normal appearance
@@ -65,54 +67,57 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 	@Override
 	public void process(long interpol) {
 		ReturnObject<PlayersAvatar> playerTemp = new ReturnObject<>();
-		float dist = this.getDistanceToClosestPlayer(playerTemp);
+		//float dist = this.getDistanceToClosestPlayer(playerTemp);
 
-		if (this.isOnScreen(game.root_cam, game.current_scale)) { //dist < Statics.ACTIVATE_DIST) { // Only process if close
-			PlayersAvatar player = playerTemp.toReturn;
-			if (turn_interval.hitInterval()) {
+		if (check_oob_interval.hitInterval()) { // Don't check straight away to avoid removing straight away
+			if (!this.isOnScreen(game.root_cam, game.current_scale)) { 
+				this.remove();
+				// Re-add them to list to create
+				this.game.levelData.mobs.add(new SimpleMobData(AbstractMob.ENEMY_NINJA_EASY, this.getWorldX(), this.getWorldY()));
+				return;
+			}
+		}
+
+		PlayersAvatar player = playerTemp.toReturn;
+		if (turn_interval.hitInterval()) {
+			if (player != null) {
+				float diff = player.getWorldCentreX() - this.getWorldCentreX();
+				x_offset = NumberFunctions.sign(diff);
+			}
+		}
+
+		// Try moving
+		if (frozenUntil < System.currentTimeMillis()) {
+			if (this.move(x_offset * Statics.ENEMY_NINJA_SPEED, 0, false) == false) {
+				// Can't move
+				if (tried_jumping == false) {
+					this.startJumping();
+					this.tried_jumping = true;
+				} else {
+					if (is_on_ground_or_ladder) {
+						tried_jumping = false;
+						x_offset = x_offset * -1; //Turn around
+					}
+				}
+			}
+		}
+
+		performJumpingOrGravity();
+		checkForHarmingBlocks();
+
+		if (frozenUntil < System.currentTimeMillis()) {
+			if (throw_interval.hitInterval()) {
+				player = this.getVisiblePlayer(); 
 				if (player != null) {
-					float diff = player.getWorldCentreX() - this.getWorldCentreX();
-					x_offset = NumberFunctions.sign(diff);
+					//if (Statics.DEBUG == false) {
+					this.throwShuriken(player);
+					//}
 				}
 			}
+		}
 
-			// Try moving
-			if (frozenUntil < System.currentTimeMillis()) {
-				if (this.move(x_offset * Statics.ENEMY_NINJA_SPEED, 0, false) == false) {
-					// Can't move
-					if (tried_jumping == false) {
-						this.startJumping();
-						this.tried_jumping = true;
-					} else {
-						if (is_on_ground_or_ladder) {
-							tried_jumping = false;
-							x_offset = x_offset * -1; //Turn around
-						}
-					}
-				}
-			}
-
-			performJumpingOrGravity();
-			checkForHarmingBlocks();
-
-			if (frozenUntil < System.currentTimeMillis()) {
-				if (throw_interval.hitInterval()) {
-					player = this.getVisiblePlayer(); 
-					if (player != null) {
-						//if (Statics.DEBUG == false) {
-						this.throwShuriken(player);
-						//}
-					}
-				}
-			}
-
-			if (is_on_ground_or_ladder) { // Must be after we've jumped!
-				tried_jumping = false;
-			}
-		} else { //if (dist > Statics.DEACTIVATE_DIST) {
-			this.remove();
-			// Re-add them to list to create
-			this.game.levelData.mobs.add(new SimpleMobData(AbstractMob.ENEMY_NINJA_EASY, this.getWorldX(), this.getWorldY()));
+		if (is_on_ground_or_ladder) { // Must be after we've jumped!
+			tried_jumping = false;
 		}
 
 	}

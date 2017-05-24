@@ -92,10 +92,10 @@ public final class DeviceThread extends Thread {
 
 	private void createController(int id, IInputDevice input) {
 		synchronized (createdDevices) {
-			if (Statics.DEBUG) {
+			//if (Statics.DEBUG) {
 				Statics.p("Devices: " + this.createdDevices.keySet());
 				Statics.p("Creating new device " + id);
-			}
+			//}
 			createdDevices.put(id, input);
 		}
 

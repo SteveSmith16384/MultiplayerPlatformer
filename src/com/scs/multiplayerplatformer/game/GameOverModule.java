@@ -13,6 +13,7 @@ import ssmith.android.lib2d.gui.MultiLineLabel;
 import ssmith.android.lib2d.layouts.GridLayout;
 
 import com.scs.multiplayerplatformer.Statics;
+import com.scs.multiplayerplatformer.start.StartupModule;
 
 
 /**
@@ -81,7 +82,7 @@ public final class GameOverModule extends SimpleAbstractModule {
 		AbstractActivity act = Statics.act;
 
 		if (c.getActionCommand().equalsIgnoreCase(RETURN)) {
-			this.getThread().setNextModule(Statics.GetStartupModule(act));
+			this.getThread().setNextModule(new StartupModule(act));
 		} else {
 			//game.loadPlayer();
 			this.getThread().setNextModule(new GameModule(act, null));

@@ -16,6 +16,7 @@ import com.scs.multiplayerplatformer.graphics.blocks.Block;
 public final class MapLoader extends AbstractLevelData {
 
 	private static final String MAP_DIR = "./maps/";
+	private static final int MAX_PREV_MAPS = 3;
 
 	// Tags
 	//public static final String HEADER_TAG_ = "Worldcrafter Save File";
@@ -31,6 +32,7 @@ public final class MapLoader extends AbstractLevelData {
 	private boolean is_resource;
 	private int version_found = 1;
 	public String mapName = "";
+	private static ArrayList<String> prevMaps = new ArrayList<>();
 
 	public MapLoader(String _filename, boolean _is_resource) {
 		super();
@@ -42,16 +44,16 @@ public final class MapLoader extends AbstractLevelData {
 	
 	
 	public static String GetRandomMap() {
-		/*String[] maps = new File(MAP_DIR).list();
-		List<String> csv = new ArrayList<>();
-			
-		for(String s : maps) {
-			if (s.toLowerCase().endsWith(".csv")) {
-				csv.add(s);
-			}
-		}*/
 		List<String> csv = GetMaps();
-		return csv.get(NumberFunctions.rnd(0, csv.size()-1));
+		String filename = csv.get(NumberFunctions.rnd(0, csv.size()-1));
+		while (prevMaps.contains(filename)) {
+			filename = csv.get(NumberFunctions.rnd(0, csv.size()-1));
+		}
+		prevMaps.add(filename);
+		while (prevMaps.size() > MAX_PREV_MAPS) {
+			prevMaps.remove(0);
+		}
+		return filename;
 	}
 
 
