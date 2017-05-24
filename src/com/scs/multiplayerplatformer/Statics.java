@@ -16,7 +16,7 @@ public final class Statics {
 	public static final String TEST_LEVEL = null;//"testmap_harry.csv";
 	public static final boolean FULL_SCREEN = true;
 	public static final boolean HIDE_GFX = true;
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	public static final boolean RELEASE_MODE = false; // Stricter if false
 
 	// Sides

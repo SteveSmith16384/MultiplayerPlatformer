@@ -36,6 +36,8 @@ Programatically adjust players colours
 
 
 TODO
+Still getting extra players
+Move hud text up
 Down-left not moving left
 PS4 up - count up-left and up-right
 	Still hiding baddies

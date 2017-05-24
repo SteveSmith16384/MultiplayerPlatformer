@@ -207,7 +207,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		a_bmp_right[size][7] = Statics.img_cache.getImage("ninja" + spritenumZB + "_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 
 		// Adjust colours?
-		for (int f=0 ; f<8 ; f++) {
+		/*for (int f=0 ; f<8 ; f++) {
 			BufferedImage img = a_bmp_left[size][f];
 			for (int y=0 ; y<img.getHeight() ; y++) {
 				for (int x=0 ; x<img.getWidth() ; x++) {
@@ -220,7 +220,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 				}
 			}
 			a_bmp_left[size][f] = img;
-		}
+		}*/
 	}
 
 

@@ -102,12 +102,12 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		str_time_remaining = act.getString("time_remaining");
 		this.setBackground(Statics.BACKGROUND_IMAGE);
 
-		// Load a player for each controller
-		startNewLevel(_filename);
-
-		DeviceThread deviceThread = new DeviceThread(act.thread.window);
+		deviceThread = new DeviceThread(act.thread.window);
 		deviceThread.addListener(this);
 		deviceThread.start();
+
+		// Load a player for each controller
+		startNewLevel(_filename);
 
 		msg = new TimedString(this, 2000);
 
