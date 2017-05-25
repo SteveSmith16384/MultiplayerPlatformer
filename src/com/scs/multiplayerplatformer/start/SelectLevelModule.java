@@ -7,6 +7,7 @@ import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.modules.AbstractModule;
 import ssmith.android.framework.modules.AbstractOptionsModule2;
 import ssmith.android.lib2d.gui.GUIFunctions;
+import ssmith.awt.ImageCache;
 
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
@@ -34,6 +35,8 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 		this.setBackground(Statics.BACKGROUND_IMAGE);
 
 		maps = MapLoader.GetMaps();//new File(Statics.MAP_DIR).list();
+		
+		//ImageCache.Save();
 	}
 
 

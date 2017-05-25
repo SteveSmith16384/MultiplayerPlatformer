@@ -36,19 +36,17 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 			new File("./data/").mkdirs();
 			if (new File(CACHE_FILE).exists()) {
 				try {
-					//if (Statics.DEBUG) {
-						Statics.p("Loading image cache...");
-					//}
-					instance = (ImageCache) Serialize.DeserializeObject(CACHE_FILE);
-					//if (Statics.DEBUG) {
-						Statics.p("Finished loading image cache");
-					//}
+					Statics.p("Loading image cache...");
+					synchronized (CACHE_FILE) {
+						instance = (ImageCache) Serialize.DeserializeObject(CACHE_FILE);
+					}
+					Statics.p("Finished loading image cache");
 				} catch (Exception e) {
 					e.printStackTrace();
 
 					Statics.p("Deleting image cache");
 					new File(CACHE_FILE).delete();
-					
+
 					instance = new ImageCache();
 				}
 			} else {
@@ -91,19 +89,13 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 				String key = filename + "_" + w + "_" + h;
 
 				// Is it in the hashmap?
-				BufferedImage img = cache.get(key);
+				BufferedImage img = null;
+				synchronized (cache) {
+					img = cache.get(key);
+				}
 				if (img != null) {
 					return img;
 				}
-
-				// Does the file exist?
-				/*File f = new File(CACHE_DIR + key); 
-				if (f.exists()) {
-					img = ImageIO.read(f);
-					Statics.p("Loading " + key + " from cache");
-					put(key, img); // Put it in the hashmap
-					return img;
-				}*/
 
 				ClassLoader cl = this.getClass().getClassLoader();
 				InputStream is = cl.getResourceAsStream(RESOURCE_DIR + filename);
@@ -118,13 +110,12 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 					BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 					scaled.getGraphics().drawImage(img, 0, 0, w, h, c);
 					//if (Statics.DEBUG) {
-					//Statics.p("Generated image " + filename + " of " + w + "," + h);
+					Statics.p("Generated image " + filename + " of " + w + "," + h);
 					//}
 					img = scaled;
-					cache.put(key, img);
-
-					//ImageIO.write(img, "png", f); // Save it
-
+					synchronized (cache) {
+						cache.put(key, img);
+					}
 					return img;
 				} else {
 					throw new FileNotFoundException(filename);
@@ -141,19 +132,21 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
-		out.writeInt(cache.size()); // how many images are serialized?
-		for (String key : cache.keySet()) {
-			out.writeUTF(key);
-			//out.writeBytes(key + "\n");
-			BufferedImage img = cache.get(key); 
+		synchronized (cache) {
+			out.writeInt(cache.size()); // how many images are serialized?
+			for (String key : cache.keySet()) {
+				out.writeUTF(key);
+				//out.writeBytes(key + "\n");
+				BufferedImage img = cache.get(key); 
 
-			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-	        ImageIO.write(img, "png", buffer);
+				ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+				ImageIO.write(img, "png", buffer);
 
-	        out.writeInt(buffer.size()); // Prepend image with byte count
-	        buffer.writeTo(out);         // Write image
-	        
-	        //ImageIO.write(img, "png", out);
+				out.writeInt(buffer.size()); // Prepend image with byte count
+				buffer.writeTo(out);         // Write image
+
+				//ImageIO.write(img, "png", out);
+			}
 		}
 	}
 
@@ -162,32 +155,37 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 		in.defaultReadObject();
 		final int imageCount = in.readInt();
 		cache = new Hashtable<String, BufferedImage>();
-		for (int i=0; i<imageCount; i++) {
-			String key = in.readUTF();
-			//BufferedImage img = ImageIO.read(in);
+		synchronized (cache) {
+			for (int i=0; i<imageCount; i++) {
+				String key = in.readUTF();
+				//BufferedImage img = ImageIO.read(in);
 
-			int size = in.readInt(); // Read byte count
+				int size = in.readInt(); // Read byte count
 
-	        byte[] buffer = new byte[size];
-	        in.readFully(buffer); // Make sure you read all bytes of the image
+				byte[] buffer = new byte[size];
+				in.readFully(buffer); // Make sure you read all bytes of the image
 
-	        BufferedImage img = ImageIO.read(new ByteArrayInputStream(buffer));
-	        
-	        cache.put(key, img);
+				BufferedImage img = ImageIO.read(new ByteArrayInputStream(buffer));
+
+				cache.put(key, img);
+			}
 		}
+	}
+
+
+	public static void Save() {
+		new Thread(GetInstance(), "ImageCache_Save").start();
 	}
 
 
 	@Override
 	public void run() {
 		try {
-			//if (Statics.DEBUG) {
-				Statics.p("Saving image cache");
-			//}
-			Serialize.SerializeObject(CACHE_FILE, instance);
-			//if (Statics.DEBUG) {
-				Statics.p("Finished saving image cache");
-			//}
+			Statics.p("Saving image cache...");
+			synchronized (CACHE_FILE) {
+				Serialize.SerializeObject(CACHE_FILE, instance);
+			}
+			Statics.p("Finished saving image cache");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

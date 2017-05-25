@@ -31,8 +31,8 @@ public final class Statics {
 	public static final int MAX_BMP_WIDTH = 100;
 	public static final int MAX_PLAYER_SPRITES = 3;
 	public static final int LEVEL_TIME_SECS = 60;
-	public static final float ZOOM_IN_SPEED = 1.02f;
-	public static final float ZOOM_OUT_SPEED = .9f;
+	public static final float ZOOM_IN_SPEED = 1.01f;
+	public static final float ZOOM_OUT_SPEED = .99f;
 	public static float MAX_ZOOM_OUT;
 	public static float MAX_ZOOM_IN;
 

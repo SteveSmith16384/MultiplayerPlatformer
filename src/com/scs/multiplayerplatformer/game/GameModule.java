@@ -238,7 +238,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 			// Do we need to zoom in/out?
 			if (avatars.size() > 1) {
-				float OUTER = 0.2f;
+				float OUTER = 0.3f;
 				float INNER = 0.4f; // 0.3f
 				boolean zoomOut = false; // Need to zoom out quickly
 				boolean zoomIn = true; // Slowly
@@ -262,7 +262,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			} else {
 				// Only one player - zoom in
 				if (this.new_scale < Statics.MAX_ZOOM_IN) {
-					new_scale *= Statics.ZOOM_OUT_SPEED;
+					new_scale *= Statics.ZOOM_IN_SPEED;
 				} else {
 					this.new_scale = Statics.MAX_ZOOM_IN;
 				}

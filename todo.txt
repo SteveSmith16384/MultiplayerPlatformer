@@ -2,12 +2,11 @@ Ninjamatic
 
 
 HOME
-Down-left not moving left
+Make levels look better
 Add baddies to levels
 Add wasps to maps
 Ask harry for name and get him to generate logo
 Sound not working
-Make levels look better
 Post to java-gaming
 Make another video
 Create new logo
@@ -31,13 +30,14 @@ Level where jump over lots of dangerous blocks
 
 
 URGENT
+Store player by input id
+version: null
+Say "press X to start"
+Players score not going up!
+More time
 Search for todos
-	Programatically adjust players colours
+Not keeping transp when adjusting players colours
 Creating new players!?
-	Slow down zoom in
-	Speed up zoom out
-	Move hud text up
-	Flashing baddies
 
 
 TODO

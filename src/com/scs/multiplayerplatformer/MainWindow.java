@@ -26,6 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import ssmith.android.framework.MyEvent;
+import ssmith.awt.ImageCache;
 
 
 public final class MainWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener, WindowListener, MouseWheelListener {
@@ -186,6 +187,7 @@ public final class MainWindow extends JFrame implements MouseListener, KeyListen
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 		this.thread.setRunning(false);
+		ImageCache.Save();
 		this.dispose();
 
 	}

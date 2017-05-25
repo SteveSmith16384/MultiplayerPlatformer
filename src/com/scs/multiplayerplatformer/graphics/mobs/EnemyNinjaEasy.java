@@ -67,7 +67,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 	@Override
 	public void process(long interpol) {
 		ReturnObject<PlayersAvatar> playerTemp = new ReturnObject<>();
-		//float dist = this.getDistanceToClosestPlayer(playerTemp);
+		float dist = this.getDistanceToClosestPlayer(playerTemp); // Need this to get closest player!
 
 		if (check_oob_interval.hitInterval()) { // Don't check straight away to avoid removing straight away
 			if (!this.isOnScreen(game.root_cam, game.current_scale)) { 
