@@ -42,7 +42,7 @@ public abstract class GameObject extends AbstractRectangle implements IProcessab
 
 
 	public float getDistanceToClosestPlayer(ReturnObject<PlayersAvatar> returnClosest) {
-		float closestDistance = 9999;
+		/*float closestDistance = 9999;
 		for(PlayersAvatar player : game.avatars) {
 			float dist = this.getDistanceTo(player); 
 			if (dist < closestDistance) {
@@ -52,7 +52,8 @@ public abstract class GameObject extends AbstractRectangle implements IProcessab
 				closestDistance = dist;
 			}
 		}
-		return closestDistance;
+		return closestDistance;*/
+		return game.getDistanceToClosestPlayer(returnClosest, this);
 	}
 
 

@@ -30,14 +30,17 @@ Level where jump over lots of dangerous blocks
 
 
 URGENT
-Store player by input id
-version: null
-Say "press X to start"
-Players score not going up!
-More time
-Search for todos
+Space out HUD better
 Not keeping transp when adjusting players colours
-Creating new players!?
+	Creating new players!?
+Search for todos
+	Starting differnt level when player joins
+	Restart time when level restarted
+	Store player by input id
+	version: null
+	Say "press X to start"
+	Players score not going up!
+	More time
 
 
 TODO

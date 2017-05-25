@@ -84,4 +84,10 @@ public final class PS4Controller implements IInputDevice {
 		return .5f;
 	}*/
 
+
+	@Override
+	public int getID() {
+		return gamepad.getDeviceID();
+	}
+
 }

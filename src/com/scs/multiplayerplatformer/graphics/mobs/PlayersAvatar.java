@@ -23,21 +23,21 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 	public float move_x_offset = 0;
 	public BlockInventory inv;
 	public int playernumZB;
-	public Player player;
+	//public Player player;
 
-	private IInputDevice input;
+	public IInputDevice input;
 	private long firePressedTime;
 	private boolean prevThrowPressed = false;
 	private long jumpPressedTime;
 
 
-	public PlayersAvatar(GameModule _game, Player _player, float x, float y, IInputDevice _input) {
-		super(_game, Statics.act.getString("player")  + _player.num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
+	public PlayersAvatar(GameModule _game, float x, float y, IInputDevice _input, int num) {
+		super(_game, Statics.act.getString("player")  + num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
 
-		player = _player;
-		playernumZB = player.num;
+		//player = _player;
+		playernumZB = num;
 		input = _input;
-		
+
 		inv = new BlockInventory(this);
 
 		this.setNumFrames(8);
@@ -170,7 +170,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 	@Override
 	public void died() {
 		Statics.act.sound_manager.playerDied();
-		game.restartPlayer(this);
+		game.restartAvatar(this);
 	}
 
 
@@ -222,8 +222,10 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 			for (int x=0 ; x<img.getWidth() ; x++) {
 				int i = img.getRGB(x, y);
 				Color c = new Color(i);
-				if (c.getAlpha() > 0) {
-					if (c.getRed() < 250 && c.getGreen() < 250 && c.getBlue() < 250) {
+				if (c.getAlpha() == 255) {
+					int LOWER = 20;
+					int UPPER = 240;
+					if (c.getRed() > LOWER && c.getGreen() > LOWER && c.getBlue() > LOWER && c.getRed() < UPPER && c.getGreen() < UPPER && c.getBlue() < UPPER) {
 						Color newCol = null; 
 						switch (this.playernumZB) {
 						case 0:
@@ -248,10 +250,6 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 							newCol = new Color(c.getRed()/2, c.getGreen()/2, c.getBlue()/2);
 							break;
 						}
-						/*c = c.brighter();
-						for (int j=0 ; j<this.playernumZB ; j++) {
-							c = c.brighter();
-						}*/
 						img.setRGB(x, y, newCol.getRGB());
 					}
 				}

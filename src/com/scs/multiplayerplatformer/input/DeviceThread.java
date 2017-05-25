@@ -68,14 +68,14 @@ public final class DeviceThread extends Thread {
 					}
 
 				}
-				if (keyboard1.isThrowPressed()) {
+				if (keyboard1.isThrowPressed() || Statics.DEBUG_TOO_MANY_PLAYERS) {
 					synchronized (createdDevices) {
 						if (createdDevices.get(-1) == null) {
 							this.createController(-1, keyboard1);
 						}
 					}
 				}
-				if (keyboard2.isThrowPressed()) {
+				if (keyboard2.isThrowPressed() || Statics.DEBUG_TOO_MANY_PLAYERS) {
 					synchronized (createdDevices) {
 						if (createdDevices.get(-2) == null) {
 							this.createController(-2, keyboard2);

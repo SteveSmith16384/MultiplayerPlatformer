@@ -2,8 +2,9 @@ package com.scs.multiplayerplatformer.game;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.gamepad4j.Controllers;
 
@@ -14,6 +15,7 @@ import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 import ssmith.android.framework.modules.AbstractModule;
 import ssmith.android.lib2d.Camera;
+import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.gui.GUIFunctions;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
@@ -21,11 +23,13 @@ import ssmith.android.lib2d.shapes.Rectangle;
 import ssmith.lang.GeometryFuncs;
 import ssmith.util.IDisplayText;
 import ssmith.util.Interval;
+import ssmith.util.ReturnObject;
 import ssmith.util.TSArrayList;
 
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.graphics.Cloud;
 import com.scs.multiplayerplatformer.graphics.Explosion;
+import com.scs.multiplayerplatformer.graphics.GameObject;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
@@ -37,7 +41,11 @@ import com.scs.multiplayerplatformer.mapgen.MapLoader;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 import com.scs.multiplayerplatformer.start.StartupModule;
 
-
+/*
+ * New player - add player, restart level
+ * Restart level - load an avatar for each player
+ * 
+ */
 public final class GameModule extends AbstractModule implements IDisplayText, NewControllerListener {
 
 	public static final byte HAND = 1;
@@ -57,11 +65,11 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private long levelEndTime;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
-	public List<PlayersAvatar> avatars = new ArrayList<>();
-	public List<Player> players = new ArrayList<>();
+	private List<PlayersAvatar> avatars = new ArrayList<>();
+	private Map<Integer, Player> players = new HashMap<>();
 	private List<IInputDevice> newControllers = new ArrayList<>();
-	//private String filename;
-	private DeviceThread deviceThread; 
+	//private DeviceThread deviceThread; 
+	private String filename;
 
 	public float current_scale = Statics.MAX_ZOOM_IN;
 	private float new_scale = current_scale;
@@ -102,24 +110,24 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		str_time_remaining = act.getString("time_remaining");
 		this.setBackground(Statics.BACKGROUND_IMAGE);
 
-		deviceThread = new DeviceThread(act.thread.window);
+		DeviceThread deviceThread = new DeviceThread(act.thread.window);
 		deviceThread.addListener(this);
 		deviceThread.start();
 
-		// Load a player for each controller
 		startNewLevel(_filename);
 
 		msg = new TimedString(this, 2000);
-
+		msg.setText("PRESS FIRE (X) TO START!");
 	}
 
 
 	// filename = null to load random map
-	private void startNewLevel(String filename) {
+	private void startNewLevel(String _filename) {
+		this.filename = _filename;
 		Statics.act.sound_manager.levelStart();
 
 		synchronized (entities) {
-			entities.clear();//.re = new TSArrayList<IProcessable>();
+			entities.clear();
 		}
 
 		this.root_node.detachAllChildren();
@@ -139,13 +147,40 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			loadMap(filename);
 		}
 
-		Iterator<IInputDevice> it = deviceThread.getDevices().iterator();
+		/*Iterator<IInputDevice> it = deviceThread.getDevices().iterator();
 		while (it.hasNext()) {
 			IInputDevice input = it.next();
-			this.loadPlayer(input);
+			this.createAvatars(input);
+		}*/
+		synchronized (players) {
+			for (Player player : players.values()) {
+				this.createAvatar(player);
+			}
 		}
 
 		showToast(this.levelData.levelName);
+	}
+
+
+	private void createAvatar(Player player) {
+		PlayersAvatar avatar = new PlayersAvatar(this, 0, 0, player.input, player.num);
+		synchronized (avatars) {
+			this.avatars.add(avatar);
+		}
+		addToProcess(avatar);
+		this.restartAvatar(avatar);
+	}
+
+
+	public void restartAvatar(PlayersAvatar avatar) {
+		float x = levelData.getStartPos().x * Statics.SQ_SIZE;
+		float y = (levelData.getStartPos().y) * Statics.SQ_SIZE; // -2 so we start above the bed
+		while (!this.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {
+			y = y - Statics.SQ_SIZE;
+		}
+		avatar.setLocation(x, y);
+		avatar.updateGeometricState();
+
 	}
 
 
@@ -190,8 +225,11 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 	public void updateGame(long interpol) {
 		synchronized (newControllers) {
-			while (this.newControllers.isEmpty() == false) {
-				this.loadPlayer(this.newControllers.remove(0));
+			if (this.newControllers.isEmpty() == false) {
+				while (this.newControllers.isEmpty() == false) {
+					this.createPlayer(this.newControllers.remove(0));
+				}
+				this.startNewLevel(filename); // Restart the level
 			}
 		}
 
@@ -227,12 +265,14 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			}
 
 			float x = 0, y = 0;
-			for (PlayersAvatar player : avatars) {
-				x += player.getWorldX();
-				y += player.getWorldY() + (Statics.PLAYER_HEIGHT/2);
+			synchronized (avatars) {
+				for (PlayersAvatar player : avatars) {
+					x += player.getWorldX();
+					y += player.getWorldY() + (Statics.PLAYER_HEIGHT/2);
+				}
+				x = x / this.avatars.size();
+				y = y / this.avatars.size();
 			}
-			x = x / this.avatars.size();
-			y = y / this.avatars.size();
 			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
 
 
@@ -242,14 +282,16 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 				float INNER = 0.4f; // 0.3f
 				boolean zoomOut = false; // Need to zoom out quickly
 				boolean zoomIn = true; // Slowly
-				for (PlayersAvatar player : avatars) {
-					float sx = player.getWindowX(this.root_cam, this.current_scale);
-					float sy = player.getWindowY(this.root_cam, this.current_scale);
-					zoomOut = sx < Statics.SCREEN_WIDTH * OUTER || sx > Statics.SCREEN_WIDTH * (1f-OUTER) || sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
-					if (zoomOut) {
-						break;
+				synchronized (avatars) {
+					for (PlayersAvatar player : avatars) {
+						float sx = player.getWindowX(this.root_cam, this.current_scale);
+						float sy = player.getWindowY(this.root_cam, this.current_scale);
+						zoomOut = sx < Statics.SCREEN_WIDTH * OUTER || sx > Statics.SCREEN_WIDTH * (1f-OUTER) || sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
+						if (zoomOut) {
+							break;
+						}
+						zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
 					}
-					zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
 				}
 				if (zoomOut) {
 					new_scale *= Statics.ZOOM_OUT_SPEED;
@@ -274,10 +316,31 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			//x += this.new_grid.getWorldX();
 			float y = (levelData.getStartPos().y) * Statics.SQ_SIZE;
 			//y += this.new_grid.getWorldY();
-			this.root_cam.lookAt(x, y, true);
+			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
+			//this.root_cam.lookAt(x, y, true);
 			new_scale = Statics.MAX_ZOOM_OUT;
 		}
 
+	}
+
+
+	private void createPlayer(IInputDevice input) {
+		if (input == null) {
+			throw new NullPointerException("Input is null");
+		}
+
+		// Restart all other players
+		/*for(PlayersAvatar avatar : this.avatars) {
+			this.restartPlayer(avatar);
+		}*/
+
+		int num = players.size();
+		synchronized (players) {
+			if (this.players.containsKey(input.getID()) == false) {
+				this.players.put(input.getID(), new Player(input, num));
+			}
+		}
+		this.msg.setText("Player " + (num+1) + " joined!");
 	}
 
 
@@ -330,10 +393,12 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		}
 
 		int y = 50;
-		for (Player player : players) {
-			g.drawText("Player " + (player.num+1) + " Score: " + player.score, 10, y, paint_text_ink);
-			y += paint_text_ink.getTextSize();
-
+		int yInc = (int)paint_text_ink.getTextSize()*2;
+		synchronized (players) {
+			for (Player player : players.values()) {
+				g.drawText("Player " + (player.num+1) + " Score: " + player.score, 10, y, paint_text_ink);
+				y += yInc;
+			}
 		}
 
 		long timeRemaining = levelEndTime - System.currentTimeMillis();
@@ -467,47 +532,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	private synchronized void loadPlayer(IInputDevice input) {
-		if (input == null) {
-			throw new NullPointerException("Input is null");
-		}
-
-		// Restart all other players
-		for(PlayersAvatar avatar : this.avatars) {
-			this.restartPlayer(avatar);
-		}
-
-		int num = avatars.size();
-
-		Player player = null;
-		if (num >= players.size()) {
-			player = new Player(num);
-			this.players.add(new Player(num));
-		} else {
-			player = players.get(num);
-		}
-
-		PlayersAvatar avatar = new PlayersAvatar(this, player, 0, 0, input);
-		this.avatars.add(avatar);
-		addToProcess(avatar);
-
-		this.msg.setText("Player " + (num+1) + " joined!");
-
-		this.restartPlayer(avatar);
-	}
-
-
-	public void restartPlayer(PlayersAvatar avatar) {
-		float x = levelData.getStartPos().x * Statics.SQ_SIZE;
-		float y = (levelData.getStartPos().y) * Statics.SQ_SIZE; // -2 so we start above the bed
-		while (!this.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {
-			y = y - Statics.SQ_SIZE;
-		}
-		avatar.setLocation(x, y);
-		avatar.updateGeometricState();
-	}
-
-
 	@Override
 	public void displayText(String s) {
 		this.msg.setText(s);
@@ -530,11 +554,13 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 			score_inc = score_inc * 2;
 		}
 		if (score_inc > 0) { // Might be negative
-			avatar.player.score += score_inc;
+			this.players.get(avatar.input.getID()).score += score_inc;
 			displayText("Player " + avatar.playernumZB + " finished!  Have " + score_inc + " points!");
 		}
 		avatar.remove();
-		this.avatars.remove(avatar);
+		synchronized (avatars) {
+			this.avatars.remove(avatar);
+		}
 
 		// check if no players left
 		if (this.avatars.isEmpty()) {
@@ -546,6 +572,51 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	public boolean isOnScreen(float x, float y, float w, float h) {
 		return x+w >= 0 && x <= Statics.SCREEN_WIDTH && y+h >= 0 && y<= Statics.SCREEN_HEIGHT;
 	}
+
+
+	public float getDistanceToClosestPlayer(ReturnObject<PlayersAvatar> returnClosest, GameObject o) {
+		float closestDistance = 9999;
+		synchronized (avatars) {
+			for(PlayersAvatar player : avatars) {
+				float dist = o.getDistanceTo(player); 
+				if (dist < closestDistance) {
+					if (returnClosest != null) {
+						returnClosest.toReturn = player;
+					}
+					closestDistance = dist;
+				}
+			}
+		}
+		return closestDistance;
+	}
+
+
+	public PlayersAvatar getVisiblePlayer(GameObject o) {
+		synchronized (avatars) {
+			for (PlayersAvatar player : avatars) { // todo - use Line() from Roguelike
+				MyPointF dir = player.getWorldCentre_CreatesNew().subtract(o.getWorldCentre_CreatesNew());//new MyPointF(mob.getWorldCentreX(), mob.getWorldCentreY());
+				float len = dir.length();
+				int num = (int)(len / Statics.SQ_SIZE) * 3;
+				dir.divideLocal(num);
+				for (int i=0 ; i<num ; i++) {
+					float x = o.getWorldCentreX() + (dir.x * i);
+					float y = o.getWorldCentreY() + (dir.y * i);
+					int map_x = (int)(x / Statics.SQ_SIZE);
+					int map_y = (int)(y / Statics.SQ_SIZE);
+					Block b = (Block) blockGrid.getBlockAtMap_MaybeNull(map_x, map_y);
+					if (b != null) {
+						if (b.getType() != Block.NOTHING_DAYLIGHT) {
+							//return false;
+							continue;
+						}
+					}
+				}
+				return player;
+			}
+			return null;
+		}
+	}
+
 
 }
 

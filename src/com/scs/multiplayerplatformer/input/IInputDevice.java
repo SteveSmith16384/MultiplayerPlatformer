@@ -2,6 +2,8 @@ package com.scs.multiplayerplatformer.input;
 
 public interface IInputDevice {
 
+	int getID();
+	
 	boolean isLeftPressed();
 
 	boolean isRightPressed();

@@ -191,4 +191,10 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 		return 1;
 	}
 
+
+	@Override
+	public int getID() {
+		return id;
+	}
+
 }

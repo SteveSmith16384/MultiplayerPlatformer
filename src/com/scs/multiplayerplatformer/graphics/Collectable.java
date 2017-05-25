@@ -19,8 +19,6 @@ public abstract class Collectable extends GameObject {
 	public Collectable(GameModule _game, MyPointF _start, float size) {
 		super(_game, "Collectable", true, _start.x, _start.y, size, size);
 
-		//bmp = todo;//Block.GetBitmap(Statics.img_cache, _type, size, size);
-
 		this.game.root_node.attachChild(this);
 		this.updateGeometricState();
 		this.game.addToProcess(this);

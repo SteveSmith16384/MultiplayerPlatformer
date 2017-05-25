@@ -190,7 +190,7 @@ public abstract class AbstractMob extends GameObject {
 
 
 	protected PlayersAvatar getVisiblePlayer() {
-		for (PlayersAvatar player : game.avatars) { // todo - use Line() from Roguelike
+		/*for (PlayersAvatar player : game.avatars) { // todo - use Line() from Roguelike
 			MyPointF dir = player.getWorldCentre_CreatesNew().subtract(this.getWorldCentre_CreatesNew());//new MyPointF(mob.getWorldCentreX(), mob.getWorldCentreY());
 			float len = dir.length();
 			int num = (int)(len / Statics.SQ_SIZE) * 3;
@@ -210,7 +210,8 @@ public abstract class AbstractMob extends GameObject {
 			}
 			return player;
 		}
-		return null;
+		return null;*/
+		return game.getVisiblePlayer(this);
 	}
 
 

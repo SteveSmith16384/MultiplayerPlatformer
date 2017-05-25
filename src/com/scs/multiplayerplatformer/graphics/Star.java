@@ -13,7 +13,7 @@ public final class Star extends Collectable {
 
 	@Override
 	protected void collected(PlayersAvatar avatar) {
-		avatar.player.score += 100;
+		//avatar.player.score += 100;
 		
 	}
 
