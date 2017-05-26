@@ -160,7 +160,7 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 				String key = in.readUTF();
 				//BufferedImage img = ImageIO.read(in);
 
-				int size = in.readInt(); // Read byte count
+				int size = in.readInt(); // Read byte count todo - change to long
 
 				byte[] buffer = new byte[size];
 				in.readFully(buffer); // Make sure you read all bytes of the image

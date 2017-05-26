@@ -30,6 +30,8 @@ Level where jump over lots of dangerous blocks
 
 
 URGENT
+Error deserializing hashmap
+Say why map in invalid
 Space out HUD better
 Not keeping transp when adjusting players colours
 	Creating new players!?
