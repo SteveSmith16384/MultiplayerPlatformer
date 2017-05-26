@@ -30,22 +30,16 @@ Level where jump over lots of dangerous blocks
 
 
 URGENT
-Error deserializing hashmap
-Say why map in invalid
-Space out HUD better
+Loading new level when another player joins
+Not showing errors on window
+	Error deserializing hashmap
 Not keeping transp when adjusting players colours
-	Creating new players!?
+	Space out HUD better
 Search for todos
-	Starting differnt level when player joins
-	Restart time when level restarted
-	Store player by input id
-	version: null
-	Say "press X to start"
-	Players score not going up!
-	More time
 
 
 TODO
+Say why map in invalid
 No "die" or "level complete" sfx
 Play sound when player joins
 "Press fire to start" is hidden

@@ -187,7 +187,7 @@ public final class MainWindow extends JFrame implements MouseListener, KeyListen
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 		this.thread.setRunning(false);
-		ImageCache.Save();
+		//ImageCache.Save();
 		this.dispose();
 
 	}

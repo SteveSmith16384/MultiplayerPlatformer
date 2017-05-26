@@ -206,25 +206,29 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 		// Adjust colours
 		for (int f=0 ; f<8 ; f++) {
-			BufferedImage img = a_bmp_left[size][f];
-			//a_bmp_left[size][f] = adjustImage(img);
-			adjustImage(img);
+			{
+				BufferedImage img = a_bmp_left[size][f];
+				adjustImage(img);
+			}
 
-			// bmp_right
-			img = a_bmp_right[size][f];
-			adjustImage(img);
+			{
+				// bmp_right
+				BufferedImage img = a_bmp_right[size][f];
+				adjustImage(img);
+			}
 		}
 	}
 
 
 	private void adjustImage(BufferedImage img) {
+		int LOWER = 20;
+		int UPPER = 240;
+
 		for (int y=0 ; y<img.getHeight() ; y++) {
 			for (int x=0 ; x<img.getWidth() ; x++) {
 				int i = img.getRGB(x, y);
 				Color c = new Color(i);
 				if (c.getAlpha() == 255) {
-					int LOWER = 20;
-					int UPPER = 240;
 					if (c.getRed() > LOWER && c.getGreen() > LOWER && c.getBlue() > LOWER && c.getRed() < UPPER && c.getGreen() < UPPER && c.getBlue() < UPPER) {
 						Color newCol = null; 
 						switch (this.playernumZB) {

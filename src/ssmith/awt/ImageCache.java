@@ -19,21 +19,21 @@ import ssmith.io.Serialize;
 
 import com.scs.multiplayerplatformer.Statics;
 
-public class ImageCache implements Runnable, Serializable { //extends Hashtable<String, BufferedImage> 
+public class ImageCache implements Runnable {//, Serializable { //extends Hashtable<String, BufferedImage> 
 
-	private static final long serialVersionUID = 1L;
+	//private static final long serialVersionUID = 1L;
 
 	private static final String RESOURCE_DIR = "assets/gfx/";
-	private static final String CACHE_FILE = "./data/imagecache.dat";
+	private static final String CACHE_DIR = "./data/images/";
 
 	public transient Component c;
 	private transient static ImageCache instance;
 
 	private transient Hashtable<String, BufferedImage> cache;
 
-	public static ImageCache GetInstance() {
+	public static synchronized ImageCache GetInstance() {
 		if (instance == null) {
-			new File("./data/").mkdirs();
+			/*new File("./data/").mkdirs();
 			if (new File(CACHE_FILE).exists()) {
 				try {
 					Statics.p("Loading image cache...");
@@ -49,9 +49,9 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 
 					instance = new ImageCache();
 				}
-			} else {
-				instance = new ImageCache();
-			}
+			} else {*/
+			instance = new ImageCache();
+			//}
 		}
 		return instance;
 	}
@@ -60,9 +60,14 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 	private ImageCache() {
 		super();
 
+		new File(CACHE_DIR).mkdirs();
 		cache = new Hashtable<String, BufferedImage>();
 
-		Runtime.getRuntime().addShutdownHook(new Thread(this, "ImageCache_Save"));
+		//Runtime.getRuntime().addShutdownHook(new Thread(this, "ImageCache_Save"));
+
+		Thread t = new Thread(this, "ImageCache_Load");//.start();
+		t.setPriority(Thread.MAX_PRIORITY);
+		t.start();
 	}
 
 
@@ -107,14 +112,22 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 						// Scale proportionally
 						w = (int)(((float)img.getWidth() / (float)img.getHeight()) * h);
 					}
-					BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-					scaled.getGraphics().drawImage(img, 0, 0, w, h, c);
-					//if (Statics.DEBUG) {
-					Statics.p("Generated image " + filename + " of " + w + "," + h);
-					//}
-					img = scaled;
+
+					{
+						BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+						scaled.getGraphics().drawImage(img, 0, 0, w, h, c);
+						Statics.p("Generated image " + filename + " of " + w + "," + h);
+						img = scaled;
+					}
+
 					synchronized (cache) {
 						cache.put(key, img);
+					}
+
+					// Save it
+					File saveAs = new File(CACHE_DIR + key);
+					if (saveAs.exists() == false) {
+						ImageIO.write(img, "png", saveAs);
 					}
 					return img;
 				} else {
@@ -130,7 +143,7 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 	}
 
 
-	private void writeObject(ObjectOutputStream out) throws IOException {
+	/*private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
 		synchronized (cache) {
 			out.writeInt(cache.size()); // how many images are serialized?
@@ -175,12 +188,12 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 
 	public static void Save() {
 		new Thread(GetInstance(), "ImageCache_Save").start();
-	}
+	}*/
 
 
 	@Override
 	public void run() {
-		try {
+		/*try {
 			Statics.p("Saving image cache...");
 			synchronized (CACHE_FILE) {
 				Serialize.SerializeObject(CACHE_FILE, instance);
@@ -188,7 +201,20 @@ public class ImageCache implements Runnable, Serializable { //extends Hashtable<
 			Statics.p("Finished saving image cache");
 		} catch (IOException e) {
 			e.printStackTrace();
+		}*/
+
+		File files[] = new File(CACHE_DIR).listFiles();
+		for(File file : files) {
+			try {
+				BufferedImage img = ImageIO.read(file);
+				synchronized (cache) {
+					cache.put(file.getName(), img);
+				}
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
+
 	}
 
 }
