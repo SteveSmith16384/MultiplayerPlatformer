@@ -1,8 +1,19 @@
 package com.scs.multiplayerplatformer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
+
+import com.scs.multiplayerplatformer.game.GameModule;
+import com.scs.multiplayerplatformer.game.Player;
+import com.scs.multiplayerplatformer.input.DeviceThread;
+import com.scs.multiplayerplatformer.input.IInputDevice;
+import com.scs.multiplayerplatformer.input.NewControllerListener;
+import com.scs.multiplayerplatformer.start.ErrorModule;
+import com.scs.multiplayerplatformer.start.StartupModule;
 
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
@@ -12,11 +23,7 @@ import ssmith.android.framework.modules.AbstractModule;
 import ssmith.awt.ImageCache;
 import ssmith.lang.Functions;
 
-import com.scs.multiplayerplatformer.game.GameModule;
-import com.scs.multiplayerplatformer.start.ErrorModule;
-import com.scs.multiplayerplatformer.start.StartupModule;
-
-public final class MainThread extends Thread {
+public final class MainThread extends Thread implements NewControllerListener {
 
 	private static final long ONBACK_GAP = 200;
 
@@ -32,6 +39,9 @@ public final class MainThread extends Thread {
 	public Canvas c;
 	public MainWindow window;
 	
+	private Map<Integer, Player> players = new HashMap<>();
+	private List<IInputDevice> newControllers = new ArrayList<>();
+
 	static {
 		paint_black_fill.setARGB(255, 0, 0, 0);
 		paint_black_fill.setAntiAlias(true);
@@ -46,6 +56,11 @@ public final class MainThread extends Thread {
 		window = new MainWindow(this);
 		Statics.img_cache = ImageCache.GetInstance();
 		Statics.img_cache.c = window;
+
+		DeviceThread deviceThread = new DeviceThread(window);
+		deviceThread.addListener(this);
+		deviceThread.start();
+
 	}
 
 
@@ -131,6 +146,15 @@ public final class MainThread extends Thread {
 
 
 	protected void updateGame() {
+		synchronized (newControllers) {
+			if (this.newControllers.isEmpty() == false) {
+				while (this.newControllers.isEmpty() == false) {
+					this.createPlayer(this.newControllers.remove(0));
+				}
+				this.startNewLevel(filename, true); // Restart the level
+			}
+		}
+
 		if (next_module != null) {
 			if (this.module != null) {
 				this.module.stopped();
@@ -174,6 +198,16 @@ public final class MainThread extends Thread {
 			}
 		}
 	}
+
+
+	@Override
+	public void newController(IInputDevice input) {
+		synchronized (newControllers) {
+			this.newControllers.add(input);
+		}
+	}
+
+
 
 
 }

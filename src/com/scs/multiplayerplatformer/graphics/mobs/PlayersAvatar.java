@@ -185,7 +185,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 
 	@Override
-	protected void generateBitmaps(int size, float scale) {
+	protected void generateBitmaps(int size, float scale) { // todo - always get playernumZB = 0
 		a_bmp_left[size][0] = Statics.img_cache.getImage("ninja" + this.playernumZB + "_l0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_left[size][1] = Statics.img_cache.getImage("ninja" + playernumZB + "_l1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_left[size][2] = Statics.img_cache.getImage("ninja" + playernumZB + "_l2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);

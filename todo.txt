@@ -30,15 +30,21 @@ Level where jump over lots of dangerous blocks
 
 
 URGENT
-Loading new level when another player joins
+	Only create one Device thread - creating more!
+Swim in water
+Wasp not doing harm
+	Not loading selected level
+Not zooming in
+	Loading new level when another player joins
 Not showing errors on window
-	Error deserializing hashmap
 Not keeping transp when adjusting players colours
-	Space out HUD better
+Space out HUD better
 Search for todos
+Devices - check device MAC or something?
 
 
 TODO
+Trampoline
 Say why map in invalid
 No "die" or "level complete" sfx
 Play sound when player joins

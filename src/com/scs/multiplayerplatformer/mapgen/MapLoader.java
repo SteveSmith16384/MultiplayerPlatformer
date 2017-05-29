@@ -148,9 +148,9 @@ public final class MapLoader extends AbstractLevelData {
 										if (pieces[0].toLowerCase().startsWith("m:")) {
 											mobs.add(new SimpleMobData(NumberFunctions.ParseByte(pieces[0].substring(2)), x * Statics.SQ_SIZE, (row-6) * Statics.SQ_SIZE)); // -6 so we start above it
 										} else {
-											if (Statics.RELEASE_MODE == false) {
+											/*if (Statics.RELEASE_MODE == false) {
 												throw new RuntimeException("Unknown code: " + pieces[0]);
-											}
+											}*/
 										}
 									}
 								}

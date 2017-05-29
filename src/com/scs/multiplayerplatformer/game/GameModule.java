@@ -46,7 +46,7 @@ import com.scs.multiplayerplatformer.start.StartupModule;
  * Restart level - load an avatar for each player
  * 
  */
-public final class GameModule extends AbstractModule implements IDisplayText, NewControllerListener {
+public final class GameModule extends AbstractModule implements IDisplayText {
 
 	public static final byte HAND = 1;
 
@@ -66,9 +66,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
 	private List<PlayersAvatar> avatars = new ArrayList<>();
-	private Map<Integer, Player> players = new HashMap<>();
-	private List<IInputDevice> newControllers = new ArrayList<>();
-	//private DeviceThread deviceThread; 
 	private String filename;
 
 	public float current_scale = Statics.MAX_ZOOM_IN;
@@ -110,11 +107,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		str_time_remaining = act.getString("time_remaining");
 		this.setBackground(Statics.BACKGROUND_IMAGE);
 
-		DeviceThread deviceThread = new DeviceThread(act.thread.window);
-		deviceThread.addListener(this);
-		deviceThread.start();
-
-		startNewLevel(_filename);
+		startNewLevel(_filename, true);
 
 		msg = new TimedString(this, 2000);
 		msg.setText("PRESS FIRE (X) TO START!");
@@ -122,8 +115,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	// filename = null to load random map
-	private void startNewLevel(String _filename) {
-		this.filename = _filename;
+	private void startNewLevel(String _filename, boolean sameMap) {
 		Statics.act.sound_manager.levelStart();
 
 		synchronized (entities) {
@@ -141,11 +133,14 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 		new EnemyEventTimer(this);
 		levelEndTime = System.currentTimeMillis() + (Statics.LEVEL_TIME_SECS * 1000);
 
-		if (filename == null) {
-			loadMap(MapLoader.GetRandomMap());
+		if (_filename == null || sameMap == false) {
+			filename = MapLoader.GetRandomMap();
 		} else {
-			loadMap(filename);
+			this.filename = _filename;
 		}
+		//filename = "bens_map1.csv"; // todo - remove
+		loadMap(filename);
+
 
 		/*Iterator<IInputDevice> it = deviceThread.getDevices().iterator();
 		while (it.hasNext()) {
@@ -224,15 +219,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	public void updateGame(long interpol) {
-		synchronized (newControllers) {
-			if (this.newControllers.isEmpty() == false) {
-				while (this.newControllers.isEmpty() == false) {
-					this.createPlayer(this.newControllers.remove(0));
-				}
-				this.startNewLevel(filename); // Restart the level
-			}
-		}
-
 		if (DeviceThread.USE_CONTROLLERS) {
 			Controllers.checkControllers();
 		}
@@ -278,8 +264,8 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 			// Do we need to zoom in/out?
 			if (avatars.size() > 1) {
-				float OUTER = 0.3f;
-				float INNER = 0.4f; // 0.3f
+				float OUTER = 0.2f;
+				float INNER = 0.22f; // 0.3f
 				boolean zoomOut = false; // Need to zoom out quickly
 				boolean zoomIn = true; // Slowly
 				synchronized (avatars) {
@@ -325,15 +311,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 
 	private void createPlayer(IInputDevice input) {
-		if (input == null) {
-			throw new NullPointerException("Input is null");
-		}
-
-		// Restart all other players
-		/*for(PlayersAvatar avatar : this.avatars) {
-			this.restartPlayer(avatar);
-		}*/
-
 		int num = players.size();
 		synchronized (players) {
 			if (this.players.containsKey(input.getID()) == false) {
@@ -538,14 +515,6 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 	}
 
 
-	@Override
-	public void newController(IInputDevice input) {
-		synchronized (newControllers) {
-			this.newControllers.add(input);
-		}
-	}
-
-
 	public void playerCompletedLevel(PlayersAvatar avatar) {
 		Statics.act.sound_manager.playerReachedEnd();
 		long score_inc = (levelEndTime - System.currentTimeMillis()) / 100;
@@ -564,7 +533,7 @@ public final class GameModule extends AbstractModule implements IDisplayText, Ne
 
 		// check if no players left
 		if (this.avatars.isEmpty()) {
-			this.startNewLevel(null); // Load random map after playing first selected map
+			this.startNewLevel(null, false); // Load random map after playing first selected map
 		}
 	}
 

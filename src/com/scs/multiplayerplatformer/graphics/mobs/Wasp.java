@@ -116,10 +116,10 @@ public class Wasp extends AbstractMob {
 	@Override
 	public void process(long interpol) {
 		ReturnObject<PlayersAvatar> playerTemp = new ReturnObject<>();
-		//float dist = this.getDistanceToClosestPlayer(playerTemp);
-		if (this.isOnScreen(game.root_cam, game.current_scale)) { //dist < Statics.ACTIVATE_DIST) { // Only process if close
+		this.getDistanceToClosestPlayer(playerTemp);
+		//if (this.isOnScreen(game.root_cam, game.current_scale)) { //dist < Statics.ACTIVATE_DIST) { // Only process if close
 			PlayersAvatar player = playerTemp.toReturn;
-			if (Functions.rnd(1, 10) == 1) {
+			if (Functions.rnd(1, 10) == 1 || player == null) {
 				// move randomly
 				this.move(Functions.rnd(-1, 1) * Statics.WASP_SPEED, 0, false);
 				this.move(0, Functions.rnd(-1, 1) * Statics.WASP_SPEED, false);
@@ -148,11 +148,11 @@ public class Wasp extends AbstractMob {
 					this.up_down_timer = TURN_DURATION;
 				}
 			}
-		} else { //if (dist > Statics.DEACTIVATE_DIST) {
+		/*} else { //if (dist > Statics.DEACTIVATE_DIST) {
 			this.remove();
 			// Re-add them to list to create
 			this.game.levelData.mobs.add(new SimpleMobData(AbstractMob.WASP, this.getWorldX(), this.getWorldY()));
-		}
+		}*/
 	}
 
 
@@ -177,11 +177,11 @@ public class Wasp extends AbstractMob {
 
 
 	private void generateBitmaps(int size, float scale) {
-		a_bmp_left[size][0] = Statics.img_cache.getImage("wasp_l0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][1] = Statics.img_cache.getImage("wasp_l1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][0] = Statics.img_cache.getImage("wasp_l1", Statics.WASP_WIDTH*scale, Statics.WASP_HEIGHT*scale);
+		a_bmp_left[size][1] = Statics.img_cache.getImage("wasp_l2", Statics.WASP_WIDTH*scale, Statics.WASP_HEIGHT*scale);
 
-		a_bmp_right[size][0] = Statics.img_cache.getImage("wasp_r0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][1] = Statics.img_cache.getImage("wasp_r1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][0] = Statics.img_cache.getImage("wasp_r1", Statics.WASP_WIDTH*scale, Statics.WASP_HEIGHT*scale);
+		a_bmp_right[size][1] = Statics.img_cache.getImage("wasp_r2", Statics.WASP_WIDTH*scale, Statics.WASP_HEIGHT*scale);
 	}
 
 

@@ -203,6 +203,7 @@ public class ImageCache implements Runnable {//, Serializable { //extends Hashta
 			e.printStackTrace();
 		}*/
 
+		Statics.p("Loading image cache...");
 		File files[] = new File(CACHE_DIR).listFiles();
 		for(File file : files) {
 			try {
@@ -214,6 +215,7 @@ public class ImageCache implements Runnable {//, Serializable { //extends Hashta
 				ex.printStackTrace();
 			}
 		}
+		Statics.p("Finished loading image cache");
 
 	}
 

@@ -23,7 +23,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 	private int x_offset = -1;
 	private boolean tried_jumping = false;
 	private Interval turn_interval = new Interval(TURN_DURATION);
-	private Interval check_oob_interval = new Interval(CHECK_OOB_DURATION);
+	//private Interval check_oob_interval = new Interval(CHECK_OOB_DURATION);
 	private Interval throw_interval = new Interval(5000);
 
 	public static void Factory(GameModule game, Block gen) { // gen == null for normal appearance
@@ -61,22 +61,29 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 
 	private EnemyNinjaEasy(GameModule _game, float x, float y) {
 		super(_game, "Enemy Ninja", x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, MAX_FRAMES, 200, true, false, Statics.SD_ENEMY_SIDE, true);
+		
+		if (Statics.DEBUG) {
+			Statics.p("Created enemy");
+		}
 	}
 
 
 	@Override
 	public void process(long interpol) {
 		ReturnObject<PlayersAvatar> playerTemp = new ReturnObject<>();
-		float dist = this.getDistanceToClosestPlayer(playerTemp); // Need this to get closest player!
+		this.getDistanceToClosestPlayer(playerTemp); // Need this to get closest player!
 
-		if (check_oob_interval.hitInterval()) { // Don't check straight away to avoid removing straight away
+		/*if (check_oob_interval.hitInterval()) { // Don't check straight away to avoid removing straight away
 			if (!this.isOnScreen(game.root_cam, game.current_scale)) { 
+				if (Statics.DEBUG) {
+					Statics.p("REMOVED enemy");
+				}
 				this.remove();
 				// Re-add them to list to create
 				this.game.levelData.mobs.add(new SimpleMobData(AbstractMob.ENEMY_NINJA_EASY, this.getWorldX(), this.getWorldY()));
 				return;
 			}
-		}
+		}*/
 
 		PlayersAvatar player = playerTemp.toReturn;
 		if (turn_interval.hitInterval()) {
