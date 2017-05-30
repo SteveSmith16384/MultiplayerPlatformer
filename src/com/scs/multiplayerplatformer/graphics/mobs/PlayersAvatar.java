@@ -23,7 +23,6 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 	public float move_x_offset = 0;
 	public BlockInventory inv;
 	public int playernumZB;
-	//public Player player;
 
 	public IInputDevice input;
 	private long firePressedTime;
@@ -32,19 +31,14 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 
 	public PlayersAvatar(GameModule _game, float x, float y, IInputDevice _input, int num) {
-		super(_game, Statics.act.getString("player")  + num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, false);
+		super(_game, Statics.act.getString("player")  + num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, true);
 
-		//player = _player;
 		playernumZB = num;
 		input = _input;
 
 		inv = new BlockInventory(this);
 
 		this.setNumFrames(8);
-
-		if (input == null) {
-			throw new RuntimeException("Input is null");
-		}
 
 	}
 
@@ -64,10 +58,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 			moving_up = false;
 			moving_down = false;
 			if (input.isJumpPressed()) {
-				//Statics.p("JUMP!");
 				startJumping();
-			} else {
-				stoppedJumping();
 			}
 
 			if (input.isUpPressed()) {
@@ -102,28 +93,16 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	protected void startJumping() {
 		if (jumping == false) {
-			if (is_on_ground_or_ladder) {
+			if (is_on_ground_or_ladder > 0) {
 				Statics.act.sound_manager.playerJumped();
 				jumping = true;
 				/*if (Statics.DEBUG) {
 					Statics.p("JUMP_Y=" + Statics.JUMP_Y + ", Statics.ROCK_SPEED="+Statics.ROCK_SPEED + ", Statics.ROCK_GRAVITY=" + Statics.ROCK_GRAVITY);
 				}*/
-				phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
+				phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y*is_on_ground_or_ladder), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
 				this.jumpPressedTime = System.currentTimeMillis();
 			}
-		} else {
-			if (System.currentTimeMillis() - this.jumpPressedTime > 1) {
-				this.stoppedJumping();
-			}
 		}
-	}
-
-
-	private void stoppedJumping() {
-		/*if (jumping) {
-			jumping = false;
-			phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
-		}*/
 	}
 
 

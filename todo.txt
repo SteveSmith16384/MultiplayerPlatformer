@@ -2,6 +2,7 @@ Ninjamatic
 
 
 HOME
+Get trampoline gfx
 Make levels look better
 Add baddies to levels
 Add wasps to maps
@@ -10,8 +11,7 @@ Sound not working
 Post to java-gaming
 Make another video
 Create new logo
-Test full screen
-Create new maps - ice
+Create new maps
 Get a font
 
 
@@ -30,21 +30,19 @@ Level where jump over lots of dangerous blocks
 
 
 URGENT
-	Only create one Device thread - creating more!
-Swim in water
-Wasp not doing harm
-	Not loading selected level
-Not zooming in
-	Loading new level when another player joins
+Trampoline
+	Not bouncing higher
+	Not zooming in
 Not showing errors on window
-Not keeping transp when adjusting players colours
-Space out HUD better
 Search for todos
-Devices - check device MAC or something?
+	Swim in water
+	Wasp not doing harm
+	Only create one Device thread - creating more!
+	Space out HUD better
+	Devices - check device MAC or something?
 
 
 TODO
-Trampoline
 Say why map in invalid
 No "die" or "level complete" sfx
 Play sound when player joins
@@ -53,10 +51,7 @@ Restart if player falls too far
 
 
 LATER
-Add mousewheel to menus
-Give limited shurikens, replenish on death
 Give levels their own background
-Give each level its own time
 Hold down jump to jump higher
 Conveyor belts
 Baddy that drop from sky
@@ -84,3 +79,12 @@ LOW PRI
 Create icon
 Enemies not sinking in water
 
+
+
+OTHER GAMES
+Surround 2600
+King Arthurs Gold
+Warlord
+Pong
+Gauntlet
+Rampart

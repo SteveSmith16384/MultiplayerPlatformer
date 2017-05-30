@@ -15,7 +15,8 @@ import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
 public abstract class AbstractWalkingMob extends AbstractMob {
 
-	protected boolean is_on_ground_or_ladder, can_swim;
+	protected boolean can_swim;
+	protected float is_on_ground_or_ladder; // Bounciness
 	protected boolean facing_left = false;
 	protected BufferedImage a_bmp_left[][]; // Size/FrameNum
 	protected BufferedImage a_bmp_right[][]; // Size/FrameNum
@@ -103,7 +104,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 	protected abstract void generateBitmaps(int size, float scale);
 
 	protected void startJumping() {
-		if (is_on_ground_or_ladder && jumping == false) {
+		if (is_on_ground_or_ladder > 0 && jumping == false) {
 			Statics.act.sound_manager.playerJumped();
 			jumping = true;
 			phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
@@ -117,7 +118,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 
 
 	protected void performJumpingOrGravity() {
-		is_on_ground_or_ladder = false;
+		is_on_ground_or_ladder = 0;
 		is_on_ladder = false;
 		ladder_x = 0;
 		boolean in_water = false;
@@ -135,7 +136,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 					in_water = true;
 				}
 				if (Block.BlocksDownMovement(b.getType())) {
-					is_on_ground_or_ladder = true;
+					is_on_ground_or_ladder = Block.GetBounciness(b.getType());
 				}
 				if (Block.IsLadder(b.getType())) {
 					is_on_ladder = true;
@@ -146,7 +147,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 
 		if (jumping) {
 			phys.process();
-			if (is_on_ground_or_ladder && this.getJumpingYOff() >= 0) {
+			if (is_on_ground_or_ladder > 0 && this.getJumpingYOff() >= 0) {
 				this.jumping = false;
 			} else {
 				if (this.move(0, this.getJumpingYOff(), false) == false) { // Hit a ceiling?
@@ -160,11 +161,14 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 				}
 			}
 		} else {
-			if (is_on_ground_or_ladder == false) {
+			if (is_on_ground_or_ladder <= 0) {
 				// Gravity
 				if (!in_water || !can_swim) {
-					is_on_ground_or_ladder = (this.move(0, curr_fall_speed, true) == false);
-					if (is_on_ground_or_ladder) {
+					boolean moved = this.move(0, curr_fall_speed, true);
+					if (moved) {
+						is_on_ground_or_ladder = 0;
+					}
+					if (is_on_ground_or_ladder > 0) {
 						curr_fall_speed = Statics.PLAYER_FALL_SPEED; // Reset current fall speed
 					} else {
 						curr_fall_speed = curr_fall_speed * 2f;
@@ -174,7 +178,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 					}
 				}
 			}
-			if (is_on_ground_or_ladder) {
+			if (is_on_ground_or_ladder > 0) {
 				if (this.moving_up) {
 					this.move(0, -Statics.PLAYER_SPEED, false);
 				} else if (moving_down) {
@@ -218,9 +222,9 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 	}
 
 
-/*	@Override
+	/*	@Override
 	protected boolean hasCollidedWith(Geometry g) {
 		return Collision.Collided(this, g);
 	}
-*/
+	 */
 }

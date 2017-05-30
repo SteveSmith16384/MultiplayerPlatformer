@@ -138,17 +138,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		} else {
 			this.filename = _filename;
 		}
-		//filename = "bens_map1.csv"; // todo - remove
 		loadMap(filename);
 
-
-		/*Iterator<IInputDevice> it = deviceThread.getDevices().iterator();
-		while (it.hasNext()) {
-			IInputDevice input = it.next();
-			this.createAvatars(input);
-		}*/
-		synchronized (players) {
-			for (Player player : players.values()) {
+		synchronized (this.getThread().players) {
+			for (Player player : this.getThread().players.values()) {
 				this.createAvatar(player);
 			}
 		}
@@ -310,17 +303,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	private void createPlayer(IInputDevice input) {
-		int num = players.size();
-		synchronized (players) {
-			if (this.players.containsKey(input.getID()) == false) {
-				this.players.put(input.getID(), new Player(input, num));
-			}
-		}
-		this.msg.setText("Player " + (num+1) + " joined!");
-	}
-
-
 	private void checkIfMobsNeedCreating(float scale, Camera cam) {
 		// Load mobs
 		if (levelData.mobs != null && this.avatars.size() > 0) {
@@ -369,10 +351,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			ex.printStackTrace();
 		}
 
-		int y = 50;
+		int y = 80;
 		int yInc = (int)paint_text_ink.getTextSize()*2;
-		synchronized (players) {
-			for (Player player : players.values()) {
+		synchronized (this.getThread().players) {
+			for (Player player : this.getThread().players.values()) {
 				g.drawText("Player " + (player.num+1) + " Score: " + player.score, 10, y, paint_text_ink);
 				y += yInc;
 			}
@@ -518,12 +500,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public void playerCompletedLevel(PlayersAvatar avatar) {
 		Statics.act.sound_manager.playerReachedEnd();
 		long score_inc = (levelEndTime - System.currentTimeMillis()) / 100;
-		if (this.avatars.size() == this.players.size()) {
+		if (this.avatars.size() == this.getThread().players.size()) {
 			// First player to get to the end!
 			score_inc = score_inc * 2;
 		}
 		if (score_inc > 0) { // Might be negative
-			this.players.get(avatar.input.getID()).score += score_inc;
+			this.getThread().players.get(avatar.input.getID()).score += score_inc;
 			displayText("Player " + avatar.playernumZB + " finished!  Have " + score_inc + " points!");
 		}
 		avatar.remove();
@@ -587,5 +569,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
+	@Override
+	public void newPlayer(Player player) {
+		this.createAvatar(player);
+	}
 }
 

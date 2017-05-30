@@ -7,14 +7,6 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import com.scs.multiplayerplatformer.game.GameModule;
-import com.scs.multiplayerplatformer.game.Player;
-import com.scs.multiplayerplatformer.input.DeviceThread;
-import com.scs.multiplayerplatformer.input.IInputDevice;
-import com.scs.multiplayerplatformer.input.NewControllerListener;
-import com.scs.multiplayerplatformer.start.ErrorModule;
-import com.scs.multiplayerplatformer.start.StartupModule;
-
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
@@ -22,6 +14,14 @@ import ssmith.android.framework.MyEvent;
 import ssmith.android.framework.modules.AbstractModule;
 import ssmith.awt.ImageCache;
 import ssmith.lang.Functions;
+
+import com.scs.multiplayerplatformer.game.GameModule;
+import com.scs.multiplayerplatformer.game.Player;
+import com.scs.multiplayerplatformer.input.DeviceThread;
+import com.scs.multiplayerplatformer.input.IInputDevice;
+import com.scs.multiplayerplatformer.input.NewControllerListener;
+import com.scs.multiplayerplatformer.start.ErrorModule;
+import com.scs.multiplayerplatformer.start.StartupModule;
 
 public final class MainThread extends Thread implements NewControllerListener {
 
@@ -38,8 +38,8 @@ public final class MainThread extends Thread implements NewControllerListener {
 	private long last_onback_pressed;
 	public Canvas c;
 	public MainWindow window;
-	
-	private Map<Integer, Player> players = new HashMap<>();
+
+	public Map<Integer, Player> players = new HashMap<>(); // todo - make private
 	private List<IInputDevice> newControllers = new ArrayList<>();
 
 	static {
@@ -87,7 +87,7 @@ public final class MainThread extends Thread implements NewControllerListener {
 		if (!mRun) {
 			return;
 		}
-		
+
 		c = new Canvas(window.bs.getDrawGraphics());
 		if (Statics.FULL_SCREEN == false) {
 			c.translate(0, Statics.WINDOW_TOP_OFFSET); // Take into account window title
@@ -151,7 +151,7 @@ public final class MainThread extends Thread implements NewControllerListener {
 				while (this.newControllers.isEmpty() == false) {
 					this.createPlayer(this.newControllers.remove(0));
 				}
-				this.startNewLevel(filename, true); // Restart the level
+				//this.startNewLevel(filename, true); // Restart the level
 			}
 		}
 
@@ -201,10 +201,23 @@ public final class MainThread extends Thread implements NewControllerListener {
 
 
 	@Override
-	public void newController(IInputDevice input) {
+	public synchronized void newController(IInputDevice input) {
 		synchronized (newControllers) {
 			this.newControllers.add(input);
 		}
+	}
+
+
+	private void createPlayer(IInputDevice input) {
+		int num = players.size();
+		synchronized (players) {
+			if (this.players.containsKey(input.getID()) == false) {
+				Player player = new Player(input, num);
+				this.players.put(input.getID(), player);
+				this.module.newPlayer(player);
+			}
+		}
+		//this.msg.setText("Player " + (num+1) + " joined!");
 	}
 
 

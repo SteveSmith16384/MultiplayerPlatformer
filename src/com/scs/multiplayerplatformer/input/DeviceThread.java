@@ -16,7 +16,7 @@ import com.scs.multiplayerplatformer.Statics;
 
 import ssmith.lang.Functions;
 
-public final class DeviceThread extends Thread {
+public final class DeviceThread extends Thread { // todo - make singleton
 
 	public static boolean USE_CONTROLLERS = true;
 

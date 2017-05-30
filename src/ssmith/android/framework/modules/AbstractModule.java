@@ -23,7 +23,7 @@ import com.scs.multiplayerplatformer.game.Player;
 import com.scs.multiplayerplatformer.input.IInputDevice;
 import com.scs.multiplayerplatformer.input.NewControllerListener;
 
-public abstract class AbstractModule extends Thread implements NewControllerListener {
+public abstract class AbstractModule extends Thread {//implements NewControllerListener {
 	
 	private static Paint paint_button_text = new Paint();
 
@@ -192,13 +192,12 @@ public abstract class AbstractModule extends Thread implements NewControllerList
 	}
 	
 
-	public void onActivityResult(int requestCode, int resultCode) {
+	/*public void onActivityResult(int requestCode, int resultCode) {
 		// Override if required
-	}
+	}*/
 	
 
-	@Override
-	public void newController(IInputDevice input) {
+	public void newPlayer(Player player) {
 		// Override if reqd
 	}
 

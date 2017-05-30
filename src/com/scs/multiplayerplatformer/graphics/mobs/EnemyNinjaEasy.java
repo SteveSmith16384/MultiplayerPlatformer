@@ -101,7 +101,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 					this.startJumping();
 					this.tried_jumping = true;
 				} else {
-					if (is_on_ground_or_ladder) {
+					if (is_on_ground_or_ladder > 0) {
 						tried_jumping = false;
 						x_offset = x_offset * -1; //Turn around
 					}
@@ -121,7 +121,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 			}
 		}
 
-		if (is_on_ground_or_ladder) { // Must be after we've jumped!
+		if (is_on_ground_or_ladder > 0) { // Must be after we've jumped!
 			tried_jumping = false;
 		}
 

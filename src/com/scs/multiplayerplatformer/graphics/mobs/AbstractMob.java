@@ -234,7 +234,7 @@ public abstract class AbstractMob extends GameObject {
 				// Suffocation
 				this.hold_breath_time--;
 				if (this.hold_breath_time < 0) {
-					this.died();//.damage(1);
+					this.died();
 					this.hold_breath_time = 0;
 				}
 				return;

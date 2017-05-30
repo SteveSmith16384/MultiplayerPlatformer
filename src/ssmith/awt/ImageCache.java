@@ -19,9 +19,7 @@ import ssmith.io.Serialize;
 
 import com.scs.multiplayerplatformer.Statics;
 
-public class ImageCache implements Runnable {//, Serializable { //extends Hashtable<String, BufferedImage> 
-
-	//private static final long serialVersionUID = 1L;
+public class ImageCache implements Runnable { 
 
 	private static final String RESOURCE_DIR = "assets/gfx/";
 	private static final String CACHE_DIR = "./data/images/";
@@ -210,6 +208,7 @@ public class ImageCache implements Runnable {//, Serializable { //extends Hashta
 				BufferedImage img = ImageIO.read(file);
 				synchronized (cache) {
 					cache.put(file.getName(), img);
+					Statics.p("Loaded " + file.getName());
 				}
 			} catch (IOException ex) {
 				ex.printStackTrace();
