@@ -5,7 +5,6 @@ import ssmith.android.lib2d.shapes.Geometry;
 import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractWalkingMob;
-import com.scs.multiplayerplatformer.graphics.mobs.EnemyNinjaEasy;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 
 public final class Collision {

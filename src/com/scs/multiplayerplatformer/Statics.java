@@ -10,7 +10,6 @@ import ssmith.awt.ImageCache;
 
 public final class Statics {
 
-	public static final boolean DEBUG_TOO_MANY_PLAYERS = false; // todo - remove
 	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = false;

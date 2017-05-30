@@ -13,7 +13,6 @@ import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.BlockInventory;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.PhysicsEngine;
-import com.scs.multiplayerplatformer.game.Player;
 import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.input.IInputDevice;
@@ -27,7 +26,6 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 	public IInputDevice input;
 	private long firePressedTime;
 	private boolean prevThrowPressed = false;
-	private long jumpPressedTime;
 
 
 	public PlayersAvatar(GameModule _game, float x, float y, IInputDevice _input, int num) {
@@ -96,11 +94,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 			if (is_on_ground_or_ladder > 0) {
 				Statics.act.sound_manager.playerJumped();
 				jumping = true;
-				/*if (Statics.DEBUG) {
-					Statics.p("JUMP_Y=" + Statics.JUMP_Y + ", Statics.ROCK_SPEED="+Statics.ROCK_SPEED + ", Statics.ROCK_GRAVITY=" + Statics.ROCK_GRAVITY);
-				}*/
 				phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y*is_on_ground_or_ladder), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
-				this.jumpPressedTime = System.currentTimeMillis();
 			}
 		}
 	}
@@ -164,24 +158,25 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 
 	@Override
-	protected void generateBitmaps(int size, float scale) { // todo - always get playernumZB = 0
-		a_bmp_left[size][0] = Statics.img_cache.getImage("ninja" + this.playernumZB + "_l0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][1] = Statics.img_cache.getImage("ninja" + playernumZB + "_l1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][2] = Statics.img_cache.getImage("ninja" + playernumZB + "_l2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][3] = Statics.img_cache.getImage("ninja" + playernumZB + "_l3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][4] = Statics.img_cache.getImage("ninja" + playernumZB + "_l4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][5] = Statics.img_cache.getImage("ninja" + playernumZB + "_l5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][6] = Statics.img_cache.getImage("ninja" + playernumZB + "_l6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_left[size][7] = Statics.img_cache.getImage("ninja" + playernumZB + "_l7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+	protected void generateBitmaps(int size, float scale) {
+		int id = 0;
+		a_bmp_left[size][0] = Statics.img_cache.getImage("ninja" + id + "_l0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][1] = Statics.img_cache.getImage("ninja" + id + "_l1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][2] = Statics.img_cache.getImage("ninja" + id + "_l2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][3] = Statics.img_cache.getImage("ninja" + id + "_l3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][4] = Statics.img_cache.getImage("ninja" + id + "_l4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][5] = Statics.img_cache.getImage("ninja" + id + "_l5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][6] = Statics.img_cache.getImage("ninja" + id + "_l6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_left[size][7] = Statics.img_cache.getImage("ninja" + id + "_l7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 
-		a_bmp_right[size][0] = Statics.img_cache.getImage("ninja" + playernumZB + "_r0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][1] = Statics.img_cache.getImage("ninja" + playernumZB + "_r1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][2] = Statics.img_cache.getImage("ninja" + playernumZB + "_r2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][3] = Statics.img_cache.getImage("ninja" + playernumZB + "_r3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][4] = Statics.img_cache.getImage("ninja" + playernumZB + "_r4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][5] = Statics.img_cache.getImage("ninja" + playernumZB + "_r5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][6] = Statics.img_cache.getImage("ninja" + playernumZB + "_r6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][7] = Statics.img_cache.getImage("ninja" + playernumZB + "_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][0] = Statics.img_cache.getImage("ninja" + id + "_r0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][1] = Statics.img_cache.getImage("ninja" + id + "_r1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][2] = Statics.img_cache.getImage("ninja" + id + "_r2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][3] = Statics.img_cache.getImage("ninja" + id + "_r3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][4] = Statics.img_cache.getImage("ninja" + id + "_r4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][5] = Statics.img_cache.getImage("ninja" + id + "_r5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][6] = Statics.img_cache.getImage("ninja" + id + "_r6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][7] = Statics.img_cache.getImage("ninja" + id + "_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 
 		// Adjust colours
 		for (int f=0 ; f<8 ; f++) {

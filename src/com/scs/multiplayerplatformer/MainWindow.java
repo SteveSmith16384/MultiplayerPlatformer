@@ -26,7 +26,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import ssmith.android.framework.MyEvent;
-import ssmith.awt.ImageCache;
 
 
 public final class MainWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener, WindowListener, MouseWheelListener {

@@ -3,9 +3,6 @@ package ssmith.android.framework.modules;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
@@ -20,8 +17,6 @@ import ssmith.lang.Functions;
 import com.scs.multiplayerplatformer.MainThread;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.Player;
-import com.scs.multiplayerplatformer.input.IInputDevice;
-import com.scs.multiplayerplatformer.input.NewControllerListener;
 
 public abstract class AbstractModule extends Thread {//implements NewControllerListener {
 	

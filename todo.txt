@@ -1,3 +1,14 @@
+OTHER GAMES
+Warlord
+Pong
+King Arthurs Gold
+Rampart
+Gauntlet
+
+
+
+
+
 Ninjamatic
 
 
@@ -30,6 +41,7 @@ Level where jump over lots of dangerous blocks
 
 
 URGENT
+Not jumping!
 Trampoline
 	Not bouncing higher
 	Not zooming in
@@ -81,10 +93,3 @@ Enemies not sinking in water
 
 
 
-OTHER GAMES
-Surround 2600
-King Arthurs Gold
-Warlord
-Pong
-Gauntlet
-Rampart

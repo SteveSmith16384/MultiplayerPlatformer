@@ -3,7 +3,6 @@ package com.scs.multiplayerplatformer.graphics.mobs;
 import java.util.ArrayList;
 
 import ssmith.android.compatibility.RectF;
-import ssmith.android.lib2d.MyPointF;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.Functions;
@@ -28,7 +27,7 @@ public abstract class AbstractMob extends GameObject {
 	public static final byte PLATFORM1 = 11;
 
 	protected byte current_item = GameModule.HAND;
-	private boolean remove_if_far_away;
+	//private boolean remove_if_far_away;
 	private boolean destroy_blocks;
 	protected RectF tmp_rect = new RectF();
 	public byte side;
@@ -36,10 +35,10 @@ public abstract class AbstractMob extends GameObject {
 	public boolean is_on_ice = false;
 	private Interval bubble_int = new Interval(1000, false);
 
-	public AbstractMob(GameModule _game, String name, float x, float y, float w, float h, boolean _remove_if_far_away, boolean _destroy_blocks, byte _side) {
+	public AbstractMob(GameModule _game, String name, float x, float y, float w, float h, boolean _remove_if_far_away, boolean _destroy_blocks, byte _side) { // todo - remove _remove_if_far_away
 		super(_game, name, true, x, y, w, h);
 
-		remove_if_far_away = _remove_if_far_away;
+		//remove_if_far_away = _remove_if_far_away;
 		destroy_blocks = _destroy_blocks;
 		side = _side;
 
@@ -86,11 +85,11 @@ public abstract class AbstractMob extends GameObject {
 
 	// Returns true of move() was successful
 	protected boolean move(float off_x, float off_y, boolean ladderBlocks) {
-		if (remove_if_far_away) {
+		/*if (remove_if_far_away) {
 			if (checkIfTooFarAway()) { 
 				return false; 
 			}
-		}
+		}*/
 
 		if (off_x != 0 && off_y != 0) {
 			throw new RuntimeException("Movement must only be along one axis at a time");
@@ -114,6 +113,10 @@ public abstract class AbstractMob extends GameObject {
 				}
 				boolean blocked = false;
 
+				if (Block.GetHarm(b.getType()) > 0) {
+					this.died();
+					return false;
+				}
 				if (Block.BlocksAllMovement(b.getType())) {
 					blocked = true;
 				}
@@ -121,7 +124,7 @@ public abstract class AbstractMob extends GameObject {
 					blocked = true;
 				}
 				if (blocked) {
-					this.is_on_ice = (b.getType() == Block.SNOW); // todo - Block.isSlippery()
+					this.is_on_ice = (b.getType() == Block.SNOW);
 
 					// Move us up to the object we hit
 					if (off_x < 0) {
@@ -135,8 +138,6 @@ public abstract class AbstractMob extends GameObject {
 					}
 					this.setLocation(prev_x, prev_y);
 					this.updateGeometricState();
-
-					this.collidedWithBlock();
 
 					// Damage the block?
 					if (this.destroy_blocks && off_y == 0) { // Only destroy going left/right
@@ -158,11 +159,6 @@ public abstract class AbstractMob extends GameObject {
 			}
 		}
 		return true;
-	}
-
-
-	protected void collidedWithBlock() {
-		// Override if required.
 	}
 
 
@@ -190,27 +186,6 @@ public abstract class AbstractMob extends GameObject {
 
 
 	protected PlayersAvatar getVisiblePlayer() {
-		/*for (PlayersAvatar player : game.avatars) { // todo - use Line() from Roguelike
-			MyPointF dir = player.getWorldCentre_CreatesNew().subtract(this.getWorldCentre_CreatesNew());//new MyPointF(mob.getWorldCentreX(), mob.getWorldCentreY());
-			float len = dir.length();
-			int num = (int)(len / Statics.SQ_SIZE) * 3;
-			dir.divideLocal(num);
-			for (int i=0 ; i<num ; i++) {
-				float x = this.getWorldCentreX() + (dir.x * i);
-				float y = this.getWorldCentreY() + (dir.y * i);
-				int map_x = (int)(x / Statics.SQ_SIZE);
-				int map_y = (int)(y / Statics.SQ_SIZE);
-				Block b = (Block) game.blockGrid.getBlockAtMap_MaybeNull(map_x, map_y);
-				if (b != null) {
-					if (b.getType() != Block.NOTHING_DAYLIGHT) {
-						//return false;
-						continue;
-					}
-				}
-			}
-			return player;
-		}
-		return null;*/
 		return game.getVisiblePlayer(this);
 	}
 
@@ -247,7 +222,7 @@ public abstract class AbstractMob extends GameObject {
 	}
 
 
-	protected void checkForHarmingBlocks() {
+	/*protected void checkForHarmingBlocks_() {
 		this.tmp_rect.set(this.getWorldBounds());
 		this.tmp_rect.bottom += 2; // In case we're walking on an object on fire.  Must be 2?
 		ArrayList<AbstractRectangle> colls = game.blockGrid.getColliders(tmp_rect);
@@ -261,13 +236,7 @@ public abstract class AbstractMob extends GameObject {
 				}
 			}
 		}
-		/*Block b = (Block)game.new_grid.getBlockAtPixel_MaybeNull(this.getWorldCentreX(), this.getWorldBounds().bottom);
-		if (b != null) {
-			if (b.harm > 0) {
-				this.damage(b.harm);
-			}
-		}*/
-	}
+	}*/
 
 
 	public boolean hasBlockSelected() {

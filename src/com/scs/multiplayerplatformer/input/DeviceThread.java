@@ -40,8 +40,6 @@ public final class DeviceThread extends Thread { // todo - make singleton
 		keyboard1 = new KeyboardInput(window, 1);
 		keyboard2 = new KeyboardInput(window, 2);
 
-		//start();
-
 	}
 
 
@@ -68,14 +66,14 @@ public final class DeviceThread extends Thread { // todo - make singleton
 					}
 
 				}
-				if (keyboard1.isThrowPressed() || Statics.DEBUG_TOO_MANY_PLAYERS) {
+				if (keyboard1.isThrowPressed()) {
 					synchronized (createdDevices) {
 						if (createdDevices.get(-1) == null) {
 							this.createController(-1, keyboard1);
 						}
 					}
 				}
-				if (keyboard2.isThrowPressed() || Statics.DEBUG_TOO_MANY_PLAYERS) {
+				if (keyboard2.isThrowPressed()) {
 					synchronized (createdDevices) {
 						if (createdDevices.get(-2) == null) {
 							this.createController(-2, keyboard2);

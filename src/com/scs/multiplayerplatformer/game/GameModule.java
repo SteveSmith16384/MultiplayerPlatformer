@@ -2,9 +2,7 @@ package com.scs.multiplayerplatformer.game;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.gamepad4j.Controllers;
 
@@ -34,8 +32,6 @@ import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
 import com.scs.multiplayerplatformer.input.DeviceThread;
-import com.scs.multiplayerplatformer.input.IInputDevice;
-import com.scs.multiplayerplatformer.input.NewControllerListener;
 import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
 import com.scs.multiplayerplatformer.mapgen.MapLoader;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;

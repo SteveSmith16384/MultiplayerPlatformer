@@ -5,7 +5,6 @@ import ssmith.android.lib2d.Camera;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
 import ssmith.util.ReturnObject;
 
-import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.IDrawable;
 import com.scs.multiplayerplatformer.game.IProcessable;
@@ -32,27 +31,16 @@ public abstract class GameObject extends AbstractRectangle implements IProcessab
 	}
 
 
-	protected boolean checkIfTooFarAway() {
+	/*protected boolean checkIfTooFarAway() {
 		if (this.getDistanceToClosestPlayer(null) > (Statics.SCREEN_WIDTH * 2)) {
 			this.remove();
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 
 	public float getDistanceToClosestPlayer(ReturnObject<PlayersAvatar> returnClosest) {
-		/*float closestDistance = 9999;
-		for(PlayersAvatar player : game.avatars) {
-			float dist = this.getDistanceTo(player); 
-			if (dist < closestDistance) {
-				if (returnClosest != null) {
-					returnClosest.toReturn = player;
-				}
-				closestDistance = dist;
-			}
-		}
-		return closestDistance;*/
 		return game.getDistanceToClosestPlayer(returnClosest, this);
 	}
 

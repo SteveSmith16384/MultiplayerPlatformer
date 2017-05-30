@@ -337,15 +337,10 @@ public class Block extends GameObject {
 			break;
 
 		case Block.MEDIKIT:
-			//player.incHealthToMax();
 			destroy(0, false, null);
 			break;
 
 		case Block.END_OF_LEVEL:
-			/*game.level++;
-			GameModule mod = new GameModule(act, game.level);
-			game.getThread().setNextModule(mod);
-			destroy(0, false, null);*/
 			game.playerCompletedLevel(player);
 			break;
 

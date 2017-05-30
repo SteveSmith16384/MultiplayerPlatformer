@@ -11,7 +11,6 @@ import ssmith.util.ReturnObject;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
-import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 
 public class Wasp extends AbstractMob {
 

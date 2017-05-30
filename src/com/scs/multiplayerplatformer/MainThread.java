@@ -39,7 +39,7 @@ public final class MainThread extends Thread implements NewControllerListener {
 	public Canvas c;
 	public MainWindow window;
 
-	public Map<Integer, Player> players = new HashMap<>(); // todo - make private
+	public Map<Integer, Player> players = new HashMap<>();
 	private List<IInputDevice> newControllers = new ArrayList<>();
 
 	static {

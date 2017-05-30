@@ -31,7 +31,7 @@ public final class AirBubble extends GameObject {
 	@Override
 	public void process(long interpol) {
 		this.adjustLocation(0, -1 * Statics.BUBBLE_SPEED);
-		this.parent.updateGeometricState(); /// todo - npe
+		this.updateGeometricState();
 
 		// Has it hit the ground
 		Block b = (Block)game.blockGrid.getBlockAtPixel_MaybeNull(this.getWorldCentreX(), this.getWorldCentreY());

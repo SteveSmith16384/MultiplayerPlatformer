@@ -124,14 +124,10 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 		boolean in_water = false;
 
 		// Check for special blocks
-		ArrayList<AbstractRectangle> colls = game.blockGrid.getColliders(this.getWorldBounds());
+		ArrayList<AbstractRectangle> colls = game.blockGrid.getColliders(this.getWorldBounds()); // todo - remvoe this loop?
 		for (AbstractRectangle g : colls) {
 			if (g instanceof Block) {
 				Block b = (Block)g;
-				if (Block.GetHarm(b.getType()) > 0) {
-					this.died();//.health -= Block.GetHarm(b.getType());
-					return;
-				}
 				if (b.getType() == Block.WATER) {
 					in_water = true;
 				}
@@ -167,6 +163,8 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 					boolean moved = this.move(0, curr_fall_speed, true);
 					if (moved) {
 						is_on_ground_or_ladder = 0;
+					} else {
+						is_on_ground_or_ladder = 1; // Need to
 					}
 					if (is_on_ground_or_ladder > 0) {
 						curr_fall_speed = Statics.PLAYER_FALL_SPEED; // Reset current fall speed

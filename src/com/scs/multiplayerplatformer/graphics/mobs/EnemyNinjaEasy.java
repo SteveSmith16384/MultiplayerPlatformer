@@ -11,12 +11,11 @@ import com.scs.multiplayerplatformer.graphics.DyingEnemy;
 import com.scs.multiplayerplatformer.graphics.Explosion;
 import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
-import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 
 public class EnemyNinjaEasy extends AbstractWalkingMob {
 
 	private static final int TURN_DURATION = 4000; // In case can't get to player
-	private static final int CHECK_OOB_DURATION = 4000; // In case can't get to player
+	//private static final int CHECK_OOB_DURATION = 4000; // In case can't get to player
 
 	private static final int MAX_FRAMES = 8;
 
@@ -110,7 +109,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 		}
 
 		performJumpingOrGravity();
-		checkForHarmingBlocks();
+		//checkForHarmingBlocks();
 
 		if (frozenUntil < System.currentTimeMillis()) {
 			if (throw_interval.hitInterval()) {
