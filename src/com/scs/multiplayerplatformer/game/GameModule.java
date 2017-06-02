@@ -37,11 +37,6 @@ import com.scs.multiplayerplatformer.mapgen.MapLoader;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
 import com.scs.multiplayerplatformer.start.StartupModule;
 
-/*
- * New player - add player, restart level
- * Restart level - load an avatar for each player
- * 
- */
 public final class GameModule extends AbstractModule implements IDisplayText {
 
 	public static final byte HAND = 1;

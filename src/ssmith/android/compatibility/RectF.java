@@ -95,5 +95,26 @@ public class RectF {
     public final float height() {
         return bottom - top;
     }
+    
+    
+    public void moveTo(float x, float y) {
+    	float w = width();
+    	float h = height();
+    	
+    	left = x;
+    	top = y;
+    	right = left + w;
+    	bottom = top + h;
+    }
 
+
+    public void moveBy(float x, float y) {
+    	float w = width();
+    	float h = height();
+    	
+    	left += x;
+    	top += y;
+    	right = left + w;
+    	bottom = top + h;
+    }
 }
