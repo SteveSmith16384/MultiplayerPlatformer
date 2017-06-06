@@ -1,6 +1,7 @@
 package com.scs.multiplayerplatformer.graphics.mobs;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import ssmith.android.compatibility.Canvas;
@@ -26,6 +27,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 	public IInputDevice input;
 	private long firePressedTime;
 	private boolean prevThrowPressed = false;
+	public Point checkpoint_map;
 
 
 	public PlayersAvatar(GameModule _game, float x, float y, IInputDevice _input, int num) {

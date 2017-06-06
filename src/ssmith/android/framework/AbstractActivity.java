@@ -1,5 +1,7 @@
 package ssmith.android.framework;
 
+import javax.swing.JOptionPane;
+
 import ssmith.audio.MP3Player;
 
 import com.scs.multiplayerplatformer.MainThread;
@@ -59,6 +61,7 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 	public static void HandleError(Throwable ex) {
 		try {
 			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error: " + ex);
 		} catch (Exception ex2) {
 			ex2.printStackTrace();
 		}

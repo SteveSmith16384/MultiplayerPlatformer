@@ -92,7 +92,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		super(act, null);
 
 		this.mod_return_to = new StartupModule(act);
-		//filename = _filename;
 
 		this.stat_cam.lookAtTopLeft(true);
 		str_time_remaining = act.getString("time_remaining");
@@ -152,8 +151,14 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 	public void restartAvatar(PlayersAvatar avatar) {
-		float x = levelData.getStartPos().x * Statics.SQ_SIZE;
-		float y = (levelData.getStartPos().y) * Statics.SQ_SIZE; // -2 so we start above the bed
+		float x, y;
+		if (avatar.checkpoint_map != null) {
+			x = avatar.checkpoint_map.x * Statics.SQ_SIZE;
+			y = avatar.checkpoint_map.y * Statics.SQ_SIZE;
+		} else {
+			x = levelData.getStartPos().x * Statics.SQ_SIZE;
+			y = (levelData.getStartPos().y) * Statics.SQ_SIZE; // -2 so we start above the bed
+		}
 		while (!this.isAreaClear(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, true)) {
 			y = y - Statics.SQ_SIZE;
 		}

@@ -1,5 +1,6 @@
 package com.scs.multiplayerplatformer.graphics.blocks;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import ssmith.android.compatibility.Canvas;
@@ -32,6 +33,7 @@ public class Block extends GameObject {
 	public static final byte TANGLEWEED = 10;
 	public static final byte APPLE = 11;
 	public static final byte CHEST = 12;
+	public static final byte CHECKPOINT = 13;
 	public static final byte COAL = 14;
 	public static final byte GOLD = 15;
 	public static final byte LAVA = 16;
@@ -340,6 +342,11 @@ public class Block extends GameObject {
 			destroy(0, false, null);
 			break;
 
+		case Block.CHECKPOINT:
+			player.checkpoint_map = new Point(this.map_x, this.map_y);
+			game.showToast("CHECKPOINT!");
+			break;
+
 		case Block.END_OF_LEVEL:
 			game.playerCompletedLevel(player);
 			break;
@@ -487,6 +494,8 @@ public class Block extends GameObject {
 			return img_cache.getImage("crate.gif", w, h);
 		case MEDIKIT:
 			return img_cache.getImage("medikit", w, h);
+		case CHECKPOINT:
+			return img_cache.getImage("chest.png", w, h);
 		case END_OF_LEVEL:
 			return img_cache.getImage("gold_star", w, h);
 		case BARREL:

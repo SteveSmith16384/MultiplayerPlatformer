@@ -19,10 +19,8 @@ public final class MapLoader extends AbstractLevelData {
 	private static final int MAX_PREV_MAPS = 3;
 
 	// Tags
-	//public static final String HEADER_TAG_ = "Worldcrafter Save File";
 	public static final String VERSION_TAG = "File Version";
 	public static final String MAP_DATA_TAG = "Map_data";
-	//public static final String INV_DATA_TAG = "Inv_data";
 	public static final String MOB_DATA_TAG = "Mob_data";
 	public static final String NAME_TAG = "Name:";
 
@@ -41,8 +39,8 @@ public final class MapLoader extends AbstractLevelData {
 		is_resource = _is_resource;
 		levelName = this.filename;
 	}
-	
-	
+
+
 	public static String GetRandomMap() {
 		List<String> csv = GetMaps();
 		String filename = csv.get(NumberFunctions.rnd(0, csv.size()-1));
@@ -60,13 +58,13 @@ public final class MapLoader extends AbstractLevelData {
 	public static List<String> GetMaps() {
 		String[] maps = new File(MAP_DIR).list();
 		List<String> csv = new ArrayList<>();
-			
+
 		for(String s : maps) {
 			if (s.toLowerCase().endsWith(".csv")) {
 				csv.add(s);
 			}
 		}
-		
+
 		return csv;
 	}
 
@@ -96,7 +94,6 @@ public final class MapLoader extends AbstractLevelData {
 
 			int map_row = 0;
 			List<byte[]> rows = new ArrayList<byte[]>();
-			//int max_rows = lines.length;
 			int max_row_length = -1;
 			for (int row=0 ; row<lines.length ; row++) {
 				lines[row] = lines[row].replaceAll("\"", "");
@@ -111,9 +108,6 @@ public final class MapLoader extends AbstractLevelData {
 					} else if (cell.equalsIgnoreCase(VERSION_TAG)) {
 						stage = VERSION_TAG;
 						continue;
-					/*} else if (cell.equalsIgnoreCase(INV_DATA_TAG)) {
-						stage = INV_DATA_TAG;
-						continue;*/
 					} else if (cell.equalsIgnoreCase(MOB_DATA_TAG)) {
 						stage = MOB_DATA_TAG;
 						continue;
@@ -123,14 +117,11 @@ public final class MapLoader extends AbstractLevelData {
 					} 
 
 					if (stage.equalsIgnoreCase(VERSION_TAG)) {
-						this.version_found = Integer.parseInt(cell);
+						if (version_found == 0) {
+							this.version_found = Integer.parseInt(cell);
+						}
 					} else if (stage.equalsIgnoreCase(MAP_DATA_TAG)) {
 						String blocks[] = lines[row].split(",");
-						/*if (last_row_length < 0) {
-							last_row_length = blocks.length;
-						} else if (blocks.length != last_row_length) {
-							throw new RuntimeException("Discrepancy in number of block in row " + row);
-						}*/
 						if (max_row_length < blocks.length) {
 							max_row_length = blocks.length;
 						}
@@ -157,9 +148,6 @@ public final class MapLoader extends AbstractLevelData {
 							} else {
 								throw new RuntimeException("Unknown file version: " + this.version_found);
 							}
-							/*if (this_data[x] == Block.AMULET) {
-								amulet_pos = new Point(x, map_row);
-							}*/
 							if (this_data[x] == Block.START_POSITION) {
 								super.setStartPos(x, map_row);
 								this_data[x] = Block.NOTHING_DAYLIGHT;
@@ -167,13 +155,6 @@ public final class MapLoader extends AbstractLevelData {
 						}
 						rows.add(this_data);
 						map_row++;
-					/*} else if (stage.equalsIgnoreCase(INV_DATA_TAG)) {
-						// Load inventory
-						if (block_inv == null) {
-							super.block_inv = new HashMap<Byte, Integer>();
-						}
-						String line[] = lines[row].split(",");
-						super.block_inv.put(NumberFunctions.ParseByte(line[0]), NumberFunctions.ParseInt(line[1]));*/
 					} else if (stage.equalsIgnoreCase(MOB_DATA_TAG)) {
 						// Load mobs
 						String line[] = lines[row].split(",");
@@ -185,13 +166,17 @@ public final class MapLoader extends AbstractLevelData {
 			}
 
 			// Copy the data into the main array
-			data = new byte[max_row_length][rows.size()];
-			int row_num = 0;
-			for (byte[] row : rows) {
-				for (int x=0 ; x<max_row_length ; x++) {
-					data[x][row_num] = row[x];
+			try {
+				data = new byte[max_row_length][rows.size()];
+				int row_num = 0;
+				for (byte[] row : rows) {
+					for (int x=0 ; x<max_row_length ; x++) {
+						data[x][row_num] = row[x];
+					}
+					row_num++;
 				}
-				row_num++;
+			} catch (NegativeArraySizeException ex) {
+				throw new RuntimeException("Error loading map '" + filename + "': No map data tag found", ex);
 			}
 		} catch (Exception ex) {
 			throw new RuntimeException("Error loading map '" + filename + "':", ex);

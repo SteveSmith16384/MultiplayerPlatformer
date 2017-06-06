@@ -29,7 +29,6 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 	static {
 		paint_free_text.setARGB(255, 200, 200, 200);
 		paint_free_text.setAntiAlias(true);
-		//paint_free_text.setStyle(Style.STROKE);
 	}
 
 	private ArrayList<String> al_button_texts, al_action_cmd_texts;

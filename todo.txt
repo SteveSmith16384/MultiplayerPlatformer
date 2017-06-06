@@ -1,15 +1,12 @@
-OTHER GAMES
-Warlord
-Pong
-King Arthurs Gold
-Rampart
-Gauntlet
+Ninja
 
 
-
-
-
-Ninjamatic
+URGENT
+	Not showing errors on window
+Say why map invalid
+	Checkpoints
+	Checkpoint gfx
+	Say "checkpoint!"
 
 
 HOME
@@ -40,21 +37,14 @@ Level where jump over lots of dangerous blocks
 5 - Manic miner TODO
 
 
-URGENT
-Checkpoints
-Trampoline
-	Not bouncing higher
-	Not zooming in
-Not showing errors on window
 Search for todos
 	Swim in water
 	Wasp not doing harm
-	Only create one Device thread - creating more!
 	Space out HUD better
-	Devices - check device MAC or something?
 
 
 TODO
+Trampoline
 Say why map in invalid
 No "die" or "level complete" sfx
 Play sound when player joins
