@@ -117,9 +117,9 @@ public final class MapLoader extends AbstractLevelData {
 					} 
 
 					if (stage.equalsIgnoreCase(VERSION_TAG)) {
-						if (version_found == 0) {
+						//if (version_found == 0) {
 							this.version_found = Integer.parseInt(cell);
-						}
+						//}
 					} else if (stage.equalsIgnoreCase(MAP_DATA_TAG)) {
 						String blocks[] = lines[row].split(",");
 						if (max_row_length < blocks.length) {
