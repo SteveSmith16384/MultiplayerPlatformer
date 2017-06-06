@@ -41,6 +41,7 @@ Level where jump over lots of dangerous blocks
 
 
 URGENT
+Checkpoints
 Trampoline
 	Not bouncing higher
 	Not zooming in
