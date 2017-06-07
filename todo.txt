@@ -3,10 +3,6 @@ Ninja
 
 URGENT
 	Not showing errors on window
-Say why map invalid
-	Checkpoints
-	Checkpoint gfx
-	Say "checkpoint!"
 
 
 HOME
