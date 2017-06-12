@@ -144,8 +144,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	@Override
 	public void died() {
-		Statics.act.sound_manager.playerDied();
-		game.restartAvatar(this);
+		game.playerDied(this);
 	}
 
 

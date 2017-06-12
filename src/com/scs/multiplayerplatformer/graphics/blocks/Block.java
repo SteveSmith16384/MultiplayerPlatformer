@@ -385,7 +385,7 @@ public class Block extends GameObject {
 		case MONSTER_GENERATOR:
 		case FIRE:
 		case LAVA:
-		case WATER:
+		//case WATER:
 		case SLIME:
 			return true;
 		default:
@@ -406,7 +406,7 @@ public class Block extends GameObject {
 	}
 
 
-	public static boolean CanBeBuiltOver(byte type) {
+	/*public static boolean CanBeBuiltOver(byte type) {
 		switch (type) {
 		case NOTHING_DAYLIGHT:
 		case WATER:
@@ -415,7 +415,7 @@ public class Block extends GameObject {
 		default:
 			return false;
 		}
-	}
+	}*/
 
 
 	public static BufferedImage GetBufferedImage(ImageCache img_cache, byte type, float w, float h) {
@@ -656,9 +656,9 @@ public class Block extends GameObject {
 
 		boolean remove_from_process = true; // Default
 		switch (type) {
-		case WATER:
+		/*case WATER:
 			processWater();
-			break;
+			break;*/
 		case LAVA:
 			/*if (this.getDistanceToClosestPlayer(null) <= Statics.ACTIVATE_DIST) {
 				checkLavaSquares();

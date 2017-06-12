@@ -9,12 +9,15 @@ import ssmith.android.framework.AbstractActivity;
 import ssmith.awt.ImageCache;
 
 public final class Statics {
+	
+	public enum GameMode {Normal, RaceToTheDeath }
 
 	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;
 	public static final boolean DEBUG = false;
 	public static final boolean RELEASE_MODE = false; // Stricter if false
 	public static final String VERSION_NAME = "1.1";
+	public static final GameMode gameMode = GameMode.RaceToTheDeath;
 
 	// Sides
 	public static final byte SD_PLAYERS_SIDE = 0;
@@ -33,7 +36,7 @@ public final class Statics {
 	public static final int MAX_PLAYER_SPRITES = 3;
 	public static final int LEVEL_TIME_SECS = 120;
 	public static final float ZOOM_IN_SPEED = 1.01f;
-	public static final float ZOOM_OUT_SPEED = .99f;
+	public static final float ZOOM_OUT_SPEED = .98f; // Need to zoom out fast
 	public static float MAX_ZOOM_OUT;
 	public static float MAX_ZOOM_IN;
 

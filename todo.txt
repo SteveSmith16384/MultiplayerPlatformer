@@ -2,7 +2,14 @@ Ninja
 
 
 URGENT
-	Not showing errors on window
+Implement gameStage
+Show "has won" bigger
+	Race mode
+Make bigger map
+Improve maps
+Squares that slow player down
+Stuck in water
+Diff maps for diff game modes
 
 
 HOME
@@ -12,8 +19,6 @@ Add baddies to levels
 Add wasps to maps
 Ask harry for name and get him to generate logo
 Sound not working
-Post to java-gaming
-Make another video
 Create new logo
 Create new maps
 Get a font
@@ -40,16 +45,12 @@ Search for todos
 
 
 TODO
-Stuck in water
 Trampoline
 Say why map in invalid
 No "die" or "level complete" sfx
 Play sound when player joins
 "Press fire to start" is hidden
 Restart if player falls too far
-
-
-LATER
 Give levels their own background
 Hold down jump to jump higher
 Conveyor belts

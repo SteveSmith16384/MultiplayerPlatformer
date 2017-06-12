@@ -25,6 +25,7 @@ import ssmith.util.ReturnObject;
 import ssmith.util.TSArrayList;
 
 import com.scs.multiplayerplatformer.Statics;
+import com.scs.multiplayerplatformer.Statics.GameMode;
 import com.scs.multiplayerplatformer.graphics.Cloud;
 import com.scs.multiplayerplatformer.graphics.Explosion;
 import com.scs.multiplayerplatformer.graphics.GameObject;
@@ -56,10 +57,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private long levelEndTime;
 	private String str_time_remaining;
 	private Interval check_for_new_mobs = new Interval(500, true);
-	private List<PlayersAvatar> avatars = new ArrayList<>();
+	private TSArrayList<PlayersAvatar> avatars = new TSArrayList<>();
 	private String filename;
 
-	public float current_scale = Statics.MAX_ZOOM_IN;
+	public float current_scale;// = Statics.MAX_ZOOM_IN;
 	private float new_scale = current_scale;
 
 	static {
@@ -101,6 +102,13 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		msg = new TimedString(this, 2000);
 		msg.setText("PRESS FIRE (X) TO START!");
+
+		if (Statics.gameMode == GameMode.Normal) {
+			current_scale = Statics.MAX_ZOOM_IN;
+		} else if (Statics.gameMode == GameMode.RaceToTheDeath) {
+			current_scale = 1;
+		}
+		new_scale = current_scale;
 	}
 
 
@@ -144,9 +152,17 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		PlayersAvatar avatar = new PlayersAvatar(this, 0, 0, player.input, player.num);
 		synchronized (avatars) {
 			this.avatars.add(avatar);
+			this.avatars.refresh();
 		}
 		addToProcess(avatar);
-		this.restartAvatar(avatar);
+		if (Statics.gameMode == GameMode.Normal) {
+			this.restartAvatar(avatar);
+		} else if (Statics.gameMode == GameMode.RaceToTheDeath) {
+			// Restart all players
+			for (PlayersAvatar a : avatars) {
+				this.restartAvatar(a);
+			}
+		}
 	}
 
 
@@ -216,6 +232,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		synchronized (entities) {
 			this.entities.refresh();
 		}
+		synchronized (avatars) {
+			this.avatars.refresh();
+		}
 
 		// Adjust scale
 		if (new_scale > Statics.MAX_ZOOM_IN) {
@@ -239,61 +258,87 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				this.checkIfMobsNeedCreating(this.current_scale, this.root_cam);
 			}
 
-			float x = 0, y = 0;
-			synchronized (avatars) {
-				for (PlayersAvatar player : avatars) {
-					x += player.getWorldX();
-					y += player.getWorldY() + (Statics.PLAYER_HEIGHT/2);
-				}
-				x = x / this.avatars.size();
-				y = y / this.avatars.size();
-			}
-			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
-
-
-			// Do we need to zoom in/out?
-			if (avatars.size() > 1) {
-				float OUTER = 0.2f;
-				float INNER = 0.22f; // 0.3f
-				boolean zoomOut = false; // Need to zoom out quickly
-				boolean zoomIn = true; // Slowly
+			if (Statics.gameMode == GameMode.Normal) {
+				float x = 0, y = 0;
 				synchronized (avatars) {
 					for (PlayersAvatar player : avatars) {
-						float sx = player.getWindowX(this.root_cam, this.current_scale);
-						float sy = player.getWindowY(this.root_cam, this.current_scale);
-						zoomOut = sx < Statics.SCREEN_WIDTH * OUTER || sx > Statics.SCREEN_WIDTH * (1f-OUTER) || sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
-						if (zoomOut) {
-							break;
-						}
-						zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
+						x += player.getWorldX();
+						y += player.getWorldY() + (Statics.PLAYER_HEIGHT/2);
 					}
+					x = x / this.avatars.size();
+					y = y / this.avatars.size();
 				}
-				if (zoomOut) {
-					new_scale *= Statics.ZOOM_OUT_SPEED;
-				} else if (zoomIn) {
-					new_scale *= Statics.ZOOM_IN_SPEED;
-				}				
-				/*if (Statics.DEBUG) {
+				this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
+
+
+				// Do we need to zoom in/out?
+				if (avatars.size() > 1) {
+					float OUTER = 0.2f;
+					float INNER = 0.22f; // 0.3f
+					boolean zoomOut = false; // Need to zoom out quickly
+					boolean zoomIn = true; // Slowly
+					synchronized (avatars) {
+						for (PlayersAvatar player : avatars) {
+							float sx = player.getWindowX(this.root_cam, this.current_scale);
+							float sy = player.getWindowY(this.root_cam, this.current_scale);
+							zoomOut = sx < Statics.SCREEN_WIDTH * OUTER || sx > Statics.SCREEN_WIDTH * (1f-OUTER) || sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
+							if (zoomOut) {
+								break;
+							}
+							zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
+						}
+					}
+					if (zoomOut) {
+						new_scale *= Statics.ZOOM_OUT_SPEED;
+					} else if (zoomIn) {
+						new_scale *= Statics.ZOOM_IN_SPEED;
+					}				
+					/*if (Statics.DEBUG) {
 					Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
 				}*/
-			} else {
-				// Only one player - zoom in
-				if (this.new_scale < Statics.MAX_ZOOM_IN) {
-					new_scale *= Statics.ZOOM_IN_SPEED;
 				} else {
-					this.new_scale = Statics.MAX_ZOOM_IN;
+					// Only one player - zoom in
+					if (this.new_scale < Statics.MAX_ZOOM_IN) {
+						new_scale *= Statics.ZOOM_IN_SPEED;
+					} else {
+						this.new_scale = Statics.MAX_ZOOM_IN;
+					}
 				}
+			} else if (Statics.gameMode == GameMode.RaceToTheDeath) {
+				float rightMost = 0;
+				PlayersAvatar rightmostPlayer = null; 
+				for (PlayersAvatar player : avatars) {
+					//float sx = player.getWindowX(this.root_cam, this.current_scale);
+					//float sy = player.getWindowY(this.root_cam, this.current_scale);
+					if (player.isOnScreen(root_cam, this.current_scale)) {
+						if (player.getWorldX() > rightMost) {
+							rightMost = player.getWorldX(); 
+							rightmostPlayer = player;
+						}
+					} else {
+						player.died();
+					}
+				}
+				if (rightmostPlayer != null) {
+					float x = rightmostPlayer.getWorldX();
+					float y = rightmostPlayer.getWorldY() + (Statics.PLAYER_HEIGHT/2);
+					this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
+				}
+			} else {
+				throw new RuntimeException("Todo");
 			}
 
 		} else {
-			// No players yet!
-			float x = levelData.getStartPos().x * Statics.SQ_SIZE;
-			//x += this.new_grid.getWorldX();
-			float y = (levelData.getStartPos().y) * Statics.SQ_SIZE;
-			//y += this.new_grid.getWorldY();
-			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
-			//this.root_cam.lookAt(x, y, true);
-			new_scale = Statics.MAX_ZOOM_OUT;
+			if (Statics.gameMode == GameMode.Normal) {
+				// No players yet!
+				float x = levelData.getStartPos().x * Statics.SQ_SIZE;
+				//x += this.new_grid.getWorldX();
+				float y = (levelData.getStartPos().y) * Statics.SQ_SIZE;
+				//y += this.new_grid.getWorldY();
+				this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
+				//this.root_cam.lookAt(x, y, true);
+				new_scale = Statics.MAX_ZOOM_OUT;
+			}
 		}
 
 	}
@@ -422,7 +467,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 			if (block != null) {
 				if (Block.RequireProcessing(block.getType())) {
-					//boolean slow = block.getType() == Block.WATER || block.getType() == Block.LAVA || block.getType() == Block.FIRE; // Always process water slow!
 					this.addToProcess(block);//, slow);
 				}
 			}
@@ -569,5 +613,26 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public void newPlayer(Player player) {
 		this.createAvatar(player);
 	}
+
+
+	public void playerDied(PlayersAvatar avatar) {
+		Statics.act.sound_manager.playerDied();
+		if (Statics.gameMode == GameMode.Normal) {
+			restartAvatar(avatar);
+		} else if (Statics.gameMode == GameMode.RaceToTheDeath) {
+			avatar.remove();
+			synchronized (avatars) {
+				this.avatars.remove(avatar);
+			}
+
+			// check if no players left
+			if (this.avatars.size() == 1) {
+				//this.startNewLevel(null, false); // Load random map after playing first selected map
+				PlayersAvatar winner = this.avatars.get(0);
+				this.showToast("Player " + (winner.playernumZB+1) + " HAS WON!");
+			}
+		}
+	}
+
 }
 
