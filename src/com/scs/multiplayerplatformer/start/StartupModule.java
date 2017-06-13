@@ -49,8 +49,8 @@ public final class StartupModule extends AbstractModule {
 	}
 
 
-	public StartupModule(AbstractActivity act) {
-		super(act, null);
+	public StartupModule() {
+		super();
 
 		background = Statics.img_cache.getImage(Statics.BACKGROUND_IMAGE, Statics.SCREEN_WIDTH, Statics.SCREEN_HEIGHT);
 
@@ -139,7 +139,7 @@ public final class StartupModule extends AbstractModule {
 
 	private void startNewGame() {
 		//AbstractModule game = new SelectLevelModule(act, this);
-		SelectGameModeModule m = new SelectGameModeModule(Statics.act, this);
+		SelectGameModeModule m = new SelectGameModeModule();
 		this.getThread().setNextModule(m);
 
 	}

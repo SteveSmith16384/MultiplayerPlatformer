@@ -49,7 +49,7 @@ public class EfficientGridLayout extends AbstractRectangle {
 	public void setRectAtMap(AbstractRectangle b, int x, int y) {
 		blocks[x][y] = b;
 		if (b != null) {
-			b.setByLTRB(x*tile_size, y*tile_size, ((x+1)*tile_size)-1, ((y+1)*tile_size)-1); // SCS
+			b.setByLTRB(x*tile_size, y*tile_size, ((x+1)*tile_size)-1, ((y+1)*tile_size)-1);
 			b.updateGeometricState();
 		}
 	}

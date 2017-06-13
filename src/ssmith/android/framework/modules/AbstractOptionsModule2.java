@@ -41,8 +41,8 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 	protected int show; // -1, 0 or 1
 	protected Label lbl_title;
 
-	public AbstractOptionsModule2(AbstractActivity _act, AbstractModule _return_to, int _cols, Paint _paint_ink, BufferedImage _bmp, int _show, boolean _auto_select, String title, boolean _trunc_names) {
-		super(_act, _return_to);
+	public AbstractOptionsModule2(int _cols, Paint _paint_ink, BufferedImage _bmp, int _show, boolean _auto_select, String title, boolean _trunc_names) {
+		super();
 
 		cols =_cols;
 		paint_ink = _paint_ink;
@@ -223,11 +223,11 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 	}
 
 
-	@Override
+	/*@Override
 	public boolean onBackPressed() {
 		returnTo();
 		return true;
-	}
+	}*/
 	
 	
 	protected void addOption(String s) {

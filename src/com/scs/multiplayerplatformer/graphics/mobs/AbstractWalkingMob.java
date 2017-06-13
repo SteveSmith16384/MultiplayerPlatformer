@@ -32,8 +32,8 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 	protected boolean is_on_ladder;
 	protected float ladder_x;
 
-	public AbstractWalkingMob(GameModule _game, String name, float x, float y, float w, float h, int _max_frames, long _frame_interval, boolean remove_if_far_away, boolean destroy_blocks, byte side, boolean _can_swim) {
-		super(_game, name, x, y, w, h, remove_if_far_away, destroy_blocks, side);
+	public AbstractWalkingMob(GameModule _game, String name, float x, float y, float w, float h, int _max_frames, long _frame_interval, boolean destroy_blocks, byte side, boolean _can_swim) {
+		super(_game, name, x, y, w, h, destroy_blocks, side);
 
 		max_frames = _max_frames;
 		frame_interval = _frame_interval;
@@ -123,22 +123,20 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 		is_on_ladder = false;
 		ladder_x = 0;
 		boolean in_water = false;
-		bounciness = 1;
-		stickiness = 1;
+		bounciness = .5f; // Min cos we can only go up
+		stickiness = .5f; // Min cos we can only go up
 
-		// Check for special blocks
-		ArrayList<AbstractRectangle> colls = game.blockGrid.getColliders(this.getWorldBounds()); // todo - remvoe this loop?
+		// Check for special blocks we might be touching - NOT by gravity!
+		ArrayList<AbstractRectangle> colls = game.blockGrid.getColliders(this.getWorldBounds());
 		for (AbstractRectangle g : colls) {
 			if (g instanceof Block) {
 				Block b = (Block)g;
 				if (b.getType() == Block.WATER) {
 					in_water = true;
 				}
-				if (Block.BlocksDownMovement(b.getType())) {
+				/*if (Block.BlocksDownMovement(b.getType())) {
 					is_on_ground_or_ladder = true;
-					bounciness = Math.max(this.bounciness, Block.GetBounciness(b.getType()));
-					stickiness = Math.max(this.stickiness, Block.GetStickiness(b.getType()));
-				}
+				}*/
 				if (Block.IsLadder(b.getType())) {
 					is_on_ladder = true;
 					ladder_x = b.getWorldX();
@@ -191,6 +189,16 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 		}
 
 	}
+
+
+	@Override
+	void hitBlockCheck(Block b, float off_x, float off_y) {
+		if (off_y > 0) {
+			bounciness = Math.max(this.bounciness, Block.GetBounciness(b.getType()));
+			stickiness = Math.max(this.stickiness, Block.GetStickiness(b.getType()));
+		}
+	}
+
 
 	protected void alignWithLadder() {
 		// Align us with the ladder

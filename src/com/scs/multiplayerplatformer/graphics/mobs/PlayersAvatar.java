@@ -31,7 +31,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 
 	public PlayersAvatar(GameModule _game, float x, float y, IInputDevice _input, int num) {
-		super(_game, Statics.act.getString("player")  + num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, true);
+		super(_game, Statics.act.getString("player")  + num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, Statics.SD_PLAYERS_SIDE, true);
 
 		playernumZB = num;
 		input = _input;

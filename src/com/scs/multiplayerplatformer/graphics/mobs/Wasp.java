@@ -21,8 +21,6 @@ public class Wasp extends AbstractMob {
 	private int off_x = 1, off_y;
 	private boolean facing_left = true;
 	private int left_right_timer, up_down_timer;
-	//private long frame_time=0, frame_interval;
-
 
 	public static void Factory(GameModule game, Block gen) { // gen == null for normal appearance
 		if (game.getNumProcessInstant() < Statics.MAX_INSTANTS) {
@@ -58,7 +56,7 @@ public class Wasp extends AbstractMob {
 
 
 	private Wasp(GameModule _game, float x, float y) {
-		super(_game, Wasp.class.getSimpleName(), x, y, Statics.WASP_WIDTH, Statics.WASP_HEIGHT, true, false, Statics.SD_ENEMY_SIDE);
+		super(_game, Wasp.class.getSimpleName(), x, y, Statics.WASP_WIDTH, Statics.WASP_HEIGHT, false, Statics.SD_ENEMY_SIDE);
 
 		a_bmp_left = new BufferedImage[Statics.MAX_BMP_WIDTH][2];
 		a_bmp_right = new BufferedImage[Statics.MAX_BMP_WIDTH][2];
@@ -181,6 +179,13 @@ public class Wasp extends AbstractMob {
 
 		a_bmp_right[size][0] = Statics.img_cache.getImage("wasp_r1", Statics.WASP_WIDTH*scale, Statics.WASP_HEIGHT*scale);
 		a_bmp_right[size][1] = Statics.img_cache.getImage("wasp_r2", Statics.WASP_WIDTH*scale, Statics.WASP_HEIGHT*scale);
+	}
+
+
+	@Override
+	void hitBlockCheck(Block b, float off_x, float off_y) {
+		// Do nothing
+		
 	}
 
 

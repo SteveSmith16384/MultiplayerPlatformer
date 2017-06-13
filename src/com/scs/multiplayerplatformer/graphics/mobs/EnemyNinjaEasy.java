@@ -57,7 +57,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 
 
 	private EnemyNinjaEasy(GameModule _game, float x, float y) {
-		super(_game, "Enemy Ninja", x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, MAX_FRAMES, 200, true, false, Statics.SD_ENEMY_SIDE, true);
+		super(_game, "Enemy Ninja", x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, MAX_FRAMES, 200, false, Statics.SD_ENEMY_SIDE, true);
 		
 		if (Statics.DEBUG) {
 			Statics.p("Created enemy");

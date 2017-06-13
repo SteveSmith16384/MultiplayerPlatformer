@@ -28,7 +28,7 @@ public abstract class AbstractModule extends Thread {//implements NewControllerL
 	public Node stat_node_front = new Node("stat_node");
 	protected Camera stat_cam; // For stat node so some graphics are always drawn at the same pos
 	protected BufferedImage background;
-	protected AbstractModule mod_return_to;
+	//protected AbstractModule mod_return_to;
 	private PleaseWaitDialog please_wait_dialog;
 	
 	static {
@@ -38,11 +38,7 @@ public abstract class AbstractModule extends Thread {//implements NewControllerL
 	}
 
 	
-	public AbstractModule(AbstractActivity _act, AbstractModule _return_to) {
-		//act = _act;
-
-		mod_return_to = _return_to;
-		
+	public AbstractModule() {
 		root_cam = new Camera();
 		stat_cam = new Camera();
 		
@@ -96,18 +92,18 @@ public abstract class AbstractModule extends Thread {//implements NewControllerL
 	 * @return
 	 */
 	public boolean onBackPressed() {
-		return returnTo();
+		return true;//returnTo();
 	}
 
-	
+	/*
 	protected boolean returnTo() {
-		if (this.mod_return_to != null) {
+	/*	if (this.mod_return_to != null) {
 			this.getThread().setNextModule(this.mod_return_to);
 		}
-		return true;
+		//return true;
 
 	}
-	
+	*/
 	
 	public void doDraw(Canvas c, long interpol) {
 		if (background != null) {

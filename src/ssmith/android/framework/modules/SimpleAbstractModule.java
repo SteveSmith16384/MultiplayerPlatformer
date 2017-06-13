@@ -12,8 +12,8 @@ import ssmith.android.lib2d.gui.AbstractComponent;
  */
 public abstract class SimpleAbstractModule extends AbstractModule {
 	
-	public SimpleAbstractModule(AbstractActivity _act, AbstractModule _return_to) {
-		super(_act, _return_to);
+	public SimpleAbstractModule() {
+		super();
 	}
 	
 	

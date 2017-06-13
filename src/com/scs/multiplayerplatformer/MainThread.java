@@ -192,9 +192,9 @@ public final class MainThread extends Thread implements NewControllerListener {
 		} else {
 			// Load default module
 			if (Statics.DEBUG) {
-				this.setNextModule(new GameModule(Statics.act, null));
+				this.setNextModule(new GameModule(null));
 			} else {
-				this.setNextModule(new StartupModule(Statics.act));
+				this.setNextModule(new StartupModule());
 			}
 		}
 	}

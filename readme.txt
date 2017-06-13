@@ -22,6 +22,11 @@ CREATING MAPS
 You can easily create your own maps.  Take a look in the maps directory for examples.  The maps need to be saved in CSV format, but there are plenty of examples created using Open Office which can then be saved as a CSV.  Any csv files found in the "maps" directory will be selectable.  Please email my any good maps you create for inclusion in the next release!
 
 
+CREDITS
+Gamepad Code thanks to Marcel Schoen (https://github.com/marcelschoen/gamepad4j)
+Music: https://opengameart.org/content/nes-shooter-music-5-tracks-3-jingles
+
+
 Thanks for playing,
 
 Stephen

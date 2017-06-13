@@ -25,8 +25,8 @@ public abstract class AbstractComplexModule extends AbstractModule {
 	private boolean is_dragging = false;
 	protected boolean scroll_lr = true;
 
-	public AbstractComplexModule(AbstractActivity _act, AbstractModule _return_to) {
-		super(_act, _return_to);
+	public AbstractComplexModule() {
+		super();
 	}
 
 

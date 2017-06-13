@@ -2,7 +2,6 @@ package com.scs.multiplayerplatformer.game;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.List;
 
 import org.gamepad4j.Controllers;
 
@@ -36,7 +35,7 @@ import com.scs.multiplayerplatformer.input.DeviceThread;
 import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
 import com.scs.multiplayerplatformer.mapgen.MapLoader;
 import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
-import com.scs.multiplayerplatformer.start.StartupModule;
+import com.scs.multiplayerplatformer.start.SelectLevelModule;
 
 public final class GameModule extends AbstractModule implements IDisplayText {
 
@@ -89,13 +88,13 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	}
 
 
-	public GameModule(AbstractActivity act, String _filename) { 
-		super(act, null);
+	public GameModule(String _filename) { 
+		super();
 
-		this.mod_return_to = new StartupModule(act);
+		//this.mod_return_to = new SelectLevelModule(act);
 
 		this.stat_cam.lookAtTopLeft(true);
-		str_time_remaining = act.getString("time_remaining");
+		str_time_remaining = Statics.act.getString("time_remaining");
 		this.setBackground(Statics.BACKGROUND_IMAGE);
 
 		startNewLevel(_filename, true);
@@ -325,7 +324,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
 				}
 			} else {
-				throw new RuntimeException("Todo");
+				throw new RuntimeException("Unknown Game Mode: " + Statics.GAME_MODE);
 			}
 
 		} else {
@@ -489,7 +488,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 	@Override
 	public boolean onBackPressed() {
-		this.returnTo();
+		this.getThread().setNextModule(new SelectLevelModule());
 		return true;
 	}
 

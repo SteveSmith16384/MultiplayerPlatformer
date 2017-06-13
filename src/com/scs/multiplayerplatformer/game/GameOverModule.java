@@ -13,7 +13,8 @@ import ssmith.android.lib2d.gui.MultiLineLabel;
 import ssmith.android.lib2d.layouts.GridLayout;
 
 import com.scs.multiplayerplatformer.Statics;
-import com.scs.multiplayerplatformer.start.StartupModule;
+import com.scs.multiplayerplatformer.start.SelectGameModeModule;
+import com.scs.multiplayerplatformer.start.SelectLevelModule;
 
 
 /**
@@ -28,7 +29,7 @@ public final class GameOverModule extends SimpleAbstractModule {
 	private static Paint paint_large_text = new Paint();
 	private static Paint paint_ink = new Paint();
 
-	private GameModule game;
+	//private GameModule game;
 
 	static {
 		paint_large_text.setARGB(255, 255, 255, 255);
@@ -43,13 +44,15 @@ public final class GameOverModule extends SimpleAbstractModule {
 	}
 
 
-	public GameOverModule(AbstractActivity act, GameModule _game, String reason) {
-		super(act, _game);
+	public GameOverModule(String reason) {
+		super();
 
-		game = _game;
+		//game = _game;
 
 		this.setBackground(Statics.BACKGROUND_IMAGE);
 
+		AbstractActivity act = Statics.act;
+		
 		RESTART = act.getString("replay_map");
 		RETURN = act.getString("main_menu");
 
@@ -79,14 +82,19 @@ public final class GameOverModule extends SimpleAbstractModule {
 
 	@Override
 	public void handleClick(AbstractComponent c) throws Exception {
-		AbstractActivity act = Statics.act;
-
 		if (c.getActionCommand().equalsIgnoreCase(RETURN)) {
-			this.getThread().setNextModule(new StartupModule(act));
+			this.getThread().setNextModule(new SelectLevelModule());
 		} else {
 			//game.loadPlayer();
-			this.getThread().setNextModule(new GameModule(act, null));
+			this.getThread().setNextModule(new GameModule(null));
 		}
+	}
+
+
+	@Override
+	public boolean onBackPressed() {
+		Statics.act.thread.setNextModule(new SelectLevelModule());
+		return true;
 	}
 
 
