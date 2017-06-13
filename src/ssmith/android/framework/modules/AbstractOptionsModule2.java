@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import ssmith.android.compatibility.MotionEvent;
 import ssmith.android.compatibility.Paint;
 import ssmith.android.compatibility.PointF;
-import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 import ssmith.android.lib2d.Spatial;
 import ssmith.android.lib2d.gui.AbstractComponent;

@@ -2,22 +2,22 @@ Ninja
 
 
 URGENT
+Player shooting up ladder
+	Don't need map lines to the end
 	Trampoline
 	Squares that slow player down
-Player shooting up ladder
-Don't need map lines to the end
-Diff maps for diff game modes - Say in map file which game mode
 Release it!
 	Don't show time if racetod
 	Don't die when racefordeath, just slow down
 Make map names better
 	Show "has won" bigger
-Make bigger map
 Stuck in water
 Search for todos
 
 
 HOME
+Make bigger map
+Diff maps for diff game modes - Say in map file which game mode
 Make levels look better
 Add baddies to levels
 Add wasps to maps

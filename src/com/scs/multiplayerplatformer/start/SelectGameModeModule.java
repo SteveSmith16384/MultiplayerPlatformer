@@ -1,16 +1,12 @@
 package com.scs.multiplayerplatformer.start;
 
-import java.awt.event.WindowEvent;
-
 import ssmith.android.compatibility.Paint;
-import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.modules.AbstractModule;
 import ssmith.android.framework.modules.AbstractOptionsModule2;
 import ssmith.android.lib2d.gui.GUIFunctions;
 
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.Statics.GameMode;
-import com.scs.multiplayerplatformer.game.GameModule;
 
 public final class SelectGameModeModule extends AbstractOptionsModule2 {
 	

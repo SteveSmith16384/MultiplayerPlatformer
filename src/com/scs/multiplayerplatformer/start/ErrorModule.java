@@ -1,8 +1,6 @@
 package com.scs.multiplayerplatformer.start;
 
 import ssmith.android.compatibility.Paint;
-import ssmith.android.framework.AbstractActivity;
-import ssmith.android.framework.modules.AbstractModule;
 import ssmith.android.framework.modules.AbstractSingleScreenModule;
 import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.gui.MultiLineLabel;

@@ -1,7 +1,6 @@
 package ssmith.android.framework.modules;
 
 import ssmith.android.compatibility.Paint;
-import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.IProgressDisplay;
 import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.gui.MultiLineLabel;

@@ -13,7 +13,6 @@ import ssmith.android.lib2d.gui.MultiLineLabel;
 import ssmith.android.lib2d.layouts.GridLayout;
 
 import com.scs.multiplayerplatformer.Statics;
-import com.scs.multiplayerplatformer.start.SelectGameModeModule;
 import com.scs.multiplayerplatformer.start.SelectLevelModule;
 
 

@@ -3,7 +3,6 @@ package com.scs.multiplayerplatformer.start;
 import java.util.List;
 
 import ssmith.android.compatibility.Paint;
-import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.modules.AbstractOptionsModule2;
 import ssmith.android.lib2d.gui.GUIFunctions;
 
