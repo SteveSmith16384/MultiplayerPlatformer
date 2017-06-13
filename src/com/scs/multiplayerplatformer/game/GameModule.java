@@ -60,7 +60,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private TSArrayList<PlayersAvatar> avatars = new TSArrayList<>();
 	private String filename;
 
-	public float current_scale;// = Statics.MAX_ZOOM_IN;
+	public float current_scale;
 	private float new_scale = current_scale;
 
 	static {
@@ -103,9 +103,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		msg = new TimedString(this, 2000);
 		msg.setText("PRESS FIRE (X) TO START!");
 
-		if (Statics.gameMode == GameMode.Normal) {
+		if (Statics.GAME_MODE == GameMode.Normal) {
 			current_scale = Statics.MAX_ZOOM_IN;
-		} else if (Statics.gameMode == GameMode.RaceToTheDeath) {
+		} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
 			current_scale = 1;
 		}
 		new_scale = current_scale;
@@ -155,9 +155,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			this.avatars.refresh();
 		}
 		addToProcess(avatar);
-		if (Statics.gameMode == GameMode.Normal) {
+		if (Statics.GAME_MODE == GameMode.Normal) {
 			this.restartAvatar(avatar);
-		} else if (Statics.gameMode == GameMode.RaceToTheDeath) {
+		} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
 			// Restart all players
 			for (PlayersAvatar a : avatars) {
 				this.restartAvatar(a);
@@ -258,7 +258,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				this.checkIfMobsNeedCreating(this.current_scale, this.root_cam);
 			}
 
-			if (Statics.gameMode == GameMode.Normal) {
+			if (Statics.GAME_MODE == GameMode.Normal) {
 				float x = 0, y = 0;
 				synchronized (avatars) {
 					for (PlayersAvatar player : avatars) {
@@ -304,7 +304,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 						this.new_scale = Statics.MAX_ZOOM_IN;
 					}
 				}
-			} else if (Statics.gameMode == GameMode.RaceToTheDeath) {
+			} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
 				float rightMost = 0;
 				PlayersAvatar rightmostPlayer = null; 
 				for (PlayersAvatar player : avatars) {
@@ -329,7 +329,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			}
 
 		} else {
-			if (Statics.gameMode == GameMode.Normal) {
+			if (Statics.GAME_MODE == GameMode.Normal) {
 				// No players yet!
 				float x = levelData.getStartPos().x * Statics.SQ_SIZE;
 				//x += this.new_grid.getWorldX();
@@ -401,13 +401,15 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			}
 		}
 
-		long timeRemaining = levelEndTime - System.currentTimeMillis();
-		if (timeRemaining > 0) {
-			g.drawText(this.str_time_remaining + ": " + (timeRemaining/1000), 10, y, paint_text_ink);
-		} else {
-			g.drawText("TIME OUT", 10, y, paint_text_ink);
+		if (Statics.GAME_MODE == GameMode.Normal) {
+			long timeRemaining = levelEndTime - System.currentTimeMillis();
+			if (timeRemaining > 0) {
+				g.drawText(this.str_time_remaining + ": " + (timeRemaining/1000), 10, y, paint_text_ink);
+			} else {
+				g.drawText("TIME OUT", 10, y, paint_text_ink);
+			}
+			y += paint_text_ink.getTextSize();
 		}
-		y += paint_text_ink.getTextSize();
 
 		g.drawText(this.levelData.levelName, 10, y, paint_text_ink);
 		y += paint_text_ink.getTextSize();
@@ -617,9 +619,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 	public void playerDied(PlayersAvatar avatar) {
 		Statics.act.sound_manager.playerDied();
-		if (Statics.gameMode == GameMode.Normal) {
+		if (Statics.GAME_MODE == GameMode.Normal) {
 			restartAvatar(avatar);
-		} else if (Statics.gameMode == GameMode.RaceToTheDeath) {
+		} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
 			avatar.remove();
 			synchronized (avatars) {
 				this.avatars.remove(avatar);

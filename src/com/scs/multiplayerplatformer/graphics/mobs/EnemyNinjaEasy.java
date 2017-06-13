@@ -15,14 +15,12 @@ import com.scs.multiplayerplatformer.graphics.blocks.Block;
 public class EnemyNinjaEasy extends AbstractWalkingMob {
 
 	private static final int TURN_DURATION = 4000; // In case can't get to player
-	//private static final int CHECK_OOB_DURATION = 4000; // In case can't get to player
 
 	private static final int MAX_FRAMES = 8;
 
 	private int x_offset = -1;
 	private boolean tried_jumping = false;
 	private Interval turn_interval = new Interval(TURN_DURATION);
-	//private Interval check_oob_interval = new Interval(CHECK_OOB_DURATION);
 	private Interval throw_interval = new Interval(5000);
 
 	public static void Factory(GameModule game, Block gen) { // gen == null for normal appearance
@@ -100,7 +98,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 					this.startJumping();
 					this.tried_jumping = true;
 				} else {
-					if (is_on_ground_or_ladder > 0) {
+					if (is_on_ground_or_ladder) {
 						tried_jumping = false;
 						x_offset = x_offset * -1; //Turn around
 					}
@@ -120,7 +118,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 			}
 		}
 
-		if (is_on_ground_or_ladder > 0) { // Must be after we've jumped!
+		if (is_on_ground_or_ladder) { // Must be after we've jumped!
 			tried_jumping = false;
 		}
 

@@ -1,5 +1,5 @@
 package com.scs.multiplayerplatformer.start;
-/*
+
 import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.modules.AbstractModule;
@@ -7,9 +7,13 @@ import ssmith.android.framework.modules.AbstractOptionsModule2;
 import ssmith.android.lib2d.gui.GUIFunctions;
 
 import com.scs.multiplayerplatformer.Statics;
+import com.scs.multiplayerplatformer.Statics.GameMode;
 import com.scs.multiplayerplatformer.game.GameModule;
 
 public final class SelectGameModeModule extends AbstractOptionsModule2 {
+	
+	private static final String NORMAL_MODE = "NORMAL";
+	private static final String RACE_TO_DEATH_MODE = "RACE to the DEATH";
 
 	private static final float ICON_WIDTH = Statics.SCREEN_WIDTH * 0.4f;
 
@@ -32,21 +36,22 @@ public final class SelectGameModeModule extends AbstractOptionsModule2 {
 
 	@Override
 	public void getOptions() {
-		int max = 6;
-		for (int i=1 ; i<=max ; i++) {
-			this.addOption("Level " + i);
-		}
+		this.addOption(NORMAL_MODE);
+		this.addOption(RACE_TO_DEATH_MODE);
 
 	}
 	
 
 	@Override
 	public void optionSelected(int idx) {
-		//int level = idx+1;
-		//AbstractLevelData original_level_data = new LoadMap(Statics.GetMapFilename(level));
-		GameModule game = new GameModule(Statics.act, maps[idx]);
+		String opt = super.getActionCommand(idx);
+		if (opt.equalsIgnoreCase(RACE_TO_DEATH_MODE)) {
+			Statics.GAME_MODE = GameMode.RaceToTheDeath;
+		} else {
+			Statics.GAME_MODE = GameMode.Normal;
+		}
+		AbstractModule game = new SelectLevelModule(Statics.act, this);
 		this.getThread().setNextModule(game);
 	}
 
 }
-*/

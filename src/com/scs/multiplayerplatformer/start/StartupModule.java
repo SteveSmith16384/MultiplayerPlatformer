@@ -138,10 +138,9 @@ public final class StartupModule extends AbstractModule {
 
 
 	private void startNewGame() {
-		AbstractActivity act = Statics.act;
-
-		AbstractModule game = new SelectLevelModule(act, this);//new GameModule(act); //
-		this.getThread().setNextModule(game);
+		//AbstractModule game = new SelectLevelModule(act, this);
+		SelectGameModeModule m = new SelectGameModeModule(Statics.act, this);
+		this.getThread().setNextModule(m);
 
 	}
 

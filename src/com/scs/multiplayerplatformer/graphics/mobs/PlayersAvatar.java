@@ -93,10 +93,10 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	protected void startJumping() {
 		if (jumping == false) {
-			if (is_on_ground_or_ladder > 0) {
+			if (is_on_ground_or_ladder) {
 				Statics.act.sound_manager.playerJumped();
 				jumping = true;
-				phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y*is_on_ground_or_ladder), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
+				phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y*this.bounciness), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
 			}
 		}
 	}
