@@ -60,7 +60,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private String filename;
 
 	public float current_scale;
-	private float new_scale = current_scale;
+	private float new_scale;// = current_scale;
 
 	static {
 		paint_health_bar.setARGB(150, 200, 0, 0); // This is set elsewhere
@@ -91,8 +91,6 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	public GameModule(String _filename) { 
 		super();
 
-		//this.mod_return_to = new SelectLevelModule(act);
-
 		this.stat_cam.lookAtTopLeft(true);
 		str_time_remaining = Statics.act.getString("time_remaining");
 		this.setBackground(Statics.BACKGROUND_IMAGE);
@@ -102,18 +100,19 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		msg = new TimedString(this, 2000);
 		msg.setText("PRESS FIRE (X) TO START!");
 
-		if (Statics.GAME_MODE == GameMode.Normal) {
-			current_scale = Statics.MAX_ZOOM_IN;
-		} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
-			current_scale = 1;
-		}
-		new_scale = current_scale;
 	}
 
 
 	// filename = null to load random map
 	private void startNewLevel(String _filename, boolean sameMap) {
 		Statics.act.sound_manager.levelStart();
+
+		if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
+			current_scale = 1;
+		} else {
+			current_scale = Statics.MAX_ZOOM_IN;
+		}
+		new_scale = current_scale;
 
 		synchronized (entities) {
 			entities.clear();
@@ -156,12 +155,13 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		addToProcess(avatar);
 		if (Statics.GAME_MODE == GameMode.Normal) {
 			this.restartAvatar(avatar);
-		} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
-			// Restart all players
-			for (PlayersAvatar a : avatars) {
-				this.restartAvatar(a);
-			}
-		}
+		}/* else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {*/
+		// Restart all players
+		/*for (PlayersAvatar a : avatars) {
+			this.restartAvatar(a);
+		}*/
+		//this.startNewLevel(this.filename, true);
+		//}
 	}
 
 
@@ -236,10 +236,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}
 
 		// Adjust scale
-		if (new_scale > Statics.MAX_ZOOM_IN) {
-			new_scale = Statics.MAX_ZOOM_IN;
-		} else if (new_scale < Statics.MAX_ZOOM_OUT) {
-			new_scale = Statics.MAX_ZOOM_OUT;
+		if (Statics.GAME_MODE != GameMode.RaceToTheDeath) {
+			if (new_scale > Statics.MAX_ZOOM_IN) {
+				new_scale = Statics.MAX_ZOOM_IN;
+			} else if (new_scale < Statics.MAX_ZOOM_OUT) {
+				new_scale = Statics.MAX_ZOOM_OUT;
+			}
 		}
 		this.current_scale = new_scale;
 
@@ -257,7 +259,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				this.checkIfMobsNeedCreating(this.current_scale, this.root_cam);
 			}
 
-			if (Statics.GAME_MODE == GameMode.Normal) {
+			if (Statics.GAME_MODE == GameMode.Normal || Statics.GAME_MODE == GameMode.Testing) {
 				float x = 0, y = 0;
 				synchronized (avatars) {
 					for (PlayersAvatar player : avatars) {
@@ -309,33 +311,37 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				for (PlayersAvatar player : avatars) {
 					//float sx = player.getWindowX(this.root_cam, this.current_scale);
 					//float sy = player.getWindowY(this.root_cam, this.current_scale);
-					if (player.isOnScreen(root_cam, this.current_scale)) {
-						if (player.getWorldX() > rightMost) {
+					if (player.getWorldX() > rightMost) {
+						if (rightmostPlayer == null || player.isOnScreen(root_cam, this.current_scale)) {
 							rightMost = player.getWorldX(); 
 							rightmostPlayer = player;
 						}
 					} else {
-						player.died();
+						//player.died();
+						playerDied(player); // Don't call player.died() since it will just freeze them in this game mode
 					}
 				}
 				if (rightmostPlayer != null) {
 					float x = rightmostPlayer.getWorldX();
 					float y = rightmostPlayer.getWorldY() + (Statics.PLAYER_HEIGHT/2);
 					this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
+					if (this.current_scale < Statics.MAX_ZOOM_IN*2) {
+						new_scale *= 1.005f; // todo - make const
+					}
 				}
 			} else {
 				throw new RuntimeException("Unknown Game Mode: " + Statics.GAME_MODE);
 			}
 
 		} else {
-			if (Statics.GAME_MODE == GameMode.Normal) {
-				// No players yet!
-				float x = levelData.getStartPos().x * Statics.SQ_SIZE;
-				//x += this.new_grid.getWorldX();
-				float y = (levelData.getStartPos().y) * Statics.SQ_SIZE;
-				//y += this.new_grid.getWorldY();
-				this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
-				//this.root_cam.lookAt(x, y, true);
+			// No players yet!
+			float x = levelData.getStartPos().x * Statics.SQ_SIZE;
+			//x += this.new_grid.getWorldX();
+			float y = (levelData.getStartPos().y) * Statics.SQ_SIZE;
+			//y += this.new_grid.getWorldY();
+			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
+			//this.root_cam.lookAt(x, y, true);
+			if (Statics.GAME_MODE != GameMode.RaceToTheDeath) {
 				new_scale = Statics.MAX_ZOOM_OUT;
 			}
 		}
@@ -407,15 +413,15 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			} else {
 				g.drawText("TIME OUT", 10, y, paint_text_ink);
 			}
-			y += paint_text_ink.getTextSize(); // todo - double distance
+			y += yInc;//paint_text_ink.getTextSize();
 		}
 
 		g.drawText(this.levelData.levelName, 10, y, paint_text_ink);
-		y += paint_text_ink.getTextSize();
+		y += yInc;//paint_text_ink.getTextSize();
 
 		if (msg != null && msg.toString().length() > 0) {
 			g.drawText(msg.toString(), 10, y, paint_icon_ink);
-			y += paint_text_ink.getTextSize();
+			y += yInc;//paint_text_ink.getTextSize();
 		}
 
 	}
@@ -612,15 +618,14 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 	@Override
 	public void newPlayer(Player player) {
-		this.createAvatar(player);
+		//this.createAvatar(player);
+		this.startNewLevel(filename, true);
 	}
 
 
 	public void playerDied(PlayersAvatar avatar) {
 		Statics.act.sound_manager.playerDied();
-		if (Statics.GAME_MODE == GameMode.Normal) {
-			restartAvatar(avatar);
-		} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
+		if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
 			avatar.remove();
 			synchronized (avatars) {
 				this.avatars.remove(avatar);
@@ -632,6 +637,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				PlayersAvatar winner = this.avatars.get(0);
 				this.showToast("Player " + (winner.playernumZB+1) + " HAS WON!");
 			}
+		} else {
+			restartAvatar(avatar);
 		}
 	}
 

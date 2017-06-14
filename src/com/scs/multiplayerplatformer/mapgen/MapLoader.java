@@ -26,7 +26,7 @@ public final class MapLoader extends AbstractLevelData {
 
 	public static final int VERSION = 2;
 
-	private String stage = "", filename = "";
+	private String stage = "", fullpath = "";
 	private boolean is_resource;
 	private int version_found = 1;
 	public String mapName = "";
@@ -35,9 +35,9 @@ public final class MapLoader extends AbstractLevelData {
 	public MapLoader(String _filename, boolean _is_resource) {
 		super();
 
-		filename = MAP_DIR + _filename;
+		fullpath = MAP_DIR + Statics.GAME_MODE.toString() + "/" + _filename;
 		is_resource = _is_resource;
-		levelName = this.filename;
+		levelName = this.fullpath;
 	}
 
 
@@ -56,7 +56,7 @@ public final class MapLoader extends AbstractLevelData {
 
 
 	public static List<String> GetMaps() {
-		String[] maps = new File(MAP_DIR).list();
+		String[] maps = new File(MAP_DIR + Statics.GAME_MODE.toString()).list();
 		List<String> csv = new ArrayList<>();
 
 		for(String s : maps) {
@@ -74,7 +74,7 @@ public final class MapLoader extends AbstractLevelData {
 		try {
 			List<String> text = new ArrayList<>();
 			if (is_resource) {
-				BufferedReader txtReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/assets/maps/" + filename)));
+				BufferedReader txtReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/assets/maps/" + fullpath)));
 				while (true) {
 					String s = txtReader.readLine();
 					if (s != null) {
@@ -85,7 +85,7 @@ public final class MapLoader extends AbstractLevelData {
 				}
 				txtReader.close();
 			} else {
-				text = Files.readAllLines(FileSystems.getDefault().getPath(filename, ""));
+				text = Files.readAllLines(FileSystems.getDefault().getPath(fullpath, ""));
 			}
 
 
@@ -176,10 +176,10 @@ public final class MapLoader extends AbstractLevelData {
 					row_num++;
 				}
 			} catch (NegativeArraySizeException ex) {
-				throw new RuntimeException("Error loading map '" + filename + "': No map data tag found", ex);
+				throw new RuntimeException("Error loading map '" + fullpath + "': No map data tag found", ex);
 			}
 		} catch (Exception ex) {
-			throw new RuntimeException("Error loading map '" + filename + "':", ex);
+			throw new RuntimeException("Error loading map '" + fullpath + "':", ex);
 		}
 	}
 

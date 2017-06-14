@@ -10,7 +10,7 @@ import ssmith.awt.ImageCache;
 
 public final class Statics {
 	
-	public enum GameMode {Normal, RaceToTheDeath }
+	public enum GameMode {Normal, RaceToTheDeath, Testing }
 
 	public static final boolean FULL_SCREEN = false;
 	public static final boolean HIDE_GFX = true;

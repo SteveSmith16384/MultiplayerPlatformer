@@ -157,7 +157,7 @@ public class Block extends GameObject {
 	public static float GetBounciness(byte type) {
 		switch (type) {
 		case GIRDER:
-			return 2f;
+			return 1.5f;
 		case SNOW:
 			return .5f;
 		default:
@@ -168,6 +168,8 @@ public class Block extends GameObject {
 
 	public static float GetStickiness(byte type) {
 		switch (type) {
+		case SNOW:
+			return 2f;
 		case BARREL:
 			return 0.5f;
 		default:

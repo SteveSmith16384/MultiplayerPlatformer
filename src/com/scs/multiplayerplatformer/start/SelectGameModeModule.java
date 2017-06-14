@@ -9,8 +9,9 @@ import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.Statics.GameMode;
 
 public final class SelectGameModeModule extends AbstractOptionsModule2 {
-	
+
 	private static final String NORMAL_MODE = "NORMAL";
+	private static final String TESTING_MODE = "Testing";
 	private static final String RACE_TO_DEATH_MODE = "RACE to the DEATH";
 
 	private static final float ICON_WIDTH = Statics.SCREEN_WIDTH * 0.4f;
@@ -36,15 +37,18 @@ public final class SelectGameModeModule extends AbstractOptionsModule2 {
 	public void getOptions() {
 		this.addOption(NORMAL_MODE);
 		this.addOption(RACE_TO_DEATH_MODE);
+		this.addOption(TESTING_MODE);
 
 	}
-	
+
 
 	@Override
 	public void optionSelected(int idx) {
 		String opt = super.getActionCommand(idx);
 		if (opt.equalsIgnoreCase(RACE_TO_DEATH_MODE)) {
 			Statics.GAME_MODE = GameMode.RaceToTheDeath;
+		} else if (opt.equalsIgnoreCase(TESTING_MODE)) {
+			Statics.GAME_MODE = GameMode.Testing;
 		} else {
 			Statics.GAME_MODE = GameMode.Normal;
 		}

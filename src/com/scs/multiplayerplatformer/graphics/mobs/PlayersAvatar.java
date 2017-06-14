@@ -11,6 +11,7 @@ import ssmith.android.lib2d.MyPointF;
 import ssmith.lang.GeometryFuncs;
 
 import com.scs.multiplayerplatformer.Statics;
+import com.scs.multiplayerplatformer.Statics.GameMode;
 import com.scs.multiplayerplatformer.game.BlockInventory;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.PhysicsEngine;
@@ -144,7 +145,11 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	@Override
 	public void died() {
-		game.playerDied(this); // todo - only die if GameMode = normal
+		if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
+			this.frozenUntil = 1000;
+		} else {
+			game.playerDied(this);
+		}
 	}
 
 
@@ -153,6 +158,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		super.doDraw(g, cam, interpol, scale);
 		if (this.visible) {
 			// Draw player number
+			g.getGraphics().setColor(Color.white);
 			g.drawText(""+(playernumZB+1), this.getWindowX(cam, scale), this.getWindowY(cam, scale), paint);
 		}
 	}

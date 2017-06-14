@@ -51,11 +51,7 @@ public final class Collision {
 
 
 	private static boolean Player_EnemyMob(PlayersAvatar player, AbstractMob enemy) {
-		if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
-			player.frozenUntil = 1000;
-		} else {
-			player.died();
-		}
+		player.died();
 		return false;
 	}
 
@@ -77,11 +73,7 @@ public final class Collision {
 		}
 		if (side != mob.side) {
 			thrown.remove();
-			if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
-				mob.frozenUntil = 1000;
-			} else {
-				mob.died();
-			}
+			mob.died();
 			//return true; // Don't move back!
 		}
 		return true;

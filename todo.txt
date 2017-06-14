@@ -2,12 +2,10 @@ Ninja
 
 
 URGENT
-Only list racetothedeath games if mode selected
-	Remove trampoline from levels
-	Player shooting up ladder
+	Bounce too high
+	Zoom in on racetothedeath
 	Squares that slow player down
 Release it!
-	Don't show time if racetod
 	Don't die when racefordeath, just slow down
 Make map names better
 	Show "has won" bigger
@@ -17,10 +15,7 @@ Search for todos
 
 HOME
 Make bigger map
-	Diff maps for diff game modes - Say in map file which game mode
 Make levels look better
-Add baddies to levels
-Add wasps to maps
 Ask harry for name and get him to generate logo
 Sound not working
 Create new logo
@@ -29,9 +24,9 @@ Get a font
 
 
 TODO
+Testing mode - replay same map
 Randomly generate infinite maps
 Conveyor belts
-Say why map in invalid
 No "die" or "level complete" sfx
 Play sound when player joins
 "Press fire to start" is hidden
