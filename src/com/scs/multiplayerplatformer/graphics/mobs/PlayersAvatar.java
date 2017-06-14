@@ -144,7 +144,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	@Override
 	public void died() {
-		game.playerDied(this);
+		game.playerDied(this); // todo - only die if GameMode = normal
 	}
 
 

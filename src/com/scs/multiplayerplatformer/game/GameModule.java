@@ -407,7 +407,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			} else {
 				g.drawText("TIME OUT", 10, y, paint_text_ink);
 			}
-			y += paint_text_ink.getTextSize();
+			y += paint_text_ink.getTextSize(); // todo - double distance
 		}
 
 		g.drawText(this.levelData.levelName, 10, y, paint_text_ink);

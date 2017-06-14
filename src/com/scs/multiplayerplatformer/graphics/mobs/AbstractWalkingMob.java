@@ -123,7 +123,7 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 		is_on_ladder = false;
 		ladder_x = 0;
 		boolean in_water = false;
-		bounciness = .5f; // Min cos we can only go up
+		bounciness = 1f;//.5f; // Min cos we can only go up
 		stickiness = .5f; // Min cos we can only go up
 
 		// Check for special blocks we might be touching - NOT by gravity!
@@ -134,9 +134,9 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 				if (b.getType() == Block.WATER) {
 					in_water = true;
 				}
-				/*if (Block.BlocksDownMovement(b.getType())) {
+				if (Block.BlocksDownMovement(b.getType())) {
 					is_on_ground_or_ladder = true;
-				}*/
+				}
 				if (Block.IsLadder(b.getType())) {
 					is_on_ladder = true;
 					ladder_x = b.getWorldX();

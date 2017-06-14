@@ -2,9 +2,9 @@ Ninja
 
 
 URGENT
-Player shooting up ladder
-	Don't need map lines to the end
-	Trampoline
+Only list racetothedeath games if mode selected
+	Remove trampoline from levels
+	Player shooting up ladder
 	Squares that slow player down
 Release it!
 	Don't show time if racetod
@@ -17,7 +17,7 @@ Search for todos
 
 HOME
 Make bigger map
-Diff maps for diff game modes - Say in map file which game mode
+	Diff maps for diff game modes - Say in map file which game mode
 Make levels look better
 Add baddies to levels
 Add wasps to maps
@@ -26,7 +26,6 @@ Sound not working
 Create new logo
 Create new maps
 Get a font
-
 
 
 TODO
