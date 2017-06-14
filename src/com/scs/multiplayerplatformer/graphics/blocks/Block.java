@@ -157,9 +157,19 @@ public class Block extends GameObject {
 	public static float GetBounciness(byte type) {
 		switch (type) {
 		case GIRDER:
+			return 2f;
+		case SNOW:
+			return .5f;
+		default:
+			return 1f;
+		}
+	}
+
+
+	public static float GetStickiness(byte type) {
+		switch (type) {
+		case BARREL:
 			return 0.5f;
-		case GRASS:
-			return 2f; // todo - remove
 		default:
 			return 1f;
 		}
@@ -352,7 +362,7 @@ public class Block extends GameObject {
 			break;
 
 		case Block.SAND:
-			destroy(2, false, null);
+			destroy(2, false, null); // todo - don't destroy immed
 		}
 	}
 

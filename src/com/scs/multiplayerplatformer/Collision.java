@@ -2,6 +2,7 @@ package com.scs.multiplayerplatformer;
 
 import ssmith.android.lib2d.shapes.Geometry;
 
+import com.scs.multiplayerplatformer.Statics.GameMode;
 import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractWalkingMob;
@@ -50,7 +51,11 @@ public final class Collision {
 
 
 	private static boolean Player_EnemyMob(PlayersAvatar player, AbstractMob enemy) {
-		player.died();
+		if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
+			player.frozenUntil = 1000;
+		} else {
+			player.died();
+		}
 		return false;
 	}
 
@@ -72,8 +77,12 @@ public final class Collision {
 		}
 		if (side != mob.side) {
 			thrown.remove();
-			mob.died();
-			return true; // Don't move back!
+			if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
+				mob.frozenUntil = 1000;
+			} else {
+				mob.died();
+			}
+			//return true; // Don't move back!
 		}
 		return true;
 	}

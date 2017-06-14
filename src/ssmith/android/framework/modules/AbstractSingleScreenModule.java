@@ -1,7 +1,6 @@
 package ssmith.android.framework.modules;
 
 import ssmith.android.compatibility.MotionEvent;
-import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 
 import com.scs.multiplayerplatformer.Statics;
@@ -12,8 +11,8 @@ public abstract class AbstractSingleScreenModule extends AbstractModule {
 
 	private long start_time;
 
-	public AbstractSingleScreenModule(AbstractActivity act, AbstractModule _return_to) {
-		super(act, _return_to);
+	public AbstractSingleScreenModule() {
+		super();
 
 		start_time = System.currentTimeMillis();
 		
@@ -25,7 +24,7 @@ public abstract class AbstractSingleScreenModule extends AbstractModule {
 	public boolean processEvent(MyEvent evt) throws Exception {
 		if (System.currentTimeMillis() > start_time + PAUSE_DURATION) {
 			if (evt.getAction() == MotionEvent.ACTION_UP) {
-				returnTo();
+				this.onBackPressed();
 				return true;
 			}
 		}
@@ -46,11 +45,11 @@ public abstract class AbstractSingleScreenModule extends AbstractModule {
 	}
 	
 	
-	@Override
+	/*@Override
 	public boolean onBackPressed() {
-		returnTo();
+		//returnTo();
 		return true;
 	}
-
+*/
 
 }

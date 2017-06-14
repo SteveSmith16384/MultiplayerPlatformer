@@ -1,8 +1,6 @@
 package com.scs.multiplayerplatformer.start;
 
 import ssmith.android.compatibility.Paint;
-import ssmith.android.framework.AbstractActivity;
-import ssmith.android.framework.modules.AbstractModule;
 import ssmith.android.framework.modules.AbstractSingleScreenModule;
 import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.gui.MultiLineLabel;
@@ -27,13 +25,13 @@ public final class ErrorModule extends AbstractSingleScreenModule {
 	}
 	
 	
-	public ErrorModule(AbstractActivity act, AbstractModule _return_to, Throwable t) {
-		this(act, _return_to, "Error", t.toString());
+	public ErrorModule(Throwable t) {
+		this("Error", t.toString());
 	}
 
 	
-	public ErrorModule(AbstractActivity act, AbstractModule _return_to, String title, String text) {
-		super(act, _return_to);
+	public ErrorModule(String title, String text) {
+		super();
 		
 		showError(title, text);
 

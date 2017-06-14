@@ -34,8 +34,9 @@ public abstract class AbstractMob extends GameObject {
 	private int hold_breath_time = MAX_HOLD_BREATH_TIME;
 	public boolean is_on_ice = false;
 	private Interval bubble_int = new Interval(1000, false);
+	public long frozenUntil = 0;
 
-	public AbstractMob(GameModule _game, String name, float x, float y, float w, float h, boolean _remove_if_far_away, boolean _destroy_blocks, byte _side) { // todo - remove _remove_if_far_away
+	public AbstractMob(GameModule _game, String name, float x, float y, float w, float h, boolean _destroy_blocks, byte _side) {
 		super(_game, name, true, x, y, w, h);
 
 		//remove_if_far_away = _remove_if_far_away;
@@ -123,6 +124,7 @@ public abstract class AbstractMob extends GameObject {
 				if (ladderBlocks && Block.BlocksDownMovement(b.getType())) {
 					blocked = true;
 				}
+				hitBlockCheck(b, off_x, off_y);
 				if (blocked) {
 					this.is_on_ice = (b.getType() == Block.SNOW);
 
@@ -161,6 +163,8 @@ public abstract class AbstractMob extends GameObject {
 		return true;
 	}
 
+	
+	abstract void hitBlockCheck(Block b, float off_x, float off_y);
 
 	// Returns false on a collision!
 	private boolean collidedWith(Geometry g, float prev_x, float prev_y) {

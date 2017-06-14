@@ -170,7 +170,7 @@ public final class MapLoader extends AbstractLevelData {
 				data = new byte[max_row_length][rows.size()];
 				int row_num = 0;
 				for (byte[] row : rows) {
-					for (int x=0 ; x<max_row_length ; x++) {
+					for (int x=0 ; x<row.length ; x++) {
 						data[x][row_num] = row[x];
 					}
 					row_num++;

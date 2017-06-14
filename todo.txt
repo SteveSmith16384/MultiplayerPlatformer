@@ -2,18 +2,22 @@ Ninja
 
 
 URGENT
-Implement gameStage
-Show "has won" bigger
-	Race mode
-Make bigger map
-Improve maps
-Squares that slow player down
+Player shooting up ladder
+	Don't need map lines to the end
+	Trampoline
+	Squares that slow player down
+Release it!
+	Don't show time if racetod
+	Don't die when racefordeath, just slow down
+Make map names better
+	Show "has won" bigger
 Stuck in water
-Diff maps for diff game modes
+Search for todos
 
 
 HOME
-Get trampoline gfx
+Make bigger map
+Diff maps for diff game modes - Say in map file which game mode
 Make levels look better
 Add baddies to levels
 Add wasps to maps
@@ -24,28 +28,10 @@ Create new maps
 Get a font
 
 
-LEVELS
-Maze-like level
-Lots of ropes
-Lots of ladders
-Map with long route or difficult short route
-Level where jump over lots of dangerous blocks
-
-1 - Bit of everything
-2 - Difficult jump
-3 - Lots of small platforms
-4 - Donkey Kong
-5 - Manic miner TODO
-
-
-Search for todos
-	Swim in water
-	Wasp not doing harm
-	Space out HUD better
-
 
 TODO
-Trampoline
+Randomly generate infinite maps
+Conveyor belts
 Say why map in invalid
 No "die" or "level complete" sfx
 Play sound when player joins
@@ -53,7 +39,6 @@ Play sound when player joins
 Restart if player falls too far
 Give levels their own background
 Hold down jump to jump higher
-Conveyor belts
 Baddy that drop from sky
 Ninja chop attack!
 Parallax
@@ -70,9 +55,19 @@ Who has the most points at the end
 Race to complete each small level
 
 
-CREDITS
-Gamepad Code thanks to Marcel Schoen (https://github.com/marcelschoen/gamepad4j)
-Music: https://opengameart.org/content/nes-shooter-music-5-tracks-3-jingles
+LEVELS
+Maze-like level
+Lots of ropes
+Lots of ladders
+Map with long route or difficult short route
+Level where jump over lots of dangerous blocks
+
+1 - Bit of everything
+2 - Difficult jump
+3 - Lots of small platforms
+4 - Donkey Kong
+5 - Manic miner TODO
+
 
 
 LOW PRI

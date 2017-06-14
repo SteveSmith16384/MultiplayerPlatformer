@@ -3,8 +3,6 @@ package com.scs.multiplayerplatformer.start;
 import java.util.List;
 
 import ssmith.android.compatibility.Paint;
-import ssmith.android.framework.AbstractActivity;
-import ssmith.android.framework.modules.AbstractModule;
 import ssmith.android.framework.modules.AbstractOptionsModule2;
 import ssmith.android.lib2d.gui.GUIFunctions;
 
@@ -28,8 +26,8 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 	}
 
 
-	public SelectLevelModule(AbstractActivity act, AbstractModule _return_to) {
-		super(act, _return_to, 2, paint_text, Statics.img_cache.getImage("button_blue", ICON_WIDTH, Statics.SCREEN_WIDTH/20), 0, false, "", true);
+	public SelectLevelModule() {
+		super(2, paint_text, Statics.img_cache.getImage("button_blue", ICON_WIDTH, Statics.SCREEN_WIDTH/20), 0, false, "", true);
 
 		this.setBackground(Statics.BACKGROUND_IMAGE);
 
@@ -53,11 +51,19 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 	public void optionSelected(int idx) {
 		GameModule game = null;
 		if (idx <= 0) {
-			game = new GameModule(Statics.act, null);
+			game = new GameModule(null);
 		} else {
-			game = new GameModule(Statics.act, maps.get(idx-1));
+			game = new GameModule(maps.get(idx-1));
 		}
 		this.getThread().setNextModule(game);
 	}
+
+
+	@Override
+	public boolean onBackPressed() {
+		Statics.act.thread.setNextModule(new SelectGameModeModule());
+		return true;
+	}
+
 
 }

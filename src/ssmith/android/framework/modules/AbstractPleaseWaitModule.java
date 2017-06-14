@@ -1,7 +1,6 @@
 package ssmith.android.framework.modules;
 
 import ssmith.android.compatibility.Paint;
-import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.IProgressDisplay;
 import ssmith.android.lib2d.gui.Label;
 import ssmith.android.lib2d.gui.MultiLineLabel;
@@ -29,10 +28,10 @@ public abstract class AbstractPleaseWaitModule extends SimpleAbstractModule impl
 	}
 	
 	
-	public AbstractPleaseWaitModule(AbstractActivity act, AbstractModule _return_to) {
-		super(act, _return_to);
+	public AbstractPleaseWaitModule() {
+		super();
 
-		Label l = new Label("Title", act.getString("please_wait"), 0, 0, null, paint_large_text, true);
+		Label l = new Label("Title", Statics.act.getString("please_wait"), 0, 0, null, paint_large_text, true);
 		l.setCentre(Statics.SCREEN_WIDTH/2, paint_large_text.getTextSize());
 		this.stat_node_front.attachChild(l);
 		

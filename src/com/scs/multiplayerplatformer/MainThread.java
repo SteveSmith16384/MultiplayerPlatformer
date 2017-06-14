@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.AbstractActivity;
@@ -78,7 +76,8 @@ public final class MainThread extends Thread implements NewControllerListener {
 			}
 		} catch (Exception ex) {
 			AbstractActivity.HandleError(ex);
-			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage() + ".  Please restart", "Error", JOptionPane.ERROR_MESSAGE);
+			window.setVisible(false);
+			window.dispose();
 		}
 	}
 
@@ -192,9 +191,9 @@ public final class MainThread extends Thread implements NewControllerListener {
 		} else {
 			// Load default module
 			if (Statics.DEBUG) {
-				this.setNextModule(new GameModule(Statics.act, null));
+				this.setNextModule(new GameModule("bens_map2.csv"));
 			} else {
-				this.setNextModule(new StartupModule(Statics.act));
+				this.setNextModule(new StartupModule());
 			}
 		}
 	}

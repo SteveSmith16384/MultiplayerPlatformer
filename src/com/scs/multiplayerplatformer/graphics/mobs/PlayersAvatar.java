@@ -31,7 +31,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 
 	public PlayersAvatar(GameModule _game, float x, float y, IInputDevice _input, int num) {
-		super(_game, Statics.act.getString("player")  + num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, false, Statics.SD_PLAYERS_SIDE, true);
+		super(_game, Statics.act.getString("player")  + num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, Statics.SD_PLAYERS_SIDE, true);
 
 		playernumZB = num;
 		input = _input;
@@ -93,10 +93,10 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	protected void startJumping() {
 		if (jumping == false) {
-			if (is_on_ground_or_ladder > 0) {
+			if (is_on_ground_or_ladder) {
 				Statics.act.sound_manager.playerJumped();
 				jumping = true;
-				phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y*is_on_ground_or_ladder), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
+				phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y*this.bounciness), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
 			}
 		}
 	}
