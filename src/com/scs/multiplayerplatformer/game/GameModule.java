@@ -117,7 +117,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		synchronized (entities) {
 			entities.clear();
 		}
-
+		synchronized (avatars) {
+		avatars.clear();
+		}
+		
 		this.root_node.detachAllChildren();
 		this.stat_node_back.detachAllChildren();
 		this.stat_node_front.detachAllChildren();
@@ -153,9 +156,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			this.avatars.refresh();
 		}
 		addToProcess(avatar);
-		if (Statics.GAME_MODE == GameMode.Normal) {
-			this.restartAvatar(avatar);
-		}/* else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {*/
+		//if (Statics.GAME_MODE == GameMode.Normal) {
+		this.restartAvatar(avatar); // Need this to position them
+		//}/* else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {*/
 		// Restart all players
 		/*for (PlayersAvatar a : avatars) {
 			this.restartAvatar(a);
@@ -309,16 +312,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				float rightMost = 0;
 				PlayersAvatar rightmostPlayer = null; 
 				for (PlayersAvatar player : avatars) {
-					//float sx = player.getWindowX(this.root_cam, this.current_scale);
-					//float sy = player.getWindowY(this.root_cam, this.current_scale);
-					if (player.getWorldX() > rightMost) {
-						if (rightmostPlayer == null || player.isOnScreen(root_cam, this.current_scale)) {
-							rightMost = player.getWorldX(); 
-							rightmostPlayer = player;
-						}
-					} else {
-						//player.died();
-						playerDied(player); // Don't call player.died() since it will just freeze them in this game mode
+					if (player.getWorldX() >= rightMost) {
+						rightMost = player.getWorldX(); 
+						rightmostPlayer = player;
 					}
 				}
 				if (rightmostPlayer != null) {
@@ -327,6 +323,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
 					if (this.current_scale < Statics.MAX_ZOOM_IN*2) {
 						new_scale *= 1.005f; // todo - make const
+					}
+				}
+				for (PlayersAvatar player : avatars) {
+					if (!player.isOnScreen(root_cam, this.current_scale)) {
+						//player.died();
+						playerDied(player); // Don't call player.died() since it will just freeze them in this game mode
 					}
 				}
 			} else {
@@ -558,10 +560,11 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		avatar.remove();
 		synchronized (avatars) {
 			this.avatars.remove(avatar);
+			this.avatars.refresh();
 		}
 
 		// check if no players left
-		if (this.avatars.isEmpty()) {
+		if (this.avatars.isEmpty()) { // todo - override empty()
 			this.startNewLevel(null, false); // Load random map after playing first selected map
 		}
 	}

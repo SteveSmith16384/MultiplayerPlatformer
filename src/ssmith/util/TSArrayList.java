@@ -52,4 +52,9 @@ public class TSArrayList<E> extends ArrayList<E> implements List<E> {
 		return super.size() + this.to_add.size() - this.to_remove.size();
 	}
 
+
+	@Override
+	public boolean isEmpty() {
+		return size() <= 0;
+	}
 }

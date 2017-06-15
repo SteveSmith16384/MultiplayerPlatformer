@@ -232,10 +232,4 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 		}
 	}
 
-
-	/*	@Override
-	protected boolean hasCollidedWith(Geometry g) {
-		return Collision.Collided(this, g);
-	}
-	 */
 }
