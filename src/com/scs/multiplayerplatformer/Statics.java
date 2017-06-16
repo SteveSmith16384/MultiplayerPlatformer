@@ -12,8 +12,8 @@ public final class Statics {
 	
 	public enum GameMode {Normal, RaceToTheDeath, Testing }
 
-	public static final boolean FULL_SCREEN = false;
-	public static final boolean HIDE_GFX = true;
+	public static final boolean FULL_SCREEN = true;
+	public static final boolean HIDE_GFX = false;
 	public static final boolean DEBUG = false;
 	public static final boolean RELEASE_MODE = true; // Stricter if false
 	public static final String VERSION_NAME = "1.1";

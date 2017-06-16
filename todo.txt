@@ -2,9 +2,7 @@ Ninja
 
 
 URGENT
-	Bounce too high
-	Zoom in on racetothedeath
-	Squares that slow player down
+Check gfx colours
 Release it!
 	Don't die when racefordeath, just slow down
 Make map names better

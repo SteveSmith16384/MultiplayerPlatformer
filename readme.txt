@@ -8,7 +8,7 @@ It is what it says. :)
 CONTROLS
 Keyboard 1 - Arrow keys and Ctrl
 Keyboard 2 - W, A, S, D and Space
-Gamepads - Left joystick and X
+Gamepads - Left joystick and X to jump
 
 Press fire to join the game!  This game can handle as many players as you have control methods for.
 
@@ -16,6 +16,7 @@ Press fire to join the game!  This game can handle as many players as you have c
 GAME MODES
 Normal - Players get points for being the first to get to the end of the level.
 Race to the Death - The camera view follows the right-most player.  Any players that are caught by the edge of the screen are elimiated.  The last player standing is the winner.
+Testing - Maps that are still being developed
 
 
 CREATING MAPS
@@ -27,7 +28,7 @@ Gamepad Code thanks to Marcel Schoen (https://github.com/marcelschoen/gamepad4j)
 Music: https://opengameart.org/content/nes-shooter-music-5-tracks-3-jingles
 
 
-Thanks for playing,
+Thanks for playing!
 
 Stephen
 stephen.carlylesmith@gmail.com
