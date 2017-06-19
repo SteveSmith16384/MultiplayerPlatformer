@@ -16,14 +16,14 @@ public final class Explosion extends GameObject {
 	
 	private PhysicsEngine phys;
 	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH];
-	private MyPointF pxl_origin;
+	private MyPointF pxlOrigin;
 	private String filename;
 	
-	public static void CreateExplosion(GameModule game, int pieces, float pxl_x, float pxl_y, String _r) {
+	public static void createExplosion(GameModule game, int pieces, float pxl_x, float pxl_y, String _r) {
 		//game.act.sound_manager.playSound(R.raw.explosion1);
 		
 		Node parent_node = new Node("ExplosionParent");
-		game.root_node.attachChild(parent_node);
+		game.rootNode.attachChild(parent_node);
 		for (int i=0 ; i<pieces ; i++) {
 			MyPointF dir = new MyPointF(Functions.rndFloat(-1, 1), Functions.rndFloat(0, -1));
 			dir.normalizeLocal();
@@ -39,7 +39,7 @@ public final class Explosion extends GameObject {
 		filename = _r;
 		phys = new PhysicsEngine(_dir, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
 		//bmp = Statics.img_cache.getImage(r, Statics.ROCK_SIZE, Statics.ROCK_SIZE);
-		pxl_origin = _pxl_origin;
+		pxlOrigin = _pxl_origin;
 		
 		parent.attachChild(this);
 		this.game.addToProcess(this);
@@ -56,7 +56,7 @@ public final class Explosion extends GameObject {
 	
 	@Override
 	public void process(long interpol) {
-		float len = this.pxl_origin.subtract(this.getWorldCentre_CreatesNew()).length(); // todo - check physical pos
+		float len = this.pxlOrigin.subtract(this.getWorldCentre_CreatesNew()).length(); // todo - check physical pos
 		if (len > Statics.SCREEN_WIDTH) { // Are we off the screen?
 			this.remove();
 		} else {
@@ -75,7 +75,7 @@ public final class Explosion extends GameObject {
 			if (bmp[width] == null) {
 				bmp[width] = Statics.img_cache.getImage(filename, Statics.ROCK_SIZE * scale, Statics.ROCK_SIZE * scale); // Notice height and width are reversed since the dying enemy is on it's side
 			}
-			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
+			g.drawBitmap(bmp[width], (this.worldBounds.left) * scale - cam.left, (this.worldBounds.top) * scale - cam.top, paint);
 		}
 	}
 

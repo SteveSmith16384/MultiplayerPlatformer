@@ -11,7 +11,7 @@ import com.scs.multiplayerplatformer.Statics;
 public abstract class AbstractPleaseWaitModule extends SimpleAbstractModule implements IDisplayText, IProgressDisplay {
 
 	private Label label3;
-	private MultiLineLabel log_label;
+	private MultiLineLabel logLabel;
 	
 	private static Paint paint_large_text = new Paint();
 	private static Paint paint_normal_text = new Paint();
@@ -33,26 +33,26 @@ public abstract class AbstractPleaseWaitModule extends SimpleAbstractModule impl
 
 		Label l = new Label("Title", Statics.act.getString("please_wait"), 0, 0, null, paint_large_text, true);
 		l.setCentre(Statics.SCREEN_WIDTH/2, paint_large_text.getTextSize());
-		this.stat_node_front.attachChild(l);
+		this.statNodeFront.attachChild(l);
 		
-		log_label = new MultiLineLabel("display", "", null, paint_normal_text, true, Statics.SCREEN_WIDTH * 0.8f);
-		log_label.setLocation(Statics.SCREEN_WIDTH*0.1f, Statics.SCREEN_HEIGHT * 0.35f);
-		stat_node_front.attachChild(log_label);
+		logLabel = new MultiLineLabel("display", "", null, paint_normal_text, true, Statics.SCREEN_WIDTH * 0.8f);
+		logLabel.setLocation(Statics.SCREEN_WIDTH*0.1f, Statics.SCREEN_HEIGHT * 0.35f);
+		statNodeFront.attachChild(logLabel);
 		
 		label3 = new Label("progress", "", null, paint_normal_text);
 		label3.setCentre(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT * 0.9f);
-		stat_node_front.attachChild(label3);
+		statNodeFront.attachChild(label3);
 		
-		this.stat_node_front.updateGeometricState();
+		this.statNodeFront.updateGeometricState();
 
-		this.stat_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT/2, true);
+		this.statCam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT/2, true);
 
 	}
 
 
 	@Override
 	public void displayText(String s) {
-		log_label.appendText(s + "\n");
+		logLabel.appendText(s + "\n");
 	}
 
 

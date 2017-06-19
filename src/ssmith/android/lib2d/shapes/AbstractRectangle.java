@@ -29,7 +29,7 @@ public abstract class AbstractRectangle extends Geometry {
 		local_rect.right = x+w;
 		local_rect.bottom = y+h;
 
-		this.needs_updating = true;
+		this.needsUpdating = true;
 	}
 
 
@@ -39,33 +39,33 @@ public abstract class AbstractRectangle extends Geometry {
 		this.local_rect.right = ex;
 		this.local_rect.bottom = ey;
 
-		this.needs_updating = true;
+		this.needsUpdating = true;
 	}
 	
 	
 	public void updateGeometricState() {
 		super.refreshParentWorldCoordsFromParent();
 
-		world_bounds.top = Math.min(local_rect.top, local_rect.bottom) + parent_world_coords.y;
-		world_bounds.bottom = Math.max(local_rect.top,local_rect.bottom) + parent_world_coords.y;
+		worldBounds.top = Math.min(local_rect.top, local_rect.bottom) + parentWorldCoords.y;
+		worldBounds.bottom = Math.max(local_rect.top,local_rect.bottom) + parentWorldCoords.y;
 			
-		world_bounds.left = Math.min(local_rect.left, local_rect.right) + parent_world_coords.x;
-		world_bounds.right = Math.max(local_rect.left, local_rect.right) + parent_world_coords.x;
+		worldBounds.left = Math.min(local_rect.left, local_rect.right) + parentWorldCoords.x;
+		worldBounds.right = Math.max(local_rect.left, local_rect.right) + parentWorldCoords.x;
 
 		super.ensureWorldBoundsNotEmpty();
 		
-		this.needs_updating = false;
+		this.needsUpdating = false;
 	}
 	
 
 	@Override
 	public boolean intersects(Spatial s) {
 		if (s instanceof Node || s instanceof AbstractRectangle) {
-			return RectF.intersects(this.world_bounds, s.getWorldBounds());// GeometryFunctions2.is//GeometryFuncs.DoLineAndRectCross(this.getWorldBounds().left, this.getWorldBounds().top, this.getWorldBounds().right, this.getWorldBounds().bottom, s.getWorldBounds().left, s.getWorldBounds().top, s.getWorldBounds().right, s.getWorldBounds().bottom);
+			return RectF.intersects(this.worldBounds, s.getWorldBounds());// GeometryFunctions2.is//GeometryFuncs.DoLineAndRectCross(this.getWorldBounds().left, this.getWorldBounds().top, this.getWorldBounds().right, this.getWorldBounds().bottom, s.getWorldBounds().left, s.getWorldBounds().top, s.getWorldBounds().right, s.getWorldBounds().bottom);
 		} else if (s instanceof Line) {
 			Line l2 = (Line)s;
 			return GeometryFunctions2.isLineIntersectingRectangle(l2.getWorldBounds().left, l2.getWorldBounds().top, l2.getWorldBounds().right, l2.getWorldBounds().bottom, 
-					this.world_bounds.left, this.world_bounds.top, this.world_bounds.right, this.world_bounds.bottom);
+					this.worldBounds.left, this.worldBounds.top, this.worldBounds.right, this.worldBounds.bottom);
 		} else {
 			throw new RuntimeException("intersects() not imlemented in AbstractRectangle for '" + s + "' (or its subclasses)");
 		}
@@ -74,7 +74,7 @@ public abstract class AbstractRectangle extends Geometry {
 	
 	@Override
 	public boolean contains(float x, float y) {
-		return this.world_bounds.contains(x, y);
+		return this.worldBounds.contains(x, y);
 	}
 
 
@@ -99,7 +99,7 @@ public abstract class AbstractRectangle extends Geometry {
 		local_rect.right += (x - old_left);
 		local_rect.bottom += (y - old_top);		
 		
-		this.needs_updating = true;
+		this.needsUpdating = true;
 	}
 
 
@@ -114,7 +114,7 @@ public abstract class AbstractRectangle extends Geometry {
 		float old_left = this.local_rect.left;
 		local_rect.left = x;
 		local_rect.right += (x - old_left);
-		this.needs_updating = true;
+		this.needsUpdating = true;
 	}
 
 
@@ -132,7 +132,7 @@ public abstract class AbstractRectangle extends Geometry {
 		float old_top = this.local_rect.top;
 		local_rect.top = y;
 		local_rect.bottom += (y - old_top);
-		this.needs_updating = true;
+		this.needsUpdating = true;
 	}
 
 
@@ -141,7 +141,7 @@ public abstract class AbstractRectangle extends Geometry {
 		local_rect.right = local_rect.left + w;
 		local_rect.bottom = local_rect.top + h;
 
-		this.needs_updating = true;
+		this.needsUpdating = true;
 	}
 
 
@@ -168,12 +168,12 @@ public abstract class AbstractRectangle extends Geometry {
 
 
 	public float getWorldCentreX() {
-		return this.world_bounds.centerX();
+		return this.worldBounds.centerX();
 	}
 
 
 	public float getWorldCentreY() {
-		return this.world_bounds.centerY();
+		return this.worldBounds.centerY();
 	}
 
 

@@ -27,8 +27,8 @@ public final class MapLoader extends AbstractLevelData {
 	public static final int VERSION = 2;
 
 	private String stage = "", fullpath = "";
-	private boolean is_resource;
-	private int version_found = 1;
+	private boolean isResource;
+	private int versionFound = 1;
 	public String mapName = "";
 	private static ArrayList<String> prevMaps = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public final class MapLoader extends AbstractLevelData {
 		super();
 
 		fullpath = MAP_DIR + Statics.GAME_MODE.toString() + "/" + _filename;
-		is_resource = _is_resource;
+		isResource = _is_resource;
 		levelName = this.fullpath;
 	}
 
@@ -73,7 +73,7 @@ public final class MapLoader extends AbstractLevelData {
 	public void getMap() {
 		try {
 			List<String> text = new ArrayList<>();
-			if (is_resource) {
+			if (isResource) {
 				BufferedReader txtReader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/assets/maps/" + fullpath)));
 				while (true) {
 					String s = txtReader.readLine();
@@ -118,7 +118,7 @@ public final class MapLoader extends AbstractLevelData {
 
 					if (stage.equalsIgnoreCase(VERSION_TAG)) {
 						//if (version_found == 0) {
-							this.version_found = Integer.parseInt(cell);
+							this.versionFound = Integer.parseInt(cell);
 						//}
 					} else if (stage.equalsIgnoreCase(MAP_DATA_TAG)) {
 						String blocks[] = lines[row].split(",");
@@ -127,9 +127,9 @@ public final class MapLoader extends AbstractLevelData {
 						}
 						byte this_data[] = new byte[blocks.length];
 						for (int x=0 ; x<blocks.length ; x++) {
-							if (version_found == 1) {
+							if (versionFound == 1) {
 								this_data[x] = Byte.parseByte(blocks[x]);
-							} else if (version_found == 2) {
+							} else if (versionFound == 2) {
 								String pieces[] = blocks[x].split("\\|");
 								if (NumberFunctions.IsNumeric(pieces[0])) { // Std block
 									byte b = Byte.parseByte(pieces[0]);
@@ -146,7 +146,7 @@ public final class MapLoader extends AbstractLevelData {
 									}
 								}
 							} else {
-								throw new RuntimeException("Unknown file version: " + this.version_found);
+								throw new RuntimeException("Unknown file version: " + this.versionFound);
 							}
 							if (this_data[x] == Block.START_POSITION) {
 								super.setStartPos(x, map_row);

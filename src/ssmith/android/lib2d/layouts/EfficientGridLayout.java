@@ -11,7 +11,7 @@ import ssmith.android.lib2d.shapes.AbstractRectangle;
 
 public class EfficientGridLayout extends AbstractRectangle {
 
-	public static int objects_being_drawn;
+	public static int numObjectsBeingDrawn;
 
 	private static Paint default_paint = new Paint();
 
@@ -123,7 +123,7 @@ public class EfficientGridLayout extends AbstractRectangle {
 		int s_x = (int)(cam.left / tile_size);
 		int s_y = (int)(cam.top / tile_size);
 
-		objects_being_drawn = 0;
+		numObjectsBeingDrawn = 0;
 
 		for (int y=s_y ; y<=s_y + draw_height+1 ; y++) {
 			if (y >= 0 && y < blocks[0].length) {
@@ -133,7 +133,7 @@ public class EfficientGridLayout extends AbstractRectangle {
 							if (blocks[x][y] != null) {
 								AbstractRectangle block = blocks[x][y];
 								block.doDraw(g, cam, interpol); // block.bmp.getWidth()
-								objects_being_drawn++;
+								numObjectsBeingDrawn++;
 							}
 						} catch (ArrayIndexOutOfBoundsException ex) {
 							//AbstractActivity.HandleError(null, ex);

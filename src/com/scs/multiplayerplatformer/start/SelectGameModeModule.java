@@ -21,7 +21,7 @@ public final class SelectGameModeModule extends AbstractOptionsModule2 {
 	static {
 		paint_text.setARGB(255, 255, 255, 255);
 		paint_text.setAntiAlias(true);
-		paint_text.setTextSize(GUIFunctions.GetTextSizeToFit("CONS TRU TION XXXX", ICON_WIDTH));
+		paint_text.setTextSize(GUIFunctions.getTextSizeToFit("CONS TRU TION XXXX", ICON_WIDTH));
 
 	}
 

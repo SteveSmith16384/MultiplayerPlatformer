@@ -32,8 +32,8 @@ public class EnemyEventTimer extends Timer implements IProcessable {
 	}
 
 
-	public static void GenerateRandomMonster(GameModule game, Block gen) {
-		EnemyNinjaEasy.Factory(game, gen);
+	public static void generateRandomMonster(GameModule game, Block gen) {
+		EnemyNinjaEasy.factory(game, gen);
 	}
 
 }

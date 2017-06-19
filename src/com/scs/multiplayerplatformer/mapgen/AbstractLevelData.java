@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public abstract class AbstractLevelData {
 
 	public byte[][] data;
-	protected Point start_pos;
+	protected Point startPos;
 	//public HashMap<Byte, Integer> block_inv;
 	public ArrayList<SimpleMobData> mobs = new ArrayList<SimpleMobData>();
 	//public volatile int row, max_rows; // To track progress
@@ -27,15 +27,15 @@ public abstract class AbstractLevelData {
 
 
 	public Point getStartPos() {
-		if (start_pos == null) {
+		if (startPos == null) {
 			throw new NullPointerException("No start position defined");
 		}
-		return this.start_pos;
+		return this.startPos;
 	}
 	
 	
 	public void setStartPos(int map_x, int map_y) {
-		start_pos = new Point(map_x, map_y);
+		startPos = new Point(map_x, map_y);
 	}
 
 

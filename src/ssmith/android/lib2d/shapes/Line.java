@@ -14,7 +14,7 @@ import ssmith.lang.Maths;
 
 public class Line extends Geometry {
 	
-	public MyPointF local_start, local_end;
+	public MyPointF localStart, localEnd;
 
 
 	public Line(String name, Paint paint) {
@@ -45,39 +45,39 @@ public class Line extends Geometry {
 	
 	
 	public void scale(float f) {
-		local_start.x = local_start.x * f;
-		local_start.y = local_start.y * f;
-		local_end.x = local_end.x * f;
-		local_end.y = local_end.y * f;
+		localStart.x = localStart.x * f;
+		localStart.y = localStart.y * f;
+		localEnd.x = localEnd.x * f;
+		localEnd.y = localEnd.y * f;
 	}
 	
 	
 	public MyPointF getVector() {
-		return this.local_end.subtract(this.local_start);
+		return this.localEnd.subtract(this.localStart);
 	}
 	
 	
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
 		if (this.visible) {
-			g.drawLine(parent_world_coords.x + this.local_start.x - cam.left, parent_world_coords.y + this.local_start.y - cam.top, parent_world_coords.x + this.local_end.x - cam.left, parent_world_coords.y + this.local_end.y - cam.top, paint);
+			g.drawLine(parentWorldCoords.x + this.localStart.x - cam.left, parentWorldCoords.y + this.localStart.y - cam.top, parentWorldCoords.x + this.localEnd.x - cam.left, parentWorldCoords.y + this.localEnd.y - cam.top, paint);
 		}
 	}
 
 
 	public float getLength() {
-		return GeometryFuncs.distance(this.local_start.x, this.local_start.y, this.local_end.x, this.local_end.y);
+		return GeometryFuncs.distance(this.localStart.x, this.localStart.y, this.localEnd.x, this.localEnd.y);
 	}
 	
 	
 	@Override
 	public boolean intersects(Spatial s) {
 		if (s instanceof Node || s instanceof AbstractRectangle) {
-			return GeometryFunctions2.isLineIntersectingRectangle(parent_world_coords.x + this.local_start.x, parent_world_coords.y + this.local_start.y, parent_world_coords.x + this.local_end.x, parent_world_coords.y + this.local_end.y, 
+			return GeometryFunctions2.isLineIntersectingRectangle(parentWorldCoords.x + this.localStart.x, parentWorldCoords.y + this.localStart.y, parentWorldCoords.x + this.localEnd.x, parentWorldCoords.y + this.localEnd.y, 
 					s.getWorldBounds().left, s.getWorldBounds().top, s.getWorldBounds().right, s.getWorldBounds().bottom); 
 		} else if (s instanceof Line) {
 			Line l2 = (Line)s;
-			return GeometryFuncs.GetLineIntersection(parent_world_coords.x + this.local_start.x, parent_world_coords.y + this.local_start.y, parent_world_coords.x + this.local_end.x, parent_world_coords.y + this.local_end.y, l2.parent_world_coords.x + l2.local_start.x, l2.parent_world_coords.y + l2.local_start.y, l2.parent_world_coords.x + l2.local_end.x, l2.parent_world_coords.y + l2.local_end.y) != null;
+			return GeometryFuncs.GetLineIntersection(parentWorldCoords.x + this.localStart.x, parentWorldCoords.y + this.localStart.y, parentWorldCoords.x + this.localEnd.x, parentWorldCoords.y + this.localEnd.y, l2.parentWorldCoords.x + l2.localStart.x, l2.parentWorldCoords.y + l2.localStart.y, l2.parentWorldCoords.x + l2.localEnd.x, l2.parentWorldCoords.y + l2.localEnd.y) != null;
 		} else {
 			throw new RuntimeException("intersects() not imlemented in Line for " + s);
 		}
@@ -86,20 +86,20 @@ public class Line extends Geometry {
 
 	@Override
 	public float getHeight() {
-		return Maths.mod(this.local_start.y - this.local_end.y);
+		return Maths.mod(this.localStart.y - this.localEnd.y);
 	}
 
 
 	@Override
 	public float getWidth() {
-		return Maths.mod(this.local_start.x - this.local_end.x);
+		return Maths.mod(this.localStart.x - this.localEnd.x);
 	}
 
 
 	@Override
 	public void setLocation(float x, float y) {
-		float off_x = x - this.local_start.x;
-		float off_y = y - this.local_start.y;
+		float off_x = x - this.localStart.x;
+		float off_y = y - this.localStart.y;
 		/*this.local_start.x = x;
 		this.local_start.y = y;
 		this.local_end.x = this.local_end.x + off_x;
@@ -109,24 +109,24 @@ public class Line extends Geometry {
 
 
 	public void moveBy(float x, float y) {
-		this.local_start.x = this.local_start.x + x;
-		this.local_start.y = this.local_start.y + y;
-		this.local_end.x = this.local_end.x + x;
-		this.local_end.y = this.local_end.y + y;
+		this.localStart.x = this.localStart.x + x;
+		this.localStart.y = this.localStart.y + y;
+		this.localEnd.x = this.localEnd.x + x;
+		this.localEnd.y = this.localEnd.y + y;
 	}
 
 
 	public void setXYXY(float x1, float y1, float x2, float y2) {
-		this.local_start.x = x1;
-		this.local_start.y = y1;
-		this.local_end.x = x2;
-		this.local_end.y = y2;
+		this.localStart.x = x1;
+		this.localStart.y = y1;
+		this.localEnd.x = x2;
+		this.localEnd.y = y2;
 	}
 
 
 	public void setX2Y2(float x, float y) {
-		this.local_end.x = x;
-		this.local_end.y = y;
+		this.localEnd.x = x;
+		this.localEnd.y = y;
 	}
 
 
@@ -140,25 +140,25 @@ public class Line extends Geometry {
 	public void updateGeometricState() {
 		super.refreshParentWorldCoordsFromParent();
 
-		world_bounds.top = Math.min(this.local_start.y, this.local_end.y) + parent_world_coords.y;
-		world_bounds.bottom = Math.max(this.local_start.y, this.local_end.y) + parent_world_coords.y;
+		worldBounds.top = Math.min(this.localStart.y, this.localEnd.y) + parentWorldCoords.y;
+		worldBounds.bottom = Math.max(this.localStart.y, this.localEnd.y) + parentWorldCoords.y;
 
-		world_bounds.left = Math.min(this.local_start.x, this.local_end.x) + parent_world_coords.x;
-		world_bounds.right = Math.max(this.local_start.x, this.local_end.x) + parent_world_coords.x;
+		worldBounds.left = Math.min(this.localStart.x, this.localEnd.x) + parentWorldCoords.x;
+		worldBounds.right = Math.max(this.localStart.x, this.localEnd.x) + parentWorldCoords.x;
 
 		super.ensureWorldBoundsNotEmpty();
 
-		needs_updating = false;
+		needsUpdating = false;
 	}
 
 
 	public PointF getStart() {
-		return new PointF(parent_world_coords.x + this.local_start.x, parent_world_coords.y + this.local_start.y);
+		return new PointF(parentWorldCoords.x + this.localStart.x, parentWorldCoords.y + this.localStart.y);
 	}
 
 	
 	public MyPointF getEndpoint() {
-		return new MyPointF(parent_world_coords.x + this.local_end.x, parent_world_coords.y + this.local_end.y);
+		return new MyPointF(parentWorldCoords.x + this.localEnd.x, parentWorldCoords.y + this.localEnd.y);
 	}
 
 

@@ -18,11 +18,15 @@ Press fire to join the game!  This game can handle as many players as you have c
 GAME MODES
 Normal - Players get points for being the first to get to the end of the level.
 Race to the Death - The camera view follows the right-most player.  Any players that are caught by the edge of the screen are elimiated.  The last player standing is the winner.
-Testing - Maps that are still being developed
+Testing - Maps that are still being developed or too rubbish to be used.
 
 
 CREATING MAPS
-You can easily create your own maps.  Take a look in the maps directory for examples.  The maps need to be saved in CSV format, but there are plenty of examples created using Open Office which can then be saved as a CSV.  Any csv files found in the "maps" directory will be selectable.  Please email my any good maps you create for inclusion in the next release!
+You can easily create your own maps.  Take a look in the maps directory for examples.  The maps need to be saved in CSV format, but there are plenty of examples created using Open Office which can then be saved as a CSV.  Any csv files found in the relevant "maps" directory will be selectable.  Please email my any good maps you create for inclusion in the next release!
+
+
+LICENCE
+All assets and code are licenced under MIT.
 
 
 CREDITS

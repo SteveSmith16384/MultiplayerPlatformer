@@ -74,8 +74,8 @@ public class Block extends GameObject {
 	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH]; // Bmp for each size
 	private BufferedImage bmp2[] = new BufferedImage[Statics.MAX_BMP_WIDTH];  // Bmp for each size
 	private byte health = 1;
-	private int map_x, map_y;
-	private long event_time = System.currentTimeMillis() + 10000; // So they don't start straight away
+	private int mapX, mapY;
+	private long eventTime = System.currentTimeMillis() + 10000; // So they don't start straight away
 
 	public Block(GameModule _game, byte _type, int _map_x, int _map_y) {
 		super(_game, "Block", true, 0, 0, Statics.SQ_SIZE, Statics.SQ_SIZE);
@@ -88,8 +88,8 @@ public class Block extends GameObject {
 		}*/
 
 		type =_type;
-		map_x = _map_x;
-		map_y = _map_y;
+		mapX = _map_x;
+		mapY = _map_y;
 	}
 
 
@@ -355,7 +355,7 @@ public class Block extends GameObject {
 			break;
 
 		case Block.CHECKPOINT:
-			player.checkpoint_map = new Point(this.map_x, this.map_y);
+			player.checkpoint_map = new Point(this.mapX, this.mapY);
 			game.showToast("CHECKPOINT!");
 			break;
 
@@ -584,8 +584,8 @@ public class Block extends GameObject {
 		AbstractActivity act = Statics.act;
 
 		this.health -= amt;
-		act.sound_manager.blockCrumbled();//.playSound("crumbling");
-		Explosion.CreateExplosion(game, 1, this.getWorldCentreX(), this.getWorldCentreY(), "thrown_rock");
+		act.soundManager.blockCrumbled();//.playSound("crumbling");
+		Explosion.createExplosion(game, 1, this.getWorldCentreX(), this.getWorldCentreY(), "thrown_rock");
 
 		if (this.health <= 0) {
 			this.destroy(1, give_to_player, player);
@@ -595,7 +595,7 @@ public class Block extends GameObject {
 
 	public void destroy(int explode_pieces, boolean give_to_player, PlayersAvatar player) {
 		if (explode_pieces > 0) {
-			Explosion.CreateExplosion(game, explode_pieces, this.getWorldCentreX(), this.getWorldCentreY(), "thrown_rock");
+			Explosion.createExplosion(game, explode_pieces, this.getWorldCentreX(), this.getWorldCentreY(), "thrown_rock");
 		}
 		if (give_to_player) {
 			if (Block.AddToInv(this.getType())) {
@@ -621,17 +621,17 @@ public class Block extends GameObject {
 			int i = Functions.rnd(1, 4);
 			switch (i) {
 			case 1:
-				this.game.addBlock(Block.ACORN, this.map_x, this.map_y, true);
+				this.game.addBlock(Block.ACORN, this.mapX, this.mapY, true);
 				break;
 			case 2:
-				this.game.addBlock(Block.FLINT, this.map_x, this.map_y, true);
+				this.game.addBlock(Block.FLINT, this.mapX, this.mapY, true);
 				break;
 			case 3:
-				this.game.addBlock(Block.GOLD, this.map_x, this.map_y, true);
+				this.game.addBlock(Block.GOLD, this.mapX, this.mapY, true);
 				break;
 			}
 		} else {
-			this.game.addBlock(Block.NOTHING_DAYLIGHT, this.map_x, this.map_y, true);
+			this.game.addBlock(Block.NOTHING_DAYLIGHT, this.mapX, this.mapY, true);
 		}
 		this.game.removeFromProcess(this);
 		/*if (this.getType() != Block.NOTHING_DAYLIGHT) {
@@ -703,20 +703,20 @@ public class Block extends GameObject {
 			break;
 		case MONSTER_GENERATOR:
 			remove_from_process = false;
-			if (this.event_time < System.currentTimeMillis()) {
-				this.event_time = System.currentTimeMillis() + MOB_GEN_DURATION;
+			if (this.eventTime < System.currentTimeMillis()) {
+				this.eventTime = System.currentTimeMillis() + MOB_GEN_DURATION;
 				if (this.getDistanceToClosestPlayer(null) <= Statics.ACTIVATE_DIST) {
-					EnemyEventTimer.GenerateRandomMonster(game, this);
+					EnemyEventTimer.generateRandomMonster(game, this);
 				}
 			}
 			break;
 		case SLIME:
 			remove_from_process = false;
-			if (this.event_time < System.currentTimeMillis()) {
-				this.event_time = System.currentTimeMillis() + SLIME_DURATION;
+			if (this.eventTime < System.currentTimeMillis()) {
+				this.eventTime = System.currentTimeMillis() + SLIME_DURATION;
 				if (Functions.rnd(1, 2) == 1) {
 					if (this.getDistanceToClosestPlayer(null) <= Statics.ACTIVATE_DIST) {
-						act.sound_manager.slime();
+						act.soundManager.slime();
 						new ThrownItem(game, Block.SLIME_SPURT, new MyPointF(this.getWorldCentreX(), this.getWorldY()), new MyPointF(Functions.rndFloat(-.5f, .5f), -1), null, 10, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.SLIME_SIZE, false);
 					}
 				}
@@ -750,20 +750,20 @@ public class Block extends GameObject {
 
 	private boolean checkAndChangeAdjacentSquares(int off_x, int off_y, byte[] from, byte to, boolean check_for_sprites) {
 		for(int i=0 ;i<from.length ; i++) {
-			Block b = (Block)this.game.blockGrid.getBlockAtMap_MaybeNull(this.map_x+off_x, this.map_y+off_y);
+			Block b = (Block)this.game.blockGrid.getBlockAtMap_MaybeNull(this.mapX+off_x, this.mapY+off_y);
 			if (b != null) {
 				if (b.getType() == from[i]) {
 					// Check area is clear
-					if (check_for_sprites == false || game.isAreaClear((map_x+off_x)*Statics.SQ_SIZE, (map_y+off_y)*Statics.SQ_SIZE, Statics.SQ_SIZE, Statics.SQ_SIZE, false)) {
-						game.addBlock(to, map_x+off_x, map_y+off_y, true);
+					if (check_for_sprites == false || game.isAreaClear((mapX+off_x)*Statics.SQ_SIZE, (mapY+off_y)*Statics.SQ_SIZE, Statics.SQ_SIZE, Statics.SQ_SIZE, false)) {
+						game.addBlock(to, mapX+off_x, mapY+off_y, true);
 						return true;
 					}
 					break;
 				}
 			} else if (from[i] == NOTHING_DAYLIGHT) {
 				// Check area is clear
-				if (check_for_sprites == false || game.isAreaClear((map_x+off_x)*Statics.SQ_SIZE, (map_y+off_y)*Statics.SQ_SIZE, Statics.SQ_SIZE, Statics.SQ_SIZE, false)) {
-					game.addBlock(to, map_x+off_x, map_y+off_y, true);
+				if (check_for_sprites == false || game.isAreaClear((mapX+off_x)*Statics.SQ_SIZE, (mapY+off_y)*Statics.SQ_SIZE, Statics.SQ_SIZE, Statics.SQ_SIZE, false)) {
+					game.addBlock(to, mapX+off_x, mapY+off_y, true);
 					return true;
 				}
 				break;
@@ -779,12 +779,12 @@ public class Block extends GameObject {
 
 
 	public int getMapX() {
-		return this.map_x;
+		return this.mapX;
 	}
 
 
 	public int getMapY() {
-		return this.map_y;
+		return this.mapY;
 	}
 
 
@@ -804,11 +804,11 @@ public class Block extends GameObject {
 			// If they have an alt image, choose one randomly
 			if (bmp2[width] != null) {
 				if (Functions.rnd(1, 2) == 2) {
-					g.drawBitmap(bmp2[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
+					g.drawBitmap(bmp2[width], (this.worldBounds.left) * scale - cam.left, (this.worldBounds.top) * scale - cam.top, paint);
 					return;
 				}
 			}
-			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
+			g.drawBitmap(bmp[width], (this.worldBounds.left) * scale - cam.left, (this.worldBounds.top) * scale - cam.top, paint);
 		}
 
 	}

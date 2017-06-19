@@ -8,7 +8,7 @@ import ssmith.android.lib2d.Spatial;
 public class BigGridLayout extends Node {
 
 	private float spacing, comp_width, comp_height;
-	private int subnode_size;
+	private int subnodeSize;
 	private Hashtable<String,Node> subnodes = new Hashtable<String,Node>();
 
 	public BigGridLayout(String name, float comp_w, float comp_h, float space, int _subnode_size) {
@@ -17,7 +17,7 @@ public class BigGridLayout extends Node {
 		spacing = space;
 		comp_width = comp_w;
 		comp_height = comp_h;
-		subnode_size = _subnode_size;
+		subnodeSize = _subnode_size;
 		
 	}
 
@@ -29,8 +29,8 @@ public class BigGridLayout extends Node {
 
 	
 	protected GridLayout getSubNode(int x, int y) {
-		x = x/subnode_size;
-		y = y/subnode_size;
+		x = x/subnodeSize;
+		y = y/subnodeSize;
 		String s = "|" + x + "," + y + "|";
 		while (subnodes.containsKey(s) == false) {
 			GridLayout n = new GridLayout("MapNode_" + x + "_" + y, this.comp_width, this.comp_height, this.spacing);

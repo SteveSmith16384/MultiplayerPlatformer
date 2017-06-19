@@ -26,13 +26,13 @@ public abstract class AbstractMob extends GameObject {
 	public static final byte WASP = 9;
 	public static final byte PLATFORM1 = 11;
 
-	protected byte current_item = GameModule.HAND;
+	protected byte currentItem = GameModule.HAND;
 	//private boolean remove_if_far_away;
 	private boolean destroy_blocks;
-	protected RectF tmp_rect = new RectF();
+	protected RectF tmpRect = new RectF();
 	public byte side;
-	private int hold_breath_time = MAX_HOLD_BREATH_TIME;
-	public boolean is_on_ice = false;
+	private int holdBreathTime = MAX_HOLD_BREATH_TIME;
+	public boolean isOnIce = false;
 	private Interval bubble_int = new Interval(1000, false);
 	public long frozenUntil = 0;
 
@@ -44,19 +44,19 @@ public abstract class AbstractMob extends GameObject {
 		side = _side;
 
 		game.addToProcess(this);
-		game.root_node.attachChild(this);
+		game.rootNode.attachChild(this);
 
 		this.updateGeometricState();
 	}
 
 
-	public static void CreateMob(GameModule game, SimpleMobData sm) {
+	public static void createMob(GameModule game, SimpleMobData sm) {
 		switch (sm.getType()) {
 		case AbstractMob.ENEMY_NINJA_EASY:
-			EnemyNinjaEasy.Subfactory(game, sm.pixel_x, sm.pixel_y);
+			EnemyNinjaEasy.Subfactory(game, sm.pixelX, sm.pixelY);
 			break;
 		case AbstractMob.WASP:
-			Wasp.Subfactory(game, sm.pixel_x, sm.pixel_y);
+			Wasp.Subfactory(game, sm.pixelX, sm.pixelY);
 			break;
 		case AbstractMob.PLATFORM1:
 			//new PlatformMob(game, sm.pixel_x, sm.pixel_y, Statics.SQ_SIZE, Statics.SQ_SIZE, R.drawable.grass, 1, 0, Statics.SQ_SIZE * 4);
@@ -102,7 +102,7 @@ public abstract class AbstractMob extends GameObject {
 		this.adjustLocation(off_x, off_y);
 		this.updateGeometricState();
 
-		is_on_ice = false;
+		isOnIce = false;
 
 		ArrayList<AbstractRectangle> colls = game.blockGrid.getColliders(this.getWorldBounds());
 
@@ -126,7 +126,7 @@ public abstract class AbstractMob extends GameObject {
 				}
 				hitBlockCheck(b, off_x, off_y);
 				if (blocked) {
-					this.is_on_ice = (b.getType() == Block.SNOW);
+					this.isOnIce = (b.getType() == Block.SNOW);
 
 					// Move us up to the object we hit
 					if (off_x < 0) {
@@ -154,7 +154,7 @@ public abstract class AbstractMob extends GameObject {
 		}
 
 		// Check for collisons with sprites
-		ArrayList<Geometry> colls2 = this.getColliders(this.game.root_node);
+		ArrayList<Geometry> colls2 = this.getColliders(this.game.rootNode);
 		for (Geometry g : colls2) {
 			if (this.collidedWith(g, prev_x, prev_y) == false) {
 				return false;
@@ -211,17 +211,17 @@ public abstract class AbstractMob extends GameObject {
 					new AirBubble(game, this);
 				}
 				// Suffocation
-				this.hold_breath_time--;
-				if (this.hold_breath_time < 0) {
+				this.holdBreathTime--;
+				if (this.holdBreathTime < 0) {
 					this.died();
-					this.hold_breath_time = 0;
+					this.holdBreathTime = 0;
 				}
 				return;
 			}
 		}
-		this.hold_breath_time++;
-		if (this.hold_breath_time > MAX_HOLD_BREATH_TIME) {
-			this.hold_breath_time = MAX_HOLD_BREATH_TIME;
+		this.holdBreathTime++;
+		if (this.holdBreathTime > MAX_HOLD_BREATH_TIME) {
+			this.holdBreathTime = MAX_HOLD_BREATH_TIME;
 		}
 	}
 
@@ -244,22 +244,22 @@ public abstract class AbstractMob extends GameObject {
 
 
 	public boolean hasBlockSelected() {
-		return this.current_item > 0;
+		return this.currentItem > 0;
 	}
 
 
 	public byte getCurrentItemType() {
-		return this.current_item;
+		return this.currentItem;
 	}
 
 
 	public void setItemType(byte t) {
-		this.current_item = t;
+		this.currentItem = t;
 	}
 
 
 	public void removeItem() {
-		this.current_item = 0;
+		this.currentItem = 0;
 	}
 
 }

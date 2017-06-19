@@ -12,11 +12,10 @@ public class Camera extends RectF {
 	//private static final float MOVE_SPEED = .1f;
 	private static final float LOCKON_DIST = 20; // Was 10
 
-	public int zoom = 1;
-	private PointF target_point = new PointF(); // Where we're aiming at
-	private boolean lock_to_target; // if false, camera slides to the target
+	private PointF targetPoint = new PointF(); // Where we're aiming at
+	private boolean lockToTarget; // if false, camera slides to the target
 	private boolean moving = false; // If not locked, are we actually moving?
-	private PointF actual_point = new PointF(); // What we're currently looking at
+	private PointF actualPoint = new PointF(); // What we're currently looking at
 
 	public Camera() {
 		super();
@@ -24,15 +23,15 @@ public class Camera extends RectF {
 
 	
 	public PointF getActualCentre() {
-		return this.actual_point;
+		return this.actualPoint;
 	}
 	
 
 	public void moveCam(float offx, float offy) {
-		this.actual_point.x += offx;
-		this.actual_point.y += offy;
+		this.actualPoint.x += offx;
+		this.actualPoint.y += offy;
 
-		lock_to_target = true;
+		lockToTarget = true;
 
 		this.updateWindow();
 	}
@@ -44,15 +43,15 @@ public class Camera extends RectF {
 	
 	
 	public void lookAt(float x, float y, boolean lock) {
-		lock_to_target = lock;
+		lockToTarget = lock;
 		if (lock) {
-			actual_point.x = x;
-			actual_point.y = y;
+			actualPoint.x = x;
+			actualPoint.y = y;
 			moving = false;
 			this.updateWindow();
 		} else {
-			target_point.x = x;
-			target_point.y = y;
+			targetPoint.x = x;
+			targetPoint.y = y;
 			moving = true;
 		}
 	}
@@ -67,16 +66,16 @@ public class Camera extends RectF {
 		if (this.right - this.left <= 0) {
 			//throw new Exception("Camera not looking at anything!");
 		}
-		if (lock_to_target == false) {
+		if (lockToTarget == false) {
 			if (moving) {
-				float dist = (float)GeometryFuncs.distance(actual_point.x, actual_point.y, target_point.x, target_point.y);
+				float dist = (float)GeometryFuncs.distance(actualPoint.x, actualPoint.y, targetPoint.x, targetPoint.y);
 				if (dist <= LOCKON_DIST) {
-					lookAt(target_point.x, target_point.y, true);
+					lookAt(targetPoint.x, targetPoint.y, true);
 				} else {
 					float off_x = 0;//Math.wrong(target_point.x - actual_point.x) * MOVE_SPEED * interpol;//  * dist;
 					float off_y = 0;//Math.wrong(target_point.y - actual_point.y) * MOVE_SPEED * interpol;//   * dist;
-					actual_point.x += off_x;//(target_point.x + actual_point.x)/2;
-					actual_point.y += off_y;//= (target_point.y + actual_point.y)/2;
+					actualPoint.x += off_x;//(target_point.x + actual_point.x)/2;
+					actualPoint.y += off_y;//= (target_point.y + actual_point.y)/2;
 					this.updateWindow();
 				}
 			}
@@ -85,10 +84,10 @@ public class Camera extends RectF {
 	
 	
 	private void updateWindow() {
-		this.left = actual_point.x - ((Statics.SCREEN_WIDTH/2) / this.zoom);
-		this.top = actual_point.y - ((Statics.SCREEN_HEIGHT/2) / this.zoom);
-		this.right = actual_point.x + ((Statics.SCREEN_WIDTH/2) / this.zoom);
-		this.bottom = actual_point.y + ((Statics.SCREEN_HEIGHT/2) / this.zoom);
+		this.left = actualPoint.x - ((Statics.SCREEN_WIDTH/2));
+		this.top = actualPoint.y - ((Statics.SCREEN_HEIGHT/2));
+		this.right = actualPoint.x + ((Statics.SCREEN_WIDTH/2));
+		this.bottom = actualPoint.y + ((Statics.SCREEN_HEIGHT/2));
 	}
 	
 }

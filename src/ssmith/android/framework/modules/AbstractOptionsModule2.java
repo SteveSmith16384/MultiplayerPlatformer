@@ -31,14 +31,14 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 	}
 
 	private ArrayList<String> al_button_texts, al_action_cmd_texts;
-	private PointF last_down_screen = new PointF();
-	private boolean is_dragging = false;
+	private PointF lastDownDcreen = new PointF();
+	private boolean isDragging = false;
 	private int cols;
 	private BufferedImage bmp;
 	private Paint paint_ink;
-	private boolean can_drag, auto_select, trunc_names;
+	private boolean canDrag, autoSelect, truncNames;
 	protected int show; // -1, 0 or 1
-	protected Label lbl_title;
+	protected Label lblTitle;
 
 	public AbstractOptionsModule2(int _cols, Paint _paint_ink, BufferedImage _bmp, int _show, boolean _auto_select, String title, boolean _trunc_names) {
 		super();
@@ -47,24 +47,24 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 		paint_ink = _paint_ink;
 		bmp = _bmp;
 		show = _show;
-		auto_select = _auto_select;
-		trunc_names = _trunc_names;
+		autoSelect = _auto_select;
+		truncNames = _trunc_names;
 		
-		lbl_title = new Label("title", "", null, paint_free_text, false);
-		lbl_title.setLocation(Statics.SCREEN_WIDTH * 0.05f, Statics.SCREEN_HEIGHT * 0.05f);
-		lbl_title.updateGeometricState();
-		this.stat_node_front.attachChild(lbl_title);
-		this.stat_node_front.updateGeometricState();
+		lblTitle = new Label("title", "", null, paint_free_text, false);
+		lblTitle.setLocation(Statics.SCREEN_WIDTH * 0.05f, Statics.SCREEN_HEIGHT * 0.05f);
+		lblTitle.updateGeometricState();
+		this.statNodeFront.attachChild(lblTitle);
+		this.statNodeFront.updateGeometricState();
 		
 		this.setTitle(title);
 		
-		this.stat_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT/2, true);
+		this.statCam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT/2, true);
 	}
 
 
 	protected void setTitle(String title) {
-		paint_free_text.setTextSize(GUIFunctions.GetTextSizeToFit(title, Statics.SCREEN_WIDTH * 0.75f));
-		lbl_title.setText(title);
+		paint_free_text.setTextSize(GUIFunctions.getTextSizeToFit(title, Statics.SCREEN_WIDTH * 0.75f));
+		lblTitle.setText(title);
 	}
 	
 	
@@ -78,7 +78,7 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 		al_button_texts = new ArrayList<String>();
 		al_action_cmd_texts = new ArrayList<String>();
 		getOptions();
-		this.root_node.removeAllChildren();
+		this.rootNode.removeAllChildren();
 		if (al_button_texts.size() > 0) {
 			int curr_col = 1;
 			int curr_row = 1;
@@ -107,14 +107,14 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 			if (longest.length() > 40) {
 				longest = longest.substring(0, 39); // Max!
 			}
-			paint_ink.setTextSize(GUIFunctions.GetTextSizeToFit(longest, bmp.getWidth() * 0.9f));
+			paint_ink.setTextSize(GUIFunctions.getTextSizeToFit(longest, bmp.getWidth() * 0.9f));
 
 			// Loop through children and reposition text now that the text size has changed
 			for (Spatial g : menu_node.getChildren()) {
 				if (g instanceof Button) {
 					Button b = (Button)g;
 					b.calcTextOffset();
-					if (this.trunc_names) {
+					if (this.truncNames) {
 						String s = b.getText();
 						while (paint_ink.measureText(s) >= b.getWidth() * 0.95f) {
 							int middle = s.length() / 2;
@@ -126,22 +126,22 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 				}
 			}
 
-			this.root_node.attachChild(menu_node);
-			root_node.updateGeometricState();
+			this.rootNode.attachChild(menu_node);
+			rootNode.updateGeometricState();
 
-			can_drag = menu_node.getHeight() > Statics.SCREEN_HEIGHT;
-			if (can_drag) {
+			canDrag = menu_node.getHeight() > Statics.SCREEN_HEIGHT;
+			if (canDrag) {
 				if (show == 1) {
-					root_cam.lookAt(menu_node.getWorldCentreX(), menu_node.getHeight(), true);
+					rootCam.lookAt(menu_node.getWorldCentreX(), menu_node.getHeight(), true);
 				} else if (show == -1) {
-					root_cam.lookAt(menu_node.getWorldCentreX(), menu_node.getWorldY() + (Statics.SCREEN_HEIGHT/2), true);
+					rootCam.lookAt(menu_node.getWorldCentreX(), menu_node.getWorldY() + (Statics.SCREEN_HEIGHT/2), true);
 				} else if (show == 0) {
-					root_cam.lookAt(menu_node, true);
+					rootCam.lookAt(menu_node, true);
 				} else {
 					// Do nothing - we might be returning and want to view where we were before
 				}
 			} else {
-				root_cam.lookAt(menu_node, true);
+				rootCam.lookAt(menu_node, true);
 			}
 
 			show = 999; // stop us moving next time
@@ -153,14 +153,14 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 	@Override
 	public boolean processEvent(MyEvent ev) throws Exception {
 		if (ev.getAction() == MotionEvent.ACTION_UP) { // Note we only catch UP so we don't select two options at the same time!
-			last_down_screen.y = ev.getY();
+			lastDownDcreen.y = ev.getY();
 
-			if (is_dragging == false) { // Check for an icon pressed
+			if (isDragging == false) { // Check for an icon pressed
 				// Adjust for camera location
-				float x = ev.getX() + root_cam.left;
-				float y = ev.getY() + this.root_cam.top;
+				float x = ev.getX() + rootCam.left;
+				float y = ev.getY() + this.rootCam.top;
 
-				ArrayList<Geometry> colls = this.root_node.getCollidersAt(x, y);
+				ArrayList<Geometry> colls = this.rootNode.getCollidersAt(x, y);
 				if (colls.size() > 0) {
 					for (Geometry g : colls) {
 						if (g instanceof AbstractComponent) {
@@ -174,27 +174,27 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 					}
 				}
 			} 
-			is_dragging = false;
+			isDragging = false;
 		} else if (ev.getAction() == MotionEvent.ACTION_MOVE) { // Dragging!
-			float offy = last_down_screen.y - ev.getY();
+			float offy = lastDownDcreen.y - ev.getY();
 			//AbstractActivity.Log("Dragging (" + offy + ")");
 			double dist = GeometryFuncs.distance(0, 0, 0, offy);
-			if (dist > MIN_DRAG_DIST || is_dragging) {// && dist < MAX_DRAG_DIST) {
-				if (can_drag) {
-					this.root_cam.moveCam(0, offy);
-					if (this.root_node.getHeight() > Statics.SCREEN_HEIGHT) {
-						if (this.root_cam.top < this.root_node.getWorldY()) {
-							this.root_cam.moveCam(0, this.root_node.getWorldY() - this.root_cam.top);
-						} else if (this.root_cam.bottom > this.root_node.getWorldBounds().bottom) {
-							this.root_cam.moveCam(0, this.root_node.getWorldBounds().bottom - this.root_cam.bottom);
+			if (dist > MIN_DRAG_DIST || isDragging) {// && dist < MAX_DRAG_DIST) {
+				if (canDrag) {
+					this.rootCam.moveCam(0, offy);
+					if (this.rootNode.getHeight() > Statics.SCREEN_HEIGHT) {
+						if (this.rootCam.top < this.rootNode.getWorldY()) {
+							this.rootCam.moveCam(0, this.rootNode.getWorldY() - this.rootCam.top);
+						} else if (this.rootCam.bottom > this.rootNode.getWorldBounds().bottom) {
+							this.rootCam.moveCam(0, this.rootNode.getWorldBounds().bottom - this.rootCam.bottom);
 						}
 					}
 				}
-				is_dragging = true;
+				isDragging = true;
 			}
-			last_down_screen.y = ev.getY();
+			lastDownDcreen.y = ev.getY();
 		} else if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-			last_down_screen.y = ev.getY();
+			lastDownDcreen.y = ev.getY();
 		}	
 		return false;			
 	}
@@ -211,7 +211,7 @@ public abstract class AbstractOptionsModule2 extends AbstractModule {
 		if (al_button_texts == null) {
 			this.setOptions();
 			// See if there's only one option.
-			if (auto_select) {
+			if (autoSelect) {
 				if (al_button_texts != null) {
 					if (al_button_texts.size() == 1) {
 						this.selectOption(0);

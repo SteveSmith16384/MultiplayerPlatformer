@@ -12,35 +12,35 @@ import ssmith.android.lib2d.Spatial;
 
 public class ToggleButton extends Button {
 
-	private RectF temp_rect2 = new RectF();
+	private RectF tempRect = new RectF();
 	private boolean selected = false;
-	private Paint deselected_background_paint_and_ink;
-	private BufferedImage deselected_bmp;
+	private Paint deselectedBackgroundPaint;
+	private BufferedImage deselectedBMP;
 
 	public ToggleButton(String _text, Paint paint, Paint _deselected_background_paint, Paint ink, BufferedImage bmp, BufferedImage _deselected_bmp) {
 		super(_text, paint, ink, bmp);
 
-		deselected_background_paint_and_ink = _deselected_background_paint;
-		deselected_bmp = _deselected_bmp;
+		deselectedBackgroundPaint = _deselected_background_paint;
+		deselectedBMP = _deselected_bmp;
 	}
 
 
 	public ToggleButton(String cmd, String _text, float x, float y, Paint paint, Paint _deselected_background_paint, Paint ink, BufferedImage bmp, BufferedImage _deselected_bmp) {
 		super(cmd + "_Btn", cmd, _text, x, y, paint, ink, bmp);
 
-		deselected_background_paint_and_ink = _deselected_background_paint;
-		deselected_bmp = _deselected_bmp;
+		deselectedBackgroundPaint = _deselected_background_paint;
+		deselectedBMP = _deselected_bmp;
 	}
 
 
-	public static void SetAll(ArrayList<Spatial> children, boolean b) {
+	public static void setAll(ArrayList<Spatial> children, boolean b) {
 		for (Spatial s : children) {
 			if (s instanceof ToggleButton) {
 				ToggleButton t = (ToggleButton)s;
 				t.setSelected(b);
 			} else if (s instanceof Node) {
 				Node n = (Node)s;
-				SetAll(n.getChildren(), b);
+				setAll(n.getChildren(), b);
 			}
 		}
 	}
@@ -52,11 +52,11 @@ public class ToggleButton extends Button {
 			super.doDraw(g, cam, interpol);
 		} else {
 			if (this.visible) {
-				if (this.deselected_bmp == null) {
-					temp_rect2.set(this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, this.world_bounds.right - cam.left, this.world_bounds.bottom - cam.top);
-					g.drawRect(temp_rect2, deselected_background_paint_and_ink);
+				if (this.deselectedBMP == null) {
+					tempRect.set(this.worldBounds.left - cam.left, this.worldBounds.top - cam.top, this.worldBounds.right - cam.left, this.worldBounds.bottom - cam.top);
+					g.drawRect(tempRect, deselectedBackgroundPaint);
 				} else {
-					g.drawBitmap(this.deselected_bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, deselected_background_paint_and_ink);
+					g.drawBitmap(this.deselectedBMP, this.worldBounds.left - cam.left, this.worldBounds.top - cam.top, deselectedBackgroundPaint);
 				}
 				super.drawText(g, cam);
 				/*if (str.length() > 0) {

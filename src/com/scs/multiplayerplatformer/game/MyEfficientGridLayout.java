@@ -79,7 +79,7 @@ public final class MyEfficientGridLayout extends EfficientGridLayout implements 
 		int s_x = (int)(cam.left / tile_size);
 		int s_y = (int)(cam.top / tile_size);
 
-		objects_being_drawn = 0;
+		numObjectsBeingDrawn = 0;
 
 		for (int y=s_y ; y<=s_y + draw_height+1 ; y++) {
 			if (y >= 0 && y < blocks[0].length) {
@@ -89,7 +89,7 @@ public final class MyEfficientGridLayout extends EfficientGridLayout implements 
 							if (blocks[x][y] != null) {
 								Block block = (Block)blocks[x][y];
 								block.doDraw(g, cam, interpol, scale); // block.bmp.getWidth()
-								objects_being_drawn++;
+								numObjectsBeingDrawn++;
 							}
 						} catch (ArrayIndexOutOfBoundsException ex) {
 							//AbstractActivity.HandleError(null, ex);

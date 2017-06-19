@@ -29,7 +29,7 @@ public class GUIFunctions {
 	}*/
 	
 	
-	public static float GetTextSizeToFit(String text, float max_width) {
+	public static float getTextSizeToFit(String text, float max_width) {
 		int size = 200;// Max size - 
 		max_width = max_width * 0.9f; // Fit inside frame
 		while (size > 2) {

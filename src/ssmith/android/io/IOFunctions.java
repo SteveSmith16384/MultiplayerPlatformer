@@ -57,7 +57,7 @@ public class IOFunctions {
 	}
 
 
-	public static void AppendLog(String filename, String text, boolean add_cr) throws IOException {
+	public static void appendLog(String filename, String text, boolean add_cr) throws IOException {
 		File logFile = new File(filename);
 		if (!logFile.exists()) {
 			logFile.createNewFile();

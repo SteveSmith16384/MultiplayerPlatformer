@@ -41,58 +41,39 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 	public static final byte HAND = 1;
 
-	private static Paint paint_health_bar = new Paint();
-	private static Paint paint_health_bar_outline = new Paint();
 	private static Paint paint_icon_ink = new Paint(); // For text on icons
-	private static Paint paint_icon_background = new Paint(); // For text on icons
-	private static Paint paint_inv_ink = new Paint(); // For inv qty
 	private static Paint paint_text_ink = new Paint(); // For timer, dist
 
 	private TSArrayList<IProcessable> entities = new TSArrayList<IProcessable>();;
 	public AbstractLevelData levelData;
 	public MyEfficientGridLayout blockGrid;
 	private TimedString msg;
-	private Rectangle dummy_rect = new Rectangle(); // for checking the area is clear
+	private Rectangle dummyRect = new Rectangle(); // for checking the area is clear
 	private long levelEndTime;
-	private String str_time_remaining;
-	private Interval check_for_new_mobs = new Interval(500, true);
+	private String strTimeRemaining;
+	private Interval checkForNewMobs = new Interval(500, true);
 	private TSArrayList<PlayersAvatar> avatars = new TSArrayList<>();
 	private String filename;
 
-	public float current_scale;
-	private float new_scale;// = current_scale;
+	public float currentScale;
+	private float newScale;// = current_scale;
 
 	static {
-		paint_health_bar.setARGB(150, 200, 0, 0); // This is set elsewhere
-		paint_health_bar.setAntiAlias(true);
-		paint_health_bar.setStyle(Style.FILL);
-
-		paint_health_bar_outline.setARGB(150, 255, 255, 255);
-		paint_health_bar_outline.setAntiAlias(true);
-		paint_health_bar_outline.setStyle(Style.STROKE);
-
 		paint_icon_ink.setARGB(255, 255, 255, 255);
 		paint_icon_ink.setAntiAlias(true);
-		paint_icon_ink.setTextSize(GUIFunctions.GetTextSizeToFit("MENU", Statics.ICON_SIZE * 0.9f));
-
-		paint_icon_background.setARGB(155, 255, 255, 255);
+		paint_icon_ink.setTextSize(GUIFunctions.getTextSizeToFit("MENU", Statics.ICON_SIZE * 0.9f));
 
 		paint_text_ink.setARGB(255, 255, 255, 255);
 		paint_text_ink.setAntiAlias(true);
-		paint_text_ink.setTextSize(GUIFunctions.GetTextSizeToFit("99XX", Statics.SCREEN_WIDTH/10));
-
-		paint_inv_ink.setARGB(255, 255, 255, 255);
-		paint_inv_ink.setAntiAlias(true);
-		paint_inv_ink.setTextSize(GUIFunctions.GetTextSizeToFit("99", Statics.SCREEN_WIDTH/10));
-
+		paint_text_ink.setTextSize(GUIFunctions.getTextSizeToFit("99XX", Statics.SCREEN_WIDTH/10));
 	}
 
 
 	public GameModule(String _filename) { 
 		super();
 
-		this.stat_cam.lookAtTopLeft(true);
-		str_time_remaining = Statics.act.getString("time_remaining");
+		this.statCam.lookAtTopLeft(true);
+		strTimeRemaining = Statics.act.getString("time_remaining");
 		this.setBackground(Statics.BACKGROUND_IMAGE);
 
 		startNewLevel(_filename, true);
@@ -105,14 +86,14 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 	// filename = null to load random map
 	private void startNewLevel(String _filename, boolean sameMap) {
-		Statics.act.sound_manager.levelStart();
+		Statics.act.soundManager.levelStart();
 
 		if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
-			current_scale = 1;
+			currentScale = 1;
 		} else {
-			current_scale = Statics.MAX_ZOOM_IN;
+			currentScale = Statics.MAX_ZOOM_IN;
 		}
-		new_scale = current_scale;
+		newScale = currentScale;
 
 		synchronized (entities) {
 			entities.clear();
@@ -121,9 +102,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		avatars.clear();
 		}
 		
-		this.root_node.detachAllChildren();
-		this.stat_node_back.detachAllChildren();
-		this.stat_node_front.detachAllChildren();
+		this.rootNode.detachAllChildren();
+		this.statNodeBack.detachAllChildren();
+		this.statNodeFront.detachAllChildren();
 
 		for (int i=0 ; i<3 ; i++) {
 			new Cloud(this);
@@ -191,12 +172,12 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		levelData.getMap();
 
 		blockGrid = new MyEfficientGridLayout(this, levelData.getGridWidth(), levelData.getGridHeight(), Statics.SQ_SIZE);
-		this.root_node.attachChild(blockGrid);
+		this.rootNode.attachChild(blockGrid);
 		synchronized (entities) {
 			this.entities.add(blockGrid);
 		}
-		this.stat_node_back.updateGeometricState();
-		this.stat_node_front.updateGeometricState();
+		this.statNodeBack.updateGeometricState();
+		this.statNodeFront.updateGeometricState();
 
 		for (int map_y=0 ; map_y<levelData.getGridHeight() ; map_y++) {
 			for (int map_x=0 ; map_x<this.levelData.getGridWidth() ; map_x++) {
@@ -206,7 +187,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				}
 			}
 		}
-		this.root_node.updateGeometricState();
+		this.rootNode.updateGeometricState();
 
 	}
 
@@ -219,7 +200,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		try {
 			// Do nothing
 		} catch (RuntimeException ex) {
-			AbstractActivity.HandleError(null, ex);
+			AbstractActivity.handleError(null, ex);
 		}
 		return false;
 	}
@@ -240,13 +221,13 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		// Adjust scale
 		if (Statics.GAME_MODE != GameMode.RaceToTheDeath) {
-			if (new_scale > Statics.MAX_ZOOM_IN) {
-				new_scale = Statics.MAX_ZOOM_IN;
-			} else if (new_scale < Statics.MAX_ZOOM_OUT) {
-				new_scale = Statics.MAX_ZOOM_OUT;
+			if (newScale > Statics.MAX_ZOOM_IN) {
+				newScale = Statics.MAX_ZOOM_IN;
+			} else if (newScale < Statics.MAX_ZOOM_OUT) {
+				newScale = Statics.MAX_ZOOM_OUT;
 			}
 		}
-		this.current_scale = new_scale;
+		this.currentScale = newScale;
 
 		// Process the rest
 		if (entities != null) {
@@ -258,8 +239,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}
 
 		if (avatars.size() > 0) {
-			if (check_for_new_mobs.hitInterval()) {
-				this.checkIfMobsNeedCreating(this.current_scale, this.root_cam);
+			if (checkForNewMobs.hitInterval()) {
+				this.checkIfMobsNeedCreating(this.currentScale, this.rootCam);
 			}
 
 			if (Statics.GAME_MODE == GameMode.Normal || Statics.GAME_MODE == GameMode.Testing) {
@@ -272,7 +253,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					x = x / this.avatars.size();
 					y = y / this.avatars.size();
 				}
-				this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
+				this.rootCam.lookAt(x * this.currentScale, y * this.currentScale, true);
 
 
 				// Do we need to zoom in/out?
@@ -283,8 +264,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					boolean zoomIn = true; // Slowly
 					synchronized (avatars) {
 						for (PlayersAvatar player : avatars) {
-							float sx = player.getWindowX(this.root_cam, this.current_scale);
-							float sy = player.getWindowY(this.root_cam, this.current_scale);
+							float sx = player.getWindowX(this.rootCam, this.currentScale);
+							float sy = player.getWindowY(this.rootCam, this.currentScale);
 							zoomOut = sx < Statics.SCREEN_WIDTH * OUTER || sx > Statics.SCREEN_WIDTH * (1f-OUTER) || sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
 							if (zoomOut) {
 								break;
@@ -293,19 +274,19 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 						}
 					}
 					if (zoomOut) {
-						new_scale *= Statics.ZOOM_OUT_SPEED;
+						newScale *= Statics.ZOOM_OUT_SPEED;
 					} else if (zoomIn) {
-						new_scale *= Statics.ZOOM_IN_SPEED;
+						newScale *= Statics.ZOOM_IN_SPEED;
 					}				
 					/*if (Statics.DEBUG) {
 					Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
 				}*/
 				} else {
 					// Only one player - zoom in
-					if (this.new_scale < Statics.MAX_ZOOM_IN) {
-						new_scale *= Statics.ZOOM_IN_SPEED;
+					if (this.newScale < Statics.MAX_ZOOM_IN) {
+						newScale *= Statics.ZOOM_IN_SPEED;
 					} else {
-						this.new_scale = Statics.MAX_ZOOM_IN;
+						this.newScale = Statics.MAX_ZOOM_IN;
 					}
 				}
 			} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
@@ -320,13 +301,13 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				if (rightmostPlayer != null) {
 					float x = rightmostPlayer.getWorldX();
 					float y = rightmostPlayer.getWorldY() + (Statics.PLAYER_HEIGHT/2);
-					this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
-					if (this.current_scale < Statics.MAX_ZOOM_IN*2) {
-						new_scale *= 1.005f; // todo - make const
+					this.rootCam.lookAt(x * this.currentScale, y * this.currentScale, true);
+					if (this.currentScale < Statics.MAX_ZOOM_IN*2) {
+						newScale *= 1.005f; // todo - make const
 					}
 				}
 				for (PlayersAvatar player : avatars) {
-					if (!player.isOnScreen(root_cam, this.current_scale)) {
+					if (!player.isOnScreen(rootCam, this.currentScale)) {
 						//player.died();
 						playerDied(player); // Don't call player.died() since it will just freeze them in this game mode
 					}
@@ -341,10 +322,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			//x += this.new_grid.getWorldX();
 			float y = (levelData.getStartPos().y) * Statics.SQ_SIZE;
 			//y += this.new_grid.getWorldY();
-			this.root_cam.lookAt(x * this.current_scale, y * this.current_scale, true);
+			this.rootCam.lookAt(x * this.currentScale, y * this.currentScale, true);
 			//this.root_cam.lookAt(x, y, true);
 			if (Statics.GAME_MODE != GameMode.RaceToTheDeath) {
-				new_scale = Statics.MAX_ZOOM_OUT;
+				newScale = Statics.MAX_ZOOM_OUT;
 			}
 		}
 
@@ -357,11 +338,11 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			for (int i=0 ; i<levelData.mobs.size() ; i++) {
 				SimpleMobData sm = levelData.mobs.get(i);
 				//float dist = getDistanceToClosestPlayer(sm.pixel_x); // NumberFunctions.mod(this.player.getWorldX() - sm.pixel_x);
-				int x = (int)(sm.pixel_x * scale - cam.left);
-				int y = (int)(sm.pixel_y * scale - cam.top);
+				int x = (int)(sm.pixelX * scale - cam.left);
+				int y = (int)(sm.pixelY * scale - cam.top);
 				boolean onscreen = this.isOnScreen(x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT);
 				if (onscreen) {//dist < Statics.ACTIVATE_DIST) { // Needs to be screen width in case we've walked too fast into their "creation zone"
-					AbstractMob.CreateMob(this, sm);
+					AbstractMob.createMob(this, sm);
 					levelData.mobs.remove(i);
 					i--;
 				}
@@ -391,7 +372,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				for (IProcessable o : this.entities) {
 					if (o instanceof IDrawable) {
 						IDrawable id = (IDrawable)o;
-						id.doDraw(g, this.root_cam, interpol, current_scale);
+						id.doDraw(g, this.rootCam, interpol, currentScale);
 					}
 				}
 			}
@@ -411,7 +392,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		if (Statics.GAME_MODE == GameMode.Normal) {
 			long timeRemaining = levelEndTime - System.currentTimeMillis();
 			if (timeRemaining > 0) {
-				g.drawText(this.str_time_remaining + ": " + (timeRemaining/1000), 10, y, paint_text_ink);
+				g.drawText(this.strTimeRemaining + ": " + (timeRemaining/1000), 10, y, paint_text_ink);
 			} else {
 				g.drawText("TIME OUT", 10, y, paint_text_ink);
 			}
@@ -430,17 +411,17 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 	public boolean isAreaClear(float x, float y, float w, float h, boolean check_blocks) {
-		dummy_rect.setByLTWH(x, y, w, h);
-		return isAreaClear(dummy_rect, check_blocks);
+		dummyRect.setByLTWH(x, y, w, h);
+		return isAreaClear(dummyRect, check_blocks);
 	}
 
 
 	public boolean isAreaClear(Rectangle r, boolean check_blocks) {
-		this.root_node.attachChild(r);
+		this.rootNode.attachChild(r);
 		r.parent.updateGeometricState();
 		//boolean result = dummy_rect.getColliders(this.root_node).size() <= 0;
 		// Check for mobs (i.e. we don't bother about ThrownObjects
-		ArrayList<Geometry> colls2 = dummy_rect.getColliders(this.root_node);
+		ArrayList<Geometry> colls2 = dummyRect.getColliders(this.rootNode);
 		boolean result = true;
 		for (Geometry g : colls2) {
 			if (g instanceof AbstractMob) {
@@ -502,7 +483,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 	public void explosionWithDamage(int block_rad, int dam, int pieces, float pxl_x, float pxl_y) {
-		Explosion.CreateExplosion(this, pieces, pxl_x, pxl_y, "thrown_rock");
+		Explosion.createExplosion(this, pieces, pxl_x, pxl_y, "thrown_rock");
 		int map_x = (int)(pxl_x / Statics.SQ_SIZE);
 		int map_y = (int)(pxl_y / Statics.SQ_SIZE);
 
@@ -522,9 +503,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 		// Kill mobs
 		Rectangle dummy_rect = new Rectangle("Temp", pxl_x - (block_rad * Statics.SQ_SIZE), pxl_y - (block_rad * Statics.SQ_SIZE), block_rad*2 * Statics.SQ_SIZE, block_rad*2 * Statics.SQ_SIZE, null, null);
-		this.root_node.attachChild(dummy_rect);
+		this.rootNode.attachChild(dummy_rect);
 		dummy_rect.parent.updateGeometricState();
-		ArrayList<Geometry> colls = dummy_rect.getColliders(this.root_node);
+		ArrayList<Geometry> colls = dummy_rect.getColliders(this.rootNode);
 		for (Geometry c : colls) {
 			if (c instanceof AbstractMob) {
 				AbstractMob m = (AbstractMob)c;
@@ -547,7 +528,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 	public void playerCompletedLevel(PlayersAvatar avatar) {
-		Statics.act.sound_manager.playerReachedEnd();
+		Statics.act.soundManager.playerReachedEnd();
 		long score_inc = (levelEndTime - System.currentTimeMillis()) / 100;
 		if (this.avatars.size() == this.getThread().players.size()) {
 			// First player to get to the end!
@@ -627,7 +608,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 	public void playerDied(PlayersAvatar avatar) {
-		Statics.act.sound_manager.playerDied();
+		Statics.act.soundManager.playerDied();
 		if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
 			avatar.remove();
 			synchronized (avatars) {

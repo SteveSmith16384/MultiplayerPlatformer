@@ -22,14 +22,14 @@ public abstract class AbstractModule extends Thread {//implements NewControllerL
 	
 	private static Paint paint_button_text = new Paint();
 
-	public Camera root_cam;
-	public Node root_node = new Node("root_node");
-	public Node stat_node_back = new Node("stat_node");
-	public Node stat_node_front = new Node("stat_node");
-	protected Camera stat_cam; // For stat node so some graphics are always drawn at the same pos
+	public Camera rootCam;
+	public Node rootNode = new Node("root_node");
+	public Node statNodeBack = new Node("stat_node");
+	public Node statNodeFront = new Node("stat_node");
+	protected Camera statCam; // For stat node so some graphics are always drawn at the same pos
 	protected BufferedImage background;
 	//protected AbstractModule mod_return_to;
-	private PleaseWaitDialog please_wait_dialog;
+	private PleaseWaitDialog pleaseWaitDialog;
 	
 	static {
 		paint_button_text.setARGB(255, 255, 255, 255);
@@ -39,10 +39,10 @@ public abstract class AbstractModule extends Thread {//implements NewControllerL
 
 	
 	public AbstractModule() {
-		root_cam = new Camera();
-		stat_cam = new Camera();
+		rootCam = new Camera();
+		statCam = new Camera();
 		
-		stat_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT/2, true); // Default, for toast
+		statCam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT/2, true); // Default, for toast
 	}
 	
 	
@@ -110,13 +110,13 @@ public abstract class AbstractModule extends Thread {//implements NewControllerL
 			c.drawBitmap(this.background, 0, 0, null);
 		}
 
-		stat_cam.update(interpol);
-		stat_node_back.doDraw(c, stat_cam, interpol);
+		statCam.update(interpol);
+		statNodeBack.doDraw(c, statCam, interpol);
 
-		root_cam.update(interpol);
-		root_node.doDraw(c, root_cam, interpol);
+		rootCam.update(interpol);
+		rootNode.doDraw(c, rootCam, interpol);
 
-		stat_node_front.doDraw(c, stat_cam, interpol);
+		statNodeFront.doDraw(c, statCam, interpol);
 
 		if (Statics.RELEASE_MODE == false || Statics.DEBUG) {
 			c.drawText("Not in release mode", 5, 200, paint_button_text);
@@ -144,25 +144,25 @@ public abstract class AbstractModule extends Thread {//implements NewControllerL
 
 	public void showPleaseWait(String msg) {
 		if (Statics.RELEASE_MODE == false) {
-			if (stat_cam.getActualCentre().x == 0) {
+			if (statCam.getActualCentre().x == 0) {
 				throw new RuntimeException("Stat cam is not set for toast!");
 			}
 		}
 		this.dismissPleaseWait();
-		if (please_wait_dialog == null) {
-			please_wait_dialog = new PleaseWaitDialog(msg);
-			this.stat_node_front.attachChild(stat_node_front.getNumChildren(), please_wait_dialog);
-			this.stat_node_front.updateGeometricState();
+		if (pleaseWaitDialog == null) {
+			pleaseWaitDialog = new PleaseWaitDialog(msg);
+			this.statNodeFront.attachChild(statNodeFront.getNumChildren(), pleaseWaitDialog);
+			this.statNodeFront.updateGeometricState();
 			this.getThread().doDrawing();
 		}
 	}
 	
 	
 	public void dismissPleaseWait() {
-		if (please_wait_dialog != null) {
-			please_wait_dialog.removeFromParent();
-			please_wait_dialog = null;
-			this.stat_node_front.updateGeometricState();
+		if (pleaseWaitDialog != null) {
+			pleaseWaitDialog.removeFromParent();
+			pleaseWaitDialog = null;
+			this.statNodeFront.updateGeometricState();
 			this.getThread().doDrawing();
 		}
 		

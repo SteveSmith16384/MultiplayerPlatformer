@@ -25,9 +25,9 @@ public abstract class SimpleAbstractModule extends AbstractModule {
 	public boolean processEvent(MyEvent evt) throws Exception {
 		if (evt.getAction() == MotionEvent.ACTION_UP) {
 			// Adjust for camera location
-			float x = evt.getX() + stat_cam.left;
-			float y = evt.getY() + this.stat_cam.top;
-			AbstractComponent c = super.GetComponentAt(this.stat_node_front, x, y);
+			float x = evt.getX() + statCam.left;
+			float y = evt.getY() + this.statCam.top;
+			AbstractComponent c = super.GetComponentAt(this.statNodeFront, x, y);
 			if (c != null) {
 				handleClick(c);
 				return true;

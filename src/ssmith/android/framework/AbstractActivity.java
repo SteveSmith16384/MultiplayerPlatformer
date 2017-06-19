@@ -14,7 +14,7 @@ import com.scs.multiplayerplatformer.sfx.StdSfxPlayer;
 public abstract class AbstractActivity implements Thread.UncaughtExceptionHandler {
 
 	public static MainThread thread; // thread must be here as this is the only constant class
-	public static ISfxPlayer sound_manager;
+	public static ISfxPlayer soundManager;
 	private MP3Player mp3Music;
 	private XMLHelper xml;
 
@@ -42,9 +42,9 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 			thread.start();
 		}
 
-		if (sound_manager == null) {
-			sound_manager = new StdSfxPlayer("assets/sfx/");
-			sound_manager.playSound("Venus.ogg");
+		if (soundManager == null) {
+			soundManager = new StdSfxPlayer("assets/sfx/");
+			soundManager.playSound("Venus.ogg");
 		}
 
 		//mp3Music = new MP3Player("assets/music/Venus.ogg", true);
@@ -53,12 +53,12 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 	}
 	
 	
-	public static void HandleError(AbstractActivity act, Throwable ex) {
-		HandleError(ex);
+	public static void handleError(AbstractActivity act, Throwable ex) {
+		handleError(ex);
 	}
 
 	
-	public static void HandleError(Throwable ex) {
+	public static void handleError(Throwable ex) {
 		try {
 			ex.printStackTrace();
 			//JOptionPane.showMessageDialog(null, "Error: " + ex);
@@ -71,7 +71,7 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 
 	@Override
 	public void uncaughtException(Thread thread, Throwable ex) {
-		HandleError(null, ex);
+		handleError(null, ex);
 	}
 
 

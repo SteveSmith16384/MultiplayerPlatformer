@@ -20,7 +20,7 @@ public class PleaseWaitDialog extends Node {
 		paint_menu_text.setARGB(255, 255, 255, 255);
 		paint_menu_text.setAntiAlias(true);
 		//paint_menu_text.setStyle(Style.STROKE);
-		paint_menu_text.setTextSize(GUIFunctions.GetTextSizeToFit("Play GameXX GameXX", ICON_WIDTH));
+		paint_menu_text.setTextSize(GUIFunctions.getTextSizeToFit("Play GameXX GameXX", ICON_WIDTH));
 
 		paint_small_text.setARGB(255, 255, 255, 255);
 		paint_small_text.setAntiAlias(true);

@@ -5,7 +5,7 @@ import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 public final class SimpleMobData {
 
 	private final byte type;
-	public float pixel_x, pixel_y;
+	public float pixelX, pixelY;
 	public AbstractMob mob; // Store the actual mob!
 	
 	
@@ -13,8 +13,8 @@ public final class SimpleMobData {
 		super();
 		
 		type = t;
-		pixel_x = px;
-		pixel_y = py;
+		pixelX = px;
+		pixelY = py;
 		
 	}
 	
@@ -25,7 +25,7 @@ public final class SimpleMobData {
 	
 	
 	public String toString() {
-		return "Type: " + type + " (" + pixel_x + "," + pixel_y +")"; 
+		return "Type: " + type + " (" + pixelX + "," + pixelY +")"; 
 	}
 	
 }

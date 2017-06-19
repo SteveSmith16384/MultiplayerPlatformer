@@ -23,7 +23,7 @@ public class DyingEnemy extends GameObject {
 		
 		phys = new PhysicsEngine(new MyPointF(0, -1), Statics.ROCK_SPEED*2, Statics.ROCK_GRAVITY*2);
 		
-		this.game.root_node.attachChild(this);
+		this.game.rootNode.attachChild(this);
 		this.updateGeometricState();
 		this.game.addToProcess(this);
 	}
@@ -43,7 +43,7 @@ public class DyingEnemy extends GameObject {
 				bmp[width] = Statics.img_cache.getImage(filename, this.getHeight() * scale, this.getWidth() * scale); // Notice height and width are reversed since the dying enemy is on it's side
 			}
 
-			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
+			g.drawBitmap(bmp[width], (this.worldBounds.left) * scale - cam.left, (this.worldBounds.top) * scale - cam.top, paint);
 		}
 	
 	}
@@ -55,7 +55,7 @@ public class DyingEnemy extends GameObject {
 		this.adjustLocation(phys.offset.x, phys.offset.y);
 		this.parent.updateGeometricState();
 
-		if (this.getScreenY(game.root_cam) > Statics.SCREEN_HEIGHT) {
+		if (this.getScreenY(game.rootCam) > Statics.SCREEN_HEIGHT) {
 			this.remove();
 		}
 	}

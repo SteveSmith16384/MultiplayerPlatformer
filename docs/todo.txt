@@ -3,8 +3,6 @@ Ninja
 
 URGENT
 Check gfx colours
-Release it!
-	Don't die when racefordeath, just slow down
 Make map names better
 	Show "has won" bigger
 Stuck in water
@@ -35,12 +33,12 @@ Baddy that drop from sky
 Ninja chop attack!
 Parallax
 More types of enemy
-Randomly drop stars
+Create icon
 
 
 GAME MODES
 Collect as many stars as possible
-Complete levels as quickly as possible
+	Complete levels as quickly as possible
 Cops and Robbers
 Throw shurikens at each other and get high score!
 Who has the most points at the end
@@ -59,12 +57,4 @@ Level where jump over lots of dangerous blocks
 3 - Lots of small platforms
 4 - Donkey Kong
 5 - Manic miner TODO
-
-
-
-LOW PRI
-Create icon
-Enemies not sinking in water
-
-
 

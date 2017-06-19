@@ -15,31 +15,31 @@ import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
 public abstract class AbstractWalkingMob extends AbstractMob {
 
-	protected boolean can_swim;
-	protected boolean is_on_ground_or_ladder;
+	protected boolean canSwim;
+	protected boolean isOnGroundOrLadder;
 	protected float bounciness = 1;
 	protected float stickiness = 1;
-	protected boolean facing_left = false;
+	protected boolean facingLeft = false;
 	protected BufferedImage a_bmp_left[][]; // Size/FrameNum
 	protected BufferedImage a_bmp_right[][]; // Size/FrameNum
-	private int max_frames, curr_frame;
-	private long frame_time=0, frame_interval;
+	private int maxFrames, currFrame;
+	private long frameTime=0, frameInterval;
 	protected boolean jumping = false;
 	protected PhysicsEngine phys;
-	private float curr_fall_speed = Statics.PLAYER_FALL_SPEED;
-	public boolean moving_up = false;
-	public boolean moving_down = false;
-	protected boolean is_on_ladder;
-	protected float ladder_x;
+	private float currFallSpeed = Statics.PLAYER_FALL_SPEED;
+	public boolean movingUp = false;
+	public boolean movingDown = false;
+	protected boolean isOnLadder;
+	protected float ladderX;
 
 	public AbstractWalkingMob(GameModule _game, String name, float x, float y, float w, float h, int _max_frames, long _frame_interval, boolean destroy_blocks, byte side, boolean _can_swim) {
 		super(_game, name, x, y, w, h, destroy_blocks, side);
 
-		max_frames = _max_frames;
-		frame_interval = _frame_interval;
-		can_swim = _can_swim;
+		maxFrames = _max_frames;
+		frameInterval = _frame_interval;
+		canSwim = _can_swim;
 
-		this.setNumFrames(max_frames);
+		this.setNumFrames(maxFrames);
 
 	}
 
@@ -56,19 +56,19 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 	@Override
 	public boolean move(float off_x, float off_y, boolean ladderBlocks) {
 		if (off_x != 0) {
-			if (frame_time > frame_interval && frame_interval > 0) {
-				frame_time = 0;
-				this.curr_frame++;
-				if (this.curr_frame >= this.max_frames) {
-					this.curr_frame = 0;
+			if (frameTime > frameInterval && frameInterval > 0) {
+				frameTime = 0;
+				this.currFrame++;
+				if (this.currFrame >= this.maxFrames) {
+					this.currFrame = 0;
 				}
 			}
 		}
 
 		if (off_x < 0) {
-			this.facing_left = true;
+			this.facingLeft = true;
 		} else if (off_x > 0) {
-			this.facing_left = false;
+			this.facingLeft = false;
 		}
 		boolean b = super.move(off_x, off_y, ladderBlocks);
 		return b;
@@ -84,18 +84,18 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
 		if (this.visible) {
-			frame_time += interpol;
+			frameTime += interpol;
 			int width = (int)(this.getWidth() * scale);
-			if (facing_left) {
-				if (a_bmp_left[width][this.curr_frame] == null) {
+			if (facingLeft) {
+				if (a_bmp_left[width][this.currFrame] == null) {
 					this.generateBitmaps(width, scale);
 				}
-				g.drawBitmap(a_bmp_left[width][this.curr_frame], this.getWindowX(cam, scale), this.getWindowY(cam, scale), paint);
+				g.drawBitmap(a_bmp_left[width][this.currFrame], this.getWindowX(cam, scale), this.getWindowY(cam, scale), paint);
 			} else {
-				if (a_bmp_right[width][this.curr_frame] == null) {
+				if (a_bmp_right[width][this.currFrame] == null) {
 					this.generateBitmaps(width, scale);
 				}
-				g.drawBitmap(a_bmp_right[width][this.curr_frame],this.getWindowX(cam, scale), getWindowY(cam, scale), paint);
+				g.drawBitmap(a_bmp_right[width][this.currFrame],this.getWindowX(cam, scale), getWindowY(cam, scale), paint);
 			}
 		}
 
@@ -105,8 +105,8 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 	protected abstract void generateBitmaps(int size, float scale);
 
 	protected void startJumping() {
-		if (is_on_ground_or_ladder && jumping == false) {
-			Statics.act.sound_manager.playerJumped();
+		if (isOnGroundOrLadder && jumping == false) {
+			Statics.act.soundManager.playerJumped();
 			jumping = true;
 			phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
 		}
@@ -119,9 +119,9 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 
 
 	protected void performJumpingOrGravity() {
-		is_on_ground_or_ladder = false;
-		is_on_ladder = false;
-		ladder_x = 0;
+		isOnGroundOrLadder = false;
+		isOnLadder = false;
+		ladderX = 0;
 		boolean in_water = false;
 		bounciness = 1f;//.5f; // Min cos we can only go up
 		stickiness = .5f; // Min cos we can only go up
@@ -135,18 +135,18 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 					in_water = true;
 				}
 				if (Block.BlocksDownMovement(b.getType())) {
-					is_on_ground_or_ladder = true;
+					isOnGroundOrLadder = true;
 				}
 				if (Block.IsLadder(b.getType())) {
-					is_on_ladder = true;
-					ladder_x = b.getWorldX();
+					isOnLadder = true;
+					ladderX = b.getWorldX();
 				}
 			}
 		}
 
 		if (jumping) {
 			phys.process();
-			if (is_on_ground_or_ladder && this.getJumpingYOff() >= 0) {
+			if (isOnGroundOrLadder && this.getJumpingYOff() >= 0) {
 				this.jumping = false;
 			} else {
 				if (this.move(0, this.getJumpingYOff(), false) == false) { // Hit a ceiling?
@@ -160,29 +160,29 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 				}
 			}
 		} else {
-			if (is_on_ground_or_ladder == false) {
+			if (isOnGroundOrLadder == false) {
 				// Gravity
-				if (!in_water || !can_swim) {
-					boolean moved = this.move(0, curr_fall_speed, true);
+				if (!in_water || !canSwim) {
+					boolean moved = this.move(0, currFallSpeed, true);
 					if (moved) {
-						is_on_ground_or_ladder = false;
+						isOnGroundOrLadder = false;
 					} else {
-						is_on_ground_or_ladder = true;
+						isOnGroundOrLadder = true;
 					}
-					if (is_on_ground_or_ladder) {
-						curr_fall_speed = Statics.PLAYER_FALL_SPEED; // Reset current fall speed
+					if (isOnGroundOrLadder) {
+						currFallSpeed = Statics.PLAYER_FALL_SPEED; // Reset current fall speed
 					} else {
-						curr_fall_speed = curr_fall_speed * 2f;
-						if (curr_fall_speed > Statics.MAX_FALL_SPEED) {
-							curr_fall_speed = Statics.MAX_FALL_SPEED;
+						currFallSpeed = currFallSpeed * 2f;
+						if (currFallSpeed > Statics.MAX_FALL_SPEED) {
+							currFallSpeed = Statics.MAX_FALL_SPEED;
 						}
 					}
 				}
 			}
-			if (is_on_ground_or_ladder) {
-				if (this.moving_up) {
+			if (isOnGroundOrLadder) {
+				if (this.movingUp) {
 					this.move(0, -Statics.PLAYER_SPEED, false);
-				} else if (moving_down) {
+				} else if (movingDown) {
 					this.move(0, Statics.PLAYER_SPEED, false);
 				}
 			}
@@ -202,11 +202,11 @@ public abstract class AbstractWalkingMob extends AbstractMob {
 
 	protected void alignWithLadder() {
 		// Align us with the ladder
-		if (is_on_ladder) {
+		if (isOnLadder) {
 			PlayersAvatar player = (PlayersAvatar)this;
-			if (player.move_x_offset == 0) {
+			if (player.moveXOffset == 0) {
 				float adj_dist = (Statics.SQ_SIZE - this.getWidth())/2;
-				float target_pos = ladder_x + adj_dist;
+				float target_pos = ladderX + adj_dist;
 				float MOVE_DIST = Statics.PLAYER_SPEED/2;
 				float diff = Math.abs(this.getWorldX() - target_pos);
 				if (diff > MOVE_DIST) {

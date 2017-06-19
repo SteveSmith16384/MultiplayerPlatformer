@@ -9,20 +9,20 @@ public abstract class AbstractSingleScreenModule extends AbstractModule {
 
 	private static final long PAUSE_DURATION = 500;
 
-	private long start_time;
+	private long startTime;
 
 	public AbstractSingleScreenModule() {
 		super();
 
-		start_time = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 		
-		stat_cam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT/2, true);
+		statCam.lookAt(Statics.SCREEN_WIDTH/2, Statics.SCREEN_HEIGHT/2, true);
 	}
 
 	
 	@Override
 	public boolean processEvent(MyEvent evt) throws Exception {
-		if (System.currentTimeMillis() > start_time + PAUSE_DURATION) {
+		if (System.currentTimeMillis() > startTime + PAUSE_DURATION) {
 			if (evt.getAction() == MotionEvent.ACTION_UP) {
 				this.onBackPressed();
 				return true;

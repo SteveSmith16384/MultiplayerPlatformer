@@ -18,20 +18,20 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 
 	private static final int MAX_FRAMES = 8;
 
-	private int x_offset = -1;
-	private boolean tried_jumping = false;
-	private Interval turn_interval = new Interval(TURN_DURATION);
-	private Interval throw_interval = new Interval(5000);
+	private int xOffset = -1;
+	private boolean triedJumping = false;
+	private Interval turnInterval = new Interval(TURN_DURATION);
+	private Interval throwInterval = new Interval(5000);
 
-	public static void Factory(GameModule game, Block gen) { // gen == null for normal appearance
+	public static void factory(GameModule game, Block gen) { // gen == null for normal appearance
 		if (game.getNumProcessInstant() < Statics.MAX_INSTANTS) {
 			if (gen == null) {
-				float start = game.root_cam.bottom + (Statics.PLAYER_HEIGHT);
-				float left = game.root_cam.left - Statics.PLAYER_WIDTH;
+				float start = game.rootCam.bottom + (Statics.PLAYER_HEIGHT);
+				float left = game.rootCam.left - Statics.PLAYER_WIDTH;
 				if (Functions.rnd(1, 2) == 1) {
-					left = game.root_cam.right + Statics.PLAYER_WIDTH;
+					left = game.rootCam.right + Statics.PLAYER_WIDTH;
 				}
-				while (start >= game.root_cam.top - (Statics.PLAYER_HEIGHT)) {
+				while (start >= game.rootCam.top - (Statics.PLAYER_HEIGHT)) {
 					boolean res = EnemyNinjaEasy.Subfactory(game, left, start);
 					if (res) {
 						break;
@@ -83,24 +83,24 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 		}*/
 
 		PlayersAvatar player = playerTemp.toReturn;
-		if (turn_interval.hitInterval()) {
+		if (turnInterval.hitInterval()) {
 			if (player != null) {
 				float diff = player.getWorldCentreX() - this.getWorldCentreX();
-				x_offset = NumberFunctions.sign(diff);
+				xOffset = NumberFunctions.sign(diff);
 			}
 		}
 
 		// Try moving
 		if (frozenUntil < System.currentTimeMillis()) {
-			if (this.move(x_offset * Statics.ENEMY_NINJA_SPEED, 0, false) == false) {
+			if (this.move(xOffset * Statics.ENEMY_NINJA_SPEED, 0, false) == false) {
 				// Can't move
-				if (tried_jumping == false) {
+				if (triedJumping == false) {
 					this.startJumping();
-					this.tried_jumping = true;
+					this.triedJumping = true;
 				} else {
-					if (is_on_ground_or_ladder) {
-						tried_jumping = false;
-						x_offset = x_offset * -1; //Turn around
+					if (isOnGroundOrLadder) {
+						triedJumping = false;
+						xOffset = xOffset * -1; //Turn around
 					}
 				}
 			}
@@ -110,7 +110,7 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 		//checkForHarmingBlocks();
 
 		if (frozenUntil < System.currentTimeMillis()) {
-			if (throw_interval.hitInterval()) {
+			if (throwInterval.hitInterval()) {
 				player = this.getVisiblePlayer(); 
 				if (player != null) {
 					this.throwShuriken(player);
@@ -118,23 +118,23 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 			}
 		}
 
-		if (is_on_ground_or_ladder) { // Must be after we've jumped!
-			tried_jumping = false;
+		if (isOnGroundOrLadder) { // Must be after we've jumped!
+			triedJumping = false;
 		}
 
 	}
 
 
 	private void throwShuriken(PlayersAvatar player) {
-		ThrownItem.ThrowShuriken(this.game, this, player.getWorldCentre_CreatesNew().subtract(this.getWorldCentre_CreatesNew()).normalizeLocal());
+		ThrownItem.throwShuriken(this.game, this, player.getWorldCentre_CreatesNew().subtract(this.getWorldCentre_CreatesNew()).normalizeLocal());
 	}
 
 
 	@Override
 	public void died() {
-		Statics.act.sound_manager.enemyDied();
+		Statics.act.soundManager.enemyDied();
 		new DyingEnemy(game, "easy_ninja_dying", this);
-		Explosion.CreateExplosion(game, 2, this.getWorldCentreX(), this.getWorldCentreY(), "blood_spurt");
+		Explosion.createExplosion(game, 2, this.getWorldCentreX(), this.getWorldCentreY(), "blood_spurt");
 		this.remove(); // Must be before we drop an item
 	}
 

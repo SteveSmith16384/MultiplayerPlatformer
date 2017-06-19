@@ -19,7 +19,7 @@ public abstract class Collectable extends GameObject {
 	public Collectable(GameModule _game, MyPointF _start, float size) {
 		super(_game, "Collectable", true, _start.x, _start.y, size, size);
 
-		this.game.root_node.attachChild(this);
+		this.game.rootNode.attachChild(this);
 		this.updateGeometricState();
 		this.game.addToProcess(this);
 	}
@@ -34,7 +34,7 @@ public abstract class Collectable extends GameObject {
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
 		if (this.visible) {
-			g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+			g.drawBitmap(bmp, this.worldBounds.left - cam.left, this.worldBounds.top - cam.top, paint);
 		}
 		
 	}

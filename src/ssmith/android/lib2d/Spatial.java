@@ -12,14 +12,14 @@ public abstract class Spatial {
 
 	private static final float MIN_SIZE = 0.01f;
 
-	protected RectF world_bounds = new RectF(); // To decide if it should be drawn
-	public PointF parent_world_coords = new PointF();
+	protected RectF worldBounds = new RectF(); // To decide if it should be drawn
+	public PointF parentWorldCoords = new PointF();
 	public Node parent = null;
 	protected String name;	
 	public boolean visible = true;
 	public boolean collides = true;
-	public boolean needs_updating = false;
-	private MyPointF centre_tmp = new MyPointF();
+	public boolean needsUpdating = false;
+	private MyPointF tmpCentre = new MyPointF();
 
 	public Spatial(String _name) {
 		super();
@@ -30,11 +30,11 @@ public abstract class Spatial {
 
 	protected void refreshParentWorldCoordsFromParent() { //This is coords, not bounds!
 		if (this.parent != null) {
-			this.parent_world_coords.x = this.getParent().world_coords.x;
-			this.parent_world_coords.y = this.getParent().world_coords.y;
+			this.parentWorldCoords.x = this.getParent().worldCoords.x;
+			this.parentWorldCoords.y = this.getParent().worldCoords.y;
 		} else {
-			this.parent_world_coords.x = 0;
-			this.parent_world_coords.y = 0;
+			this.parentWorldCoords.x = 0;
+			this.parentWorldCoords.y = 0;
 		}
 
 	}
@@ -42,11 +42,11 @@ public abstract class Spatial {
 
 	protected void ensureWorldBoundsNotEmpty() {
 		// Ensure not empty
-		if (this.world_bounds.right <= this.world_bounds.left) {
-			this.world_bounds.right = this.world_bounds.left + MIN_SIZE;
+		if (this.worldBounds.right <= this.worldBounds.left) {
+			this.worldBounds.right = this.worldBounds.left + MIN_SIZE;
 		}
-		if (this.world_bounds.bottom <= this.world_bounds.top) {
-			this.world_bounds.bottom = this.world_bounds.top + MIN_SIZE;
+		if (this.worldBounds.bottom <= this.worldBounds.top) {
+			this.worldBounds.bottom = this.worldBounds.top + MIN_SIZE;
 		}
 
 	}
@@ -59,12 +59,12 @@ public abstract class Spatial {
 
 
 	public String toString() {
-		return name + "[WB: " + world_bounds.left + ", " + world_bounds.top + ", " + world_bounds.right + ", " + world_bounds.bottom + "]";
+		return name + "[WB: " + worldBounds.left + ", " + worldBounds.top + ", " + worldBounds.right + ", " + worldBounds.bottom + "]";
 	}
 
 
 	public RectF getWorldBounds() {
-		return world_bounds;
+		return worldBounds;
 	}
 
 
@@ -182,39 +182,39 @@ public abstract class Spatial {
 	public abstract void setSize(float w, float h);
 
 	public float getWorldCentreX() {
-		return (this.world_bounds.left + this.world_bounds.right) / 2;
+		return (this.worldBounds.left + this.worldBounds.right) / 2;
 	}
 
 
 	public float getWorldCentreY() {
-		return (this.world_bounds.top + this.world_bounds.bottom) / 2;
+		return (this.worldBounds.top + this.worldBounds.bottom) / 2;
 	}
 
 
 	public float getWorldX() {
-		return (this.world_bounds.left);
+		return (this.worldBounds.left);
 	}
 
 
 	public float getWorldY() {
-		return (this.world_bounds.top);
+		return (this.worldBounds.top);
 	}
 
 
 	public float getScreenX(Camera cam) {
-		return this.world_bounds.left - cam.left;
+		return this.worldBounds.left - cam.left;
 
 	}
 
 	public float getScreenY(Camera cam) {
-		return this.world_bounds.top - cam.top;
+		return this.worldBounds.top - cam.top;
 	}
 	
 	
 	public MyPointF getWorldCentre_CreatesNew() {
-		centre_tmp.x = this.getWorldCentreX();
-		centre_tmp.y = this.getWorldCentreY();
-		return centre_tmp;
+		tmpCentre.x = this.getWorldCentreX();
+		tmpCentre.y = this.getWorldCentreY();
+		return tmpCentre;
 	}
 	
 	

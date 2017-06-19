@@ -113,7 +113,7 @@ public abstract class AbstractTextComponent extends AbstractComponent {
 
 
 	public void setActionCommand(String s) {
-		this.action_command = s;
+		this.actionCommand = s;
 	}
 
 

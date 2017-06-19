@@ -32,8 +32,8 @@ public final class MainThread extends Thread implements NewControllerListener {
 	protected volatile boolean mRun = true;
 
 	public AbstractModule module;
-	public AbstractModule next_module;
-	private long last_onback_pressed;
+	public AbstractModule nextModule;
+	private long lastOnbackPressed;
 	public Canvas c;
 	public MainWindow window;
 
@@ -75,7 +75,7 @@ public final class MainThread extends Thread implements NewControllerListener {
 				Functions.delay(Statics.LOOP_DELAY - diff);
 			}
 		} catch (Exception ex) {
-			AbstractActivity.HandleError(ex);
+			AbstractActivity.handleError(ex);
 			window.setVisible(false);
 			window.dispose();
 		}
@@ -113,8 +113,8 @@ public final class MainThread extends Thread implements NewControllerListener {
 		}
 
 		if (this.module != null) {
-			if (System.currentTimeMillis() > this.last_onback_pressed + ONBACK_GAP) {
-				last_onback_pressed = System.currentTimeMillis();
+			if (System.currentTimeMillis() > this.lastOnbackPressed + ONBACK_GAP) {
+				lastOnbackPressed = System.currentTimeMillis();
 				return this.module.onBackPressed();
 			} else {
 				return true;
@@ -138,8 +138,8 @@ public final class MainThread extends Thread implements NewControllerListener {
 
 
 	public void setNextModule(AbstractModule m) {
-		if (this.next_module == null || m instanceof ErrorModule) {  // So if we've got one lined up, it doesn't get overridden
-			this.next_module = m;
+		if (this.nextModule == null || m instanceof ErrorModule) {  // So if we've got one lined up, it doesn't get overridden
+			this.nextModule = m;
 		}
 	}
 
@@ -154,12 +154,12 @@ public final class MainThread extends Thread implements NewControllerListener {
 			}
 		}
 
-		if (next_module != null) {
+		if (nextModule != null) {
 			if (this.module != null) {
 				this.module.stopped();
 			}
-			this.module = next_module;
-			next_module = null;
+			this.module = nextModule;
+			nextModule = null;
 			this.module.started();
 			synchronized (events) {
 				this.events.clear();
@@ -183,7 +183,7 @@ public final class MainThread extends Thread implements NewControllerListener {
 							}
 						}
 					} catch (Exception ex) {
-						AbstractActivity.HandleError(ex);
+						AbstractActivity.handleError(ex);
 					}
 				}
 			}

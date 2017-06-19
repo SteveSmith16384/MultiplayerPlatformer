@@ -43,18 +43,18 @@ public class Rectangle extends AbstractRectangle {
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol) {
 		if (Statics.RELEASE_MODE == false) {
-			if (this.needs_updating) {
+			if (this.needsUpdating) {
 				throw new RuntimeException(this.name + " needs updating!");
 			}
 		}
 		if (this.visible) {
 			if (bmp_background == null) {
 				if (paint != null) {
-					temp_rect.set(this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, this.world_bounds.right - cam.left, this.world_bounds.bottom - cam.top);
+					temp_rect.set(this.worldBounds.left - cam.left, this.worldBounds.top - cam.top, this.worldBounds.right - cam.left, this.worldBounds.bottom - cam.top);
 					g.drawRect(temp_rect, paint);
 				}
 			} else {
-				g.drawBitmap(bmp_background, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+				g.drawBitmap(bmp_background, this.worldBounds.left - cam.left, this.worldBounds.top - cam.top, paint);
 			}
 		}
 	}

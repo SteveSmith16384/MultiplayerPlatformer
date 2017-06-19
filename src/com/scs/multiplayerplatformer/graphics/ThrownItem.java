@@ -21,14 +21,14 @@ public class ThrownItem extends GameObject {
 	private BufferedImage bmp[] = new BufferedImage[Statics.MAX_BMP_WIDTH];
 	public AbstractMob thrower;
 	private byte type;
-	public boolean collidesWithothers;
+	public boolean collidesWithOthers;
 
-	public static void ThrowRock(GameModule _game, byte _type, AbstractMob _thrower, MyPointF _dir) {
+	public static void throwRock(GameModule _game, byte _type, AbstractMob _thrower, MyPointF _dir) {
 		new ThrownItem(_game, _type, _thrower, _dir, 1, Statics.ROCK_SPEED, Statics.ROCK_GRAVITY, Statics.ROCK_SIZE);
 	}
 
 
-	public static void ThrowShuriken(GameModule _game, AbstractMob _thrower, MyPointF _dir) {
+	public static void throwShuriken(GameModule _game, AbstractMob _thrower, MyPointF _dir) {
 		new ThrownItem(_game, Block.SHURIKEN, _thrower, _dir, 1, Statics.ROCK_SPEED*2, Statics.ROCK_GRAVITY/2, Statics.ROCK_SIZE);
 	}
 
@@ -44,9 +44,9 @@ public class ThrownItem extends GameObject {
 		type = _type;
 		phys = new PhysicsEngine(_dir, speed, grav);
 		thrower = _thrower;
-		collidesWithothers = _collidesWithothers;
+		collidesWithOthers = _collidesWithothers;
 
-		this.game.root_node.attachChild(this);
+		this.game.rootNode.attachChild(this);
 		this.updateGeometricState();
 		this.game.addToProcess(this);
 	}
@@ -66,7 +66,7 @@ public class ThrownItem extends GameObject {
 		this.updateGeometricState();
 
 		// Has it hit anything
-		ArrayList<Geometry> colls = this.getColliders(this.game.root_node);
+		ArrayList<Geometry> colls = this.getColliders(this.game.rootNode);
 		if (colls.size() > 0) {
 			for (Geometry c : colls) { // this
 				Collision.Collided(this, c);
@@ -104,7 +104,7 @@ public class ThrownItem extends GameObject {
 			if (bmp[width] == null) {
 				bmp[width] = Block.GetBufferedImage(Statics.img_cache, type, this.getHeight() * scale, this.getWidth() * scale);
 			}
-			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
+			g.drawBitmap(bmp[width], (this.worldBounds.left) * scale - cam.left, (this.worldBounds.top) * scale - cam.top, paint);
 		}
 
 	}

@@ -13,20 +13,20 @@ public final class Cloud extends GameObject {
 
 	private BufferedImage bmp_day;//, bmp_night;
 	private float speed;
-	private float x_off = -Statics.CLOUD_WIDTH;
-	private float y_off = Functions.rndFloat(0, Statics.SCREEN_HEIGHT/2);
+	private float xOff = -Statics.CLOUD_WIDTH;
+	private float yOff = Functions.rndFloat(0, Statics.SCREEN_HEIGHT/2);
 
 	public Cloud(GameModule _game) {
 		super(_game, "Cloud", false, 0, 0, Statics.CLOUD_WIDTH, Statics.CLOUD_HEIGHT);
 
-		this.setLocation(x_off, y_off);
+		this.setLocation(xOff, yOff);
 
 		bmp_day = Statics.img_cache.getImage("white_cloud", Statics.CLOUD_WIDTH, Statics.CLOUD_HEIGHT);
 		//bmp_night = Statics.img_cache.getImage("red_cloud", Statics.CLOUD_WIDTH, Statics.CLOUD_HEIGHT);
 		speed = Functions.rndFloat(Statics.CLOUD_SPEED * .05f, Statics.CLOUD_SPEED);
 
 		game.addToProcess(this);//, true);
-		game.stat_node_back.attachChild(0, this); // Must be in front of sun/moon
+		game.statNodeBack.attachChild(0, this); // Must be in front of sun/moon
 	}
 
 
@@ -38,10 +38,10 @@ public final class Cloud extends GameObject {
 
 	@Override
 	public void process(long interpol) {
-		x_off += speed; 
-		this.setLocation(x_off, y_off);
+		xOff += speed; 
+		this.setLocation(xOff, yOff);
 		this.updateGeometricState();
-		if (x_off > Statics.SCREEN_WIDTH) {
+		if (xOff > Statics.SCREEN_WIDTH) {
 			this.remove();
 			new Cloud(game);
 
@@ -52,7 +52,7 @@ public final class Cloud extends GameObject {
 	@Override
 	public void doDraw(Canvas g, Camera cam, long interpol, float scale) {
 		if (this.visible) {
-			g.drawBitmap(bmp_day, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+			g.drawBitmap(bmp_day, this.worldBounds.left - cam.left, this.worldBounds.top - cam.top, paint);
 		}
 		
 	}

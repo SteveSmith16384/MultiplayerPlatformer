@@ -21,7 +21,7 @@ import com.scs.multiplayerplatformer.input.IInputDevice;
 
 public final class PlayersAvatar extends AbstractWalkingMob {
 
-	public float move_x_offset = 0;
+	public float moveXOffset = 0;
 	public BlockInventory inv;
 	public int playernumZB;
 
@@ -47,25 +47,25 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 	@Override
 	public void process(long interpol) {
 		if (frozenUntil < System.currentTimeMillis()) {
-			if (is_on_ice == false) {
-				move_x_offset = 0;
+			if (isOnIce == false) {
+				moveXOffset = 0;
 			}
 			if (input.isLeftPressed()) {
-				move_x_offset = -1 * input.getStickDistance();
+				moveXOffset = -1 * input.getStickDistance();
 			} else if (input.isRightPressed()) {
-				move_x_offset = 1 * input.getStickDistance();
+				moveXOffset = 1 * input.getStickDistance();
 			}
 
-			moving_up = false;
-			moving_down = false;
+			movingUp = false;
+			movingDown = false;
 			if (input.isJumpPressed()) {
 				startJumping();
 			}
 
 			if (input.isUpPressed()) {
-				moving_up = true;
+				movingUp = true;
 			} else if (input.isDownPressed()) {
-				moving_down = true;
+				movingDown = true;
 			}
 
 			boolean throwPressed = input.isThrowPressed(); 
@@ -80,8 +80,8 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 			}
 			this.prevThrowPressed = throwPressed;
 
-			if (move_x_offset != 0) {
-				this.move(move_x_offset * Statics.PLAYER_SPEED, 0, false);
+			if (moveXOffset != 0) {
+				this.move(moveXOffset * Statics.PLAYER_SPEED, 0, false);
 			}
 
 		}
@@ -94,8 +94,8 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	protected void startJumping() {
 		if (jumping == false) {
-			if (is_on_ground_or_ladder) {
-				Statics.act.sound_manager.playerJumped();
+			if (isOnGroundOrLadder) {
+				Statics.act.soundManager.playerJumped();
 				jumping = true;
 				phys = new PhysicsEngine(new MyPointF(0, Statics.JUMP_Y*this.bounciness), Statics.ROCK_SPEED, Statics.ROCK_GRAVITY);
 			}
@@ -133,9 +133,9 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 			MyPointF dir = new MyPointF(p.x, p.y);
 			//Statics.p("Dir:" + dir);
 			if (type == Block.SHURIKEN) {
-				ThrownItem.ThrowShuriken(game, this, dir);
+				ThrownItem.throwShuriken(game, this, dir);
 			} else {
-				ThrownItem.ThrowRock(game, type, this, dir);
+				ThrownItem.throwRock(game, type, this, dir);
 			}
 			inv.addBlock(type, -1);
 		}

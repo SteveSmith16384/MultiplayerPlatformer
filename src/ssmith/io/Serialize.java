@@ -12,7 +12,7 @@ public class Serialize {
 	}
 
 
-	public static void SerializeObject(String file, Object e) throws IOException {
+	public static void serializeObject(String file, Object e) throws IOException {
 		FileOutputStream fileOut = new FileOutputStream(file);
 		ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		out.writeObject(e);
@@ -21,7 +21,7 @@ public class Serialize {
 	}
 
 
-	public static Object DeserializeObject(String file) throws IOException, ClassNotFoundException {
+	public static Object deserializeObject(String file) throws IOException, ClassNotFoundException {
 		FileInputStream fileIn = null;
 		ObjectInputStream in = null;
 		try {

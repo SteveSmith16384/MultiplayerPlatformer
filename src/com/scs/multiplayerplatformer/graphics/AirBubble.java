@@ -17,7 +17,7 @@ public final class AirBubble extends GameObject {
 	public AirBubble(GameModule _game, AbstractMob _thrower) {
 		super(_game, "AirBubble", true, _thrower.getWorldCentreX(), _thrower.getWorldCentreY(), Statics.ROCK_SIZE/3, Statics.ROCK_SIZE/3);
 
-		this.game.root_node.attachChild(this);
+		this.game.rootNode.attachChild(this);
 		this.updateGeometricState();
 		this.game.addToProcess(this);
 	}
@@ -53,7 +53,7 @@ public final class AirBubble extends GameObject {
 			if (bmp[width] == null) {
 				bmp[width] = Statics.img_cache.getImage("bubble",  this.getHeight() * scale, this.getWidth() * scale);//Block.GetBufferedImage(Statics.img_cache, type, this.getHeight() * scale, this.getWidth() * scale);
 			}
-			g.drawBitmap(bmp[width], (this.world_bounds.left) * scale - cam.left, (this.world_bounds.top) * scale - cam.top, paint);
+			g.drawBitmap(bmp[width], (this.worldBounds.left) * scale - cam.left, (this.worldBounds.top) * scale - cam.top, paint);
 		}
 
 	}

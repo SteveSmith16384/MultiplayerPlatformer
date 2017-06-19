@@ -12,9 +12,9 @@ import ssmith.lang.GeometryFunctions2;
 
 public class Node extends Spatial {
 
-	private PointF local_coords = new MyPointF(); // The adjustment to local co-ords.  WE CANNOT USE WORLD BOUNDS!
-	protected PointF world_coords = new MyPointF(); // Our world coords, based on our parents world coords and our local coords
-	protected RectF local_bounds = new RectF(); // For storing the local bounds of all contained shapes.  Do not directly edit, let updateGeometricState() do it!
+	private PointF localCoords = new MyPointF(); // The adjustment to local co-ords.  WE CANNOT USE WORLD BOUNDS!
+	protected PointF worldCoords = new MyPointF(); // Our world coords, based on our parents world coords and our local coords
+	protected RectF localBounds = new RectF(); // For storing the local bounds of all contained shapes.  Do not directly edit, let updateGeometricState() do it!
 	private ArrayList<Spatial> children = new ArrayList<Spatial>();
 
 	public Node(String name) {
@@ -25,8 +25,8 @@ public class Node extends Spatial {
 	public Node(String name, float x, float y) {
 		super(name);
 
-		this.local_coords.x = x;
-		this.local_coords.y = y;
+		this.localCoords.x = x;
+		this.localCoords.y = y;
 	}
 
 
@@ -58,7 +58,7 @@ public class Node extends Spatial {
 			this.children.add(pos, s);
 			s.setParent(this);
 
-			s.needs_updating = true;
+			s.needsUpdating = true;
 		}
 	}
 
@@ -89,46 +89,46 @@ public class Node extends Spatial {
 		super.refreshParentWorldCoordsFromParent();
 
 		// Update our world coords
-		this.world_coords.x = this.parent_world_coords.x + this.local_coords.x;
-		this.world_coords.y = this.parent_world_coords.y + this.local_coords.y;
+		this.worldCoords.x = this.parentWorldCoords.x + this.localCoords.x;
+		this.worldCoords.y = this.parentWorldCoords.y + this.localCoords.y;
 
 		if (children.size() > 0) {
 			// Set our bounds to infinite opposite
-			local_bounds.left = Float.MAX_VALUE;
-			local_bounds.top = Float.MAX_VALUE;
-			local_bounds.right = (Float.MAX_VALUE * -1);
-			local_bounds.bottom = (Float.MAX_VALUE * -1);
+			localBounds.left = Float.MAX_VALUE;
+			localBounds.top = Float.MAX_VALUE;
+			localBounds.right = (Float.MAX_VALUE * -1);
+			localBounds.bottom = (Float.MAX_VALUE * -1);
 
 			synchronized (children) {
 				for (Spatial child : children) {
 					child.updateGeometricState(); // Need this in case it's a node to update it's bounds!
 
-					local_bounds.left = Math.min(local_bounds.left, child.world_bounds.left);
-					local_bounds.top = Math.min(local_bounds.top, child.world_bounds.top);
-					local_bounds.right = Math.max(local_bounds.right, child.world_bounds.right);
-					local_bounds.bottom = Math.max(local_bounds.bottom, child.world_bounds.bottom);
+					localBounds.left = Math.min(localBounds.left, child.worldBounds.left);
+					localBounds.top = Math.min(localBounds.top, child.worldBounds.top);
+					localBounds.right = Math.max(localBounds.right, child.worldBounds.right);
+					localBounds.bottom = Math.max(localBounds.bottom, child.worldBounds.bottom);
 				}
 			}
 		} else {
 			// No children, so we're zero-sized
-			local_bounds.left = 0;
-			local_bounds.top = 0;
-			local_bounds.right = 0;
-			local_bounds.bottom = 0;
+			localBounds.left = 0;
+			localBounds.top = 0;
+			localBounds.right = 0;
+			localBounds.bottom = 0;
 		}
 
 		// Now update our world bounds
-		this.world_bounds.left = local_bounds.left;// + this.parent_world_coords.x;// + this.local_coords.x;
-		this.world_bounds.top = local_bounds.top;// + this.parent_world_coords.y;// + this.local_coords.y;
-		this.world_bounds.right = local_bounds.right;// + this.parent_world_coords.x;// + this.local_coords.x;
-		this.world_bounds.bottom = local_bounds.bottom;// + this.parent_world_coords.y;// + this.local_coords.y;
+		this.worldBounds.left = localBounds.left;// + this.parent_world_coords.x;// + this.local_coords.x;
+		this.worldBounds.top = localBounds.top;// + this.parent_world_coords.y;// + this.local_coords.y;
+		this.worldBounds.right = localBounds.right;// + this.parent_world_coords.x;// + this.local_coords.x;
+		this.worldBounds.bottom = localBounds.bottom;// + this.parent_world_coords.y;// + this.local_coords.y;
 
 		/*local_bounds.left -= this.world_bounds.left;
 		local_bounds.top  -= this.world_bounds.top;
 		local_bounds.right -= this.world_bounds.right;
 		local_bounds.bottom -= this.world_bounds.bottom;*/
 
-		this.needs_updating = false;
+		this.needsUpdating = false;
 	}
 
 
@@ -138,7 +138,7 @@ public class Node extends Spatial {
 			if (Lib2DStatics.DEBUG_GFX) {
 				//if (this.name.equalsIgnoreCase("root_node")) {
 				//RectF temp_rect = new RectF(this.world_coords.x - cam.left, this.world_coords.y - cam.top, this.world_coords.x - cam.left+2, this.world_coords.y - cam.top+2);
-				RectF temp_rect = new RectF(this.world_bounds.left - cam.left-2, this.world_bounds.top - cam.top-2, this.world_bounds.right - cam.left+2, this.world_bounds.bottom - cam.top+2);
+				RectF temp_rect = new RectF(this.worldBounds.left - cam.left-2, this.worldBounds.top - cam.top-2, this.worldBounds.right - cam.left+2, this.worldBounds.bottom - cam.top+2);
 				g.drawRect(temp_rect, Lib2DStatics.paint_red_line);
 				//}
 			}
@@ -162,11 +162,11 @@ public class Node extends Spatial {
 	@Override
 	public boolean intersects(Spatial s) {
 		if (s instanceof Node || s instanceof Rectangle) {
-			return RectF.intersects(this.world_bounds, s.getWorldBounds());
+			return RectF.intersects(this.worldBounds, s.getWorldBounds());
 		} else if (s instanceof Line) {
 			Line l2 = (Line)s;
-			return GeometryFunctions2.isLineIntersectingRectangle(l2.world_bounds.left, l2.world_bounds.top, l2.world_bounds.right, l2.world_bounds.bottom, 
-					this.world_bounds.left, this.world_bounds.top, this.world_bounds.right, this.world_bounds.bottom);
+			return GeometryFunctions2.isLineIntersectingRectangle(l2.worldBounds.left, l2.worldBounds.top, l2.worldBounds.right, l2.worldBounds.bottom, 
+					this.worldBounds.left, this.worldBounds.top, this.worldBounds.right, this.worldBounds.bottom);
 		} else {
 			throw new RuntimeException("intersects() not implemented in Node for " + s);
 		}
@@ -175,7 +175,7 @@ public class Node extends Spatial {
 
 	@Override
 	public boolean contains(float x, float y) {
-		return this.world_bounds.contains(x, y);
+		return this.worldBounds.contains(x, y);
 	}
 
 
@@ -186,8 +186,8 @@ public class Node extends Spatial {
 
 	@Override
 	public void setLocation(float x, float y) {
-		local_coords.x = x;
-		local_coords.y = y;
+		localCoords.x = x;
+		localCoords.y = y;
 
 	}
 
@@ -199,19 +199,19 @@ public class Node extends Spatial {
 
 
 	public PointF getLocation() {
-		return this.local_coords;
+		return this.localCoords;
 	}
 
 
 	@Override
 	public float getHeight() {
-		return local_bounds.bottom - local_bounds.top;
+		return localBounds.bottom - localBounds.top;
 	}
 
 
 	@Override
 	public float getWidth() {
-		return local_bounds.right - local_bounds.left;
+		return localBounds.right - localBounds.left;
 	}
 
 

@@ -20,7 +20,7 @@ public class BitmapRectangle extends AbstractRectangle {
 	public void doDraw(Canvas g, Camera cam, long interpol) {
 		if (bmp != null) {
 			if (this.visible) {
-				g.drawBitmap(bmp, this.world_bounds.left - cam.left, this.world_bounds.top - cam.top, paint);
+				g.drawBitmap(bmp, this.worldBounds.left - cam.left, this.worldBounds.top - cam.top, paint);
 			}
 		}
 	}
