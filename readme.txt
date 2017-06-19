@@ -1,8 +1,10 @@
 MULTIPLAYER PLATFORMER
 
+![ss1.png](https://bitbucket.org/repo/ekk78oE/images/400426500-ss1.png)
+
 by Stephen Carlyle-Smith (stephen.carlylesmith@gmail.com)
 
-It is what it says. :)
+[Youtube vid](https://www.youtube.com/watch?v=gKTC4e8nbpw)
 
 
 CONTROLS
