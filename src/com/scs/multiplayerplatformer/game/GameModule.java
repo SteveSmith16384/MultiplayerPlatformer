@@ -220,13 +220,13 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}
 
 		// Adjust scale
-		if (Statics.GAME_MODE != GameMode.RaceToTheDeath) {
+		//if (Statics.GAME_MODE != GameMode.RaceToTheDeath) {
 			if (newScale > Statics.MAX_ZOOM_IN) {
 				newScale = Statics.MAX_ZOOM_IN;
 			} else if (newScale < Statics.MAX_ZOOM_OUT) {
 				newScale = Statics.MAX_ZOOM_OUT;
 			}
-		}
+		//}
 		this.currentScale = newScale;
 
 		// Process the rest
@@ -302,7 +302,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					float x = rightmostPlayer.getWorldX();
 					float y = rightmostPlayer.getWorldY() + (Statics.PLAYER_HEIGHT/2);
 					this.rootCam.lookAt(x * this.currentScale, y * this.currentScale, true);
-					if (this.currentScale < Statics.MAX_ZOOM_IN*2) {
+					if (this.currentScale < Statics.MAX_ZOOM_IN) {
 						newScale *= 1.005f; // todo - make const
 					}
 				}

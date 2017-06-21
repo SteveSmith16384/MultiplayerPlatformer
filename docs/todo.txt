@@ -2,6 +2,10 @@ Ninja
 
 
 URGENT
+Freeze game when player has won, and then restart
+RTTD Showing wrong player has won
+Not freezing player
+Show please wait when starting
 Check gfx colours
 Make map names better
 	Show "has won" bigger
