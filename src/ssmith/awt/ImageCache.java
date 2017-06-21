@@ -56,8 +56,9 @@ public class ImageCache implements Runnable {
 
 		//Runtime.getRuntime().addShutdownHook(new Thread(this, "ImageCache_Save"));
 
-		Thread t = new Thread(this, "ImageCache_Load");//.start();
-		t.setPriority(Thread.MAX_PRIORITY);
+		Thread t = new Thread(this, "ImageCache_Load");
+		//t.setPriority(Thread.MAX_PRIORITY);
+		t.setDaemon(true);
 		t.start();
 	}
 

@@ -52,7 +52,7 @@ public final class Collision {
 
 	private static boolean Player_EnemyMob(PlayersAvatar player, AbstractMob enemy) {
 		player.died();
-		return false;
+		return true; // Move back in case frozen
 	}
 
 

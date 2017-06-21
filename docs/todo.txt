@@ -1,15 +1,13 @@
-Ninja
+Multiplayer Platformer Todo List
 
 
 URGENT
-Freeze game when player has won, and then restart
-RTTD Showing wrong player has won
-Not freezing player
-Show please wait when starting
-Check gfx colours
-Make map names better
+	Give points when won
+	RTTD - Scale along y coord, not x 
+"Press fire to start" is hidden
+Show please wait when loading images
+	RTTD Showing wrong player has won
 	Show "has won" bigger
-Stuck in water
 Search for todos
 
 
@@ -25,11 +23,9 @@ Get a font
 
 TODO
 Testing mode - replay same map
-Randomly generate infinite maps
 Conveyor belts
 No "die" or "level complete" sfx
 Play sound when player joins
-"Press fire to start" is hidden
 Restart if player falls too far
 Give levels their own background
 Hold down jump to jump higher

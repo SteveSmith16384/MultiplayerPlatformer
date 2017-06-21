@@ -46,18 +46,18 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	@Override
 	public void process(long interpol) {
+		if (isOnIce == false) {
+			moveXOffset = 0;
+		}
+		movingUp = false;
+		movingDown = false;
 		if (frozenUntil < System.currentTimeMillis()) {
-			if (isOnIce == false) {
-				moveXOffset = 0;
-			}
 			if (input.isLeftPressed()) {
 				moveXOffset = -1 * input.getStickDistance();
 			} else if (input.isRightPressed()) {
 				moveXOffset = 1 * input.getStickDistance();
 			}
 
-			movingUp = false;
-			movingDown = false;
 			if (input.isJumpPressed()) {
 				startJumping();
 			}
@@ -146,7 +146,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 	@Override
 	public void died() {
 		if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
-			this.frozenUntil = 1000;
+			this.frozenUntil = System.currentTimeMillis() + 1000;
 		} else {
 			game.playerDied(this);
 		}

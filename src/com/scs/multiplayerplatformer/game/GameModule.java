@@ -54,6 +54,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private Interval checkForNewMobs = new Interval(500, true);
 	private TSArrayList<PlayersAvatar> avatars = new TSArrayList<>();
 	private String filename;
+	private boolean restartGame = false;
+	private long restartGameAt;
 
 	public float currentScale;
 	private float newScale;// = current_scale;
@@ -87,7 +89,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	// filename = null to load random map
 	private void startNewLevel(String _filename, boolean sameMap) {
 		Statics.act.soundManager.levelStart();
-
+		restartGame = false;
 		if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
 			currentScale = 1;
 		} else {
@@ -99,9 +101,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			entities.clear();
 		}
 		synchronized (avatars) {
-		avatars.clear();
+			avatars.clear();
 		}
-		
+
 		this.rootNode.detachAllChildren();
 		this.statNodeBack.detachAllChildren();
 		this.statNodeFront.detachAllChildren();
@@ -137,15 +139,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			this.avatars.refresh();
 		}
 		addToProcess(avatar);
-		//if (Statics.GAME_MODE == GameMode.Normal) {
 		this.restartAvatar(avatar); // Need this to position them
-		//}/* else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {*/
-		// Restart all players
-		/*for (PlayersAvatar a : avatars) {
-			this.restartAvatar(a);
-		}*/
-		//this.startNewLevel(this.filename, true);
-		//}
 	}
 
 
@@ -219,13 +213,19 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			this.avatars.refresh();
 		}
 
+		if (this.restartGame) {
+			if (this.restartGameAt < System.currentTimeMillis()) {
+				this.startNewLevel(null, false);
+			}
+		}
+
 		// Adjust scale
 		//if (Statics.GAME_MODE != GameMode.RaceToTheDeath) {
-			if (newScale > Statics.MAX_ZOOM_IN) {
-				newScale = Statics.MAX_ZOOM_IN;
-			} else if (newScale < Statics.MAX_ZOOM_OUT) {
-				newScale = Statics.MAX_ZOOM_OUT;
-			}
+		if (newScale > Statics.MAX_ZOOM_IN) {
+			newScale = Statics.MAX_ZOOM_IN;
+		} else if (newScale < Statics.MAX_ZOOM_OUT) {
+			newScale = Statics.MAX_ZOOM_OUT;
+		}
 		//}
 		this.currentScale = newScale;
 
@@ -277,10 +277,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 						newScale *= Statics.ZOOM_OUT_SPEED;
 					} else if (zoomIn) {
 						newScale *= Statics.ZOOM_IN_SPEED;
-					}				
-					/*if (Statics.DEBUG) {
-					Statics.p("Zoom: " + this.current_scale + " -> " + this.new_scale);
-				}*/
+					}
 				} else {
 					// Only one player - zoom in
 					if (this.newScale < Statics.MAX_ZOOM_IN) {
@@ -290,26 +287,51 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					}
 				}
 			} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
-				float rightMost = 0;
-				PlayersAvatar rightmostPlayer = null; 
-				for (PlayersAvatar player : avatars) {
-					if (player.getWorldX() >= rightMost) {
-						rightMost = player.getWorldX(); 
-						rightmostPlayer = player;
+				if (this.avatars.size() > 1) {
+					float rightMost = 0;
+					PlayersAvatar rightmostPlayer = null; 
+					for (PlayersAvatar player : avatars) {
+						if (player.getWorldX() >= rightMost) {
+							rightMost = player.getWorldX(); 
+							rightmostPlayer = player;
+						}
 					}
-				}
-				if (rightmostPlayer != null) {
+					//if (rightmostPlayer != null) {
 					float x = rightmostPlayer.getWorldX();
 					float y = rightmostPlayer.getWorldY() + (Statics.PLAYER_HEIGHT/2);
 					this.rootCam.lookAt(x * this.currentScale, y * this.currentScale, true);
-					if (this.currentScale < Statics.MAX_ZOOM_IN) {
+					/*if (this.currentScale < Statics.MAX_ZOOM_IN) {
 						newScale *= 1.005f; // todo - make const
+					}*/
+					//}
+
+					float OUTER = 0.2f;
+					//float INNER = 0.22f; // 0.3f
+					boolean zoomOut = false; // Need to zoom out quickly
+					//boolean zoomIn = true; // Slowly
+					synchronized (avatars) {
+						for (PlayersAvatar player : avatars) {
+							//float sx = player.getWindowX(this.rootCam, this.currentScale);
+							float sy = player.getWindowY(this.rootCam, this.currentScale);
+							zoomOut = sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
+							if (zoomOut) {
+								break;
+							}
+							//zoomIn = zoomIn && (sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
+						}
 					}
-				}
-				for (PlayersAvatar player : avatars) {
-					if (!player.isOnScreen(rootCam, this.currentScale)) {
-						//player.died();
-						playerDied(player); // Don't call player.died() since it will just freeze them in this game mode
+					if (zoomOut) {
+						newScale *= Statics.ZOOM_OUT_SPEED;
+					} else { //if (zoomIn) {
+						newScale *= Statics.ZOOM_IN_SPEED;
+					}
+
+					// Check if a player is off-screen
+					for (PlayersAvatar player : avatars) {
+						if (!player.isOnScreen(rootCam, this.currentScale)) {
+							//player.died();
+							playerDied(player); // Don't call player.died() since it will just freeze them in this game mode
+						}
 					}
 				}
 			} else {
@@ -545,7 +567,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}
 
 		// check if no players left
-		if (this.avatars.isEmpty()) { // todo - override empty()
+		if (this.avatars.isEmpty()) {
 			this.startNewLevel(null, false); // Load random map after playing first selected map
 		}
 	}
@@ -613,6 +635,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			avatar.remove();
 			synchronized (avatars) {
 				this.avatars.remove(avatar);
+				this.avatars.refresh();
 			}
 
 			// check if no players left
@@ -620,6 +643,10 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				//this.startNewLevel(null, false); // Load random map after playing first selected map
 				PlayersAvatar winner = this.avatars.get(0);
 				this.showToast("Player " + (winner.playernumZB+1) + " HAS WON!");
+				long score_inc = (levelEndTime - System.currentTimeMillis()) / 100;
+				this.getThread().players.get(avatar.input.getID()).score += score_inc;
+				restartGame = true;
+				restartGameAt = System.currentTimeMillis() + 3000;
 			}
 		} else {
 			restartAvatar(avatar);

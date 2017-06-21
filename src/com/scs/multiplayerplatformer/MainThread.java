@@ -99,10 +99,6 @@ public final class MainThread extends Thread implements NewControllerListener {
 			module.doDraw(c, Statics.LOOP_DELAY);
 		}
 
-		/*if (Statics.DEBUG) {
-			c.getGraphics().drawString("FPS: "+fps, 20, 30);
-		}*/
-
 		window.bs.show();
 	}
 

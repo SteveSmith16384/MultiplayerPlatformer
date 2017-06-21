@@ -49,7 +49,8 @@ public class TSArrayList<E> extends ArrayList<E> implements List<E> {
 	
 	@Override
 	public int size() {
-		return super.size() + this.to_add.size() - this.to_remove.size();
+		this.refresh();
+		return super.size();// + this.to_add.size() - this.to_remove.size();
 	}
 
 
