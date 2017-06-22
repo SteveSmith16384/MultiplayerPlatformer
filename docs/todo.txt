@@ -2,8 +2,9 @@ Multiplayer Platformer Todo List
 
 
 URGENT
+Use Harry's logo
+	Say "no maps found" if none
 	Give points when won
-	RTTD - Scale along y coord, not x 
 "Press fire to start" is hidden
 Show please wait when loading images
 	RTTD Showing wrong player has won
@@ -11,17 +12,8 @@ Show please wait when loading images
 Search for todos
 
 
-HOME
-Make bigger map
-Make levels look better
-Ask harry for name and get him to generate logo
-Sound not working
-Create new logo
-Create new maps
-Get a font
-
-
 TODO
+Use random background
 Testing mode - replay same map
 Conveyor belts
 No "die" or "level complete" sfx
@@ -34,27 +26,26 @@ Ninja chop attack!
 Parallax
 More types of enemy
 Create icon
+Make bigger map
+Make levels look better
+Sound not working
+Create new logo
+Create new maps
+Get a font
 
 
 GAME MODES
 Collect as many stars as possible
 	Complete levels as quickly as possible
 Cops and Robbers
-Throw shurikens at each other and get high score!
+Throw shurikens at each other and get high score
 Who has the most points at the end
 Race to complete each small level
 
 
 LEVELS
-Maze-like level
 Lots of ropes
 Lots of ladders
 Map with long route or difficult short route
 Level where jump over lots of dangerous blocks
-
-1 - Bit of everything
-2 - Difficult jump
-3 - Lots of small platforms
-4 - Donkey Kong
-5 - Manic miner TODO
 

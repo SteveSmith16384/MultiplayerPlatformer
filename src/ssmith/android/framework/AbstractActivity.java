@@ -61,8 +61,7 @@ public abstract class AbstractActivity implements Thread.UncaughtExceptionHandle
 	public static void handleError(Throwable ex) {
 		try {
 			ex.printStackTrace();
-			//JOptionPane.showMessageDialog(null, "Error: " + ex);
-			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage() + ".  Please restart", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage() + ".", "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (Exception ex2) {
 			ex2.printStackTrace();
 		}

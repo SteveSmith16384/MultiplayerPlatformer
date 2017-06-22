@@ -15,7 +15,7 @@ import com.scs.multiplayerplatformer.graphics.blocks.Block;
 
 public final class MapLoader extends AbstractLevelData {
 
-	private static final String MAP_DIR = "./maps/";
+	public static final String MAP_DIR = "./maps/";
 	private static final int MAX_PREV_MAPS = 3;
 
 	// Tags

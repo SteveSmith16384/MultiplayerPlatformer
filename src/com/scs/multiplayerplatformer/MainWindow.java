@@ -96,8 +96,8 @@ public final class MainWindow extends JFrame implements MouseListener, KeyListen
 				ImageIO.write(image, "png", new File(filename));
 				Statics.p("Screenshot saved as " + filename);
 			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				ex.printStackTrace();
+				JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			return;
 		}

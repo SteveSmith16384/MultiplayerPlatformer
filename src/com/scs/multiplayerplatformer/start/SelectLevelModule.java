@@ -2,6 +2,8 @@ package com.scs.multiplayerplatformer.start;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import ssmith.android.compatibility.Paint;
 import ssmith.android.framework.modules.AbstractOptionsModule2;
 import ssmith.android.lib2d.gui.GUIFunctions;
@@ -32,7 +34,7 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 		this.setBackground(Statics.BACKGROUND_IMAGE);
 
 		maps = MapLoader.GetMaps();//new File(Statics.MAP_DIR).list();
-		
+
 		//ImageCache.Save();
 	}
 
@@ -40,8 +42,12 @@ public class SelectLevelModule extends AbstractOptionsModule2 {
 	@Override
 	public void getOptions() {
 		this.addOption("Random");
-		for (int i=0 ; i<maps.size() ; i++) {
-			this.addOption(maps.get(i));
+		if (maps.size() > 0) {
+			for (int i=0 ; i<maps.size() ; i++) {
+				this.addOption(maps.get(i));
+			}
+		} else {
+			JOptionPane.showMessageDialog(this.getThread().window, "No maps found in " + MapLoader.MAP_DIR + Statics.GAME_MODE.toString(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}

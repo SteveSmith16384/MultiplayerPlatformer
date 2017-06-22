@@ -238,106 +238,98 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			}
 		}
 
-		if (avatars.size() > 0) {
+		if (avatars.size() > 1) {
 			if (checkForNewMobs.hitInterval()) {
 				this.checkIfMobsNeedCreating(this.currentScale, this.rootCam);
 			}
 
-			if (Statics.GAME_MODE == GameMode.Normal || Statics.GAME_MODE == GameMode.Testing) {
-				float x = 0, y = 0;
-				synchronized (avatars) {
-					for (PlayersAvatar player : avatars) {
-						x += player.getWorldX();
-						y += player.getWorldY() + (Statics.PLAYER_HEIGHT/2);
-					}
-					x = x / this.avatars.size();
-					y = y / this.avatars.size();
+			if (Statics.GAME_MODE != GameMode.RaceToTheDeath) {
+				float avgx = 0, avgy = 0;
+				for (PlayersAvatar player : avatars) {
+					avgx += player.getWorldX();
+					avgy += player.getWorldY() + (Statics.PLAYER_HEIGHT/2);
 				}
-				this.rootCam.lookAt(x * this.currentScale, y * this.currentScale, true);
-
+				avgx = avgx / this.avatars.size();
+				avgy = avgy / this.avatars.size();
+				this.rootCam.lookAt(avgx * this.currentScale, avgy * this.currentScale, true);
 
 				// Do we need to zoom in/out?
-				if (avatars.size() > 1) {
-					float OUTER = 0.2f;
-					float INNER = 0.22f; // 0.3f
-					boolean zoomOut = false; // Need to zoom out quickly
-					boolean zoomIn = true; // Slowly
-					synchronized (avatars) {
-						for (PlayersAvatar player : avatars) {
-							float sx = player.getWindowX(this.rootCam, this.currentScale);
-							float sy = player.getWindowY(this.rootCam, this.currentScale);
-							zoomOut = sx < Statics.SCREEN_WIDTH * OUTER || sx > Statics.SCREEN_WIDTH * (1f-OUTER) || sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
-							if (zoomOut) {
-								break;
-							}
-							zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
+				float OUTER = 0.2f;
+				float INNER = 0.22f; // 0.3f
+				boolean zoomOut = false; // Need to zoom out quickly
+				boolean zoomIn = true; // Slowly
+				synchronized (avatars) {
+					for (PlayersAvatar player : avatars) {
+						float sx = player.getWindowX(this.rootCam, this.currentScale);
+						float sy = player.getWindowY(this.rootCam, this.currentScale);
+						zoomOut = sx < Statics.SCREEN_WIDTH * OUTER || sx > Statics.SCREEN_WIDTH * (1f-OUTER) || sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
+						if (zoomOut) {
+							break;
 						}
-					}
-					if (zoomOut) {
-						newScale *= Statics.ZOOM_OUT_SPEED;
-					} else if (zoomIn) {
-						newScale *= Statics.ZOOM_IN_SPEED;
-					}
-				} else {
-					// Only one player - zoom in
-					if (this.newScale < Statics.MAX_ZOOM_IN) {
-						newScale *= Statics.ZOOM_IN_SPEED;
-					} else {
-						this.newScale = Statics.MAX_ZOOM_IN;
+						zoomIn = zoomIn && (sx > Statics.SCREEN_WIDTH * INNER && sx < Statics.SCREEN_WIDTH * (1f-INNER) && sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
 					}
 				}
-			} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
-				if (this.avatars.size() > 1) {
-					float rightMost = 0;
-					PlayersAvatar rightmostPlayer = null; 
-					for (PlayersAvatar player : avatars) {
-						if (player.getWorldX() >= rightMost) {
-							rightMost = player.getWorldX(); 
-							rightmostPlayer = player;
-						}
-					}
-					//if (rightmostPlayer != null) {
-					float x = rightmostPlayer.getWorldX();
-					float y = rightmostPlayer.getWorldY() + (Statics.PLAYER_HEIGHT/2);
-					this.rootCam.lookAt(x * this.currentScale, y * this.currentScale, true);
-					/*if (this.currentScale < Statics.MAX_ZOOM_IN) {
-						newScale *= 1.005f; // todo - make const
-					}*/
-					//}
-
-					float OUTER = 0.2f;
-					//float INNER = 0.22f; // 0.3f
-					boolean zoomOut = false; // Need to zoom out quickly
-					//boolean zoomIn = true; // Slowly
-					synchronized (avatars) {
-						for (PlayersAvatar player : avatars) {
-							//float sx = player.getWindowX(this.rootCam, this.currentScale);
-							float sy = player.getWindowY(this.rootCam, this.currentScale);
-							zoomOut = sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
-							if (zoomOut) {
-								break;
-							}
-							//zoomIn = zoomIn && (sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
-						}
-					}
-					if (zoomOut) {
-						newScale *= Statics.ZOOM_OUT_SPEED;
-					} else { //if (zoomIn) {
-						newScale *= Statics.ZOOM_IN_SPEED;
-					}
-
-					// Check if a player is off-screen
-					for (PlayersAvatar player : avatars) {
-						if (!player.isOnScreen(rootCam, this.currentScale)) {
-							//player.died();
-							playerDied(player); // Don't call player.died() since it will just freeze them in this game mode
-						}
+				if (zoomOut) {
+					newScale *= Statics.ZOOM_OUT_SPEED;
+				} else if (zoomIn) {
+					newScale *= Statics.ZOOM_IN_SPEED;
+				}
+			} else { // Race to the Death if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
+				float rightMost = 0;
+				float avgx = 0, avgy = 0;
+				PlayersAvatar rightmostPlayer = null; 
+				for (PlayersAvatar player : avatars) {
+					avgx += player.getWorldX();
+					avgy += player.getWorldY() + (Statics.PLAYER_HEIGHT/2);
+					if (player.getWorldX() >= rightMost) {
+						rightMost = player.getWorldX(); 
+						rightmostPlayer = player;
 					}
 				}
-			} else {
-				throw new RuntimeException("Unknown Game Mode: " + Statics.GAME_MODE);
+				avgx = avgx / this.avatars.size();
+				avgy = avgy / this.avatars.size();
+
+				//float x = rightmostPlayer.getWorldX();
+				//float y = rightmostPlayer.getWorldY() + (Statics.PLAYER_HEIGHT/2);
+				this.rootCam.lookAt(rightmostPlayer.getWorldX() * this.currentScale, avgy * this.currentScale, true);
+
+				float OUTER = 0.2f;
+				//float INNER = 0.22f; // 0.3f
+				boolean zoomOut = false; // Need to zoom out quickly
+				//boolean zoomIn = true; // Slowly
+				synchronized (avatars) {
+					for (PlayersAvatar player : avatars) {
+						//float sx = player.getWindowX(this.rootCam, this.currentScale);
+						float sy = player.getWindowY(this.rootCam, this.currentScale);
+						zoomOut = sy < Statics.SCREEN_HEIGHT * OUTER || sy > Statics.SCREEN_HEIGHT * (1f-OUTER);
+						if (zoomOut) {
+							break;
+						}
+						//zoomIn = zoomIn && (sy > Statics.SCREEN_HEIGHT * INNER && sy < Statics.SCREEN_HEIGHT * (1f-INNER));
+					}
+				}
+				if (zoomOut) {
+					newScale *= Statics.ZOOM_OUT_SPEED;
+				} else { //if (zoomIn) {
+					newScale *= Statics.ZOOM_IN_SPEED;
+				}
+
+				// Check if a player is off-screen
+				for (PlayersAvatar player : avatars) {
+					if (!player.isOnScreen(rootCam, this.currentScale)) {
+						//player.died();
+						playerDied(player); // Don't call player.died() since it will just freeze them in this game mode
+					}
+				}
 			}
 
+		} else if (avatars.size() == 1) {
+			// Only one player - zoom in
+			if (this.newScale < Statics.MAX_ZOOM_IN) {
+				newScale *= Statics.ZOOM_IN_SPEED;
+			} else {
+				this.newScale = Statics.MAX_ZOOM_IN;
+			}
 		} else {
 			// No players yet!
 			float x = levelData.getStartPos().x * Statics.SQ_SIZE;
