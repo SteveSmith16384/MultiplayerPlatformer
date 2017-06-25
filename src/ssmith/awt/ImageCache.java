@@ -108,7 +108,7 @@ public class ImageCache implements Runnable {
 					{
 						BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 						scaled.getGraphics().drawImage(img, 0, 0, w, h, c);
-						Statics.p("Generated image " + filename + " of " + w + "," + h);
+						//Statics.p("Generated image " + filename + " of " + w + "," + h);
 						img = scaled;
 					}
 
@@ -202,7 +202,7 @@ public class ImageCache implements Runnable {
 				BufferedImage img = ImageIO.read(file);
 				synchronized (cache) {
 					cache.put(file.getName(), img);
-					Statics.p("Loaded " + file.getName());
+					//Statics.p("Loaded " + file.getName());
 				}
 			} catch (IOException ex) {
 				ex.printStackTrace();
