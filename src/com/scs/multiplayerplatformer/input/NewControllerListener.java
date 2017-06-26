@@ -4,6 +4,6 @@ public interface NewControllerListener {
 
 	void newController(IInputDevice input);
 
-	void controllerRemoved(int id);
+	void controllerRemoved(IInputDevice input);
 
 }

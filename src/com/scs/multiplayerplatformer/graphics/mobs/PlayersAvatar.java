@@ -39,7 +39,7 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		playernumZB = num;
 		//input = _input;
 		player = _player;
-		
+
 		inv = new BlockInventory(this);
 
 		this.setNumFrames(8);
@@ -169,8 +169,19 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 
 	@Override
 	protected void generateBitmaps(int size, float scale) {
+		/*
+		 * 						BufferedImage scaled = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+						scaled.getGraphics().drawImage(img, 0, 0, w, h, c);
+
+		 */
+		int width = (int)(Statics.PLAYER_WIDTH*scale);
+		int height = (int)(Statics.PLAYER_HEIGHT*scale);
 		int id = 0;
-		a_bmp_left[size][0] = Statics.img_cache.getImage("ninja" + id + "_l0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		for (int i=0 ; i<8 ; i++) {
+			a_bmp_left[size][i] = Statics.img_cache.getImage("ninja" + id + "_l"+i, width, height);
+			a_bmp_right[size][i] = Statics.img_cache.getImage("ninja" + id + "_r"+i, width, height);
+		}
+		/*a_bmp_left[size][0] = Statics.img_cache.getImage("ninja" + id + "_l0", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_left[size][1] = Statics.img_cache.getImage("ninja" + id + "_l1", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_left[size][2] = Statics.img_cache.getImage("ninja" + id + "_l2", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_left[size][3] = Statics.img_cache.getImage("ninja" + id + "_l3", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
@@ -186,19 +197,28 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		a_bmp_right[size][4] = Statics.img_cache.getImage("ninja" + id + "_r4", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_right[size][5] = Statics.img_cache.getImage("ninja" + id + "_r5", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
 		a_bmp_right[size][6] = Statics.img_cache.getImage("ninja" + id + "_r6", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
-		a_bmp_right[size][7] = Statics.img_cache.getImage("ninja" + id + "_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);
+		a_bmp_right[size][7] = Statics.img_cache.getImage("ninja" + id + "_r7", Statics.PLAYER_WIDTH*scale, Statics.PLAYER_HEIGHT*scale);*/
 
 		// Adjust colours
 		for (int f=0 ; f<8 ; f++) {
 			{
-				BufferedImage img = a_bmp_left[size][f];
-				adjustImage(img);
+				// Left images
+				BufferedImage copy = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+				copy.getGraphics().drawImage(a_bmp_left[size][f], 0, 0, width, height, null);
+				//BufferedImage img = a_bmp_left[size][f];
+				adjustImage(copy);
+				a_bmp_left[size][f] = copy;
 			}
 
 			{
+				BufferedImage copy = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+				copy.getGraphics().drawImage(a_bmp_right[size][f], 0, 0, width, height, null);
+				adjustImage(copy);
+				a_bmp_right[size][f] = copy;
+				
 				// bmp_right
-				BufferedImage img = a_bmp_right[size][f];
-				adjustImage(img);
+				//BufferedImage img = a_bmp_right[size][f];
+				//adjustImage(img);
 			}
 		}
 	}

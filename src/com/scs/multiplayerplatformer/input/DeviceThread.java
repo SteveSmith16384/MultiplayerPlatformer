@@ -20,7 +20,7 @@ public final class DeviceThread extends Thread {
 
 	public static boolean USE_CONTROLLERS = true;
 
-	private Map<Integer, IInputDevice> createdDevices = new HashMap<>();
+	private List<IInputDevice> createdDevices = new ArrayList<>();
 	private IInputDevice keyboard1, keyboard2;
 	private List<NewControllerListener> listeners = new ArrayList<>();
 
@@ -37,15 +37,11 @@ public final class DeviceThread extends Thread {
 			USE_CONTROLLERS = false;
 		}
 
-		keyboard1 = new KeyboardInput(window, 1);
-		keyboard2 = new KeyboardInput(window, 2);
+		keyboard1 = new KeyboardInput(window, -1);
+		keyboard2 = new KeyboardInput(window, -2);
 
 	}
 
-
-	public Collection<IInputDevice> getDevices() {
-		return this.createdDevices.values();
-	}
 
 	public void run() {
 		try {
@@ -58,8 +54,8 @@ public final class DeviceThread extends Thread {
 					for (IController gamepad : gamepads) {
 						if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
 							synchronized (createdDevices) {
-								if (!createdDevices.containsKey(gamepad.getDeviceID())) {
-									this.createController(gamepad.getDeviceID(), new PS4Controller(gamepad));
+								if (!createdDevices.contains(gamepad)) {
+									this.createController(new PS4Controller(gamepad));
 								}
 							}
 						}
@@ -67,11 +63,11 @@ public final class DeviceThread extends Thread {
 
 					// Chck for removed devices
 					synchronized (createdDevices) {
-						for (int id : createdDevices.keySet()) {
-							if (id > 0) {
+						for (IInputDevice id : createdDevices) {
+							if (id.getID() > 0) { // Don't check keyboard
 								boolean found = false;
 								for (IController gamepad : gamepads) {
-									if (gamepad.getDeviceID() == id) {
+									if (gamepad == id) {
 										found = true;
 										break;
 									}
@@ -87,14 +83,14 @@ public final class DeviceThread extends Thread {
 				if (keyboard1.isThrowPressed()) {
 					synchronized (createdDevices) {
 						if (createdDevices.get(-1) == null) {
-							this.createController(-1, keyboard1);
+							this.createController(keyboard1);
 						}
 					}
 				}
 				if (keyboard2.isThrowPressed()) {
 					synchronized (createdDevices) {
 						if (createdDevices.get(-2) == null) {
-							this.createController(-2, keyboard2);
+							this.createController(keyboard2);
 						}
 					}
 				}
@@ -107,13 +103,13 @@ public final class DeviceThread extends Thread {
 	}
 
 
-	private void createController(int id, IInputDevice input) {
+	private void createController(IInputDevice input) {
 		synchronized (createdDevices) {
 			//if (Statics.DEBUG) {
-			Statics.p("Current Devices: " + this.createdDevices.keySet());
-			Statics.p("Creating new device id:" + id);
+			//Statics.p("Current Devices: " + this.createdDevices.keySet());
+			//Statics.p("Creating new device id:" + id);
 			//}
-			createdDevices.put(id, input);
+			createdDevices.add(input);
 		}
 
 		synchronized (listeners) {
@@ -124,18 +120,18 @@ public final class DeviceThread extends Thread {
 	}
 
 
-	private void removeController(int id) {
+	private void removeController(IInputDevice input) {
 		synchronized (createdDevices) {
 			//if (Statics.DEBUG) {
-			Statics.p("Current Devices: " + this.createdDevices.keySet());
-			Statics.p("Removing device id:" + id);
+			Statics.p("Current Devices: " + this.createdDevices.size());
+			Statics.p("Removing device id:" + input.getID());
 			//}
-			createdDevices.remove(id);
+			createdDevices.remove(input);
 		}
 
 		synchronized (listeners) {
 			for (NewControllerListener l : this.listeners) {
-				l.controllerRemoved(id);
+				l.controllerRemoved(input);
 			}
 		}
 	}

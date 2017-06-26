@@ -37,7 +37,7 @@ public final class MainThread extends Thread implements NewControllerListener {
 	public Canvas c;
 	public MainWindow window;
 
-	public Map<IInputDevice, Player> players_ = new HashMap<>();
+	public Map<IInputDevice, Player> players = new HashMap<>();
 	private List<IInputDevice> newControllers = new ArrayList<>();
 
 	static {
@@ -206,21 +206,21 @@ public final class MainThread extends Thread implements NewControllerListener {
 	private void createPlayer(IInputDevice input) {
 		//int num = players.size();
 		synchronized (players) {
-			if (this.players.containsKey(input.getID()) == false) {
+			//if (this.players.containsKey(input) == false) {
 				Player player = new Player(input);
 				this.players.put(input, player);
 				this.module.newPlayer(player);
-			}
+			//}
 		}
 		//this.msg.setText("Player " + (num+1) + " joined!");
 	}
 
 
 	@Override
-	public void controllerRemoved(int id) {
+	public void controllerRemoved(IInputDevice input) {
 		synchronized (players) {
-			Player player = this.players.get(id);
-			this.players.remove(id);
+			Player player = this.players.get(input);
+			this.players.remove(input);
 			this.module.playerRemoved(player);
 		}
 

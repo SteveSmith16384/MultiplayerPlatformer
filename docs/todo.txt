@@ -1,20 +1,13 @@
-java.util.ConcurrentModificationException
-	at java.util.ArrayList$Itr.checkForComodification(Unknown Source)
-	at java.util.ArrayList$Itr.next(Unknown Source)
-	at com.scs.multiplayerplatformer.game.GameModule.updateGame(GameModule.java:318)
-	at com.scs.multiplayerplatformer.MainThread.updateGame(MainThread.java:186)
-	at com.scs.multiplayerplatformer.MainThread.run(MainThread.java:71)
-
-
 Multiplayer Platformer Todo List
 
 
 URGENT
-Remove player if device removed
-All avatars are the same colour
-Concurrent modification
-Could not join with keyboard
-Fire p[roblem
+Create test map with no baddies
+	Fire problem - player dropping down
+	All avatars are the same colour
+	Remove player if device removed
+	Concurrent modification
+	Could not join with keyboard
 Use Harry's logo
 	Say "no maps found" if none
 	Give points when won

@@ -7,13 +7,17 @@ import javax.swing.JFrame;
 
 public class KeyboardInput implements IInputDevice, KeyListener {
 
-	private volatile boolean left, right, jump, up, down, fire; // todo - remove Up
+	private volatile boolean left, right, jump, up, down, fire;
 	private boolean lastMoveWasLeft = false;
 	private int id;
 
 	public KeyboardInput(JFrame frame, int _id) {
 		super();
 
+		if (id >= 0) {
+			throw new RuntimeException("Invalid keyboard ID - must be < 0");
+		}
+		
 		id = _id;
 		frame.addKeyListener(this);
 	}
@@ -195,6 +199,12 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 	@Override
 	public int getID() {
 		return id;
+	}
+
+
+	@Override
+	public String toString() {
+		return "KeyboardInput:" + id;
 	}
 
 }

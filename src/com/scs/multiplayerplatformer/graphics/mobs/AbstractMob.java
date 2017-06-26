@@ -116,6 +116,7 @@ public abstract class AbstractMob extends GameObject {
 
 				if (Block.GetHarm(b.getType()) > 0) {
 					this.died();
+					blocked = true; // So we move back, e.g. if hit fire and on RTTD
 					return false;
 				}
 				if (Block.BlocksAllMovement(b.getType())) {

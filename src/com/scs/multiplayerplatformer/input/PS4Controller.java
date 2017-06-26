@@ -79,15 +79,15 @@ public final class PS4Controller implements IInputDevice {
 	}
 
 
-	/*@Override
-	public float getThrowDuration() {
-		return .5f;
-	}*/
-
-
 	@Override
 	public int getID() {
 		return gamepad.getDeviceID();
+	}
+
+
+	@Override
+	public String toString() {
+		return "PS4Controller:" + getID();
 	}
 
 }

@@ -2,9 +2,9 @@ package com.scs.multiplayerplatformer.game;
 
 import com.scs.multiplayerplatformer.input.IInputDevice;
 
-public final class Player { // todo - tostring
+public final class Player {
 
-	public int num; // todo - zb
+	public int numZB;
 	public int score;
 	public IInputDevice input;
 	
@@ -14,7 +14,13 @@ public final class Player { // todo - tostring
 		super();
 		
 		input = _input;
-		num = nextId++;
+		numZB = nextId++;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "Player" + numZB;
 	}
 
 }

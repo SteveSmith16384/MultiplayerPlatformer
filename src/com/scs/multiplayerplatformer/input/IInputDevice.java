@@ -2,7 +2,7 @@ package com.scs.multiplayerplatformer.input;
 
 public interface IInputDevice {
 
-	int getID(); // todo - create tostring
+	int getID();
 	
 	boolean isLeftPressed();
 
@@ -20,6 +20,6 @@ public interface IInputDevice {
 	
 	int getAngle();
 
-	//float getThrowDuration();
+	String toString();
 
 }
