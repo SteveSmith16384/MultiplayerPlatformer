@@ -2,7 +2,7 @@ package com.scs.multiplayerplatformer.input;
 
 public interface IInputDevice {
 
-	int getID();
+	int getID(); // todo - create tostring
 	
 	boolean isLeftPressed();
 

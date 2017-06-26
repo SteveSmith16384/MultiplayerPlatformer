@@ -133,7 +133,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 
 
 	private void createAvatar(Player player) {
-		PlayersAvatar avatar = new PlayersAvatar(this, 0, 0, player.input, player.num);
+		PlayersAvatar avatar = new PlayersAvatar(this, 0, 0, player, player.num);
 		synchronized (avatars) {
 			this.avatars.add(avatar);
 			this.avatars.refresh();
@@ -549,7 +549,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			score_inc = score_inc * 2;
 		}
 		if (score_inc > 0) { // Might be negative
-			this.getThread().players.get(avatar.input.getID()).score += score_inc;
+			this.getThread().players.get(avatar.player.num).score += score_inc;
 			displayText("Player " + avatar.playernumZB + " finished!  Have " + score_inc + " points!");
 		}
 		avatar.remove();
@@ -636,7 +636,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				PlayersAvatar winner = this.avatars.get(0);
 				this.showToast("Player " + (winner.playernumZB+1) + " HAS WON!");
 				long score_inc = (levelEndTime - System.currentTimeMillis()) / 100;
-				this.getThread().players.get(avatar.input.getID()).score += score_inc;
+				this.getThread().players.get(avatar.player.num).score += score_inc;
 				restartGame = true;
 				restartGameAt = System.currentTimeMillis() + 3000;
 			}
@@ -644,6 +644,21 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			restartAvatar(avatar);
 		}
 	}
+	
+	
+	public void playerRemoved(Player player) {
+		synchronized (avatars) {
+			for (PlayersAvatar avatar : avatars) {
+				if (avatar.playernumZB == player.num) {
+					avatars.remove(avatar);
+					break;
+				}
+			}
+		}
+	}
+
+
+
 
 }
 

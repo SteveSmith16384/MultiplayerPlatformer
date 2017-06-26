@@ -65,6 +65,24 @@ public final class DeviceThread extends Thread {
 						}
 					}
 
+					// Chck for removed devices
+					synchronized (createdDevices) {
+						for (int id : createdDevices.keySet()) {
+							if (id > 0) {
+								boolean found = false;
+								for (IController gamepad : gamepads) {
+									if (gamepad.getDeviceID() == id) {
+										found = true;
+										break;
+									}
+								}
+								if (!found) {
+									//this.createdDevices.remove(id);
+									this.removeController(id);
+								}
+							}
+						}
+					}
 				}
 				if (keyboard1.isThrowPressed()) {
 					synchronized (createdDevices) {
@@ -80,6 +98,7 @@ public final class DeviceThread extends Thread {
 						}
 					}
 				}
+				
 				Functions.delay(500);
 			} 
 		} catch (Exception ex) {
@@ -105,9 +124,27 @@ public final class DeviceThread extends Thread {
 	}
 
 
+	private void removeController(int id) {
+		synchronized (createdDevices) {
+			//if (Statics.DEBUG) {
+			Statics.p("Current Devices: " + this.createdDevices.keySet());
+			Statics.p("Removing device id:" + id);
+			//}
+			createdDevices.remove(id);
+		}
+
+		synchronized (listeners) {
+			for (NewControllerListener l : this.listeners) {
+				l.controllerRemoved(id);
+			}
+		}
+	}
+
+
 	public void addListener(NewControllerListener l) {
 		synchronized (listeners) {
 			this.listeners.add(l);
 		}		
 	}
+	
 }

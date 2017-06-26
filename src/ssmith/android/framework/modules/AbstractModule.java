@@ -193,4 +193,9 @@ public abstract class AbstractModule extends Thread {//implements NewControllerL
 	}
 
 
+	public void playerRemoved(Player player) {
+		// Override if reqd
+	}
+
+
 }

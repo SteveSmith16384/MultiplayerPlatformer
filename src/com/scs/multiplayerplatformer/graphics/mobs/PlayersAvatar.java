@@ -4,20 +4,21 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 
-import ssmith.android.compatibility.Canvas;
-import ssmith.android.compatibility.PointF;
-import ssmith.android.lib2d.Camera;
-import ssmith.android.lib2d.MyPointF;
-import ssmith.lang.GeometryFuncs;
-
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.Statics.GameMode;
 import com.scs.multiplayerplatformer.game.BlockInventory;
 import com.scs.multiplayerplatformer.game.GameModule;
 import com.scs.multiplayerplatformer.game.PhysicsEngine;
+import com.scs.multiplayerplatformer.game.Player;
 import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.input.IInputDevice;
+
+import ssmith.android.compatibility.Canvas;
+import ssmith.android.compatibility.PointF;
+import ssmith.android.lib2d.Camera;
+import ssmith.android.lib2d.MyPointF;
+import ssmith.lang.GeometryFuncs;
 
 public final class PlayersAvatar extends AbstractWalkingMob {
 
@@ -25,18 +26,20 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 	public BlockInventory inv;
 	public int playernumZB;
 
-	public IInputDevice input;
+	//public IInputDevice input;
+	public Player player;
 	private long firePressedTime;
 	private boolean prevThrowPressed = false;
 	public Point checkpoint_map;
 
 
-	public PlayersAvatar(GameModule _game, float x, float y, IInputDevice _input, int num) {
+	public PlayersAvatar(GameModule _game, float x, float y, Player _player, int num) {
 		super(_game, Statics.act.getString("player")  + num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, Statics.SD_PLAYERS_SIDE, false);
 
 		playernumZB = num;
-		input = _input;
-
+		//input = _input;
+		player = _player;
+		
 		inv = new BlockInventory(this);
 
 		this.setNumFrames(8);
@@ -52,30 +55,30 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		movingUp = false;
 		movingDown = false;
 		if (frozenUntil < System.currentTimeMillis()) {
-			if (input.isLeftPressed()) {
-				moveXOffset = -1 * input.getStickDistance();
-			} else if (input.isRightPressed()) {
-				moveXOffset = 1 * input.getStickDistance();
+			if (player.input.isLeftPressed()) {
+				moveXOffset = -1 * player.input.getStickDistance();
+			} else if (player.input.isRightPressed()) {
+				moveXOffset = 1 * player.input.getStickDistance();
 			}
 
-			if (input.isJumpPressed()) {
+			if (player.input.isJumpPressed()) {
 				startJumping();
 			}
 
-			if (input.isUpPressed()) {
+			if (player.input.isUpPressed()) {
 				movingUp = true;
-			} else if (input.isDownPressed()) {
+			} else if (player.input.isDownPressed()) {
 				movingDown = true;
 			}
 
-			boolean throwPressed = input.isThrowPressed(); 
+			boolean throwPressed = player.input.isThrowPressed(); 
 			if (throwPressed) {
 				if (!prevThrowPressed) {
 					this.firePressedTime = System.currentTimeMillis();
 				}
 			} else {
 				if (prevThrowPressed) {
-					throwItem(input.getAngle(), System.currentTimeMillis() - this.firePressedTime);
+					throwItem(player.input.getAngle(), System.currentTimeMillis() - this.firePressedTime);
 				}
 			}
 			this.prevThrowPressed = throwPressed;
