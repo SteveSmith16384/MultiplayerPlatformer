@@ -14,11 +14,12 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 	public KeyboardInput(JFrame frame, int _id) {
 		super();
 
+		id = _id;
+
 		if (id >= 0) {
 			throw new RuntimeException("Invalid keyboard ID - must be < 0");
 		}
 		
-		id = _id;
 		frame.addKeyListener(this);
 	}
 
@@ -73,7 +74,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent ke) {
-		if (this.id == 1) {
+		if (this.id == -1) { // todo - make const
 			switch (ke.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
 				left = true;
@@ -97,7 +98,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 				//firePressedTime = System.currentTimeMillis();
 				break;
 			}
-		} else if (id == 2) {
+		} else if (id == -2) {
 			switch (ke.getKeyCode()) {
 			case KeyEvent.VK_A:
 				left = true;
@@ -122,6 +123,8 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 				break;
 			}
 
+		} else {
+			throw new RuntimeException("todo");
 		}
 
 	}
@@ -129,7 +132,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent ke) {
-		if (this.id == 1) {
+		if (this.id == -1) {
 			switch (ke.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
 				left = false;
@@ -155,7 +158,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 			}
 
-		} else if (id == 2) {
+		} else if (id == -2) { // todo - make const
 			switch (ke.getKeyCode()) {
 			case KeyEvent.VK_A:
 				left = false;

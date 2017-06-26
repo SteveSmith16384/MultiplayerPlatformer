@@ -2,15 +2,13 @@ Multiplayer Platformer Todo List
 
 
 URGENT
-Create test map with no baddies
-	Fire problem - player dropping down
-	All avatars are the same colour
+Fire problem - player dropping down
 	Remove player if device removed
-	Concurrent modification
-	Could not join with keyboard
+Concurrent modification
 Use Harry's logo
 	Say "no maps found" if none
 	Give points when won
+Create test map with no baddies
 "Press fire to start" is hidden
 Show please wait when loading images
 	RTTD Showing wrong player has won

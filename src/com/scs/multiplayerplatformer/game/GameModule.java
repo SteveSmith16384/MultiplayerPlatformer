@@ -240,7 +240,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		}
 
 		if (avatars.size() > 1) {
-			if (checkForNewMobs.hitInterval()) {
+			if (checkForNewMobs.hitInterval()) { // todo - move
 				this.checkIfMobsNeedCreating(this.currentScale, this.rootCam);
 			}
 
@@ -320,6 +320,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 					if (!player.isOnScreen(rootCam, this.currentScale)) {
 						//player.died();
 						playerDied(player); // Don't call player.died() since it will just freeze them in this game mode
+						break; // Prevent CME
 					}
 				}
 			}
@@ -331,6 +332,9 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			} else {
 				this.newScale = Statics.MAX_ZOOM_IN;
 			}
+			PlayersAvatar rightmostPlayer = avatars.get(0);
+			this.rootCam.lookAt(rightmostPlayer.getWorldX() * this.currentScale, rightmostPlayer.getWorldY() * this.currentScale, true);
+
 		} else {
 			// No players yet!
 			float x = levelData.getStartPos().x * Statics.SQ_SIZE;
@@ -656,6 +660,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			for (PlayersAvatar avatar : avatars) {
 				if (avatar.player == player) {
 					avatars.remove(avatar);
+					avatar.remove();
+					//this.entities.remove(avater);
 					this.msg.setText("Player " + player.numZB+1 + " has left!");
 					break;
 				}
