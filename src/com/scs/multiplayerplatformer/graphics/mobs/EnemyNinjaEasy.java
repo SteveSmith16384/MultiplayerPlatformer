@@ -2,7 +2,7 @@ package com.scs.multiplayerplatformer.graphics.mobs;
 
 import ssmith.lang.Functions;
 import ssmith.lang.NumberFunctions;
-import ssmith.util.Interval;
+import ssmith.util.RealtimeInterval;
 import ssmith.util.ReturnObject;
 
 import com.scs.multiplayerplatformer.Statics;
@@ -20,8 +20,8 @@ public class EnemyNinjaEasy extends AbstractWalkingMob {
 
 	private int xOffset = -1;
 	private boolean triedJumping = false;
-	private Interval turnInterval = new Interval(TURN_DURATION);
-	private Interval throwInterval = new Interval(5000);
+	private RealtimeInterval turnInterval = new RealtimeInterval(TURN_DURATION);
+	private RealtimeInterval throwInterval = new RealtimeInterval(5000);
 
 	public static void factory(GameModule game, Block gen) { // gen == null for normal appearance
 		if (game.getNumProcessInstant() < Statics.MAX_INSTANTS) {

@@ -7,6 +7,9 @@ import javax.swing.JFrame;
 
 public class KeyboardInput implements IInputDevice, KeyListener {
 
+	public static final int KEYBOARD1_ID = -1;
+	public static final int KEYBOARD2_ID = -2;
+	
 	private volatile boolean left, right, jump, up, down, fire;
 	private boolean lastMoveWasLeft = false;
 	private int id;
@@ -74,7 +77,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent ke) {
-		if (this.id == -1) { // todo - make const
+		if (this.id == KEYBOARD1_ID) {
 			switch (ke.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
 				left = true;
@@ -98,7 +101,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 				//firePressedTime = System.currentTimeMillis();
 				break;
 			}
-		} else if (id == -2) {
+		} else if (id == KEYBOARD2_ID) {
 			switch (ke.getKeyCode()) {
 			case KeyEvent.VK_A:
 				left = true;
@@ -124,7 +127,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 			}
 
 		} else {
-			throw new RuntimeException("todo");
+			throw new RuntimeException("Invalid keyboard ID: " + id);
 		}
 
 	}
@@ -132,7 +135,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent ke) {
-		if (this.id == -1) {
+		if (this.id == KEYBOARD1_ID) {
 			switch (ke.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
 				left = false;
@@ -158,7 +161,7 @@ public class KeyboardInput implements IInputDevice, KeyListener {
 
 			}
 
-		} else if (id == -2) { // todo - make const
+		} else if (id == KEYBOARD2_ID) {
 			switch (ke.getKeyCode()) {
 			case KeyEvent.VK_A:
 				left = false;

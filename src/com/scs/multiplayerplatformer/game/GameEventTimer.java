@@ -1,8 +1,8 @@
 package com.scs.multiplayerplatformer.game;
 
-import ssmith.android.util.Timer;
 import ssmith.lang.DateFunctions;
 import ssmith.lang.Functions;
+import ssmith.util.Timer;
 
 public class GameEventTimer extends Timer implements IProcessable {
 

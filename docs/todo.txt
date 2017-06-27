@@ -2,10 +2,8 @@ Multiplayer Platformer Todo List
 
 
 URGENT
-Fire problem - player dropping down
-	Remove player if device removed
-Concurrent modification
-Use Harry's logo
+RTTD Fire problem - player dropping down
+	Concurrent modification
 	Say "no maps found" if none
 	Give points when won
 Create test map with no baddies
@@ -17,6 +15,7 @@ Search for todos
 
 
 TODO
+Use Harry's logo
 Use random background
 Testing mode - replay same map
 Conveyor belts

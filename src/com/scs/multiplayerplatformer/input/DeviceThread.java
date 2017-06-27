@@ -35,8 +35,8 @@ public final class DeviceThread extends Thread {
 			USE_CONTROLLERS = false;
 		}
 
-		keyboard1 = new KeyboardInput(window, -1);
-		keyboard2 = new KeyboardInput(window, -2);
+		keyboard1 = new KeyboardInput(window, KeyboardInput.KEYBOARD1_ID);
+		keyboard2 = new KeyboardInput(window, KeyboardInput.KEYBOARD2_ID);
 
 	}
 
@@ -78,7 +78,7 @@ public final class DeviceThread extends Thread {
 									for (IController gamepad : gamepads) {
 										if (gamepad.getDeviceID() == id.getID()) {
 											found = true;
-											break; // todo - catch CME
+											break;
 										}
 									}
 									if (!found) {
@@ -132,13 +132,13 @@ public final class DeviceThread extends Thread {
 
 
 	private void removeController(IInputDevice input) {
-		synchronized (createdDevices) {
+		//synchronized (createdDevices) {
 			//if (Statics.DEBUG) {
 			Statics.p("Current Devices: " + this.createdDevices.size());
 			Statics.p("Removing device id:" + input.getID());
 			//}
 			createdDevices.remove(input);
-		}
+		//}
 
 		synchronized (listeners) {
 			for (NewControllerListener l : this.listeners) {

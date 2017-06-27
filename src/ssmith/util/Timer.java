@@ -1,4 +1,4 @@
-package ssmith.android.util;
+package ssmith.util;
 
 /**
  * We can't just use currentTimeMillis as when the game is paused, it will still continue.

@@ -19,7 +19,7 @@ import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.android.lib2d.shapes.Rectangle;
 import ssmith.lang.GeometryFuncs;
 import ssmith.util.IDisplayText;
-import ssmith.util.Interval;
+import ssmith.util.RealtimeInterval;
 import ssmith.util.ReturnObject;
 import ssmith.util.TSArrayList;
 
@@ -51,7 +51,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 	private Rectangle dummyRect = new Rectangle(); // for checking the area is clear
 	private long levelEndTime;
 	private String strTimeRemaining;
-	private Interval checkForNewMobs = new Interval(500, true);
+	private RealtimeInterval checkForNewMobs = new RealtimeInterval(500, true);
 	private TSArrayList<PlayersAvatar> avatars = new TSArrayList<>();
 	private String filename;
 	private boolean restartGame = false;
@@ -239,11 +239,13 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 			}
 		}
 
-		if (avatars.size() > 1) {
-			if (checkForNewMobs.hitInterval()) { // todo - move
+		if (avatars.size() > 0) {
+			if (checkForNewMobs.hitInterval()) {
 				this.checkIfMobsNeedCreating(this.currentScale, this.rootCam);
 			}
-
+		}
+		
+		if (avatars.size() > 1) {
 			if (Statics.GAME_MODE != GameMode.RaceToTheDeath) {
 				float avgx = 0, avgy = 0;
 				for (PlayersAvatar player : avatars) {

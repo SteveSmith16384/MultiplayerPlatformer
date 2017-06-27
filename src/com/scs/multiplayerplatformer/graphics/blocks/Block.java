@@ -364,7 +364,7 @@ public class Block extends GameObject {
 			break;
 
 		case Block.SAND:
-			destroy(2, false, null); // todo - don't destroy immed
+			destroy(2, false, null);
 		}
 	}
 

@@ -1,6 +1,6 @@
 package com.scs.multiplayerplatformer.game;
 
-import ssmith.android.util.Timer;
+import ssmith.util.Timer;
 
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
 import com.scs.multiplayerplatformer.graphics.mobs.EnemyNinjaEasy;

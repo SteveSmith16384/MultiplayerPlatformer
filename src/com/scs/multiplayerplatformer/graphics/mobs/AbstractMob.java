@@ -6,7 +6,7 @@ import ssmith.android.compatibility.RectF;
 import ssmith.android.lib2d.shapes.AbstractRectangle;
 import ssmith.android.lib2d.shapes.Geometry;
 import ssmith.lang.Functions;
-import ssmith.util.Interval;
+import ssmith.util.RealtimeInterval;
 
 import com.scs.multiplayerplatformer.Collision;
 import com.scs.multiplayerplatformer.Statics;
@@ -33,7 +33,7 @@ public abstract class AbstractMob extends GameObject {
 	public byte side;
 	private int holdBreathTime = MAX_HOLD_BREATH_TIME;
 	public boolean isOnIce = false;
-	private Interval bubble_int = new Interval(1000, false);
+	private RealtimeInterval bubble_int = new RealtimeInterval(1000, false);
 	public long frozenUntil = 0;
 
 	public AbstractMob(GameModule _game, String name, float x, float y, float w, float h, boolean _destroy_blocks, byte _side) {
