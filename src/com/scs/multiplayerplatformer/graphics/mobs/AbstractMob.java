@@ -117,7 +117,7 @@ public abstract class AbstractMob extends GameObject {
 				if (Block.GetHarm(b.getType()) > 0) {
 					this.died();
 					blocked = true; // So we move back, e.g. if hit fire and on RTTD
-					return false;
+					//return false;
 				}
 				if (Block.BlocksAllMovement(b.getType())) {
 					blocked = true;
@@ -164,7 +164,23 @@ public abstract class AbstractMob extends GameObject {
 		return true;
 	}
 
-	
+	/*
+	private void moveBack(Block b, float prev_x, float prev_y, float off_x, float off_y) {
+		// Move us up to the object we hit
+		if (off_x < 0) {
+			prev_x = b.getWorldBounds().right + 1;
+		} else if (off_x > 0) {
+			prev_x = b.getWorldBounds().left - this.getWidth() - 1;
+		} else if (off_y < 0) {
+			prev_y = b.getWorldBounds().bottom + 1;
+		} else if (off_y > 0) {
+			prev_y = b.getWorldBounds().top - this.getHeight() - 1;
+		}
+		this.setLocation(prev_x, prev_y);
+		this.updateGeometricState();
+
+	}
+	*/
 	abstract void hitBlockCheck(Block b, float off_x, float off_y);
 
 	// Returns false on a collision!

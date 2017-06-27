@@ -150,6 +150,8 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 	public void died() {
 		if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
 			this.frozenUntil = System.currentTimeMillis() + 1000;
+			this.isOnGroundOrLadder = true;
+			this.startJumping(); // In case we landed on fire
 		} else {
 			game.playerDied(this);
 		}

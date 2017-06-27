@@ -2,19 +2,16 @@ Multiplayer Platformer Todo List
 
 
 URGENT
-RTTD Fire problem - player dropping down
-	Concurrent modification
+	RTTD Fire problem - player dropping down
 	Say "no maps found" if none
 	Give points when won
-Create test map with no baddies
 "Press fire to start" is hidden
 Show please wait when loading images
-	RTTD Showing wrong player has won
-	Show "has won" bigger
 Search for todos
 
 
 TODO
+Show "has won" bigger
 Use Harry's logo
 Use random background
 Testing mode - replay same map
