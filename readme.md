@@ -2,7 +2,7 @@ MULTIPLAYER PLATFORMER
 
 ![ss1.png](https://bitbucket.org/repo/ekk78oE/images/400426500-ss1.png)
 
-by Stephen Carlyle-Smith (stephen.carlylesmith@gmail.com)
+by Stephen Carlyle-Smith (https://twitter.com/stephencsmith)
 
 [Youtube vid](https://www.youtube.com/watch?v=gKTC4e8nbpw)
 
@@ -37,4 +37,4 @@ Music: https://opengameart.org/content/nes-shooter-music-5-tracks-3-jingles
 Thanks for playing!
 
 Stephen
-stephen.carlylesmith@gmail.com
+https://twitter.com/stephencsmith
