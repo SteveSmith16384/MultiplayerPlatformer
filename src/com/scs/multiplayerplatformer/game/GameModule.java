@@ -570,6 +570,8 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 		// check if no players left
 		if (this.avatars.isEmpty()) {
 			this.startNewLevel(null, false); // Load random map after playing first selected map
+		} else if (Statics.GAME_MODE == GameMode.RaceToTheDeath) {
+			this.startNewLevel(null, false); // Load random map after playing first selected map
 		}
 	}
 

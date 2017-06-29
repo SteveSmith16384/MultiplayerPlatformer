@@ -2,15 +2,13 @@ Multiplayer Platformer Todo List
 
 
 URGENT
-	RTTD Fire problem - player dropping down
-	Say "no maps found" if none
-	Give points when won
-"Press fire to start" is hidden
-Show please wait when loading images
+	RTTD - first to end wins
 Search for todos
 
 
 TODO
+"Press fire to start" is hidden
+Show please wait when loading images
 Show "has won" bigger
 Use Harry's logo
 Use random background

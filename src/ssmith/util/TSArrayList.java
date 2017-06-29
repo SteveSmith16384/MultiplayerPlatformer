@@ -58,4 +58,10 @@ public class TSArrayList<E> extends ArrayList<E> implements List<E> {
 	public boolean isEmpty() {
 		return size() <= 0;
 	}
+	
+	
+	@Override
+	public boolean contains(Object o) {
+		return super.contains(o) || this.to_add.contains(o);
+	}
 }
