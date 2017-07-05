@@ -25,8 +25,16 @@ CREATING MAPS
 You can easily create your own maps.  Take a look in the maps directory for examples.  The maps need to be saved in CSV format, but there are plenty of examples created using Open Office which can then be saved as a CSV.  Any csv files found in the relevant "maps" directory will be selectable.  Please email my any good maps you create for inclusion in the next release!
 
 
+FEATURES!
+* Easy to create custom maps using any spreadsheet
+* Any number of players, using keyboard or gamepads
+* Fast & smooth graphics
+* Runs on any PC regardless of graphics card
+* Source code "just works"
+
+
 LICENCE
-All assets and code are licenced under MIT.
+All assets and code are licenced under MIT.  Source code is available from https://bitbucket.org/SteveSmith16384/multiplayerplatformer
 
 
 CREDITS
