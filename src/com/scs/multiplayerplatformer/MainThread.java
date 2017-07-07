@@ -204,15 +204,11 @@ public final class MainThread extends Thread implements NewControllerListener {
 
 
 	private void createPlayer(IInputDevice input) {
-		//int num = players.size();
 		synchronized (players) {
-			//if (this.players.containsKey(input) == false) {
-				Player player = new Player(input);
-				this.players.put(input, player);
-				this.module.newPlayer(player);
-			//}
+			Player player = new Player(input);
+			this.players.put(input, player);
+			this.module.newPlayer(player);
 		}
-		//this.msg.setText("Player " + (num+1) + " joined!");
 	}
 
 

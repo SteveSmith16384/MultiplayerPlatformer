@@ -26,7 +26,6 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 	public BlockInventory inv;
 	public int playernumZB;
 
-	//public IInputDevice input;
 	public Player player;
 	private long firePressedTime;
 	private boolean prevThrowPressed = false;
@@ -37,7 +36,6 @@ public final class PlayersAvatar extends AbstractWalkingMob {
 		super(_game, Statics.act.getString("player")  + num, x, y, Statics.PLAYER_WIDTH, Statics.PLAYER_HEIGHT, 3, 100, false, Statics.SD_PLAYERS_SIDE, false);
 
 		playernumZB = num;
-		//input = _input;
 		player = _player;
 
 		inv = new BlockInventory(this);

@@ -665,8 +665,7 @@ public final class GameModule extends AbstractModule implements IDisplayText {
 				if (avatar.player == player) {
 					avatars.remove(avatar);
 					avatar.remove();
-					//this.entities.remove(avater);
-					this.msg.setText("Player " + player.numZB+1 + " has left!");
+					this.msg.setText("Player " + (player.numZB+1) + " has left!");
 					break;
 				}
 			}
