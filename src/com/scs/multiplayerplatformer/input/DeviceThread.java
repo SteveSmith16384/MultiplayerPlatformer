@@ -53,9 +53,6 @@ public final class DeviceThread extends Thread {
 						if (gamepad.isButtonPressed(ButtonID.FACE_DOWN)) {
 							boolean found = false;
 							synchronized (createdDevices) {
-								/*if (!createdDevices.contains(gamepad)) {
-									this.createController(new PS4Controller(gamepad));
-								}*/
 								for (IInputDevice exists : this.createdDevices) {
 									if (exists.getID() == gamepad.getDeviceID()) {
 										found = true;

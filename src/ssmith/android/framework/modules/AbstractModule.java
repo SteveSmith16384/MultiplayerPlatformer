@@ -18,7 +18,7 @@ import com.scs.multiplayerplatformer.MainThread;
 import com.scs.multiplayerplatformer.Statics;
 import com.scs.multiplayerplatformer.game.Player;
 
-public abstract class AbstractModule extends Thread {//implements NewControllerListener {
+public abstract class AbstractModule extends Thread {
 	
 	private static Paint paint_button_text = new Paint();
 
