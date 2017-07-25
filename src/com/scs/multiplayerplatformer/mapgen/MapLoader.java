@@ -56,7 +56,11 @@ public final class MapLoader extends AbstractLevelData {
 
 
 	public static List<String> GetMaps() {
-		String[] maps = new File(MAP_DIR + Statics.GAME_MODE.toString()).list();
+		String dir = MAP_DIR + Statics.GAME_MODE.toString();
+		String[] maps = new File(dir).list();
+		if (maps == null) {
+			throw new RuntimeException("No map files found in " + dir);
+		}
 		List<String> csv = new ArrayList<>();
 
 		for(String s : maps) {
