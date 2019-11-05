@@ -108,14 +108,14 @@ public class DesktopControllerProvider implements IControllerProvider {
 		
 		// 1st check which controllers are (still) connected
 		int newNumberOfControllers = jniWrapper.natGetNumberOfPads();
-		if(newNumberOfControllers != this.numberOfControllers) {
-			this.numberOfControllers = newNumberOfControllers;
+		if(newNumberOfControllers != numberOfControllers) {
+			numberOfControllers = newNumberOfControllers;
 			if(Log.debugEnabled) {
-				Log.logger.debug("Number of controllers: " + this.numberOfControllers);
+				Log.logger.debug("Number of controllers: " + numberOfControllers);
 			}
 		}
 //		Log.log("Check for newly connected controllers...");
-		for(int ct = 0; ct < this.numberOfControllers; ct++) {
+		for(int ct = 0; ct < numberOfControllers; ct++) {
 			int connectedId = jniWrapper.natGetDeviceID(ct);
 			if(connectedId != -1) {
 				DesktopController controller = this.connected.get(connectedId);
@@ -177,7 +177,7 @@ public class DesktopControllerProvider implements IControllerProvider {
 		
 		// 3rd update the state of all remaining controllers
 //		Log.log("Update controllers...");
-		for(DesktopController controller : this.connected.values()) {
+		for(DesktopController controller : connected.values()) {
 			jniWrapper.updateControllerStatus(controller);
 		}
 	}

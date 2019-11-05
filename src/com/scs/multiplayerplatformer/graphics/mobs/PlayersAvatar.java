@@ -12,7 +12,6 @@ import com.scs.multiplayerplatformer.game.PhysicsEngine;
 import com.scs.multiplayerplatformer.game.Player;
 import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.blocks.Block;
-import com.scs.multiplayerplatformer.input.IInputDevice;
 
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.PointF;

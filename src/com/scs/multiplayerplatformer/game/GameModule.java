@@ -5,9 +5,22 @@ import java.util.ConcurrentModificationException;
 
 import org.gamepad4j.Controllers;
 
+import com.scs.multiplayerplatformer.Statics;
+import com.scs.multiplayerplatformer.Statics.GameMode;
+import com.scs.multiplayerplatformer.graphics.Cloud;
+import com.scs.multiplayerplatformer.graphics.Explosion;
+import com.scs.multiplayerplatformer.graphics.GameObject;
+import com.scs.multiplayerplatformer.graphics.blocks.Block;
+import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
+import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
+import com.scs.multiplayerplatformer.input.DeviceThread;
+import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
+import com.scs.multiplayerplatformer.mapgen.MapLoader;
+import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
+import com.scs.multiplayerplatformer.start.SelectLevelModule;
+
 import ssmith.android.compatibility.Canvas;
 import ssmith.android.compatibility.Paint;
-import ssmith.android.compatibility.Style;
 import ssmith.android.framework.AbstractActivity;
 import ssmith.android.framework.MyEvent;
 import ssmith.android.framework.modules.AbstractModule;
@@ -22,20 +35,6 @@ import ssmith.util.IDisplayText;
 import ssmith.util.RealtimeInterval;
 import ssmith.util.ReturnObject;
 import ssmith.util.TSArrayList;
-
-import com.scs.multiplayerplatformer.Statics;
-import com.scs.multiplayerplatformer.Statics.GameMode;
-import com.scs.multiplayerplatformer.graphics.Cloud;
-import com.scs.multiplayerplatformer.graphics.Explosion;
-import com.scs.multiplayerplatformer.graphics.GameObject;
-import com.scs.multiplayerplatformer.graphics.blocks.Block;
-import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
-import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
-import com.scs.multiplayerplatformer.input.DeviceThread;
-import com.scs.multiplayerplatformer.mapgen.AbstractLevelData;
-import com.scs.multiplayerplatformer.mapgen.MapLoader;
-import com.scs.multiplayerplatformer.mapgen.SimpleMobData;
-import com.scs.multiplayerplatformer.start.SelectLevelModule;
 
 public final class GameModule extends AbstractModule implements IDisplayText {
 

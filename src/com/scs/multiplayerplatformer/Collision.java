@@ -1,12 +1,11 @@
 package com.scs.multiplayerplatformer;
 
-import ssmith.android.lib2d.shapes.Geometry;
-
-import com.scs.multiplayerplatformer.Statics.GameMode;
 import com.scs.multiplayerplatformer.graphics.ThrownItem;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractMob;
 import com.scs.multiplayerplatformer.graphics.mobs.AbstractWalkingMob;
 import com.scs.multiplayerplatformer.graphics.mobs.PlayersAvatar;
+
+import ssmith.android.lib2d.shapes.Geometry;
 
 public final class Collision {
 
