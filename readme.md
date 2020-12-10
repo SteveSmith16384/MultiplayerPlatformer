@@ -1,6 +1,6 @@
 # MULTIPLAYER PLATFORMER
 
-![ss1.png](https://bitbucket.org/repo/ekk78oE/images/400426500-ss1.png)
+![ss1.png](https://raw.githubusercontent.com/SteveSmith16384/MultiplayerPlatformer/master/docs/screenshots/ss1.png)
 
 by Stephen Carlyle-Smith (https://twitter.com/stephencsmith)
 
@@ -18,7 +18,7 @@ Press fire to join the game!  This game can handle as many players as you have c
 ### GAME MODES
 * Normal - Players get points for being the first to get to the end of the level.
 * Race to the Death - The camera view follows the right-most player.  Any players that are caught by the * edge of the screen are elimiated.  The last player standing is the winner.
-* Testing - Maps that are still being developed or too rubbish to be used.
+* Testing - Maps that are still being developed.
 
 
 ### CREATING MAPS
@@ -34,7 +34,7 @@ You can easily create your own maps.  Take a look in the maps directory for exam
 
 
 ### LICENCE
-All assets and code are licenced under MIT.  Source code is available from https://bitbucket.org/SteveSmith16384/multiplayerplatformer
+All assets and code are licenced under MIT.  Source code is available from https://github.com/SteveSmith16384/MultiplayerPlatformer
 
 
 ### CREDITS
